@@ -1,0 +1,1442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mid-Autumn Mayhem</title>
+<meta name="description" content="Build a Mid-Autumn Festival party under the full moon in a Hong Kong harbour city. Keep it in balance, meet the Jade Rabbit and Chang'e, and learn the moon legends and Chinese words.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mid-Autumn Mayhem">
+<meta property="og:description" content="A cause-and-effect festival game: build the biggest Mid-Autumn party without setting the city on fire.">
+<meta property="og:image" content="https://magicmakersfamily.github.io/games/mid-autumn/cover.png">
+<meta name="theme-color" content="#0B1230">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B1230'/%3E%3Ccircle cx='36' cy='26' r='14' fill='%23F4C24F'/%3E%3Cellipse cx='20' cy='44' rx='6' ry='8' fill='%23E3493A'/%3E%3Crect x='17' y='34' width='6' height='2' fill='%23F4C24F'/%3E%3C/svg%3E">
+<style>
+:root { color-scheme: dark; padding-block: env(safe-area-inset-top, 0px) env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Serif+TC:wght@500;700;900&family=Young+Serif&display=swap">
+<style>
+:root {
+  --night: #0B1230; --night-2: #111A40; --panel: #162051; --panel-2: #1D2A62; --line: #2C3A78;
+  --ink: #F6ECD6; --ink-2: #C9C0AA; --ink-3: #928EA8;
+  --gold: #F4C24F; --gold-ink: #2A1A00; --red: #E3493A; --jade: #56B98E;
+  --m-fire: #FF6B3D; --m-tummy: #A6D13A; --m-noise: #7FA8FF; --m-rowdy: #FF7EC7;
+  --display: "Young Serif", Georgia, serif;
+  --body: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
+  --zh: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--night); }
+body { margin: 0; color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.app { max-width: 1320px; margin: 0 auto; padding-inline: 16px; padding-block: 10px 28px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.app > *, .top > *, .stats > * { min-width: 0; }
+.shelf-back { justify-self: start; font-size: 13px; color: var(--ink-3); text-decoration: none; }
+.shelf-back:hover { color: var(--ink); text-decoration: underline; }
+
+/* Top bar */
+.top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+.top h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.05; letter-spacing: -.01em; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.top h1 .zh { font-size: .7em; color: var(--gold); font-weight: 700; }
+.stats { display: flex; gap: 8px; flex-wrap: wrap; margin-left: auto; }
+.stat { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 4px 12px; display: grid; min-width: 86px; }
+.stat small { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); display: flex; gap: 6px; align-items: baseline; }
+.stat small .zh { text-transform: none; letter-spacing: 0; }
+.stat b { font-family: var(--display); font-weight: 400; font-size: 21px; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.stat.score b { color: var(--gold); }
+.tools { display: flex; gap: 6px; flex-wrap: wrap; }
+.tool { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 7px 11px; font-size: 13.5px; font-weight: 700; display: inline-flex; gap: 6px; align-items: center; }
+.tool:hover { background: var(--panel-2); }
+.tool[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
+.tool .zh { font-weight: 700; }
+
+/* Stage */
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 14px; align-items: start; }
+@media (max-width: 980px) { .main { grid-template-columns: minmax(0, 1fr); } }
+.stage { position: relative; border-radius: 16px; overflow: hidden; background: #081026; border: 1px solid var(--line); aspect-ratio: 1000 / 560; max-width: 100%; touch-action: manipulation; }
+.stage.narrow { aspect-ratio: 700 / 560; }
+#scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.meters { position: absolute; left: 10px; top: 10px; display: grid; gap: 5px; width: min(210px, 42%); pointer-events: auto; }
+.meter { display: grid; grid-template-columns: 1fr auto; gap: 2px 6px; background: rgba(8, 12, 34, .62); border-radius: 8px; padding: 4px 8px 5px; backdrop-filter: blur(3px); }
+.meter span { font-size: 11.5px; font-weight: 700; display: flex; gap: 5px; align-items: baseline; }
+.meter span .zh { font-weight: 500; color: var(--ink-2); }
+.meter em { font-style: normal; font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.meter i { grid-column: 1 / -1; height: 6px; border-radius: 4px; background: rgba(255,255,255,.12); overflow: hidden; display: block; }
+.meter i::after { content: ""; display: block; height: 100%; width: var(--v, 0%); background: var(--c); border-radius: 4px; transition: width .2s linear; }
+.meter.hot { animation: hot .6s ease-in-out infinite alternate; }
+.stage.narrow .meters { gap: 3px; width: 40%; } .stage.narrow .meter { padding: 2px 6px 4px; } .stage.narrow .meter span { font-size: 10px; } .stage.narrow .meter rt { display: none; }
+@keyframes hot { to { background: rgba(120, 20, 20, .7); } }
+.toasts { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); display: grid; gap: 6px; width: min(460px, 56%); pointer-events: none; justify-items: center; }
+.stage.narrow .toasts { top: auto; bottom: 10px; width: 92%; }
+.toast { background: rgba(10, 14, 40, .88); border: 1px solid var(--line); border-left: 4px solid var(--tc, var(--gold)); border-radius: 10px; padding: 7px 12px; font-size: 13.5px; line-height: 1.35; animation: tin .25s ease-out; pointer-events: auto; }
+.toast b { color: var(--tc, var(--gold)); }
+@keyframes tin { from { opacity: 0; transform: translateY(-6px); } }
+.celebrate-pill { position: absolute; right: 10px; top: 10px; background: rgba(8,12,34,.62); border-radius: 8px; padding: 4px 9px; font-size: 12px; color: var(--ink-2); }
+.stage.narrow .celebrate-pill { display: none; }
+
+/* Overlays on the stage */
+.overlay { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 40%, rgba(11,18,48,.45), rgba(6,9,26,.88)); padding: 16px; overflow: auto; }
+.card { max-width: 520px; background: rgba(16, 24, 64, .94); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; display: grid; gap: 10px; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
+.card h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 28px; line-height: 1.1; text-wrap: balance; }
+.card p { margin: 0; color: var(--ink-2); text-wrap: pretty; }
+.card ul { margin: 0; padding-left: 18px; color: var(--ink-2); display: grid; gap: 3px; }
+.go { justify-self: start; background: var(--gold); color: var(--gold-ink); border: 0; border-radius: 12px; padding: 11px 20px; font-weight: 700; font-size: 16px; }
+.go:hover { filter: brightness(1.07); }
+.grade { font-family: var(--zh); font-weight: 900; font-size: 46px; color: var(--gold); line-height: 1.2; }
+.tally { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 4px 12px; font-size: 13.5px; color: var(--ink-2); margin: 0; padding: 0; list-style: none; }
+.tally b { color: var(--ink); font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) {
+  .card { padding: 14px; gap: 7px; } .card h2 { font-size: 19px; } .card p { font-size: 13px; } #startOv ul { display: none; } .grade { font-size: 34px; }
+  .stats { margin-left: 0; width: 100%; flex-wrap: nowrap; } .stat { flex: 1; padding: 3px 8px; } .stat b { font-size: 18px; } .stat small { font-size: 9.5px; letter-spacing: .04em; }
+  .top h1 { font-size: 24px; } .items { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Controls */
+.controls { display: grid; gap: 8px; }
+.controls h2 { margin: 2px 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); font-weight: 700; }
+.items { display: grid; gap: 6px; }
+@media (max-width: 980px) { .items { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); } }
+.item { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 10px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 6px 8px 6px 6px; }
+.item.new { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset; }
+.item canvas { width: 40px; height: 40px; border-radius: 9px; background: var(--night-2); }
+.lbl { display: grid; gap: 1px; min-width: 0; }
+.lbl .name { display: flex; gap: 7px; align-items: baseline; flex-wrap: wrap; font-weight: 700; font-size: 14.5px; }
+.lbl .name .zh { font-weight: 700; color: var(--gold); font-size: 15px; }
+.lbl small { font-size: 12px; color: var(--ink-3); line-height: 1.3; }
+.lbl small.warn { color: #FFB27A; }
+.stepper { display: flex; align-items: center; gap: 2px; }
+.stepper button { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel-2); font-size: 20px; line-height: 1; font-weight: 700; display: grid; place-items: center; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.stepper button:hover { background: #26357A; }
+.stepper button:disabled { opacity: .35; cursor: default; }
+.stepper output { min-width: 28px; text-align: center; font-family: var(--display); font-size: 19px; font-variant-numeric: tabular-nums; }
+.plot { font-size: 12px; color: var(--gold); }
+
+/* Chinese words */
+.zh { font-family: var(--zh); cursor: help; }
+[data-say] { cursor: help; border-radius: 4px; }
+[data-say]:hover { background: rgba(244, 194, 79, .14); }
+ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: var(--ink-3); letter-spacing: 0; display: none; }
+.show-ruby ruby rt { display: ruby-text; }
+.speaking { background: rgba(244, 194, 79, .3) !important; }
+
+/* Moon Tales */
+.tales { position: fixed; inset: 0; background: rgba(4, 6, 20, .8); display: grid; place-items: center; padding: 16px; z-index: 20; overflow: auto; }
+.book { width: min(860px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: #F3E6C8; color: #2A1D12; border-radius: 16px; padding: 22px; display: grid; gap: 16px; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+.book header { display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+.book h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 28px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.book h2 .zh { color: #A5281B; font-size: .8em; }
+.book .close { background: #2A1D12; color: #F3E6C8; border: 0; border-radius: 10px; padding: 8px 14px; font-weight: 700; }
+.book ruby rt { color: #7A6450; }
+.tale-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tale-tabs button { background: #E6D3AA; border: 1px solid #CDB688; border-radius: 999px; padding: 5px 12px; font-size: 13.5px; font-weight: 700; color: #2A1D12; }
+.tale-tabs button[aria-selected="true"] { background: #A5281B; color: #FFF3DF; border-color: #A5281B; }
+.tale { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 680px) { .tale { grid-template-columns: minmax(0, 1fr); } }
+.tale canvas { width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; background: #10183F; }
+.tale h3 { margin: 0 0 4px; font-family: var(--display); font-weight: 400; font-size: 24px; line-height: 1.15; }
+.tale h3 + .zh { font-size: 20px; color: #A5281B; font-weight: 700; }
+.tale p { margin: 8px 0 0; max-width: 62ch; text-wrap: pretty; }
+.tale .ingame { background: #E6D3AA; border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+.tale .note { font-size: 13px; color: #6A5642; }
+
+/* #cover: the scene alone, for the shelf card image */
+.cover-mode body { overflow: hidden; }
+.cover-mode .app { padding: 0; max-width: none; display: block; }
+.cover-mode .shelf-back, .cover-mode .top, .cover-mode .controls, .cover-mode .about, .cover-mode .meters, .cover-mode .celebrate-pill { display: none; }
+.cover-mode .main { display: block; }
+.cover-mode .stage { width: 1329px; max-width: none; height: 744px; aspect-ratio: auto; margin-left: -64px; border: 0; border-radius: 0; }
+.about { margin: 4px 0 0; font-size: 12.5px; color: var(--ink-3); text-align: center; }
+.about a { color: var(--ink-2); }
+@media (prefers-reduced-motion: reduce) { .meter.hot, .toast { animation: none; } }
+</style>
+
+</head>
+<body>
+<div class="app" id="app">
+  <a class="shelf-back" href="../">← All games</a>
+  <div class="top">
+    <h1>Mid-Autumn Mayhem <span data-zh="title"></span></h1>
+    <div class="stats">
+      <div class="stat"><small>Time</small><b id="clock">6:00 pm</b></div>
+      <div class="stat"><small>Celebrating <span data-zh="celebrate"></span></small><b id="cel">0</b></div>
+      <div class="stat score"><small>Reunion points <span data-zh="reunion"></span></small><b id="score">0</b></div>
+    </div>
+    <div class="tools">
+      <button class="tool" id="pauseBtn" type="button" aria-pressed="false">Pause</button>
+      <button class="tool" id="soundBtn" type="button" aria-pressed="true">Sound on</button>
+      <button class="tool" id="langBtn" type="button" title="Which Chinese you hear when you point at a word">Cantonese <span class="zh" lang="zh-TW">粵</span></button>
+      <button class="tool" id="rubyBtn" type="button" aria-pressed="true">Jyutping</button>
+      <button class="tool" id="talesBtn" type="button">Moon Tales <span class="zh" lang="zh-TW">故事</span></button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="stage" id="stage">
+      <canvas id="scene" aria-label="A city under the full moon on the night of the Mid-Autumn Festival"></canvas>
+      <div class="meters" id="meters"></div>
+      <div class="celebrate-pill" id="pill"></div>
+      <div class="toasts" id="toasts" aria-live="polite"></div>
+
+      <div class="overlay" id="startOv">
+        <div class="card">
+          <h2>The full moon is rising over the harbour.</h2>
+          <p>It is the 15th night of the 8th lunar month: the <span data-zh="festival"></span> Mid-Autumn Festival. Tonight everyone wants to be together under the round moon. Build the party from 6 pm to midnight.</p>
+          <ul>
+            <li>Use <b>+</b> and <b>−</b> to add buildings, people, lanterns, mooncakes and more.</li>
+            <li>Every happy, celebrating person earns <b>Reunion points</b>.</li>
+            <li>Watch the four trouble meters. If one fills up, trouble arrives: fire trucks, ambulances, police…</li>
+            <li>Tap surprise visitors before they disappear. Point at any Chinese word to hear it.</li>
+          </ul>
+          <button class="go" id="startBtn" type="button">Start the night</button>
+        </div>
+      </div>
+
+      <div class="overlay" id="endOv" hidden>
+        <div class="card" id="endCard"></div>
+      </div>
+    </div>
+
+    <section class="controls" aria-label="Things to add">
+      <h2>Build the festival</h2>
+      <div class="items" id="items"></div>
+    </section>
+  </div>
+
+  <p class="about">Version 1.0 · Launched <time datetime="2026-09-25">September 25, 2026</time> · Made for James and friends · <a href="../">The Game Shelf</a></p>
+</div>
+
+<div class="tales" id="tales" hidden>
+  <div class="book" role="dialog" aria-modal="true" aria-labelledby="talesTitle">
+    <header>
+      <h2 id="talesTitle">Moon Tales <span data-zh="tales"></span></h2>
+      <button class="close" id="talesClose" type="button">Close</button>
+    </header>
+    <div class="tale-tabs" id="taleTabs" role="tablist"></div>
+    <div class="tale" id="taleBody"></div>
+  </div>
+</div>
+
+<script src="sim.js"></script>
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const TAU = Math.PI * 2;
+const rnd = (a, b) => a + Math.random() * (b - a);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const clamp = (x, a, b) => x < a ? a : x > b ? b : x;
+
+/* ───────────── Chinese words: [Traditional, pinyin, jyutping, English] ───────────── */
+const ZH = {
+  title: ['中秋大混亂', 'zhōng qiū dà hùn luàn', 'zung1 cau1 daai6 wan6 lyun6', 'Mid-Autumn big mess'],
+  festival: ['中秋節', 'zhōng qiū jié', 'zung1 cau1 zit3', 'Mid-Autumn Festival'],
+  happy: ['中秋快樂', 'zhōng qiū kuài lè', 'zung1 cau1 faai3 lok6', 'Happy Mid-Autumn!'],
+  reunion: ['團圓', 'tuán yuán', 'tyun4 jyun4', 'reunion, being together'],
+  celebrate: ['慶祝', 'qìng zhù', 'hing3 zuk1', 'celebrate'],
+  moon: ['月亮', 'yuè liàng', 'jyut6 loeng6', 'moon'],
+  buildings: ['大樓', 'dà lóu', 'daai6 lau4', 'building'],
+  adults: ['大人', 'dà rén', 'daai6 jan4', 'grown-ups'],
+  kids: ['小朋友', 'xiǎo péng yǒu', 'siu2 pang4 jau5', 'kids'],
+  lanterns: ['燈籠', 'dēng lóng', 'dang1 lung4', 'lantern'],
+  mooncakes: ['月餅', 'yuè bǐng', 'jyut6 beng2', 'mooncake'],
+  tea: ['茶', 'chá', 'caa4', 'tea'],
+  mahjong: ['麻將', 'má jiàng', 'maa4 zoeng3', 'mahjong'],
+  fireworks: ['煙花', 'yān huā', 'jin1 faa1', 'fireworks'],
+  secret: ['密信月餅', 'mì xìn yuè bǐng', 'mat6 seon3 jyut6 beng2', 'secret-message mooncake'],
+  fire: ['火災', 'huǒ zāi', 'fo2 zoi1', 'fire'],
+  tummy: ['肚痛', 'dù tòng', 'tou5 tung3', 'tummy ache'],
+  noise: ['噪音', 'zào yīn', 'cou3 jam1', 'noise'],
+  rowdy: ['搗蛋', 'dǎo dàn', 'dou2 daan6', 'mischief'],
+  firefighters: ['消防員', 'xiāo fáng yuán', 'siu1 fong4 jyun4', 'firefighters'],
+  ambulance: ['救護車', 'jiù hù chē', 'gau3 wu6 ce1', 'ambulance'],
+  police: ['警察', 'jǐng chá', 'ging2 caat3', 'police'],
+  rabbit: ['玉兔', 'yù tù', 'juk6 tou3', 'Jade Rabbit'],
+  change: ['嫦娥', 'cháng é', 'soeng4 ngo4', "Chang'e, the Moon Lady"],
+  houyi: ['后羿', 'hòu yì', 'hau6 ngai6', 'Hou Yi, the archer'],
+  wugang: ['吳剛', 'wú gāng', 'ng4 gong1', 'Wu Gang, the woodcutter'],
+  osmanthus: ['桂花', 'guì huā', 'gwai3 faa1', 'osmanthus flowers'],
+  dragon: ['火龍', 'huǒ lóng', 'fo2 lung4', 'fire dragon'],
+  flag: ['升旗', 'shēng qí', 'sing1 kei4', 'raise the flag'],
+  tales: ['月亮故事', 'yuè liàng gù shì', 'jyut6 loeng6 gu3 si6', 'moon stories'],
+  pung: ['碰', 'pèng', 'pung3', 'Pung! (a mahjong call)'],
+  legend: ['花好月圓', 'huā hǎo yuè yuán', 'faa1 hou2 jyut6 jyun4', 'flowers in bloom, moon full: perfect happiness'],
+  great: ['熱鬧', 'rè nao', 'jit6 naau6', 'lively and bustling'],
+  good: ['開心', 'kāi xīn', 'hoi1 sam1', 'happy'],
+  quiet: ['冷清', 'lěng qīng', 'laang5 cing1', 'quiet and lonely'],
+  empty: ['靜夜', 'jìng yè', 'zing6 je6', 'a still night'],
+  t_change: ['嫦娥奔月', 'cháng é bēn yuè', 'soeng4 ngo4 ban1 jyut6', "Chang'e flies to the moon"],
+  t_suns: ['后羿射日', 'hòu yì shè rì', 'hau6 ngai6 se6 jat6', 'Hou Yi shoots the suns'],
+  t_rabbit: ['玉兔搗藥', 'yù tù dǎo yào', 'juk6 tou3 dou2 joek6', 'the Jade Rabbit makes medicine'],
+  t_wugang: ['吳剛伐桂', 'wú gāng fá guì', 'ng4 gong1 fat6 gwai3', 'Wu Gang chops the osmanthus'],
+  t_cakes: ['月餅起義', 'yuè bǐng qǐ yì', 'jyut6 beng2 hei2 ji6', 'the mooncake uprising'],
+  t_dragon: ['大坑舞火龍', 'dà kēng wǔ huǒ lóng', 'daai6 haang1 mou5 fo2 lung4', 'the Tai Hang fire dragon dance'],
+};
+
+let LANG = 'yue';            // 'yue' Cantonese (asked for by the family) or 'cmn' Mandarin
+let RUBY = true;
+function ruby(z) {
+  const ch = [...z[0]], sy = (LANG === 'yue' ? z[2] : z[1]).split(' ');
+  return ch.length === sy.length ? ch.map((c, i) => `<ruby>${c}<rt>${sy[i]}</rt></ruby>`).join('') : `<ruby>${z[0]}<rt>${sy.join(' ')}</rt></ruby>`;
+}
+function zh(key) {
+  const z = ZH[key];
+  if (!z) return '';
+  return `<span class="zh" lang="zh-TW" data-say="${z[0]}" data-key="${key}" title="${z[1]} · ${z[2]} · ${z[3]}">${ruby(z)}</span>`;
+}
+function hydrate(root = document) { root.querySelectorAll('[data-zh]').forEach(el => { el.outerHTML = zh(el.dataset.zh); }); }
+function rerenderZh() {
+  document.querySelectorAll('.zh[data-key]').forEach(el => { const z = ZH[el.dataset.key]; if (z) el.innerHTML = ruby(z); });
+}
+
+/* Speech: Cantonese by default (zh-HK / yue voices), Mandarin on request (zh-TW, then zh-CN). */
+let voices = [];
+function loadVoices() { try { voices = speechSynthesis.getVoices() || []; } catch (e) { voices = []; } }
+try { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; } catch (e) { /* no speech */ }
+function voiceFor(lang) {
+  if (lang === 'yue') return voices.find(v => /yue|zh[-_]HK/i.test(v.lang));
+  return voices.find(v => /zh[-_](TW|Hant)/i.test(v.lang)) || voices.find(v => /zh[-_]CN/i.test(v.lang)) || voices.find(v => /^zh/i.test(v.lang) && !/HK|yue/i.test(v.lang));
+}
+let spokeWarn = false, userActed = false;
+function speak(text, el) {
+  try {
+    const sp = window.speechSynthesis;
+    if (!sp) return;
+    sp.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    let v = voiceFor(LANG);
+    if (LANG === 'yue') { u.lang = 'zh-HK'; if (!v && voices.length && !spokeWarn) { spokeWarn = true; toast('This device has no Cantonese voice, so words are read in Mandarin.', '--ink-3'); } }
+    else u.lang = 'zh-TW';
+    if (!v && LANG === 'yue') { v = voiceFor('cmn'); u.lang = 'zh-TW'; }
+    if (v) u.voice = v;
+    u.rate = 0.75;
+    if (el) { el.classList.add('speaking'); u.onend = u.onerror = () => el.classList.remove('speaking'); }
+    sp.speak(u);
+  } catch (e) { /* speech unavailable */ }
+}
+let hoverTimer = 0;
+document.addEventListener('pointerover', e => {
+  const w = e.target.closest && e.target.closest('[data-say]');
+  if (!w || e.pointerType !== 'mouse' || !userActed) return;
+  clearTimeout(hoverTimer);
+  hoverTimer = setTimeout(() => speak(w.dataset.say, w), 220);
+});
+document.addEventListener('pointerout', e => { if (e.target.closest && e.target.closest('[data-say]')) clearTimeout(hoverTimer); });
+document.addEventListener('click', e => {
+  userActed = true;
+  const w = e.target.closest('[data-say]');
+  if (w && !w.closest('button')) speak(w.dataset.say, w);
+});
+
+/* ───────────── Settings and best score ───────────── */
+const STORE = 'mid-autumn-mayhem-v1';
+let prefs = { lang: 'yue', ruby: true, sound: true, best: 0, seenTales: {} };
+try { const p = JSON.parse(localStorage.getItem(STORE) || 'null'); if (p) prefs = Object.assign(prefs, p); } catch (e) { /* storage blocked */ }
+function savePrefs() { try { localStorage.setItem(STORE, JSON.stringify(prefs)); } catch (e) { /* storage blocked */ } }
+LANG = prefs.lang === 'cmn' ? 'cmn' : 'yue';
+RUBY = prefs.ruby !== false;
+
+/* ───────────── Items the player controls ───────────── */
+const ITEMS = [
+  { key: 'buildings', name: 'Buildings', step: 1 },
+  { key: 'adults', name: 'Grown-ups', step: 2 },
+  { key: 'kids', name: 'Kids', step: 2 },
+  { key: 'lanterns', name: 'Lanterns', step: 2 },
+  { key: 'mooncakes', name: 'Mooncakes', step: 1 },
+  { key: 'tea', name: 'Pots of tea', step: 1 },
+  { key: 'mahjong', name: 'Mahjong tables', step: 1 },
+  { key: 'fireworks', name: 'Fireworks', step: 1 },
+  { key: 'secret', name: 'Secret mooncakes', step: 1, locked: true },
+];
+function hintFor(key, s, d) {
+  const n = s.n, P = d.P;
+  switch (key) {
+    case 'buildings': return [`Room for ${d.cap} people (the park fits ${MMSim.PARK}, each building ${MMSim.PER_BUILDING} more)`, P > d.cap];
+    case 'adults': return [n.adults ? `${n.adults} grown-ups can watch ${n.adults * MMSim.KIDS_PER_ADULT} kids` : 'Grown-ups keep kids safe and play mahjong', false];
+    case 'kids': return [d.unsupervised ? `${d.unsupervised} kids with nobody watching them!` : 'Kids love lanterns. 1 grown-up for every 3 kids', d.unsupervised > 0];
+    case 'lanterns': { const need = Math.ceil(P * 0.4); return [P ? `${need} lanterns light up ${P} people (1 for every 2–3)` : 'Paper lanterns once held real candles', false]; }
+    case 'mooncakes': { const need = Math.ceil(P / MMSim.WEDGES); return [P ? `${need} is right for ${P} people: each cake is cut in 4 wedges` : 'Very rich: families cut them in 4 and share', d.wedgesEach > 1.25]; }
+    case 'tea': { const need = Math.ceil(P / MMSim.TEA_SERVES); return [P ? `${need} pots serve ${P} people. Tea helps with rich mooncakes` : 'One pot serves 6 people', false]; }
+    case 'mahjong': return [n.mahjong ? `${n.mahjong * MMSim.SEATS} seats, but the tiles are LOUD` : '4 players a table. Clack, clack, clack…', false];
+    case 'fireworks': return ['Exciting! But each one adds noise and fire risk', n.fireworks > 3];
+    case 'secret': return [`Each one tells 4 grown-ups. Informed: ${s.informed} of ${n.adults}. Need at least 12 and 6 in 10`, false];
+  }
+  return ['', false];
+}
+
+/* ───────────── The model ───────────── */
+let S = MMSim.create();
+let running = false, paused = false;
+
+/* ───────────── Canvas and scene geometry ───────────── */
+const stage = $('#stage'), canvas = $('#scene');
+let ctx = canvas.getContext('2d');
+const FZH = '"Noto Serif TC", "Songti TC", "PMingLiU", serif', FBODY = '"Atkinson Hyperlegible", system-ui, sans-serif', FDISP = '"Young Serif", Georgia, serif';
+let W = 1000; const H = 560;
+let DPR = 1;
+const G = { hillTop: 250, waterTop: 322, shore: 372, road: 405, roadB: 428, plazaB: 556 };
+const SLOT_ORDER = [3, 4, 2, 5, 1, 6, 0, 7];
+const SLOT_H = [205, 165, 250, 190, 235, 175, 150, 200];
+const SLOT_W = [84, 74, 92, 80, 96, 78, 86, 76];
+function slotX(i) { return W * (0.065 + i * 0.124); }
+function buildingSlot(k) { const i = SLOT_ORDER[k]; const sc = W / 1000; return { i, x: slotX(i), w: SLOT_W[i] * Math.max(0.78, sc), h: SLOT_H[i] }; }
+const MOON = () => ({ x: W * 0.8, y: 102, r: 52 });
+
+function resize() {
+  const narrow = stage.clientWidth < 620;
+  stage.classList.toggle('narrow', narrow);
+  W = narrow ? 700 : 1000;
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  const cw = stage.clientWidth, ch = stage.clientHeight;
+  canvas.width = Math.round(cw * DPR); canvas.height = Math.round(ch * DPR);
+  scale = canvas.width / W;
+  buildStatic();
+}
+let scale = 1;
+window.addEventListener('resize', resize);
+
+/* Stars and static layers, redrawn on resize. */
+let stars = [], staticSky = null;
+function buildStatic() {
+  stars = Array.from({ length: 140 }, () => ({ x: Math.random() * W, y: Math.random() * 300, r: Math.random() * 1.3 + .2, p: Math.random() * TAU }));
+}
+
+/* ───────────── Entities ───────────── */
+const SKIN = ['#F2C9A0', '#E3B38A', '#C98E62', '#F5D4B3', '#D9A477'];
+const CLOTH = ['#E3493A', '#F4C24F', '#56B98E', '#5E8BE0', '#C45BD0', '#F08A3E', '#EDE6D6', '#3FB6C9', '#D94F7A'];
+let people = [], parts = [], bubbles = [], vehicles = [], ruins = [], puddles = [];
+let special = null, couple = null, flag = null, dragonDance = null;
+function plazaPoint() { return { x: rnd(20, W - 20), y: rnd(G.roadB + 12, G.plazaB - 6) }; }
+function newPerson(kind) {
+  const side = Math.random() < .5;
+  const p = plazaPoint();
+  return {
+    kind, x: side ? -20 : W + 20, y: p.y, tx: p.x, ty: p.y, wait: 0,
+    sp: kind === 'kid' ? rnd(38, 60) : rnd(26, 40), ph: Math.random() * TAU,
+    skin: pick(SKIN), cloth: pick(CLOTH), hair: Math.random() < .15 ? '#DDD' : '#1C1612',
+    state: 'walk', seat: -1, lantern: 0, sick: 0, smoke: 0, dir: 1, gone: false, taken: false, bubbleT: rnd(3, 12),
+  };
+}
+function syncPeople() {
+  for (const kind of ['adult', 'kid']) {
+    const want = kind === 'adult' ? S.n.adults : S.n.kids;
+    const live = people.filter(p => p.kind === kind && !p.gone && !p.taken);
+    if (live.length < want) for (let i = live.length; i < want; i++) people.push(newPerson(kind));
+    else if (live.length > want) {
+      live.sort((a, b) => (a.seat >= 0) - (b.seat >= 0));
+      for (let i = 0; i < live.length - want; i++) { const p = live[i]; leave(p); }
+    }
+  }
+}
+function leave(p) { p.gone = true; p.seat = -1; p.tx = p.x < W / 2 ? -40 : W + 40; p.ty = p.y; p.state = 'walk'; }
+function takeTo(kind, count, x) {
+  const pool = people.filter(p => !p.gone && !p.taken && (kind === 'any' || p.kind === kind));
+  pool.sort((a, b) => kind === 'adult' ? (b.seat >= 0) - (a.seat >= 0) : (b.sick - a.sick));
+  for (let i = 0; i < Math.min(count, pool.length); i++) { const p = pool[i]; p.taken = true; p.seat = -1; p.tx = x + rnd(-10, 10); p.ty = G.roadB + 4; p.state = 'walk'; p.sp = 45; }
+}
+function takeMixed(total, x) {
+  // Match what the model took: it already lowered the counts, so hide the right number of each kind.
+  const liveA = people.filter(p => p.kind === 'adult' && !p.gone && !p.taken).length;
+  const liveK = people.filter(p => p.kind === 'kid' && !p.gone && !p.taken).length;
+  takeTo('adult', Math.max(0, liveA - S.n.adults), x);
+  takeTo('kid', Math.max(0, liveK - S.n.kids), x);
+}
+function tables() {
+  const out = [];
+  const cols = W < 800 ? 4 : 5;
+  for (let i = 0; i < S.n.mahjong; i++) {
+    const r = Math.floor(i / cols), c = i % cols;
+    out.push({ x: W * (0.1 + c * (0.8 / (cols - 1))) + (r % 2 ? 36 : 0), y: 458 + r * 42 });
+  }
+  return out;
+}
+
+/* ───────────── Particles and bubbles ───────────── */
+function burst(x, y, n, o) {
+  for (let i = 0; i < n; i++) {
+    const a = o.a != null ? o.a + rnd(-o.spread, o.spread) : Math.random() * TAU, v = rnd(o.v0 || 20, o.v1 || 80);
+    parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, g: o.g ?? 60, life: rnd(o.l0 || .6, o.l1 || 1.4), max: 1, c: typeof o.c === 'function' ? o.c() : o.c, r: rnd(o.r0 || 1, o.r1 || 2.4), kind: o.kind || 'dot', drag: o.drag ?? .98 });
+    parts[parts.length - 1].max = parts[parts.length - 1].life;
+  }
+}
+function say(p, text, col) { bubbles.push({ p, x: p.x, y: p.y, text, life: 1.8, col: col || '#fff' }); }
+
+/* ───────────── Drawing helpers ───────────── */
+function roundRect(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h); }
+function drawLantern(x, y, s, glow, kind) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  if (glow) { const g = ctx.createRadialGradient(0, 0, 1, 0, 0, 16); g.addColorStop(0, 'rgba(255,180,80,.55)'); g.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = g; ctx.fillRect(-16, -16, 32, 32); }
+  if (kind === 1) { // rabbit lantern
+    ctx.fillStyle = '#FFF4E8'; ctx.beginPath(); ctx.ellipse(0, 0, 7, 5, 0, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-4, -6, 1.6, 4, -.3, 0, TAU); ctx.ellipse(-1, -7, 1.6, 4, .1, 0, TAU); ctx.fill();
+    ctx.fillStyle = '#E3493A'; ctx.beginPath(); ctx.arc(-4.5, -1, 1, 0, TAU); ctx.fill();
+  } else {
+    ctx.fillStyle = kind === 2 ? '#F4C24F' : '#E3493A';
+    ctx.beginPath(); ctx.ellipse(0, 0, 5.5, 7, 0, 0, TAU); ctx.fill();
+    ctx.strokeStyle = 'rgba(80,10,0,.5)'; ctx.lineWidth = .7; ctx.beginPath(); ctx.ellipse(0, 0, 2.4, 7, 0, 0, TAU); ctx.stroke();
+    ctx.fillStyle = '#F4C24F'; ctx.fillRect(-2.5, -8.5, 5, 2); ctx.fillRect(-2.5, 6.5, 5, 2);
+    ctx.strokeStyle = '#F4C24F'; ctx.beginPath(); ctx.moveTo(0, 8.5); ctx.lineTo(0, 12); ctx.stroke();
+  }
+  ctx.restore();
+}
+function drawMooncake(x, y, s, secret) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = '#B06A2B'; ctx.beginPath(); ctx.ellipse(0, 1.5, 8, 4, 0, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#D89148'; ctx.beginPath(); ctx.ellipse(0, 0, 8, 4, 0, 0, TAU); ctx.fill();
+  ctx.strokeStyle = '#8E4F1B'; ctx.lineWidth = .8; ctx.beginPath(); ctx.ellipse(0, 0, 5, 2.4, 0, 0, TAU); ctx.stroke();
+  ctx.beginPath(); for (let i = 0; i < 8; i++) { const a = i / 8 * TAU; ctx.moveTo(Math.cos(a) * 5.5, Math.sin(a) * 2.7); ctx.lineTo(Math.cos(a) * 7.4, Math.sin(a) * 3.6); } ctx.stroke();
+  if (secret) { ctx.fillStyle = '#FFF8E6'; ctx.save(); ctx.rotate(-.5); ctx.fillRect(-1.5, -9, 3, 8); ctx.restore(); ctx.fillStyle = '#E3493A'; ctx.fillRect(-1, -7.5, 2, 1); }
+  ctx.restore();
+}
+function drawTeapot(x, y, s) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = '#E9E2D0'; ctx.beginPath(); ctx.ellipse(0, 0, 7, 5.5, 0, 0, TAU); ctx.fill();
+  ctx.strokeStyle = '#3B6FB0'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(0, 0, 7, 2, 0, 0, Math.PI); ctx.stroke();
+  ctx.strokeStyle = '#E9E2D0'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(6, -1); ctx.lineTo(11, -5); ctx.stroke();
+  ctx.beginPath(); ctx.arc(-8, 0, 3, Math.PI * .5, Math.PI * 1.5); ctx.stroke();
+  ctx.fillStyle = '#3B6FB0'; ctx.beginPath(); ctx.arc(0, -5.5, 1.6, 0, TAU); ctx.fill();
+  ctx.restore();
+}
+function drawTable(x, y, s) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = '#3B2A1D'; ctx.fillRect(-12, 0, 2, 7); ctx.fillRect(10, 0, 2, 7);
+  ctx.fillStyle = '#1F7A4E'; ctx.beginPath(); ctx.moveTo(-15, -2); ctx.lineTo(15, -2); ctx.lineTo(13, 3); ctx.lineTo(-13, 3); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#F4EFDF'; for (let i = -3; i <= 3; i++) ctx.fillRect(i * 3.2 - 1, -3.5, 2.4, 1.6);
+  ctx.restore();
+}
+function drawRocket(x, y, s) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = '#E3493A'; ctx.fillRect(-3, -10, 6, 14); ctx.fillStyle = '#F4C24F'; ctx.beginPath(); ctx.moveTo(-3, -10); ctx.lineTo(0, -15); ctx.lineTo(3, -10); ctx.fill();
+  ctx.strokeStyle = '#8B6B3A'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, 4); ctx.lineTo(0, 12); ctx.stroke();
+  ctx.fillStyle = '#FFF'; ctx.fillRect(-3, -4, 6, 1.5);
+  ctx.restore();
+}
+
+function drawSky(t) {
+  const glow = S.uprising ? .12 : 0;
+  const g = ctx.createLinearGradient(0, 0, 0, G.waterTop);
+  g.addColorStop(0, '#060B24'); g.addColorStop(.6, '#15205A'); g.addColorStop(1, `rgba(${60 + glow * 400},${50},${110},1)`);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, G.waterTop + 2);
+  for (const s of stars) { ctx.globalAlpha = .45 + .45 * Math.sin(t * 1.3 + s.p); ctx.fillStyle = '#FFF6DE'; ctx.fillRect(s.x, s.y, s.r, s.r); }
+  ctx.globalAlpha = 1;
+  const m = MOON();
+  const halo = ctx.createRadialGradient(m.x, m.y, m.r * .8, m.x, m.y, m.r * 3.4);
+  halo.addColorStop(0, 'rgba(255,230,160,.35)'); halo.addColorStop(1, 'rgba(255,230,160,0)');
+  ctx.fillStyle = halo; ctx.fillRect(m.x - m.r * 4, m.y - m.r * 4, m.r * 8, m.r * 8);
+  const mg = ctx.createRadialGradient(m.x - 14, m.y - 14, 4, m.x, m.y, m.r);
+  mg.addColorStop(0, '#FFF7D6'); mg.addColorStop(1, '#F6D57E');
+  ctx.fillStyle = mg; ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, TAU); ctx.fill();
+  ctx.fillStyle = 'rgba(190,150,80,.25)';
+  [[-18, -8, 9], [14, 12, 12], [-6, 22, 6], [22, -18, 6], [-26, 14, 5]].forEach(([dx, dy, r]) => { ctx.beginPath(); ctx.arc(m.x + dx, m.y + dy, r, 0, TAU); ctx.fill(); });
+  // The osmanthus tree and Wu Gang, faint on the moon's face.
+  ctx.fillStyle = 'rgba(150,110,50,.4)';
+  ctx.fillRect(m.x + 10, m.y + 2, 2.5, 16);
+  ctx.beginPath(); ctx.arc(m.x + 11, m.y - 2, 9, 0, TAU); ctx.fill();
+  const chop = Math.sin(t * 6) > 0 ? -.6 : .2;
+  ctx.strokeStyle = 'rgba(120,85,40,.55)'; ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.arc(m.x - 1, m.y + 6, 2.2, 0, TAU); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(m.x - 1, m.y + 8); ctx.lineTo(m.x - 1, m.y + 15); ctx.moveTo(m.x - 1, m.y + 15); ctx.lineTo(m.x - 3, m.y + 19); ctx.moveTo(m.x - 1, m.y + 15); ctx.lineTo(m.x + 1, m.y + 19);
+  ctx.moveTo(m.x - 1, m.y + 10); ctx.lineTo(m.x - 1 + Math.cos(chop) * 7, m.y + 10 + Math.sin(chop) * 7); ctx.stroke();
+  // The rabbit on the moon (a little silhouette at the lower left).
+  ctx.fillStyle = 'rgba(150,110,50,.35)'; ctx.beginPath(); ctx.ellipse(m.x - 22, m.y + 24, 6, 4, 0, 0, TAU); ctx.ellipse(m.x - 26, m.y + 17, 1.6, 5, -.3, 0, TAU); ctx.fill();
+  if (running && S.t >= S.next.wugang) {
+    const pulse = .5 + .5 * Math.sin(t * 5);
+    ctx.strokeStyle = `rgba(255,220,120,${.4 + .5 * pulse})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(m.x + 4, m.y + 8, 14 + pulse * 4, 0, TAU); ctx.stroke();
+  }
+}
+function drawLand(t) {
+  // Lion Rock and the hills of Kowloon.
+  ctx.fillStyle = '#18214F';
+  ctx.beginPath(); ctx.moveTo(0, G.waterTop);
+  const hx = x => x * W / 1000;
+  ctx.lineTo(0, 292); ctx.bezierCurveTo(hx(80), 268, hx(140), 284, hx(210), 270);
+  ctx.bezierCurveTo(hx(250), 262, hx(262), 232, hx(300), 226); ctx.bezierCurveTo(hx(322), 222, hx(334), 232, hx(346), 240);
+  ctx.bezierCurveTo(hx(380), 250, hx(430), 262, hx(470), 266); ctx.bezierCurveTo(hx(560), 272, hx(640), 250, hx(720), 262);
+  ctx.bezierCurveTo(hx(820), 276, hx(900), 262, W, 280); ctx.lineTo(W, G.waterTop); ctx.fill();
+  ctx.fillStyle = '#121A43';
+  ctx.beginPath(); ctx.moveTo(0, G.waterTop); ctx.lineTo(0, 305); ctx.bezierCurveTo(hx(200), 296, hx(360), 310, hx(520), 300); ctx.bezierCurveTo(hx(700), 290, hx(860), 306, W, 298); ctx.lineTo(W, G.waterTop); ctx.fill();
+  // Harbour with the moon's reflection.
+  const wg = ctx.createLinearGradient(0, G.waterTop, 0, G.shore);
+  wg.addColorStop(0, '#1B2A66'); wg.addColorStop(1, '#0E1740');
+  ctx.fillStyle = wg; ctx.fillRect(0, G.waterTop, W, G.shore - G.waterTop);
+  const m = MOON();
+  for (let i = 0; i < 12; i++) {
+    const y = G.waterTop + 4 + i * 4, w = 40 - i * 2 + Math.sin(t * 2 + i) * 6;
+    ctx.fillStyle = `rgba(255,225,150,${.5 - i * .035})`; ctx.fillRect(m.x - w / 2 + Math.sin(t * 1.5 + i * 1.7) * 4, y, w, 1.4);
+  }
+  // Shore and trees.
+  ctx.fillStyle = '#16233D'; ctx.fillRect(0, G.shore, W, G.road - G.shore);
+  for (const x of [0.03, 0.2, 0.37, 0.58, 0.7, 0.93]) {
+    const tx = x * W, ty = G.shore + 16;
+    ctx.fillStyle = '#23180F'; ctx.fillRect(tx - 2, ty - 18, 4, 22);
+    ctx.fillStyle = '#1D3A33'; ctx.beginPath(); ctx.arc(tx, ty - 26, 16, 0, TAU); ctx.arc(tx - 11, ty - 18, 11, 0, TAU); ctx.arc(tx + 12, ty - 19, 12, 0, TAU); ctx.fill();
+  }
+}
+function buildingLit(k) { const d = MMSim.derive(S); const housed = Math.max(0, d.inside - MMSim.PARK); return clamp(housed / Math.max(1, S.n.buildings * MMSim.PER_BUILDING), 0, 1); }
+const SIGNS = ['月餅', '茶樓', '酒家', '麻將', '涼茶', '燒臘', '士多', '冰室'];
+function drawBuilding(b, k, t, lit, burning) {
+  const x = b.x - b.w / 2, y = G.road - b.h;
+  ctx.fillStyle = ['#2A3163', '#33386B', '#2C3A5E', '#3A3160'][b.i % 4];
+  ctx.fillRect(x, y, b.w, b.h);
+  ctx.fillStyle = 'rgba(0,0,0,.22)'; ctx.fillRect(x + b.w - 8, y, 8, b.h);
+  ctx.fillStyle = '#20264F'; ctx.fillRect(x + b.w * .2, y - 10, b.w * .22, 10); ctx.fillRect(x + b.w * .6, y - 6, 8, 6);
+  const cols = Math.max(3, Math.floor(b.w / 13)), rows = Math.floor((b.h - 30) / 16);
+  const cw = (b.w - 12) / cols;
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    const seed = Math.sin((b.i * 97 + r * 13 + c * 7) * 12.9898) * 43758.5453 % 1;
+    const on = Math.abs(seed) < .2 + lit * .75;
+    const wx = x + 6 + c * cw, wy = y + 12 + r * 16;
+    ctx.fillStyle = on ? (Math.abs(seed) < .1 ? '#FFD98A' : '#F6C667') : '#1A1F42';
+    if (burning && Math.abs(seed) < .5) ctx.fillStyle = Math.sin(t * 20 + r + c) > 0 ? '#FF7A2E' : '#FFB347';
+    ctx.fillRect(wx, wy, cw - 4, 9);
+  }
+  // A neon sign in Traditional Chinese.
+  const sign = SIGNS[b.i];
+  ctx.save(); ctx.font = `700 13px ${FZH}`;
+  ctx.fillStyle = '#10142E'; ctx.fillRect(x + b.w - 20, y + 20, 16, sign.length * 15 + 6);
+  ctx.fillStyle = ['#FF5E7A', '#63E6FF', '#FFD23F', '#8CFF8A'][b.i % 4]; ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 6;
+  [...sign].forEach((ch, i) => ctx.fillText(ch, x + b.w - 18.5, y + 36 + i * 15));
+  ctx.restore();
+  // Mooncake lanterns strung on balconies once lanterns are out.
+  if (S.n.lanterns > 4) for (let r = 1; r < rows; r += 3) drawLantern(x + 5, y + 12 + r * 16, .55, true, 0);
+}
+function drawFire(x, y, w, h, t, s = 1) {
+  for (let i = 0; i < 9; i++) {
+    const fx = x + (i / 8 - .5) * w, fh = h * (.6 + .4 * Math.sin(t * 9 + i * 2.1)) * s;
+    ctx.fillStyle = i % 2 ? 'rgba(255,120,40,.85)' : 'rgba(255,200,60,.85)';
+    ctx.beginPath(); ctx.moveTo(fx - 9 * s, y); ctx.quadraticCurveTo(fx - 4 * s, y - fh * .6, fx + Math.sin(t * 7 + i) * 4, y - fh); ctx.quadraticCurveTo(fx + 4 * s, y - fh * .6, fx + 9 * s, y); ctx.fill();
+  }
+}
+function drawStringLanterns(t) {
+  const hung = Math.max(0, S.n.lanterns - carriedLanterns);
+  if (!hung) return;
+  const x0 = 14, x1 = W - 14, y0 = G.road - 38, sag = 26;
+  ctx.strokeStyle = 'rgba(40,20,10,.8)'; ctx.lineWidth = 1;
+  ctx.beginPath(); for (let i = 0; i <= 40; i++) { const u = i / 40, x = x0 + (x1 - x0) * u, y = y0 + sag * 4 * u * (1 - u); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke();
+  for (let i = 0; i < hung; i++) {
+    const u = (i + .5) / hung, x = x0 + (x1 - x0) * u, y = y0 + sag * 4 * u * (1 - u);
+    const fall = lanternFall[i] || 0;
+    drawLantern(x + Math.sin(t * 1.6 + i) * 1.5, y + 9 + fall, .9, true, i % 5 === 2 ? 1 : i % 3 === 1 ? 2 : 0);
+  }
+}
+let lanternFall = [];
+function drawRoad() {
+  ctx.fillStyle = '#1B1F33'; ctx.fillRect(0, G.road, W, G.roadB - G.road);
+  ctx.fillStyle = 'rgba(255,255,255,.25)'; for (let x = 10; x < W; x += 44) ctx.fillRect(x, G.road + 11, 20, 1.5);
+  const g = ctx.createLinearGradient(0, G.roadB, 0, H);
+  g.addColorStop(0, '#2B2F4E'); g.addColorStop(1, '#1D2140');
+  ctx.fillStyle = g; ctx.fillRect(0, G.roadB, W, H - G.roadB);
+  ctx.strokeStyle = 'rgba(255,255,255,.04)'; ctx.lineWidth = 1;
+  for (let x = -H; x < W; x += 28) { ctx.beginPath(); ctx.moveTo(x, H); ctx.lineTo(x + (H - G.roadB) * .5, G.roadB); ctx.stroke(); }
+}
+function depth(y) { return .78 + (y - G.roadB) / (G.plazaB - G.roadB) * .38; }
+function drawPerson(p, t) {
+  const s = (p.scale || depth(p.y)) * (p.kind === 'kid' ? .72 : 1);
+  const moving = Math.hypot(p.tx - p.x, p.ty - p.y) > 2 && p.seat < 0;
+  const flee = p.state === 'flee', celebrating = p.state === 'party';
+  let bob = 0;
+  if (celebrating && !moving) bob = Math.max(0, Math.sin(t * 8 + p.ph)) * 5;
+  if (flee) bob = Math.abs(Math.sin(t * 16 + p.ph)) * 3;
+  ctx.save(); ctx.translate(p.x, p.y - bob * s); ctx.scale(s * p.dir, s);
+  const step = moving ? Math.sin(t * (flee ? 22 : 11) + p.ph) * 4 : 0;
+  ctx.strokeStyle = '#1B1A2A'; ctx.lineWidth = 2.4; ctx.lineCap = 'round';
+  if (p.seat >= 0) { ctx.beginPath(); ctx.moveTo(-2, -8); ctx.lineTo(3, -8); ctx.lineTo(3, 0); ctx.moveTo(2, -8); ctx.lineTo(6, -8); ctx.lineTo(6, 0); ctx.stroke(); }
+  else { ctx.beginPath(); ctx.moveTo(-1.5, -10); ctx.lineTo(-1.5 - step, 0); ctx.moveTo(1.5, -10); ctx.lineTo(1.5 + step, 0); ctx.stroke(); }
+  ctx.fillStyle = p.cloth; roundRect(-5, -24, 10, 15, 4); ctx.fill();
+  // Arms
+  ctx.strokeStyle = p.cloth; ctx.lineWidth = 2.6;
+  ctx.beginPath();
+  if (flee || celebrating && !moving) { ctx.moveTo(-4, -21); ctx.lineTo(-8, -31 + Math.sin(t * 12 + p.ph) * 2); ctx.moveTo(4, -21); ctx.lineTo(8, -31 - Math.sin(t * 12 + p.ph) * 2); }
+  else if (p.seat >= 0) { const sh = Math.sin(t * 9 + p.ph) * 2; ctx.moveTo(3, -20); ctx.lineTo(10 + sh, -15); }
+  else { ctx.moveTo(-4, -21); ctx.lineTo(-6 + step * .5, -12); ctx.moveTo(4, -21); ctx.lineTo(6 - step * .5, -12); }
+  ctx.stroke();
+  // Head
+  const face = p.sick > .5 ? '#9BCB5B' : p.skin;
+  ctx.fillStyle = face; ctx.beginPath(); ctx.arc(0, -29, 5.4, 0, TAU); ctx.fill();
+  ctx.fillStyle = p.hair; ctx.beginPath(); ctx.arc(0, -30.5, 5.5, Math.PI * 1.05, Math.PI * 1.95); ctx.fill();
+  if (p.kind === 'kid' && p.ph > 3) { ctx.beginPath(); ctx.arc(4.5, -33, 2.2, 0, TAU); ctx.fill(); }
+  ctx.fillStyle = '#1B1A2A';
+  ctx.fillRect(1, -30, 1.2, 1.4);
+  if (flee) { ctx.beginPath(); ctx.ellipse(2.4, -26.3, 1.5, 2, 0, 0, TAU); ctx.fill(); }
+  else if (celebrating) { ctx.beginPath(); ctx.arc(2, -27.2, 1.6, 0, Math.PI); ctx.fill(); }
+  if (p.lantern && p.seat < 0 && !flee) { ctx.strokeStyle = '#8B6B3A'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(6, -14); ctx.lineTo(12, -30); ctx.stroke(); ctx.restore(); drawLantern(p.x + 12 * s * p.dir, p.y - bob * s - 22 * s, .75 * s, true, p.lantern - 1); return; }
+  ctx.restore();
+  if (p.smoke > 0) burst(p.x - 3 * p.dir, p.y - 12 * s, 1, { c: 'rgba(90,90,100,.6)', v0: 5, v1: 15, g: -30, l0: .5, l1: .9, r0: 2, r1: 4, kind: 'smoke' });
+}
+function drawVehicle(v, t) {
+  ctx.save(); ctx.translate(v.x, G.road + 16); ctx.scale(v.dir, 1);
+  const body = { fire: '#D9302B', amb: '#F1F1EC', police: '#23336B' }[v.kind];
+  ctx.fillStyle = body; roundRect(-44, -26, 88, 24, 4); ctx.fill();
+  ctx.fillStyle = body; roundRect(24, -34, 22, 32, 4); ctx.fill();
+  ctx.fillStyle = '#9CC7E8'; ctx.fillRect(30, -30, 13, 10);
+  if (v.kind === 'fire') { ctx.strokeStyle = '#DDD'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-40, -30); ctx.lineTo(18, -30); for (let x = -36; x < 18; x += 7) { ctx.moveTo(x, -33); ctx.lineTo(x, -27); } ctx.moveTo(-40, -33); ctx.lineTo(18, -33); ctx.stroke(); }
+  if (v.kind === 'amb') { ctx.fillStyle = '#F4C24F'; for (let x = -44; x < 24; x += 12) ctx.fillRect(x, -10, 6, 6); ctx.fillStyle = '#2F7D4F'; for (let x = -38; x < 24; x += 12) ctx.fillRect(x, -10, 6, 6); }
+  if (v.kind === 'police') { for (let x = -44; x < 24; x += 6) { ctx.fillStyle = ((x / 6) & 1) ? '#FFF' : '#3A6FD8'; ctx.fillRect(x, -12, 6, 4); } }
+  ctx.scale(v.dir, 1);
+  ctx.font = `900 11px ${FZH}`; ctx.fillStyle = v.kind === 'amb' ? '#C0392B' : '#FFF';
+  ctx.textAlign = 'center'; ctx.fillText({ fire: '消防', amb: '救護', police: '警察' }[v.kind], -10 * v.dir, -15);
+  ctx.scale(v.dir, 1);
+  ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(-28, -1, 6, 0, TAU); ctx.arc(30, -1, 6, 0, TAU); ctx.fill();
+  const on = Math.sin(t * 16) > 0;
+  ctx.fillStyle = v.kind === 'police' ? (on ? '#3A8CFF' : '#FF3B3B') : (on ? '#FF3B3B' : '#FFB0B0');
+  ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 12; ctx.fillRect(28, -38, 10, 4); ctx.shadowBlur = 0;
+  ctx.restore();
+}
+function drawFlag(x, y, t, s) {
+  // Hong Kong's flag: a white five-petal bauhinia on red.
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.strokeStyle = '#DDD'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, 70); ctx.stroke();
+  const fw = 48, fh = 32;
+  ctx.fillStyle = '#DE2910';
+  ctx.beginPath(); ctx.moveTo(0, 2);
+  for (let i = 0; i <= 12; i++) { const u = i / 12; ctx.lineTo(u * fw, 2 + Math.sin(t * 4 - u * 5) * 3 * u); }
+  for (let i = 12; i >= 0; i--) { const u = i / 12; ctx.lineTo(u * fw, 2 + fh + Math.sin(t * 4 - u * 5) * 3 * u); }
+  ctx.fill();
+  const cx = fw / 2, cy = 2 + fh / 2 + Math.sin(t * 4 - 2.5) * 1.5;
+  for (let k = 0; k < 5; k++) {
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(k / 5 * TAU);
+    ctx.fillStyle = '#FFF'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(-6, -4, -5, -12, 0, -12.5); ctx.bezierCurveTo(3, -11, 3, -5, 0, 0); ctx.fill();
+    ctx.fillStyle = '#DE2910'; ctx.beginPath(); ctx.arc(-1, -8, 1, 0, TAU); ctx.fill();
+    ctx.strokeStyle = '#DE2910'; ctx.lineWidth = .5; ctx.beginPath(); ctx.moveTo(0, -1); ctx.quadraticCurveTo(-1.5, -4, -1, -7); ctx.stroke();
+    ctx.restore();
+  }
+  ctx.restore();
+}
+function drawRabbit(x, y, s, t, hop) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  const g = ctx.createRadialGradient(0, -6, 2, 0, -6, 26); g.addColorStop(0, 'rgba(255,255,255,.35)'); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(-26, -32, 52, 52);
+  ctx.fillStyle = '#FBFBF7';
+  ctx.beginPath(); ctx.ellipse(0, -6, 10, 7, 0, 0, TAU); ctx.fill();
+  ctx.beginPath(); ctx.arc(9, -12, 5.5, 0, TAU); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(8, -22, 2, 7, -.2 + hop * .3, 0, TAU); ctx.ellipse(12, -21, 2, 7, .3 + hop * .3, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#F4A7B9'; ctx.beginPath(); ctx.ellipse(12, -21, .8, 5, .3 + hop * .3, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#E3493A'; ctx.beginPath(); ctx.arc(11.5, -13, 1.2, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#FBFBF7'; ctx.beginPath(); ctx.arc(-10, -7, 3, 0, TAU); ctx.fill();
+  ctx.restore();
+}
+function drawChangE(x, y, s, t) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  const g = ctx.createRadialGradient(0, -20, 2, 0, -20, 44); g.addColorStop(0, 'rgba(255,240,210,.5)'); g.addColorStop(1, 'rgba(255,240,210,0)'); ctx.fillStyle = g; ctx.fillRect(-44, -64, 88, 88);
+  // Flowing ribbons
+  ctx.strokeStyle = '#F7A8C4'; ctx.lineWidth = 2.2;
+  for (const side of [-1, 1]) { ctx.beginPath(); ctx.moveTo(side * 6, -26); for (let i = 1; i <= 10; i++) ctx.lineTo(side * (6 + i * 2.6), -26 + i * 4 + Math.sin(t * 4 + i * .7) * 4); ctx.stroke(); }
+  ctx.fillStyle = '#FFF4EA'; ctx.beginPath(); ctx.moveTo(-6, -26); ctx.quadraticCurveTo(-13, 0, -10 + Math.sin(t * 3) * 3, 14); ctx.lineTo(10 + Math.sin(t * 3 + 1) * 3, 14); ctx.quadraticCurveTo(13, 0, 6, -26); ctx.fill();
+  ctx.fillStyle = '#E88AAE'; ctx.fillRect(-6, -14, 12, 3);
+  ctx.fillStyle = '#F5D4B3'; ctx.beginPath(); ctx.arc(0, -32, 6, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#1C1612'; ctx.beginPath(); ctx.arc(0, -34, 6.2, Math.PI, TAU); ctx.fill(); ctx.beginPath(); ctx.arc(0, -41, 4, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#F4C24F'; ctx.fillRect(-1, -46, 2, 3);
+  ctx.restore();
+}
+function drawHouYi(x, y, s) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.strokeStyle = '#1B1A2A'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(-2, -10); ctx.lineTo(-3, 0); ctx.moveTo(2, -10); ctx.lineTo(3, 0); ctx.stroke();
+  ctx.fillStyle = '#8B3A2E'; roundRect(-6, -27, 12, 18, 4); ctx.fill();
+  ctx.fillStyle = '#F2C9A0'; ctx.beginPath(); ctx.arc(0, -32, 6, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#1C1612'; ctx.beginPath(); ctx.arc(0, -34, 6.2, Math.PI, TAU); ctx.fill(); ctx.fillRect(-1.5, -42, 3, 4);
+  ctx.strokeStyle = '#C9A15C'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(-9, -18, 14, -1.2, 1.2); ctx.stroke();
+  ctx.strokeStyle = '#EEE'; ctx.lineWidth = .6; ctx.beginPath(); ctx.moveTo(-9 + Math.cos(-1.2) * 14, -18 + Math.sin(-1.2) * 14); ctx.lineTo(-9 + Math.cos(1.2) * 14, -18 + Math.sin(1.2) * 14); ctx.stroke();
+  ctx.restore();
+}
+function drawDragon(d, t) {
+  const n = 16;
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    let x, y;
+    if (d.dance > 0) { const a = t * 2.4 - i * .32; x = d.cx + Math.cos(a) * (70 + i * 3); y = d.cy + Math.sin(a) * 26; }
+    else { x = d.x - i * 16; y = 488 + Math.sin(t * 3 - i * .5) * 12; }
+    pts.push([x, y]);
+  }
+  for (let i = n - 1; i >= 0; i--) {
+    const [x, y] = pts[i], r = i === 0 ? 13 : 10 - i * .25;
+    ctx.strokeStyle = '#5A4020'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + 22); ctx.stroke();
+    ctx.fillStyle = '#C8A55A'; ctx.beginPath(); ctx.ellipse(x, y, r * 1.2, r, 0, 0, TAU); ctx.fill();
+    for (let k = 0; k < 5; k++) { const a = k / 5 * TAU + i; const fl = .5 + .5 * Math.sin(t * 12 + k + i); ctx.fillStyle = `rgba(255,${120 + fl * 100},40,${.7 + fl * .3})`; ctx.fillRect(x + Math.cos(a) * r * .8, y + Math.sin(a) * r * .6, 2, 2); }
+  }
+  const [hx, hy] = pts[0];
+  ctx.fillStyle = '#E3493A'; ctx.beginPath(); ctx.arc(hx + 8, hy - 4, 3, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#FFF'; ctx.beginPath(); ctx.arc(hx + 4, hy - 6, 2.4, 0, TAU); ctx.fill();
+}
+
+/* ───────────── Scene update and draw ───────────── */
+let carriedLanterns = 0, lastT = 0, clock = 0, fwTimer = 0, babbleTimer = 0, clackTimer = 0, shTimer = 0;
+const rockets = [];
+function incidentKind() { return S.incident ? S.incident.kind : null; }
+function updateScene(dt, t) {
+  syncPeople();
+  const inc = incidentKind();
+  const d = MMSim.derive(S);
+  // Seats at mahjong tables.
+  const tbs = tables();
+  const seated = people.filter(p => p.seat >= 0 && !p.gone && !p.taken);
+  seated.forEach(p => { if (p.seat >= tbs.length * 4 || inc === 'fire' || inc === 'rowdy' && p.kind === 'kid') p.seat = -1; });
+  const taken = new Set(people.filter(p => p.seat >= 0).map(p => p.seat));
+  if (inc !== 'fire') for (let sI = 0; sI < tbs.length * 4; sI++) if (!taken.has(sI)) { const p = people.find(q => q.kind === 'adult' && q.seat < 0 && !q.gone && !q.taken); if (!p) break; p.seat = sI; }
+  // Who carries lanterns: kids first, then grown-ups.
+  const free = people.filter(p => !p.gone && !p.taken && p.seat < 0).sort((a, b) => (a.kind === 'kid' ? 0 : 1) - (b.kind === 'kid' ? 0 : 1));
+  carriedLanterns = Math.min(S.n.lanterns, Math.ceil(free.length * .6));
+  people.forEach(p => p.lantern = 0);
+  for (let i = 0; i < carriedLanterns; i++) free[i].lantern = 1 + (i % 4 === 1 ? 1 : i % 4 === 3 ? 2 : 0);
+  const celebratingShare = d.inside ? S.celebrating / Math.max(1, d.P) : 0;
+  const cap = d.cap;
+  let housedCount = 0;
+  people.forEach((p, idx) => {
+    if (p.taken || p.gone) { p.state = 'walk'; }
+    else if (inc === 'fire') p.state = 'flee';
+    else if (inc === 'rowdy' && p.kind === 'kid') p.state = 'flee';
+    else p.state = (idx * .6180339887 % 1) < celebratingShare ? 'party' : 'walk';
+    if (!p.gone && !p.taken) housedCount++;
+    // Movement
+    if (p.seat >= 0) {
+      const tb = tbs[Math.floor(p.seat / 4)];
+      if (tb) { const k = p.seat % 4; const off = [[-24, -2], [24, -2], [-11, 9], [11, 9]][k]; p.tx = tb.x + off[0]; p.ty = tb.y + off[1]; p.dir = off[0] < 0 ? 1 : -1; }
+    } else if (!p.gone && !p.taken) {
+      p.wait -= dt;
+      if (p.state === 'flee') { if (p.wait <= 0 || Math.hypot(p.tx - p.x, p.ty - p.y) < 4) { const q = plazaPoint(); p.tx = q.x; p.ty = q.y; p.wait = rnd(.3, 1); } }
+      else if (Math.hypot(p.tx - p.x, p.ty - p.y) < 3 && p.wait <= 0) { const q = plazaPoint(); p.tx = clamp(p.x + rnd(-160, 160), 16, W - 16); p.ty = q.y; p.wait = rnd(1, 5); }
+    }
+    const dx = p.tx - p.x, dy = p.ty - p.y, dist = Math.hypot(dx, dy);
+    const sp = p.sp * (p.state === 'flee' ? 3 : 1) * (p.seat >= 0 ? 3 : 1);
+    if (dist > 1) { const k = Math.min(1, sp * dt / dist); p.x += dx * k; p.y += dy * k; if (Math.abs(dx) > 1 && p.seat < 0) p.dir = dx > 0 ? 1 : -1; }
+    else if (p.seat >= 0) p.x = p.tx, p.y = p.ty;
+    // Sickness shows during tummy trouble.
+    const tummyHigh = S.m.tummy > 60 || inc === 'tummy';
+    p.sick = tummyHigh && (idx * .7548776662 % 1) < (inc === 'tummy' ? .45 : (S.m.tummy - 60) / 100) ? 1 : Math.max(0, p.sick - dt);
+    p.smoke = inc === 'fire' && idx % 4 === 0 ? 1 : 0;
+    if (p.sick > .5 && !p.gone && Math.random() < dt * .35) {
+      const s = depth(p.y);
+      if (Math.random() < .55) { burst(p.x + 6 * p.dir * s, p.y - 27 * s, 14, { a: p.dir > 0 ? -.2 : Math.PI + .2, spread: .5, v0: 30, v1: 70, g: 200, c: () => pick(['#9DBE3B', '#C4D65A', '#7FA43A']), l0: .5, l1: .8, r0: 1.4, r1: 2.6 }); say(p, pick(['Blergh!', 'Urrgh…', 'Too much cake!']), '#C9E27A'); SFX.vomit(p.x); }
+      else { puddles.push({ x: p.x - 4 * p.dir, y: p.y + 1, life: 22 }); say(p, pick(['Uh oh…', 'Toilet! Toilet!', 'Oops!']), '#D7A36B'); SFX.fart(p.x); }
+    }
+    // Speech bubbles
+    p.bubbleT -= dt;
+    if (p.bubbleT <= 0 && !p.gone) {
+      p.bubbleT = rnd(5, 14) * (people.length > 30 ? 2 : 1);
+      if (p.state === 'flee') { say(p, pick(['AAAH!', 'Hot hot hot!', 'Run!', '救命!']), '#FFB27A'); SFX.scream(p.x, p.kind === 'kid'); }
+      else if (p.seat >= 0 && Math.random() < .5) say(p, pick(['碰!', '食糊!', 'Pung!', 'Mahjong!']), '#9FF0C4');
+      else if (p.state === 'party') { say(p, pick(['中秋快樂!', 'Happy Mid-Autumn!', 'Look at the moon!', 'Yum, mooncake!', 'Hahaha!']), '#FFE7A6'); if (Math.random() < .5) SFX.laugh(p.x, p.kind === 'kid'); }
+      else if (S.m.noise > 70 && Math.random() < .4) say(p, 'Shhh! Too loud!', '#A9C4FF');
+    }
+  });
+  people = people.filter(p => !(p.gone || p.taken) || (p.x > -30 && p.x < W + 30 && !(p.taken && Math.hypot(p.tx - p.x, p.ty - p.y) < 4)));
+  // Fireworks launch.
+  if (!inc || inc === 'rowdy') {
+    fwTimer -= dt * S.n.fireworks * .22;
+    if (fwTimer <= 0 && S.n.fireworks > 0) { fwTimer = 1 + Math.random(); rockets.push({ x: rnd(W * .1, W * .9), y: G.road, vy: -rnd(260, 330), fuse: rnd(.7, 1.1), c: pick(['#FF5E5E', '#FFD23F', '#63E6FF', '#FF8BEA', '#9DFF7A', '#FFFFFF']) }); SFX.whistle(); }
+  }
+  for (const r of rockets) {
+    r.y += r.vy * dt; r.fuse -= dt; burst(r.x, r.y, 1, { c: 'rgba(255,200,120,.8)', v0: 2, v1: 10, g: 20, l0: .3, l1: .5, r0: .8, r1: 1.4 });
+    if (r.fuse <= 0) { r.done = true; burst(r.x, r.y, 70, { c: () => Math.random() < .8 ? r.c : '#FFF', v0: 40, v1: 130, g: 40, l0: 1, l1: 1.8, r0: 1.1, r1: 2.2, drag: .97, kind: 'spark' }); SFX.boom(r.x); }
+  }
+  for (let i = rockets.length - 1; i >= 0; i--) if (rockets[i].done) rockets.splice(i, 1);
+  // Mahjong clacks.
+  clackTimer -= dt * S.n.mahjong * .4;
+  if (clackTimer <= 0 && S.n.mahjong > 0) { clackTimer = rnd(.8, 1.6); SFX.clack(tbs.length ? pick(tbs).x : W / 2); }
+  // Rowdy kids knock lanterns down.
+  if (inc === 'rowdy') { for (let i = 0; i < 20; i++) if (Math.random() < dt * .5) lanternFall[i] = Math.min(60, (lanternFall[i] || 0) + 30); }
+  else lanternFall = lanternFall.map(v => Math.max(0, v - dt * 20));
+  // Vehicles.
+  for (const v of vehicles) {
+    if (v.state === 'in') { v.x += (v.tx - v.x) * Math.min(1, dt * 1.6); if (Math.abs(v.tx - v.x) < 3) v.state = 'park'; }
+    else if (v.state === 'out') v.x -= 240 * dt;
+  }
+  vehicles = vehicles.filter(v => v.x > -140 && v.x < W + 140);
+  // Firefighters spray water.
+  const fireV = vehicles.find(v => v.kind === 'fire' && v.state === 'park');
+  if (fireV && inc === 'fire' && fireTarget) {
+    for (let k = 0; k < 3; k++) burst(fireV.x - 20 * fireV.dir, G.road - 10, 1, { a: Math.atan2(fireTarget.y - G.road, fireTarget.x - fireV.x) + rnd(-.08, .08), spread: .04, v0: 280, v1: 330, g: 260, c: 'rgba(150,210,255,.85)', l0: .6, l1: .9, r0: 1.2, r1: 2.2, drag: 1 });
+  }
+  // Particles.
+  for (const q of parts) { q.vx *= q.drag; q.vy = q.vy * q.drag + q.g * dt; q.x += q.vx * dt; q.y += q.vy * dt; q.life -= dt; }
+  parts = parts.filter(q => q.life > 0);
+  if (parts.length > 1800) parts.splice(0, parts.length - 1800);
+  bubbles.forEach(b => b.life -= dt); bubbles = bubbles.filter(b => b.life > 0);
+  puddles.forEach(b => b.life -= dt); puddles = puddles.filter(b => b.life > 0);
+  ruins.forEach(r => r.life -= dt); ruins = ruins.filter(r => r.life > 0);
+  // Special visitors.
+  if (special) {
+    special.age += dt;
+    if (special.kind === 'rabbit') {
+      if (special.caught) { special.cy -= dt * (special.age > 2.2 ? 160 : 0); if (special.cy < -30) special = null; }
+      else special.x += dt * (W + 80) / 5;
+    } else if (special.kind === 'change') {
+      if (special.caught) { special.y += (G.plazaB - 40 - special.y) * dt * 1.4; special.x += (W * .5 - special.x) * dt * 1.4; if (Math.abs(special.y - (G.plazaB - 40)) < 3) { couple = { x: W * .5, y: G.plazaB - 40, t: 0 }; special = null; SFX.cheer(1.2); } }
+      else { const m = MOON(), u = clamp(special.age / 9, 0, 1); special.x = special.x0 + (m.x - special.x0) * u + Math.sin(u * 8) * 20 * (1 - u); special.y = special.y0 + (m.y - special.y0) * (u * u * (3 - 2 * u)); special.s = 1.1 - u * .6; }
+    } else if (special.kind === 'dragon') {
+      if (special.caught) { special.dance -= dt; if (Math.random() < dt * 6) { burst(special.cx + rnd(-90, 90), special.cy + rnd(-30, 30), 10, { c: () => pick(['#FF5E3A', '#FFD23F', '#FFF']), v0: 30, v1: 90, g: 80, l0: .3, l1: .7 }); SFX.cracker(special.cx); } if (special.dance <= 0) { special.caught = false; special.leaving = true; special.dance = 0; special.x = special.cx + 70; } }
+      else special.x += dt * (W + 300) / 8;
+      if (special.leaving && special.x > W + 280) special = null;
+    }
+  }
+  if (couple) { couple.t += dt; if (Math.random() < dt * 3) burst(couple.x, couple.y - 50, 1, { c: '#FF8BB0', v0: 10, v1: 25, g: -30, l0: 1, l1: 1.6, r0: 3, r1: 4, kind: 'heart' }); }
+}
+let fireTarget = null;
+function drawScene(t) {
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  drawSky(t);
+  // Fireworks sparks draw in the sky, behind the city.
+  for (const q of parts) if (q.kind === 'spark') { ctx.globalAlpha = clamp(q.life / q.max, 0, 1); ctx.fillStyle = q.c; ctx.fillRect(q.x, q.y, q.r, q.r); }
+  ctx.globalAlpha = 1;
+  for (const r of rockets) { ctx.fillStyle = '#FFE2A0'; ctx.fillRect(r.x - 1, r.y - 3, 2, 6); }
+  drawLand(t);
+  // Special: Chang'e drifts up behind the buildings, in front of the sky.
+  if (special && special.kind === 'change') drawChangE(special.x, special.y, special.s || 1, t);
+  const inc = incidentKind();
+  const lit = buildingLit();
+  fireTarget = null;
+  for (let k = 0; k < S.n.buildings; k++) {
+    const b = buildingSlot(k);
+    const burning = inc === 'fire' && k === S.n.buildings - 1;
+    drawBuilding(b, k, t, lit, burning);
+    if (burning) { drawFire(b.x, G.road - b.h + 4, b.w, 50, t); drawFire(b.x, G.road - b.h * .5, b.w * .8, 30, t, .8); fireTarget = { x: b.x, y: G.road - b.h * .6 }; if (Math.random() < .5) burst(b.x + rnd(-b.w / 2, b.w / 2), G.road - b.h, 2, { c: 'rgba(70,70,80,.55)', v0: 8, v1: 20, g: -25, l0: 1.5, l1: 2.6, r0: 4, r1: 8, kind: 'smoke' }); }
+  }
+  for (const r of ruins) {
+    const b = buildingSlot(r.k), a = clamp(r.life / 4, 0, 1);
+    ctx.globalAlpha = a; ctx.fillStyle = '#1A1512'; ctx.beginPath(); ctx.moveTo(b.x - b.w / 2, G.road); ctx.lineTo(b.x - b.w / 2, G.road - 40); ctx.lineTo(b.x - 10, G.road - 60); ctx.lineTo(b.x + 6, G.road - 34); ctx.lineTo(b.x + b.w / 2, G.road - 48); ctx.lineTo(b.x + b.w / 2, G.road); ctx.fill(); ctx.globalAlpha = 1;
+    if (Math.random() < .3) burst(b.x + rnd(-20, 20), G.road - 40, 1, { c: 'rgba(70,70,80,.5)', v0: 6, v1: 14, g: -20, l0: 1.5, l1: 2.5, r0: 4, r1: 7, kind: 'smoke' });
+    if (!fireTarget && inc === 'fire') fireTarget = { x: b.x, y: G.road - 40 };
+  }
+  if (inc === 'fire' && S.n.buildings === 0 && !ruins.length) { drawFire(W * .37, G.shore + 16, 60, 40, t); fireTarget = { x: W * .37, y: G.shore }; }
+  if (flag) { const top = S.n.buildings ? Math.max(...Array.from({ length: S.n.buildings }, (_, k) => buildingSlot(k)).map(b => b.h)) : 0; const b = S.n.buildings ? Array.from({ length: S.n.buildings }, (_, k) => buildingSlot(k)).find(b => b.h === top) : { x: W * .5 }; drawFlag(b.x, G.road - top - 70 * flag.rise, t, 1); flag.rise = Math.min(1, flag.rise + .004); }
+  drawStringLanterns(t);
+  for (const q of parts) if (q.kind === 'smoke') { ctx.globalAlpha = clamp(q.life / q.max, 0, 1) * .8; ctx.fillStyle = q.c; ctx.beginPath(); ctx.arc(q.x, q.y, q.r * (2 - q.life / q.max), 0, TAU); ctx.fill(); }
+  ctx.globalAlpha = 1;
+  drawRoad();
+  for (const v of vehicles) drawVehicle(v, t);
+  // Puddles (the less said the better).
+  for (const pd of puddles) { ctx.globalAlpha = clamp(pd.life / 5, 0, 1); ctx.fillStyle = '#7A5230'; ctx.beginPath(); ctx.ellipse(pd.x, pd.y, 5, 2, 0, 0, TAU); ctx.fill(); ctx.beginPath(); ctx.arc(pd.x, pd.y - 2, 2.5, 0, TAU); ctx.fill(); ctx.strokeStyle = 'rgba(160,200,90,.6)'; ctx.lineWidth = .8; ctx.beginPath(); for (let k = -1; k <= 1; k++) { ctx.moveTo(pd.x + k * 3, pd.y - 5); ctx.quadraticCurveTo(pd.x + k * 3 + 2, pd.y - 8, pd.x + k * 3, pd.y - 11 - Math.sin(t * 4 + k) * 1); } ctx.stroke(); }
+  ctx.globalAlpha = 1;
+  // Everything on the plaza, back to front.
+  const draw = [];
+  tables().forEach(tb => draw.push({ y: tb.y, f: () => drawTable(tb.x, tb.y, depth(tb.y) * 1.35) }));
+  people.forEach(p => draw.push({ y: p.y, f: () => drawPerson(p, t) }));
+  const cakes = S.n.mooncakes + S.n.secret;
+  if (cakes || S.n.tea) {
+    const by = G.plazaB - 12;
+    draw.push({ y: by, f: () => {
+      const bw = Math.min(W * .6, 60 + (cakes + S.n.tea) * 16), bx = W / 2 - bw / 2;
+      ctx.fillStyle = '#7A1E16'; ctx.fillRect(bx, by - 6, bw, 12); ctx.fillStyle = '#B42A1E'; ctx.fillRect(bx, by - 9, bw, 5); ctx.fillStyle = '#F4C24F'; ctx.fillRect(bx, by - 4, bw, 1.2);
+      let i = 0; const slot = bw / (cakes + S.n.tea + 1);
+      for (let k = 0; k < S.n.tea; k++) drawTeapot(bx + slot * (++i), by - 14, 1);
+      for (let k = 0; k < S.n.mooncakes; k++) drawMooncake(bx + slot * (++i), by - 12, 1, false);
+      for (let k = 0; k < S.n.secret; k++) drawMooncake(bx + slot * (++i), by - 12, 1, true);
+    } });
+  }
+  if (couple) draw.push({ y: couple.y, f: () => { drawHouYi(couple.x - 10, couple.y, 1.1); drawChangE(couple.x + 12, couple.y + 14, .85, t); } });
+  if (special && special.kind === 'rabbit') draw.push({ y: special.cy, f: () => { const hop = Math.abs(Math.sin(special.age * 9)); drawRabbit(special.x, special.cy - (special.caught ? 0 : hop * 18), 1.2, t, hop); if (special.caught && special.age < 2.2) { ctx.fillStyle = '#C9B28A'; ctx.fillRect(special.x - 20, special.cy - 8, 10, 8); ctx.strokeStyle = '#8A6B3A'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(special.x - 15, special.cy - 8 - Math.abs(Math.sin(special.age * 12)) * 10); ctx.lineTo(special.x - 8, special.cy - 20); ctx.stroke(); } } });
+  if (special && special.kind === 'dragon') draw.push({ y: 488, f: () => drawDragon(special, t) });
+  draw.sort((a, b) => a.y - b.y).forEach(o => o.f());
+  // Loose particles (vomit, water, petals, hearts).
+  for (const q of parts) {
+    if (q.kind === 'spark' || q.kind === 'smoke') continue;
+    ctx.globalAlpha = clamp(q.life / q.max * 1.5, 0, 1); ctx.fillStyle = q.c;
+    if (q.kind === 'heart') { ctx.beginPath(); const x = q.x, y = q.y, r = q.r; ctx.moveTo(x, y + r); ctx.bezierCurveTo(x - r * 2, y - r * .5, x - r * .5, y - r * 2, x, y - r * .6); ctx.bezierCurveTo(x + r * .5, y - r * 2, x + r * 2, y - r * .5, x, y + r); ctx.fill(); }
+    else if (q.kind === 'petal') { ctx.beginPath(); ctx.ellipse(q.x, q.y, q.r, q.r * .55, q.x * .05, 0, TAU); ctx.fill(); }
+    else ctx.fillRect(q.x - q.r / 2, q.y - q.r / 2, q.r, q.r);
+  }
+  ctx.globalAlpha = 1;
+  // Speech bubbles.
+  ctx.font = `700 11px ${FBODY}`; ctx.textAlign = 'center';
+  for (const b of bubbles) {
+    const p = b.p, x = clamp(p.x, 30, W - 30), y = p.y - 44 * depth(p.y) - (1.8 - b.life) * 6;
+    const w = ctx.measureText(b.text).width + 10;
+    ctx.globalAlpha = clamp(b.life * 2, 0, 1);
+    ctx.fillStyle = 'rgba(8,10,30,.8)'; roundRect(x - w / 2, y - 12, w, 16, 6); ctx.fill();
+    ctx.fillStyle = b.col; ctx.fillText(b.text, x, y);
+  }
+  ctx.globalAlpha = 1;
+  // Tap hints on visitors.
+  if (special && !special.caught && special.kind !== 'dragon' || special && special.kind === 'dragon' && !special.caught && !special.leaving) {
+    const hp = hitPoint();
+    if (hp) { const pulse = .5 + .5 * Math.sin(t * 8); ctx.strokeStyle = `rgba(255,230,140,${.5 + pulse * .5})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(hp.x, hp.y, hp.r + pulse * 5, 0, TAU); ctx.stroke(); ctx.fillStyle = '#FFE58A'; ctx.font = `700 12px ${FBODY}`; ctx.fillText('Tap!', hp.x, hp.y - hp.r - 8); }
+  }
+  // A still, empty night: say so, gently.
+  if (running && !people.length && S.n.buildings === 0) { ctx.fillStyle = 'rgba(246,236,214,.55)'; ctx.font = `italic 16px ${FDISP}`; ctx.fillText('Just the moon, the crickets and the sea. Add some people…', W / 2, G.roadB + 60); }
+}
+function hitPoint() {
+  if (!special) return null;
+  if (special.kind === 'rabbit') return { x: special.x, y: special.cy - 12, r: 30 };
+  if (special.kind === 'change') return { x: special.x, y: special.y - 20, r: 34 * (special.s || 1) + 8 };
+  if (special.kind === 'dragon') return { x: special.x, y: 482, r: 40 };
+  return null;
+}
+
+/* ───────────── Model events → story, sound and scene ───────────── */
+const TCOL = { fire: '--m-fire', tummy: '--m-tummy', police: '--m-noise', rowdy: '--m-rowdy' };
+function toast(html, col, ms = 5200) {
+  const el = document.createElement('div'); el.className = 'toast'; if (col) el.style.setProperty('--tc', `var(${col})`);
+  el.innerHTML = html; $('#toasts').prepend(el);
+  const all = $('#toasts').children; while (all.length > 3) all[all.length - 1].remove();
+  setTimeout(() => el.remove(), ms);
+}
+function handleEvent(e) {
+  const V = x => vehicles.push({ kind: x, x: W + 120, tx: W * (x === 'fire' ? .55 : x === 'amb' ? .72 : .38), dir: -1, state: 'in' });
+  if (e.type === 'incident') {
+    if (e.kind === 'fire') { toast(`<b>Fire! ${zh('fire')}</b> Too many fireworks and lanterns without enough grown-ups watching. The firefighters ${zh('firefighters')} are on the way.`, TCOL.fire, 7000); V('fire'); SFX.siren('fire'); SFX.cheer(0, true); }
+    if (e.kind === 'tummy') { toast(`<b>Tummy trouble! ${zh('tummy')}</b> Too much mooncake and not enough tea. Call the ambulance ${zh('ambulance')}!`, TCOL.tummy, 7000); V('amb'); SFX.siren('amb'); }
+    if (e.kind === 'police') { toast(`<b>Too loud! ${zh('noise')}</b> The neighbours complained about the mahjong and fireworks. Here come the police ${zh('police')}.`, TCOL.police, 7000); V('police'); SFX.siren('police'); SFX.whistleBlow(); }
+    if (e.kind === 'rowdy') { toast(`<b>Mischief! ${zh('rowdy')}</b> Too many kids and not enough grown-ups. Lanterns are falling and mooncakes are flying!`, TCOL.rowdy, 7000); SFX.cheer(.5, false, true); for (let i = 0; i < 12; i++) burst(rnd(W * .3, W * .7), G.plazaB - 20, 1, { a: -Math.PI / 2, spread: 1, v0: 120, v1: 220, g: 300, c: '#D89148', l0: 1, l1: 1.4, r0: 4, r1: 6 }); }
+    hydrate($('#toasts'));
+  }
+  if (e.type === 'burned') { ruins.push({ k: S.n.buildings, life: 14 }); toast('A building burned down. Everyone got out, but now there is less room for people.', TCOL.fire); SFX.crash(); }
+  if (e.type === 'sent') { const amb = vehicles.find(v => v.kind === 'amb'); takeMixed(e.count, amb ? amb.x : W * .72); toast(`${e.count} people with sore tummies went to hospital. Half the mooncakes went in the bin.`, TCOL.tummy); }
+  if (e.type === 'arrested') { const pv = vehicles.find(v => v.kind === 'police'); takeMixed(e.count, pv ? pv.x : W * .38); toast(`${e.count} grown-ups taken away for noise. Half the mahjong tables were packed up.`, TCOL.police); }
+  if (e.type === 'resolved') { vehicles.forEach(v => { v.state = 'out'; v.dir = -1; }); }
+  if (e.type === 'unlock') {
+    toast(`<b>A secret recipe…</b> Legend says that long ago, people hid messages inside mooncakes to plan an uprising on the night of the full moon. You can now serve <b>secret mooncakes</b> ${zh('secret')}. Read the story in Moon Tales.`, '--gold', 11000);
+    const row = document.querySelector('.item[data-key="secret"]'); row.hidden = false; row.classList.add('new'); SFX.gong();
+  }
+  if (e.type === 'discovered') { toast('The secret leaked! Too few grown-ups had the message, so the police found out.', TCOL.police, 7000); }
+  if (e.type === 'uprising') {
+    flag = { rise: 0 }; toast(`<b>The people rise up!</b> Enough grown-ups read the message. The crowd raises its own flag ${zh('flag')}, the police go home, and the party gets even bigger. +1,500`, '--gold', 11000);
+    vehicles.forEach(v => { v.state = 'out'; }); SFX.gong(); SFX.cheer(1.5); hydrate($('#toasts'));
+  }
+  if (e.type === 'special') {
+    const k = e.kind;
+    if (k === 'rabbit') { special = { kind: k, x: -40, cy: rnd(G.roadB + 40, G.plazaB - 20), age: 0 }; toast(`A white rabbit! Is it the Jade Rabbit ${zh('rabbit')}? Tap it quickly!`, '--gold', 4000); SFX.sparkle(); }
+    if (k === 'change') { const bl = S.n.buildings ? buildingSlot(0) : { x: W * .3, h: 0 }; special = { kind: k, x0: bl.x, y0: G.road - bl.h - 10, x: bl.x, y: G.road - bl.h - 10, age: 0, s: 1.1 }; toast(`Chang'e ${zh('change')} is floating up to the moon! Tap her before she gets there, so she can stay with Hou Yi ${zh('houyi')}.`, '--gold', 7000); SFX.rise(); }
+    if (k === 'dragon') { special = { kind: k, x: -60, cx: W * .5, cy: 488, dance: 0, age: 0 }; toast(`The fire dragon ${zh('dragon')} of Tai Hang is coming down the street! Tap it to make it dance.`, '--gold', 6000); SFX.drumRoll(); }
+    hydrate($('#toasts'));
+  }
+  if (e.type === 'missed') {
+    if (e.kind === 'change') { toast(`Chang'e reached the moon. In the old story she lives there still, and Hou Yi looks up at her every Mid-Autumn night.`, '--ink-3', 7000); special = null; }
+    else if (e.kind === 'dragon') { if (special) special.leaving = true; }
+    else if (e.kind === 'rabbit') { special = null; }
+  }
+  if (e.type === 'caught') {
+    const p = e.points;
+    if (e.kind === 'rabbit' && special) { special.caught = true; special.age = 0; toast(`You caught the Jade Rabbit ${zh('rabbit')}! It pounds a little medicine: everyone's tummy feels better. +${p}`, '--gold'); SFX.sparkle(true); burst(special.x, special.cy - 10, 30, { c: '#FFF6C8', v0: 20, v1: 80, g: -10, l0: .8, l1: 1.4 }); }
+    if (e.kind === 'change' && special) { special.caught = true; toast(`Chang'e comes home to Hou Yi ${zh('houyi')}! A real family reunion ${zh('reunion')}. Everyone celebrates harder for a while. +${p}`, '--gold', 7000); SFX.reunion(); }
+    if (e.kind === 'dragon' && special) { special.caught = true; special.dance = 8; special.cx = W * .5; toast(`The fire dragon dances! In 1880 its dance was said to chase away sickness. Tummies and mischief calm down. +${p}`, '--gold', 7000); SFX.drumRoll(true); }
+    if (e.kind === 'wugang') { toast(`Wu Gang ${zh('wugang')} chops the moon tree and osmanthus ${zh('osmanthus')} flowers drift down. Everyone breathes in and quiets down. +${p}`, '--gold'); for (let i = 0; i < 90; i++) burst(rnd(0, W), rnd(-30, 60), 1, { a: Math.PI / 2, spread: .6, v0: 20, v1: 50, g: 12, c: pick(['#FFD35C', '#F4B63A', '#FFE9A0']), l0: 5, l1: 8, r0: 2.2, r1: 3.4, kind: 'petal', drag: .995 }); SFX.chop(); }
+    hydrate($('#toasts'));
+  }
+  if (e.type === 'end') endNight();
+}
+
+/* ───────────── Pointer: tapping visitors ───────────── */
+function toLogical(ev) { const r = canvas.getBoundingClientRect(); return { x: (ev.clientX - r.left) / r.width * W, y: (ev.clientY - r.top) / r.height * H }; }
+canvas.addEventListener('pointerdown', ev => {
+  if (!running || paused) return;
+  const q = toLogical(ev);
+  const hp = hitPoint();
+  if (hp && !special.caught && Math.hypot(q.x - hp.x, q.y - hp.y) < hp.r + 14) { MMSim.tap(S, special.kind); return; }
+  const m = MOON();
+  if (Math.hypot(q.x - m.x, q.y - m.y) < m.r + 6) { if (!MMSim.tap(S, 'wugang')) toast('Wu Gang is still resting. The osmanthus tree needs time to grow back.', '--ink-3', 2500); }
+});
+canvas.addEventListener('pointermove', ev => {
+  const q = toLogical(ev), hp = hitPoint(), m = MOON();
+  canvas.style.cursor = (hp && Math.hypot(q.x - hp.x, q.y - hp.y) < hp.r + 14) || Math.hypot(q.x - m.x, q.y - m.y) < m.r + 6 ? 'pointer' : 'default';
+});
+
+/* ───────────── Controls ───────────── */
+const METERS = [['fire', 'Fire risk', '--m-fire'], ['tummy', 'Tummy ache', '--m-tummy'], ['noise', 'Noise', '--m-noise'], ['rowdy', 'Mischief', '--m-rowdy']];
+$('#meters').innerHTML = METERS.map(([k, name, c]) => `<div class="meter" id="m-${k}" style="--c: var(${c})"><span>${name} ${zh(k)}</span><em>0</em><i></i></div>`).join('');
+$('#items').innerHTML = ITEMS.map(it => `
+  <div class="item" data-key="${it.key}" ${it.locked ? 'hidden' : ''}>
+    <canvas width="80" height="80" aria-hidden="true"></canvas>
+    <div class="lbl"><span class="name">${it.name} ${zh(it.key)}</span><small></small></div>
+    <div class="stepper">
+      <button type="button" data-d="-1" aria-label="Fewer ${it.name.toLowerCase()}">−</button>
+      <output>0</output>
+      <button type="button" data-d="1" aria-label="More ${it.name.toLowerCase()}">+</button>
+    </div>
+  </div>`).join('');
+function change(key, dir) {
+  const it = ITEMS.find(i => i.key === key);
+  const before = S.n[key];
+  MMSim.set(S, key, before + dir * it.step);
+  if (S.n[key] !== before) { SFX.tick(dir > 0); if (key === 'buildings' && dir > 0) SFX.build(); if (key === 'fireworks' && dir > 0 && !running) { /* nothing */ } }
+  refreshControls();
+}
+let holdT = 0, holdI = 0;
+$('#items').addEventListener('pointerdown', e => {
+  const b = e.target.closest('button[data-d]'); if (!b) return;
+  e.preventDefault(); userActed = true; audioStart();
+  const key = b.closest('.item').dataset.key, d = +b.dataset.d;
+  change(key, d);
+  clearTimeout(holdT); clearInterval(holdI);
+  holdT = setTimeout(() => { holdI = setInterval(() => change(key, d), 110); }, 380);
+});
+['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => $('#items').addEventListener(ev, () => { clearTimeout(holdT); clearInterval(holdI); }));
+$('#items').addEventListener('keydown', e => { const b = e.target.closest('button[data-d]'); if (b && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); change(b.closest('.item').dataset.key, +b.dataset.d); } });
+function refreshControls() {
+  const d = MMSim.derive(S);
+  document.querySelectorAll('.item').forEach(row => {
+    const key = row.dataset.key, v = S.n[key];
+    row.querySelector('output').textContent = v;
+    row.querySelector('[data-d="-1"]').disabled = v <= 0;
+    row.querySelector('[data-d="1"]').disabled = v >= MMSim.LIMITS[key] || !running;
+    const [txt, warn] = hintFor(key, S, d);
+    const sm = row.querySelector('small'); sm.textContent = txt; sm.classList.toggle('warn', !!warn);
+  });
+}
+/* Item icons, drawn with the scene's own drawing code. */
+let ctxRef = null;
+const ICON = {
+  buildings: () => withCtx(g => { g.fillStyle = '#33386B'; g.fillRect(8, 10, 14, 26); g.fillStyle = '#2A3163'; g.fillRect(22, 16, 12, 20); g.fillStyle = '#F6C667'; for (let r = 0; r < 5; r++) for (let c = 0; c < 2; c++) if ((r + c) % 3) g.fillRect(10 + c * 6, 13 + r * 4.5, 4, 2.5); for (let r = 0; r < 4; r++) g.fillRect(25, 19 + r * 4.5, 5, 2.5); }),
+  adults: () => withCtx(() => drawPerson({ kind: 'adult', x: 20, y: 36, tx: 20, ty: 36, seat: -1, dir: 1, ph: 1, scale: 1.05, state: 'party', skin: '#E3B38A', cloth: '#5E8BE0', hair: '#1C1612', sick: 0, smoke: 0, lantern: 0 }, 0)),
+  kids: () => withCtx(() => { drawPerson({ kind: 'kid', x: 20, y: 36, tx: 20, ty: 36, seat: -1, dir: 1, ph: 4, scale: 1.45, state: 'walk', skin: '#F2C9A0', cloth: '#F4C24F', hair: '#1C1612', sick: 0, smoke: 0, lantern: 1 }, 0); }),
+  lanterns: () => withCtx(() => drawLantern(20, 20, 1.9, true, 0)),
+  mooncakes: () => withCtx(() => drawMooncake(20, 22, 2, false)),
+  tea: () => withCtx(() => drawTeapot(19, 22, 1.8)),
+  mahjong: () => withCtx(() => drawTable(20, 22, 1.2)),
+  fireworks: () => withCtx(() => drawRocket(20, 22, 1.4)),
+  secret: () => withCtx(() => drawMooncake(20, 24, 2, true)),
+};
+function withCtx(f) { const keep = ctx; ctxSwap(ctxRef); try { f(ctxRef); } finally { ctxSwap(keep); } }
+function ctxSwap(c) { ctx = c; }
+
+/* ───────────── Moon Tales ───────────── */
+const TALES = [
+  { id: 'change', zh: 't_change', title: 'Chang’e and the Elixir',
+    body: ['Long ago, ten suns rose into the sky at once and the earth began to burn. The great archer Hou Yi shot down nine of them, leaving one sun to warm the world.',
+      'As a reward, the Queen Mother of the West gave him an elixir that would let one person live forever and rise up to the heavens. Hou Yi did not want to leave his wife, Chang’e, so he kept it hidden at home.',
+      'One day while Hou Yi was away, his wicked student Peng Meng tried to steal it. To keep it from him, Chang’e drank the elixir herself. She floated up and up, all the way to the moon, where she lives still. Hou Yi missed her terribly, and on the night of the full moon he set out her favourite fruits and cakes in the garden. People have been doing the same ever since.'],
+    game: 'When Chang’e floats up in the game, tap her before she reaches the moon. You get to give the story a happy ending: she comes home to Hou Yi, and the whole city celebrates harder for 40 seconds.' },
+  { id: 'suns', zh: 't_suns', title: 'Hou Yi Shoots the Suns',
+    body: ['The ten suns were the children of the Emperor of Heaven. They were meant to cross the sky one at a time, but one morning all ten came out together to play.',
+      'Rivers dried up, crops burned and people hid from the heat. Hou Yi climbed a mountain, drew his red bow and shot the suns down one by one. Each one fell to earth as a three-legged golden crow.',
+      'People begged him to leave one sun, so the world would not freeze in darkness. That is why we have exactly one sun, and why Hou Yi is remembered as a hero.'],
+    game: 'Hou Yi appears with his bow if you bring Chang’e home. It is the start of her story, so read this one first!' },
+  { id: 'rabbit', zh: 't_rabbit', title: 'The Jade Rabbit',
+    body: ['Three hungry old men once asked a fox, a monkey and a rabbit for food. The fox brought a fish and the monkey brought fruit. The rabbit could only find grass, which people cannot eat.',
+      'So the rabbit offered the only thing it had: itself. It jumped toward the cooking fire. But the old men were really immortals in disguise, and they pulled the rabbit out unharmed, amazed at how kind it was.',
+      'They sent the rabbit to live on the moon, where it keeps Chang’e company and pounds medicine with a mortar and pestle. Look at the full moon and you may see its shape, ears and all.'],
+    game: 'A white rabbit sometimes hops across the plaza. Tap it in time and it makes medicine: everyone’s tummy ache disappears, and you score 300 points.' },
+  { id: 'wugang', zh: 't_wugang', title: 'Wu Gang and the Osmanthus Tree',
+    body: ['Wu Gang wanted to become an immortal, but he never finished anything he started. He studied a little medicine, then got bored. He learned a little magic, then wandered off.',
+      'As a punishment, he was sent to the moon and told he could leave once he chopped down the great osmanthus tree growing there. But every cut Wu Gang makes heals up straight away. He has been chopping ever since.',
+      'Osmanthus flowers bloom in autumn and smell sweet like apricots. People drink osmanthus tea and wine at Mid-Autumn, and some say the scent drifts down from Wu Gang’s tree.'],
+    game: 'Look closely at the moon: Wu Gang is chopping. When a glowing ring appears around him, tap the moon. Osmanthus flowers fall and the city calms down (less noise and mischief).' },
+  { id: 'cakes', zh: 't_cakes', title: 'The Mooncake Messages',
+    body: ['About 650 years ago, China was ruled by the Yuan dynasty, and many people wanted to be free of it. Gatherings were watched closely, so it was hard for anyone to make plans together.',
+      'Legend says a rebel named Liu Bowen had an idea. Mooncakes were given as gifts at Mid-Autumn, so nobody would look twice at them. Messages were baked inside, telling people to rise up together on the 15th night of the 8th month.',
+      'The uprising worked, and in 1368 the Ming dynasty began. Historians are not sure the mooncake part really happened, but it is one of the most famous Mid-Autumn stories.'],
+    game: 'Unlocks when the police visit, or at 9 pm. Serve secret mooncakes so at least 12 grown-ups (and 6 out of every 10) get the message. Then the people raise their own flag and the police leave for good. If too few people know, the plan leaks!' },
+  { id: 'dragon', zh: 't_dragon', title: 'The Fire Dragon of Tai Hang',
+    body: ['In 1880, a typhoon hit the village of Tai Hang in Hong Kong, and then a terrible sickness spread. A wise person said the village must dance a fire dragon for three nights at Mid-Autumn.',
+      'The villagers built a huge dragon from straw and stuck it all over with burning incense sticks. They danced it through the streets with drums and firecrackers, and the sickness went away.',
+      'Tai Hang still dances its fire dragon every Mid-Autumn. The dragon is about 67 metres long and carries thousands of incense sticks. It is now on China’s national list of intangible cultural heritage.'],
+    game: 'When the city has plenty of lanterns and grown-ups and the fire risk is low, the fire dragon may come down the street. Tap it: it dances, clears everyone’s tummy ache and calms the mischief.' },
+];
+let taleIdx = 0;
+function openTales(id) {
+  if (id) taleIdx = Math.max(0, TALES.findIndex(t => t.id === id));
+  $('#tales').hidden = false; wasPaused = paused; paused = true; renderTale(); $('#talesClose').focus();
+}
+let wasPaused = false;
+function closeTales() { $('#tales').hidden = true; paused = wasPaused; syncPause(); }
+$('#talesBtn').addEventListener('click', () => openTales());
+$('#talesClose').addEventListener('click', closeTales);
+$('#tales').addEventListener('click', e => { if (e.target.id === 'tales') closeTales(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#tales').hidden) closeTales(); });
+function renderTale() {
+  $('#taleTabs').innerHTML = TALES.map((t, i) => `<button type="button" role="tab" aria-selected="${i === taleIdx}" data-i="${i}">${t.title}</button>`).join('');
+  const t = TALES[taleIdx];
+  $('#taleBody').innerHTML = `<canvas width="560" height="420" aria-hidden="true"></canvas><div><h3>${t.title}</h3>${zh(t.zh)}${t.body.map(p => `<p>${p}</p>`).join('')}<p class="ingame"><b>In the game:</b> ${t.game}</p></div>`;
+  paintTale(t.id, $('#taleBody canvas'));
+}
+$('#taleTabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { taleIdx = +b.dataset.i; renderTale(); } });
+function paintTale(id, c) {
+  const g = c.getContext('2d'), keep = ctx; ctxSwap(g);
+  const oldW = W; W = 280;
+  g.setTransform(2, 0, 0, 2, 0, 0);
+  const sky = g.createLinearGradient(0, 0, 0, 210); sky.addColorStop(0, '#070C28'); sky.addColorStop(1, '#23306E'); g.fillStyle = sky; g.fillRect(0, 0, 280, 210);
+  for (let i = 0; i < 40; i++) { g.fillStyle = 'rgba(255,246,222,.7)'; g.fillRect((i * 73) % 280, (i * 37) % 120, 1, 1); }
+  const moon = (x, y, r) => { const mg = g.createRadialGradient(x - 8, y - 8, 2, x, y, r); mg.addColorStop(0, '#FFF7D6'); mg.addColorStop(1, '#F6D57E'); g.fillStyle = 'rgba(255,230,160,.18)'; g.beginPath(); g.arc(x, y, r * 1.8, 0, TAU); g.fill(); g.fillStyle = mg; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill(); };
+  const ground = col => { g.fillStyle = col; g.beginPath(); g.moveTo(0, 170); g.quadraticCurveTo(140, 150, 280, 172); g.lineTo(280, 210); g.lineTo(0, 210); g.fill(); };
+  if (id === 'change') { moon(210, 55, 36); drawChangE(150, 120, 1.3, 1.2); ground('#18233F'); drawHouYi(60, 185, 1.3); }
+  if (id === 'suns') { g.fillStyle = '#3A1A10'; g.fillRect(0, 0, 280, 210); for (let i = 0; i < 10; i++) { const x = 30 + (i % 5) * 55, y = 30 + Math.floor(i / 5) * 45; g.fillStyle = i === 4 ? '#FFB23F' : 'rgba(255,120,40,.45)'; g.beginPath(); g.arc(x, y, i === 4 ? 16 : 11, 0, TAU); g.fill(); } ground('#5A2A14'); drawHouYi(140, 188, 1.6); }
+  if (id === 'rabbit') { moon(140, 90, 60); g.fillStyle = 'rgba(150,110,50,.35)'; g.fillRect(150, 100, 14, 16); drawRabbit(120, 125, 2.2, 0, .2); g.strokeStyle = '#8A6B3A'; g.lineWidth = 3; g.beginPath(); g.moveTo(145, 95); g.lineTo(156, 108); g.stroke(); }
+  if (id === 'wugang') { moon(140, 100, 70); g.fillStyle = 'rgba(120,85,40,.6)'; g.fillRect(152, 90, 6, 60); g.beginPath(); g.arc(155, 78, 26, 0, TAU); g.fill(); g.fillStyle = '#FFD35C'; for (let i = 0; i < 26; i++) { g.beginPath(); g.arc(130 + (i * 37) % 60, 60 + (i * 23) % 40, 1.6, 0, TAU); g.fill(); } g.strokeStyle = 'rgba(80,55,25,.9)'; g.lineWidth = 3; g.beginPath(); g.arc(118, 112, 5, 0, TAU); g.moveTo(118, 117); g.lineTo(118, 135); g.lineTo(112, 148); g.moveTo(118, 135); g.lineTo(124, 148); g.moveTo(118, 122); g.lineTo(140, 112); g.stroke(); g.fillStyle = '#BBB'; g.fillRect(138, 106, 7, 8); }
+  if (id === 'cakes') { moon(220, 45, 26); ground('#2B1F18'); g.fillStyle = '#7A1E16'; g.fillRect(40, 150, 200, 14); for (let i = 0; i < 5; i++) drawMooncake(70 + i * 35, 142, 2.2, i === 2); g.save(); g.translate(140, 70); g.rotate(-.08); g.fillStyle = '#FFF8E6'; g.fillRect(-40, -22, 80, 44); g.fillStyle = '#A5281B'; g.font = '900 16px "Noto Serif TC", serif'; g.textAlign = 'center'; g.fillText('八月十五', 0, -2); g.font = '700 10px "Atkinson Hyperlegible", sans-serif'; g.fillText('15th night, 8th month', 0, 14); g.restore(); }
+  if (id === 'dragon') { moon(230, 40, 22); ground('#1D1A2C'); const d = { x: 250, dance: 0 }; g.save(); g.translate(0, -320); g.scale(1, 1); for (let i = 0; i < 14; i++) { const x = 250 - i * 16, y = 488 + Math.sin(1 - i * .5) * 12; g.strokeStyle = '#5A4020'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(x, y); g.lineTo(x, y + 22); g.stroke(); g.fillStyle = '#C8A55A'; g.beginPath(); g.ellipse(x, y, 12, 10, 0, 0, TAU); g.fill(); for (let k = 0; k < 6; k++) { g.fillStyle = '#FF9A3A'; g.fillRect(x + Math.cos(k + i) * 8, y + Math.sin(k + i) * 6, 2, 2); } } g.restore(); g.fillStyle = '#E3493A'; g.beginPath(); g.arc(258, 164, 3, 0, TAU); g.fill(); }
+  W = oldW; ctxSwap(keep);
+}
+
+/* ───────────── Sound: Web Audio, all generated ───────────── */
+let AC = null, master, musicBus, sfxBus, ambBus, verb, crowdGain, crowdHi, cricketGain, windGain, noiseBuf;
+function audioStart() {
+  if (AC) { if (AC.state === 'suspended') AC.resume(); return; }
+  const C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+  try { AC = new C(); } catch (e) { return; }
+  master = AC.createGain(); master.gain.value = prefs.sound ? .9 : 0; master.connect(AC.destination);
+  const comp = AC.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 4; comp.connect(master);
+  verb = AC.createConvolver(); verb.buffer = impulse(2.6); const vg = AC.createGain(); vg.gain.value = .35; verb.connect(vg); vg.connect(comp);
+  musicBus = AC.createGain(); musicBus.gain.value = .5; musicBus.connect(comp);
+  sfxBus = AC.createGain(); sfxBus.gain.value = .7; sfxBus.connect(comp);
+  ambBus = AC.createGain(); ambBus.gain.value = .6; ambBus.connect(comp);
+  noiseBuf = AC.createBuffer(1, AC.sampleRate * 2, AC.sampleRate);
+  const nd = noiseBuf.getChannelData(0); let b = 0; for (let i = 0; i < nd.length; i++) { const w = Math.random() * 2 - 1; b = .97 * b + .03 * w; nd[i] = w * .5 + b * 3; }
+  // Wind over the harbour.
+  const wind = loopNoise(); const wf = AC.createBiquadFilter(); wf.type = 'lowpass'; wf.frequency.value = 400; windGain = AC.createGain(); windGain.gain.value = .12;
+  const lfo = AC.createOscillator(); lfo.frequency.value = .07; const lg = AC.createGain(); lg.gain.value = 240; lfo.connect(lg); lg.connect(wf.frequency); lfo.start();
+  wind.connect(wf); wf.connect(windGain); windGain.connect(ambBus);
+  // The crowd: two bands of filtered noise, plus voices added in the loop.
+  const cr = loopNoise(); const cf = AC.createBiquadFilter(); cf.type = 'bandpass'; cf.frequency.value = 650; cf.Q.value = .8; crowdGain = AC.createGain(); crowdGain.gain.value = 0; cr.connect(cf); cf.connect(crowdGain); crowdGain.connect(ambBus);
+  const ch = loopNoise(); const chf = AC.createBiquadFilter(); chf.type = 'bandpass'; chf.frequency.value = 1800; chf.Q.value = 1.2; crowdHi = AC.createGain(); crowdHi.gain.value = 0; ch.connect(chf); chf.connect(crowdHi); crowdHi.connect(ambBus);
+  cricketGain = AC.createGain(); cricketGain.gain.value = .5; cricketGain.connect(ambBus);
+  Music.start();
+}
+function impulse(sec) { const len = AC.sampleRate * sec, b = AC.createBuffer(2, len, AC.sampleRate); for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); } return b; }
+function loopNoise() { const s = AC.createBufferSource(); s.buffer = noiseBuf; s.loop = true; s.loopStart = Math.random(); s.start(0, Math.random()); return s; }
+function env(g, t, a, peak, d, sus = 0.0001) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(Math.max(sus, 0.0001), t + a + d); }
+function pan(x) { const p = AC.createStereoPanner ? AC.createStereoPanner() : AC.createGain(); if (p.pan) p.pan.value = clamp((x / W) * 2 - 1, -1, 1) * .8; return p; }
+function noiseHit(t, dur, type, freq, q, peak, out, x) {
+  const s = AC.createBufferSource(); s.buffer = noiseBuf; const f = AC.createBiquadFilter(); f.type = type; f.frequency.value = freq; f.Q.value = q || 1; const g = AC.createGain(); env(g, t, .004, peak, dur);
+  const p = x != null ? pan(x) : null; s.connect(f); f.connect(g); if (p) { g.connect(p); p.connect(out); } else g.connect(out); s.start(t, Math.random()); s.stop(t + dur + .1); return g;
+}
+function tone(t, freq, dur, type, peak, out, o = {}) {
+  const osc = AC.createOscillator(); osc.type = type; osc.frequency.setValueAtTime(freq, t);
+  if (o.to) osc.frequency.exponentialRampToValueAtTime(o.to, t + (o.glide || dur));
+  const g = AC.createGain(); env(g, t, o.a || .005, peak, dur);
+  let node = osc;
+  if (o.lp) { const f = AC.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(o.lp, t); if (o.lpTo) f.frequency.exponentialRampToValueAtTime(o.lpTo, t + dur); osc.connect(f); node = f; }
+  if (o.vib) { const l = AC.createOscillator(); l.frequency.value = o.vib; const lg = AC.createGain(); lg.gain.value = freq * (o.vibD || .012); l.connect(lg); lg.connect(osc.frequency); l.start(t); l.stop(t + dur + .1); }
+  node.connect(g);
+  const p = o.x != null ? pan(o.x) : null; if (p) { g.connect(p); p.connect(out); } else g.connect(out);
+  if (o.verb) g.connect(verb);
+  osc.start(t); osc.stop(t + (o.a || .005) + dur + .05);
+  return osc;
+}
+// A voice: a buzzy source through two vowel formants.
+const VOWELS = [[800, 1200], [500, 900], [400, 2000], [320, 2300], [650, 1100]];
+function voice(t, f0, dur, peak, x, o = {}) {
+  const osc = AC.createOscillator(); osc.type = 'sawtooth'; osc.frequency.setValueAtTime(f0, t);
+  if (o.to) osc.frequency.exponentialRampToValueAtTime(o.to, t + dur);
+  if (o.vib) { const l = AC.createOscillator(); l.frequency.value = o.vib; const lg = AC.createGain(); lg.gain.value = f0 * .06; l.connect(lg); lg.connect(osc.frequency); l.start(t); l.stop(t + dur + .1); }
+  const v = o.vowel || pick(VOWELS), g = AC.createGain(); env(g, t, o.a || .03, peak, dur);
+  const out = AC.createGain(); out.gain.value = 1;
+  for (const [i, fq] of v.entries()) { const f = AC.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = fq * (o.kid ? 1.25 : 1); f.Q.value = 6; const fg = AC.createGain(); fg.gain.value = i ? .5 : 1; osc.connect(f); f.connect(fg); fg.connect(g); }
+  const p = pan(x ?? W / 2); g.connect(p); p.connect(o.bus || ambBus); if (o.verb) g.connect(verb);
+  osc.start(t); osc.stop(t + dur + .1);
+}
+const SFX = {
+  ok: () => AC && prefs.sound && running,
+  tick(up) { if (!AC) return; tone(AC.currentTime, up ? 880 : 620, .06, 'triangle', .08, sfxBus); },
+  build() { if (!this.ok()) return; const t = AC.currentTime; for (let i = 0; i < 4; i++) noiseHit(t + i * .09, .06, 'bandpass', 1400, 4, .25, sfxBus); },
+  whistle() { if (!this.ok()) return; tone(AC.currentTime, 500, .8, 'sine', .05, sfxBus, { to: 1800, glide: .8 }); },
+  boom(x) { if (!this.ok()) return; const t = AC.currentTime + .05; noiseHit(t, .9, 'lowpass', 300, .7, .8, sfxBus, x); tone(t, 90, .5, 'sine', .5, sfxBus, { to: 40 }); for (let i = 0; i < 14; i++) noiseHit(t + .2 + Math.random() * .8, .03, 'highpass', 4000, 1, .12, sfxBus, x); noiseHit(t, .3, 'lowpass', 600, .7, .2, verb); },
+  clack(x) { if (!this.ok()) return; const t = AC.currentTime, n = 3 + Math.floor(Math.random() * 6); for (let i = 0; i < n; i++) noiseHit(t + i * rnd(.04, .09), .025, 'bandpass', rnd(2500, 3800), 8, .35, sfxBus, x); },
+  laugh(x, kid) { if (!this.ok()) return; const t = AC.currentTime, f = kid ? rnd(330, 420) : rnd(140, 220); for (let i = 0; i < 5; i++) voice(t + i * .13, f * (1 - i * .04), .09, .18, x, { vowel: VOWELS[0], kid }); },
+  scream(x, kid) { if (!this.ok()) return; const t = AC.currentTime, f = kid ? rnd(900, 1200) : rnd(550, 800); voice(t, f, .9, .22, x, { to: f * rnd(.6, 1.2), vib: 7, vowel: VOWELS[0], kid, a: .05 }); },
+  cheer(amount = 1, scared = false, wild = false) { if (!AC || !prefs.sound) return; const t = AC.currentTime; noiseHit(t, 1.6, 'bandpass', 900, .8, .3 * amount + .1, sfxBus); for (let i = 0; i < 10; i++) voice(t + Math.random() * .3, scared ? rnd(500, 1000) : rnd(160, 420), rnd(.8, 1.4), .07, rnd(0, W), { to: scared ? rnd(300, 600) : rnd(250, 500), vib: 6, vowel: scared ? VOWELS[0] : pick([VOWELS[0], VOWELS[4], VOWELS[2]]), kid: wild }); },
+  vomit(x) { if (!this.ok()) return; const t = AC.currentTime; voice(t, 160, .5, .25, x, { to: 70, vib: 18, vowel: [450, 800] }); noiseHit(t + .1, .5, 'lowpass', 700, 3, .3, sfxBus, x); },
+  fart(x) { if (!this.ok()) return; const t = AC.currentTime; tone(t, rnd(60, 90), .45, 'sawtooth', .22, sfxBus, { to: 45, lp: 400, vib: 22, vibD: .2, x }); },
+  siren(kind) {
+    if (!AC || !prefs.sound) return; const t = AC.currentTime; const g = AC.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.06, t + 1.5); g.gain.setValueAtTime(.06, t + 5); g.gain.exponentialRampToValueAtTime(.0001, t + 8); g.connect(sfxBus);
+    const o = AC.createOscillator(); o.type = 'square'; const f = AC.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 1800; o.connect(f); f.connect(g);
+    const hi = kind === 'amb' ? 960 : kind === 'fire' ? 880 : 1200, lo = kind === 'amb' ? 770 : kind === 'fire' ? 660 : 600, per = kind === 'amb' ? .35 : kind === 'fire' ? .6 : .18;
+    for (let i = 0, tt = t; tt < t + 8; i++, tt += per) { if (kind === 'police') { o.frequency.setValueAtTime(lo, tt); o.frequency.linearRampToValueAtTime(hi, tt + per * .9); } else o.frequency.setValueAtTime(i % 2 ? lo : hi, tt); }
+    o.start(t); o.stop(t + 8.1);
+  },
+  whistleBlow() { if (!this.ok()) return; const t = AC.currentTime + .6; for (let i = 0; i < 3; i++) tone(t + i * .35, 2600, .25, 'sine', .12, sfxBus, { vib: 30, vibD: .03 }); },
+  crash() { if (!this.ok()) return; const t = AC.currentTime; noiseHit(t, 2, 'lowpass', 500, .7, .9, sfxBus); tone(t, 60, 1.2, 'sine', .5, sfxBus, { to: 30 }); },
+  sparkle(big) { if (!AC || !prefs.sound) return; const t = AC.currentTime; const sc = [0, 2, 4, 7, 9, 12, 14, 16]; sc.forEach((s, i) => tone(t + i * .06, 1046 * Math.pow(2, s / 12), .4, 'sine', big ? .09 : .05, sfxBus, { verb: true })); },
+  rise() { if (!AC || !prefs.sound) return; const t = AC.currentTime; [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24].forEach((s, i) => tone(t + i * .18, 523 * Math.pow(2, s / 12), 1.2, 'triangle', .05, sfxBus, { verb: true, vib: 5 })); },
+  reunion() { if (!AC || !prefs.sound) return; const t = AC.currentTime; this.gong(); [[0, 4, 7], [5, 9, 12], [7, 11, 14], [12, 16, 19]].forEach((ch, i) => ch.forEach(s => tone(t + i * .4, 392 * Math.pow(2, s / 12), 1.4, 'triangle', .06, sfxBus, { verb: true }))); this.cheer(1.2); },
+  gong() { if (!AC || !prefs.sound) return; const t = AC.currentTime; [1, 1.48, 2.09, 2.56, 3.18, 4.1].forEach((r, i) => tone(t, 98 * r, 3.5 - i * .3, 'sine', .14 / (i + 1), sfxBus, { to: 98 * r * .97, verb: true })); noiseHit(t, .4, 'bandpass', 500, 1, .2, sfxBus); },
+  chop() { if (!AC || !prefs.sound) return; const t = AC.currentTime; for (let i = 0; i < 3; i++) { noiseHit(t + i * .35, .08, 'bandpass', 900, 3, .5, sfxBus); tone(t + i * .35, 220, .1, 'triangle', .2, sfxBus); } this.sparkle(); },
+  drumRoll(big) { if (!AC || !prefs.sound) return; const t = AC.currentTime; for (let i = 0; i < (big ? 32 : 12); i++) { tone(t + i * .12, 130, .2, 'sine', i % 4 ? .15 : .3, sfxBus, { to: 60 }); } },
+  cracker(x) { if (!this.ok()) return; const t = AC.currentTime; for (let i = 0; i < 12; i++) noiseHit(t + i * rnd(.03, .07), .04, 'highpass', 1500, 1, .35, sfxBus, x); },
+  cricket() { if (!AC || !prefs.sound) return; const t = AC.currentTime, f = rnd(4200, 5200); for (let i = 0; i < 3; i++) tone(t + i * .05, f, .03, 'sine', .04, cricketGain, { x: rnd(0, W) }); },
+};
+
+/* Music: a small sequencer. The mood follows what is happening on screen. */
+const PENTA = [0, 2, 4, 7, 9];
+function pn(i, root) { const o = Math.floor(i / 5), k = ((i % 5) + 5) % 5; return root * Math.pow(2, (PENTA[k] + 12 * o) / 12); }
+const SONGS = {
+  festive: { bpm: 116, root: 293.66, mel: [3,3,4,5, 4,3,2,null, 3,2,1,2, 3,null,null,null, 5,5,6,7, 6,5,4,5, 3,2,1,2, 0,null,0,null, 2,3,5,4, 3,2,1,null, 2,1,0,1, 2,null,3,null, 5,4,3,4, 5,6,5,4, 3,2,1,2, 0,null,null,null], bass: [0,3,4,0, 0,3,1,0] },
+  fire: { bpm: 168, root: 220, mel: [5,4,3,4, 5,4,3,1, 5,4,3,4, 6,5,4,3, 4,3,2,3, 4,3,2,0, 1,2,3,4, 5,null,5,null], bass: [0,0,3,3, 1,1,4,4], minor: true },
+  tummy: { bpm: 74, root: 110, semis: [0,null,-1,null, -2,null,-3,-4, 0,null,-1,null, -5,null,null,null, 3,null,2,null, 1,null,0,-1, -2,-3,-4,-5, -7,null,null,null] },
+  police: { bpm: 108, root: 110, semis: [0,null,3,null, 5,null,6,5, 0,null,3,null, 7,6,5,3, 0,null,3,null, 5,null,6,5, 8,7,6,5, 3,null,0,null] },
+  rowdy: { bpm: 152, root: 349.23, mel: [0,2,4,5, 4,2,0,2, 5,7,9,7, 5,4,2,null, 0,2,4,5, 7,5,4,2, 1,3,5,3, 1,null,0,null], bass: [0,3,0,3, 1,4,0,3] },
+  uprising: { bpm: 94, root: 261.63, mel: [3,null,3,4, 5,null,3,null, 4,null,5,6, 5,null,null,null, 7,null,6,5, 4,null,3,null, 2,3,4,2, 3,null,null,null, 5,null,5,6, 7,null,5,null, 6,null,7,8, 7,null,null,null, 10,null,9,8, 7,null,6,5, 4,5,6,4, 5,null,null,null], bass: [0,3,1,0, 0,3,1,3] },
+};
+const Music = {
+  mood: 'nature', step: 0, next: 0, timer: 0, energy: 0, tension: 0,
+  start() { this.next = AC.currentTime + .1; this.timer = setInterval(() => this.tick(), 50); },
+  tick() {
+    if (!AC || !prefs.sound) return;
+    const ahead = AC.currentTime + .15;
+    while (this.next < ahead) { this.play(this.next); const song = SONGS[this.mood]; const spb = song ? 60 / song.bpm / 2 : .25; this.next += spb; this.step++; }
+  },
+  setMood(m) { if (m !== this.mood) { this.mood = m; this.step = 0; } },
+  play(t) {
+    const m = this.mood, st = this.step;
+    if (paused || !running) return;
+    if (m === 'nature') { if (st % 12 === 0 && Math.random() < .6) { const i = Math.floor(rnd(3, 11)); tone(t, pn(i, 196), 1.6, 'triangle', .06, musicBus, { lp: 2400, lpTo: 500, verb: true }); } return; }
+    const song = SONGS[m]; const e = this.energy;
+    const bar = Math.floor(st / 8), inBar = st % 8;
+    if (song.mel) {
+      const n = song.mel[st % song.mel.length];
+      if (n != null && (e > .35 || m !== 'festive')) {
+        const f = pn(n, song.minor ? song.root * 1.189 : song.root) * (song.minor ? .8409 : 1);
+        tone(t, f, m === 'fire' || m === 'rowdy' ? .16 : .32, m === 'uprising' ? 'sawtooth' : 'triangle', m === 'uprising' ? .07 : .09, musicBus, { lp: m === 'uprising' ? 2200 : 3200, a: .02, vib: 5.5, vibD: .008, verb: true });
+        if (m === 'uprising' || e > .75) tone(t, f * 2, .25, 'sine', .035, musicBus, { verb: true });
+      }
+      // Plucked accompaniment (like a guzheng or pipa).
+      const b = song.bass[bar % song.bass.length];
+      if (inBar % 2 === 0) tone(t, pn(b + (inBar === 4 ? 2 : 0), song.root / 2) * (song.minor ? .8409 : 1), .5, 'sawtooth', .07, musicBus, { lp: 2600, lpTo: 300, a: .003 });
+      if (inBar === 0) tone(t, pn(b, song.root / 4) * (song.minor ? .8409 : 1), .9, 'triangle', .12, musicBus);
+    } else {
+      const s = song.semis[st % song.semis.length];
+      if (s != null) {
+        if (m === 'tummy') tone(t, song.root * Math.pow(2, s / 12), .45, 'sawtooth', .16, musicBus, { lp: 600, to: song.root * Math.pow(2, (s - 1.5) / 12), glide: .45, vib: 4, vibD: .03 });
+        else tone(t, song.root * Math.pow(2, s / 12), .14, 'triangle', .2, musicBus, { lp: 900, lpTo: 200 });
+      }
+      if (m === 'police' && inBar % 2 === 1) noiseHit(t, .03, 'bandpass', 1800, 10, .25, musicBus);
+      if (m === 'tummy' && inBar === 4) tone(t, 700, .25, 'sine', .04, musicBus, { to: 300, vib: 12 });
+    }
+    // Drums: big drum, small cymbal, gong.
+    const drums = m === 'festive' ? e > .15 : true;
+    if (drums) {
+      const fast = m === 'fire' || m === 'rowdy';
+      if (inBar === 0 || inBar === 4 || fast && inBar % 2 === 0) tone(t, 150, .3, 'sine', m === 'uprising' ? .45 : .3, musicBus, { to: 55 });
+      if ((inBar === 2 || inBar === 6) && (m !== 'festive' || e > .5)) noiseHit(t, .12, 'highpass', 6000, 1, m === 'fire' ? .12 : .08, musicBus);
+      if (m === 'uprising' && inBar === 7) for (let k = 0; k < 3; k++) noiseHit(t + k * .06, .05, 'bandpass', 2000, 2, .15, musicBus);
+      if (bar % 4 === 0 && inBar === 0 && (m === 'festive' && e > .7 || m === 'uprising')) SFX.gong();
+    }
+  },
+};
+function updateAudio(dt, d) {
+  if (!AC) return;
+  const P = d.P, inc = incidentKind();
+  const chaos = inc ? 1 : Math.max(S.m.fire, S.m.tummy, S.m.noise, S.m.rowdy) / 100;
+  Music.energy = clamp(S.celebrating / 40, 0, 1);
+  let mood = 'nature';
+  if (inc === 'fire') mood = 'fire'; else if (inc === 'tummy') mood = 'tummy'; else if (inc === 'police') mood = 'police'; else if (inc === 'rowdy') mood = 'rowdy';
+  else if (S.uprising && flag && flag.rise < 1 || S.uprising && S.celebrating > 20) mood = 'uprising';
+  else if (S.celebrating >= 3) mood = 'festive';
+  Music.setMood(mood);
+  const now = AC.currentTime, crowd = Math.sqrt(P / 80);
+  crowdGain.gain.setTargetAtTime(prefs.sound ? crowd * (.35 + chaos * .35) : 0, now, .4);
+  crowdHi.gain.setTargetAtTime(prefs.sound ? Math.sqrt(S.n.kids / 40) * (.12 + chaos * .25) : 0, now, .4);
+  windGain.gain.setTargetAtTime(.12 * (1 - crowd * .6), now, 1);
+  // Crickets only when it is quiet.
+  if (Math.random() < dt * 3 * clamp(1 - P / 15, 0, 1)) SFX.cricket();
+  // Voices in the crowd.
+  babbleTimer -= dt * Math.min(24, P * .35 * (1 + chaos));
+  while (babbleTimer <= 0 && P > 0 && prefs.sound) {
+    babbleTimer += 1;
+    const kid = Math.random() < S.n.kids / Math.max(1, P);
+    const f = kid ? rnd(260, 420) : rnd(100, 220);
+    voice(now + Math.random() * .1, f * (1 + chaos * .4), rnd(.1, .28), .035 + chaos * .02, rnd(0, W), { to: f * rnd(.8, 1.3), kid });
+  }
+  // Fire crackles while a building burns.
+  if (inc === 'fire' && Math.random() < dt * 20) noiseHit(now, .02, 'highpass', 2500, 1, .2, sfxBus);
+  if (inc === 'fire' && Math.random() < dt * .5 && fireTarget) noiseHit(now, .6, 'highpass', 3000, .5, .08, sfxBus);
+}
+
+/* ───────────── HUD ───────────── */
+function fmtClock(t) { const mins = 18 * 60 + t / MMSim.NIGHT * 360; let h = Math.floor(mins / 60), m = Math.floor(mins % 60); const pm = h < 24; h = h % 12 || 12; return h === 12 && !pm ? '12:00 midnight' : `${h}:${String(m).padStart(2, '0')} pm`; }
+let hudT = 0;
+function updateHud(d) {
+  $('#clock').textContent = fmtClock(S.t);
+  $('#cel').textContent = Math.round(S.celebrating);
+  $('#score').textContent = Math.round(S.score).toLocaleString('en');
+  for (const [k] of METERS) {
+    const el = $('#m-' + k), v = Math.round(S.m[k]);
+    el.style.setProperty('--v', v + '%'); el.querySelector('em').textContent = v; el.classList.toggle('hot', v >= 75);
+  }
+  const inc = incidentKind();
+  $('#pill').textContent = inc ? { fire: 'Fire! Everyone runs', tummy: 'Tummy trouble', police: 'Police visit', rowdy: 'Kids gone wild' }[inc] : d.P ? `${Math.round(S.celebrating)} of ${d.P} people celebrating` : 'An empty, quiet night';
+  refreshControls();
+}
+
+/* ───────────── Main loop ───────────── */
+function frame(ms) {
+  const t = ms / 1000; const dt = Math.min(.05, t - (lastT || t)); lastT = t;
+  if (running && !paused) {
+    // The model runs in 0.1 s steps.
+    clock += dt;
+    while (clock >= .1) { clock -= .1; MMSim.step(S, .1); for (const e of S.events) handleEvent(e); S.events.length = 0; }
+  }
+  const d = MMSim.derive(S);
+  if (!paused) updateScene(running ? dt : dt * .5, t);
+  drawScene(t);
+  if (running && !paused) { hudT -= dt; if (hudT <= 0) { hudT = .15; updateHud(d); } updateAudio(dt, d); }
+  requestAnimationFrame(frame);
+}
+
+/* ───────────── Start, pause, end ───────────── */
+function startNight() {
+  S = MMSim.create(); people = []; parts = []; bubbles = []; vehicles = []; ruins = []; puddles = []; special = null; couple = null; flag = null; lanternFall = [];
+  running = true; paused = false; syncPause();
+  $('#startOv').hidden = true; $('#endOv').hidden = true;
+  document.querySelector('.item[data-key="secret"]').hidden = true; document.querySelector('.item[data-key="secret"]').classList.remove('new');
+  audioStart(); refreshControls(); updateHud(MMSim.derive(S));
+}
+$('#startBtn').addEventListener('click', () => { userActed = true; startNight(); });
+function syncPause() { $('#pauseBtn').setAttribute('aria-pressed', paused); $('#pauseBtn').textContent = paused ? 'Resume' : 'Pause'; if (AC) { paused ? AC.suspend() : prefs.sound && AC.resume(); } }
+$('#pauseBtn').addEventListener('click', () => { if (!running) return; paused = !paused; syncPause(); });
+$('#soundBtn').addEventListener('click', () => { prefs.sound = !prefs.sound; savePrefs(); syncSound(); if (prefs.sound) audioStart(); });
+function syncSound() { $('#soundBtn').setAttribute('aria-pressed', prefs.sound); $('#soundBtn').textContent = prefs.sound ? 'Sound on' : 'Sound off'; if (master) master.gain.setTargetAtTime(prefs.sound ? .9 : 0, AC.currentTime, .1); }
+$('#langBtn').addEventListener('click', () => { LANG = LANG === 'yue' ? 'cmn' : 'yue'; prefs.lang = LANG; savePrefs(); syncLang(); rerenderZh(); });
+function syncLang() { $('#langBtn').innerHTML = LANG === 'yue' ? 'Cantonese <span class="zh" lang="zh-TW">粵</span>' : 'Mandarin <span class="zh" lang="zh-TW">普</span>'; $('#rubyBtn').textContent = LANG === 'yue' ? 'Jyutping' : 'Pinyin'; }
+$('#rubyBtn').addEventListener('click', () => { RUBY = !RUBY; prefs.ruby = RUBY; savePrefs(); syncRuby(); });
+function syncRuby() { document.documentElement.classList.toggle('show-ruby', RUBY); $('#rubyBtn').setAttribute('aria-pressed', RUBY); }
+function endNight() {
+  running = false;
+  const g = MMSim.grade(S.score);
+  const key = { legend: 'legend', great: 'great', happy: 'good', quiet: 'quiet', empty: 'empty' }[g];
+  const names = { legend: 'A legendary night', great: 'A lively, bustling night', happy: 'A happy night', quiet: 'A quiet night', empty: 'A still, empty night' };
+  const T = S.tally;
+  const best = Math.max(prefs.best || 0, Math.round(S.score)); const isBest = best > (prefs.best || 0); prefs.best = best; savePrefs();
+  const tip = T.police > 1 ? 'Tip: fewer mahjong tables and fireworks keep the neighbours happy.' : T.fire ? 'Tip: every firework needs grown-ups watching. Keep 1 grown-up for every 3 kids.' : T.tummy ? 'Tip: one mooncake feeds 4 people, and tea helps.' : T.rowdy ? 'Tip: 1 grown-up for every 3 kids keeps the mischief down.' : !S.uprising ? 'Tip: try the secret mooncakes after 9 pm. Tell enough grown-ups and the whole city joins in.' : 'You found every secret. Can you beat your best score?';
+  $('#endCard').innerHTML = `
+    <div class="grade">${zh(key)}</div>
+    <h2>Midnight. ${names[g]}.</h2>
+    <p><b style="color:var(--gold);font-size:22px">${Math.round(S.score).toLocaleString('en')}</b> Reunion points ${zh('reunion')} ${isBest ? '· <b>New best!</b>' : `· Best ${best.toLocaleString('en')}`}</p>
+    <ul class="tally">
+      <li>Most celebrating <b>${Math.round(S.peak)}</b></li>
+      <li>Bonus points <b>${S.bonus.toLocaleString('en')}</b></li>
+      <li>Fires <b>${T.fire}</b></li>
+      <li>Ambulances <b>${T.tummy}</b></li>
+      <li>Police visits <b>${T.police}</b></li>
+      <li>Kids gone wild <b>${T.rowdy}</b></li>
+      <li>Buildings lost <b>${T.burned}</b></li>
+      <li>Visitors caught <b>${T.rabbit + T.change + T.dragon}</b></li>
+    </ul>
+    <p>${tip}</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="againBtn" type="button">Play another night</button><button class="tool" id="endTales" type="button">Read the Moon Tales</button></div>`;
+  $('#endOv').hidden = false;
+  $('#againBtn').addEventListener('click', startNight);
+  $('#endTales').addEventListener('click', () => openTales());
+  refreshControls();
+}
+
+/* ───────────── Boot ───────────── */
+// Drawing functions use the shared `ctx`; icons and tale pictures swap it for their own canvas.
+hydrate(); syncLang(); syncRuby(); syncSound();
+resize();
+ctxRef = null;
+document.querySelectorAll('.item').forEach(row => { const c = row.querySelector('canvas'), g = c.getContext('2d'); g.setTransform(2, 0, 0, 2, 0, 0); ctxRef = g; ICON[row.dataset.key](); });
+refreshControls();
+// A cover picture: #demo fills the city so it can be screenshotted.
+if (location.hash === '#cover') document.documentElement.classList.add('cover-mode');
+resize();
+if (location.hash === '#demo' || location.hash === '#cover') {
+  running = true; $('#startOv').hidden = true;
+  Object.assign(S.n, { buildings: 8, adults: 30, kids: 26, lanterns: 24, mooncakes: 14, tea: 8, mahjong: 3, fireworks: 3 });
+  S.t = 60; for (let i = 0; i < 40; i++) MMSim.step(S, .1); S.events.length = 0;
+  for (let i = 0; i < 200; i++) updateScene(.05, i * .05);
+  people.forEach(p => { p.x = p.tx; p.y = p.ty; });
+  rockets.push({ x: W * .3, y: 140, vy: -1, fuse: .01, c: '#FFD23F' }, { x: W * .55, y: 90, vy: -1, fuse: .01, c: '#FF5E7A' }, { x: W * .15, y: 120, vy: -1, fuse: .01, c: '#63E6FF' });
+  updateScene(.05, 10); for (let i = 0; i < 12; i++) updateScene(.05, 10 + i * .05);
+  updateHud(MMSim.derive(S));
+  if (location.hash === '#cover') { const m = MOON(); special = { kind: 'change', x0: W * .5, y0: 300, x: W * .6, y: 190, age: 5, s: .95 }; }
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

@@ -15,6 +15,10 @@ aquarium/           James's Nature Aquarium
   index.html        page, graphics, sound and interface
   sim.js            the ecosystem model (hour-by-hour simulation)
   cover.png         1200×744 card image, also used for link previews
+mid-autumn/         Mid-Autumn Mayhem
+  index.html        page, city scene, sound, Moon Tales and interface
+  sim.js            the festival model (celebration score and trouble meters)
+  cover.png         card image (render with index.html#cover)
 .nojekyll           serve files as-is
 ```
 
@@ -23,6 +27,7 @@ aquarium/           James's Nature Aquarium
 | Game | Folder | Version | Launched |
 |---|---|---|---|
 | James’s Nature Aquarium | `aquarium/` | 3.1 | 2026-09-24 |
+| Mid-Autumn Mayhem | `mid-autumn/` | 1.0 | 2026-09-25 |
 
 ## Adding a game
 

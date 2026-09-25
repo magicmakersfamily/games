@@ -71,6 +71,9 @@ Audio API, started only from a button press.
 - Mark Chinese text `lang="zh-TW"`; use the fonts "Noto Serif TC", "Songti TC", "PMingLiU".
 - For spoken words use `speechSynthesis` with `lang = 'zh-TW'`, preferring a zh-TW voice, then
   zh-CN — never zh-HK or yue (that is Cantonese).
+- Exception, at the family's request: `mid-autumn/` speaks Cantonese by default (zh-HK / yue voice,
+  Jyutping over the characters) with a button to switch to Mandarin and pinyin. Other games stay Mandarin
+  unless the user asks otherwise.
 - Double-check every word: Traditional forms (龜 not 龟, 觀察 not 观察), and Chinese words rather
   than Japanese ones (氮 not 窒素, 光合作用 not 光合成).
 
