@@ -59,6 +59,16 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .tool:hover { background: var(--panel-2); }
 .tool[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
 .tool .zh { font-weight: 700; }
+/* Text language: English, 中文 or both. */
+.t-zh { font-family: var(--zh); }
+html.text-both .t-zh:not(:first-child) { margin-left: .35em; }
+html.text-both .t-en + .t-zh { color: var(--gold); font-size: .95em; }
+html.text-both .tb .t-zh { display: block; margin: 3px 0 0; }
+.tool[aria-pressed="true"] .t-zh, .go .t-zh { color: inherit !important; }
+html.text-en .t-zh, html.text-zh .t-en, html.text-en .zh[data-key], html.text-en .line .yue, html.text-zh .line .en { display: none !important; }
+.speed { display: inline-flex; align-items: center; gap: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 2px 4px 2px 10px; font-size: 13.5px; font-weight: 700; }
+.speed .tool { padding: 4px 10px; border: 0; background: var(--panel-2); font-size: 16px; }
+.speed output { min-width: 44px; text-align: center; font-variant-numeric: tabular-nums; color: var(--gold); }
 .seg { display: inline-flex; }
 .seg .tool { border-radius: 0; }
 .seg .tool:first-child { border-radius: 10px 0 0 10px; }
@@ -192,6 +202,8 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
 .more-game:hover { border-color: var(--gold); }
 .more-game img { width: 96px; aspect-ratio: 1200 / 744; object-fit: cover; border-radius: 6px; display: block; }
 .more-game small { display: block; color: var(--ink-3); font-size: 12.5px; }
+.more-fb { margin: 0; font-size: 13.5px; color: var(--ink-2); }
+.more-fb a { color: var(--gold); font-weight: 700; }
 .grownups { margin: 0; font-size: 13px; color: var(--ink-2); background: rgba(244, 194, 79, .08); border-radius: 10px; padding: 8px 10px; }
 .grownups a { color: var(--gold); font-weight: 700; }
 @media (prefers-reduced-motion: reduce) { .meter.hot, .line { animation: none; } }
@@ -202,23 +214,29 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
 <div class="app" id="app">
   <a class="shelf-back" href="../">← All games</a>
   <div class="top">
-    <h1>Mid-Autumn Mayhem <span data-zh="title"></span></h1>
+    <h1><span class="t-en">Mid-Autumn Mayhem</span> <span data-zh="title"></span></h1>
     <div class="stats">
-      <div class="stat"><small>Time</small><b id="clock">6:00 pm</b></div>
-      <div class="stat"><small>Celebrating <span data-zh="celebrate"></span></small><b id="cel">0</b></div>
-      <div class="stat score"><small>Reunion points <span data-zh="reunion"></span></small><b id="score">0</b></div>
+      <div class="stat"><small><span class="t-en">Time</span><span class="t-zh" lang="zh-TW">時間</span></small><b id="clock">6:00 pm</b></div>
+      <div class="stat"><small><span class="t-en">Celebrating</span> <span data-zh="celebrate"></span></small><b id="cel">0</b></div>
+      <div class="stat score"><small><span class="t-en">Reunion points</span> <span data-zh="reunion"></span></small><b id="score">0</b></div>
     </div>
     <div class="tools">
+      <div class="seg" role="group" aria-label="Text language">
+        <button class="tool" id="tEn" type="button" aria-pressed="false">English</button>
+        <button class="tool" id="tZh" type="button" aria-pressed="false" lang="zh-TW">中文</button>
+        <button class="tool" id="tBoth" type="button" aria-pressed="true">Both <span lang="zh-TW">雙語</span></button>
+      </div>
+      <span class="speed" role="group" aria-label="Game speed"><span class="t-en">Speed</span><span class="t-zh" lang="zh-TW">速度</span><button class="tool" id="slowBtn" type="button" aria-label="Slower">−</button><output id="speedOut">0.75×</output><button class="tool" id="fastBtn" type="button" aria-label="Faster">+</button></span>
       <button class="tool" id="pauseBtn" type="button" aria-pressed="false">Pause</button>
       <button class="tool" id="soundBtn" type="button" aria-pressed="true">Sound on</button>
       <div class="seg" role="group" aria-label="Chinese to hear and read">
-        <button class="tool" id="yueBtn" type="button" aria-pressed="true">Cantonese <span class="zh" lang="zh-HK">粵</span></button>
-        <button class="tool" id="cmnBtn" type="button" aria-pressed="false">Mandarin <span class="zh" lang="zh-TW">普</span></button>
+        <button class="tool" id="yueBtn" type="button" aria-pressed="true"><span class="t-en">Cantonese</span><span class="t-zh" lang="zh-HK">粵語</span></button>
+        <button class="tool" id="cmnBtn" type="button" aria-pressed="false"><span class="t-en">Mandarin</span><span class="t-zh" lang="zh-TW">普通話</span></button>
       </div>
       <button class="tool" id="rubyBtn" type="button" aria-pressed="true">Show Jyutping</button>
-      <button class="tool" id="talesBtn" type="button">Moon Tales <span class="zh" lang="zh-TW">故事</span></button>
-      <button class="tool" id="scopeBtn" type="button" aria-pressed="false">Telescope <span class="zh" lang="zh-TW">望遠鏡</span></button>
-      <button class="tool" id="camBtn" type="button" aria-pressed="true">Camera drift</button>
+      <button class="tool" id="talesBtn" type="button"><span class="t-en">Moon Tales</span><span class="t-zh" lang="zh-TW">月亮故事</span></button>
+      <button class="tool" id="scopeBtn" type="button" aria-pressed="false"><span class="t-en">Telescope</span><span class="t-zh" lang="zh-TW">望遠鏡</span></button>
+      <button class="tool" id="camBtn" type="button" aria-pressed="true"><span class="t-en">Camera drift</span><span class="t-zh" lang="zh-TW">鏡頭移動</span></button>
     </div>
   </div>
 
@@ -230,16 +248,16 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
 
       <div class="overlay" id="startOv">
         <div class="card">
-          <h2>The full moon is rising over the harbour.</h2>
-          <p>It is the 15th night of the 8th lunar month: the <span data-zh="festival"></span> Mid-Autumn Festival. Tonight everyone wants to be together under the round moon. Build the party from 6 pm to midnight.</p>
+          <h2 class="tb"><span class="t-en">The full moon is rising over the harbour.</span><span class="t-zh" lang="zh-TW">圓月正在海港上空升起。</span></h2>
+          <p class="tb"><span class="t-en">It is the 15th night of the 8th lunar month: the Mid-Autumn Festival. Tonight everyone wants to be together under the round moon. Build the party from 6 pm to midnight.</span><span class="t-zh" lang="zh-TW">今天是農曆八月十五，中秋節。今晚大家都想在圓月下團聚。由晚上六點到午夜，一起佈置派對吧。</span></p>
           <ul>
-            <li>Use <b>+</b> and <b>−</b> to add buildings, people, lanterns, mooncakes and more.</li>
-            <li>Every happy, celebrating person earns <b>Reunion points</b>.</li>
-            <li>Watch the four trouble meters. If one fills up, trouble arrives: fire trucks, ambulances, police…</li>
-            <li>Tap surprise visitors before they disappear. Point at any Chinese word to hear it.</li>
-            <li>A storyteller tells you what is happening, in English and Chinese words and spoken Cantonese.</li>
+            <li class="tb"><span class="t-en">Use <b>+</b> and <b>−</b> to add buildings, people, lanterns, mooncakes, fruit and more.</span><span class="t-zh" lang="zh-TW">用 + 和 − 加入大樓、人、燈籠、月餅、生果等等。</span></li>
+            <li class="tb"><span class="t-en">Every happy, celebrating person earns <b>Reunion points</b>.</span><span class="t-zh" lang="zh-TW">每個開心慶祝的人都會帶來團圓分。</span></li>
+            <li class="tb"><span class="t-en">Watch the six trouble meters. If one fills up, trouble arrives: fire trucks, ambulances, police, monkeys…</span><span class="t-zh" lang="zh-TW">留意六個麻煩指數。任何一個滿了，麻煩就會來：消防車、救護車、警察、馬騮……</span></li>
+            <li class="tb"><span class="t-en">Tap surprise visitors before they disappear. Point at any Chinese word to hear it.</span><span class="t-zh" lang="zh-TW">趁驚喜訪客未離開前點一下。指著任何中文字就可以聽到讀音。</span></li>
+            <li class="tb"><span class="t-en">Too fast? Use <b>Speed −</b> to slow the night down.</span><span class="t-zh" lang="zh-TW">太快？用「速度 −」令晚上慢一點。</span></li>
           </ul>
-          <button class="go" id="startBtn" type="button">Start the night</button>
+          <button class="go" id="startBtn" type="button"><span class="t-en">Start the night</span><span class="t-zh" lang="zh-TW">開始今晚</span></button>
         </div>
       </div>
 
@@ -247,30 +265,32 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
     <div class="meters" id="meters"></div>
     <section class="story" aria-label="Tonight's story">
       <div class="story-head">
-        <h2>Tonight’s story <span class="zh" lang="zh-HK">今晚嘅故事</span></h2>
-        <span class="tools"><span class="seg" role="group" aria-label="Narration"><button class="tool" id="nBoth" type="button" aria-pressed="true">English + <span class="zh" lang="zh-HK">粵</span></button><button class="tool" id="nYue" type="button" aria-pressed="false"><span class="zh" lang="zh-HK">粵</span> only</button><button class="tool" id="nOff" type="button" aria-pressed="false">Off</button></span><button class="tool" id="voiceBtn" type="button">Test voice</button></span>
+        <h2><span class="t-en">Tonight’s story</span><span class="t-zh" lang="zh-TW">今晚的故事</span></h2>
+        <span class="tools"><span class="seg" role="group" aria-label="Narration"><button class="tool" id="nBoth" type="button" aria-pressed="true"><span class="t-en">Voice: English + 粵</span><span class="t-zh" lang="zh-TW">英語＋粵語</span></button><button class="tool" id="nYue" type="button" aria-pressed="false"><span class="t-en">粵 only</span><span class="t-zh" lang="zh-TW">只講粵語</span></button><button class="tool" id="nOff" type="button" aria-pressed="false"><span class="t-en">Off</span><span class="t-zh" lang="zh-TW">靜音</span></button></span><button class="tool" id="voiceBtn" type="button"><span class="t-en">Test voice</span><span class="t-zh" lang="zh-TW">試聲</span></button></span>
       </div>
       <ol class="story-log" id="storyLog" aria-live="polite"></ol>
     </section>
     </div>
 
     <section class="controls" aria-label="Things to add">
-      <h2>Build the festival</h2>
+      <h2><span class="t-en">Build the festival</span><span class="t-zh" lang="zh-TW">佈置中秋晚會</span></h2>
       <div class="items" id="items"></div>
     </section>
   </div>
 
-  <p class="about">Version 1.3 · Launched <time datetime="2026-09-25">September 25, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Follow for new games</a> · <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">♥ Support on Ko-fi</a></p>
+  <p class="about">Version 1.4 · Launched <time datetime="2026-09-25">September 25, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="../feedback/?game=mid-autumn&amp;v=1.4"><span class="t-en">Share your thoughts</span><span class="t-zh" lang="zh-TW">分享意見</span></a> · <a href="../feedback/?game=mid-autumn&amp;v=1.4&amp;kind=bug"><span class="t-en">Report a bug</span><span class="t-zh" lang="zh-TW">報告問題</span></a></p>
+  <p class="about tb"><span class="t-en">Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></span><span class="t-zh" lang="zh-TW">由 Magic Makers 製作。更多遊戲陸續推出。喜歡嗎？請我們食個月餅：<a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></span></p>
+  <p class="about tb"><span class="t-en">These games don’t collect any information. Saved progress stays in your own browser.</span><span class="t-zh" lang="zh-TW">這些遊戲不會收集任何資料。儲存的進度只會留在你自己的瀏覽器。</span></p>
 </div>
 
 <div class="endmodal" id="riddleOv" hidden>
   <div class="card riddle" role="dialog" aria-modal="true" aria-labelledby="rdTitle">
-    <p class="rd-eyebrow">Lantern riddle <span class="zh" lang="zh-HK">燈謎</span> · guess the Chinese character</p>
+    <p class="rd-eyebrow"><span class="t-en">Lantern riddle · guess the Chinese character</span><span class="t-zh" lang="zh-TW">燈謎・估一個字</span></p>
     <h2 id="rdTitle"></h2>
     <p class="rd-zh zh" id="rdZh" lang="zh-HK"></p>
     <div class="rd-opts" id="rdOpts"></div>
     <p class="rd-result" id="rdResult" hidden></p>
-    <button class="go" id="rdDone" type="button" hidden>Keep partying</button>
+    <button class="go" id="rdDone" type="button" hidden><span class="t-en">Keep partying</span><span class="t-zh" lang="zh-TW">繼續派對</span></button>
   </div>
 </div>
 
@@ -281,8 +301,8 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
 <div class="tales" id="tales" hidden>
   <div class="book" role="dialog" aria-modal="true" aria-labelledby="talesTitle">
     <header>
-      <h2 id="talesTitle">Moon Tales <span data-zh="tales"></span></h2>
-      <button class="close" id="talesClose" type="button">Close</button>
+      <h2 id="talesTitle"><span class="t-en">Moon Tales</span> <span data-zh="tales"></span></h2>
+      <button class="close" id="talesClose" type="button"><span class="t-en">Close</span><span class="t-zh" lang="zh-TW">關閉</span></button>
     </header>
     <div class="tale-tabs" id="taleTabs" role="tablist"></div>
     <div class="tale" id="taleBody"></div>
@@ -350,6 +370,9 @@ const ZH = {
 };
 
 let LANG = 'yue';            // 'yue' Cantonese (asked for by the family) or 'cmn' Mandarin
+let TMODE = 'both';   // text on screen: 'en', 'zh' or 'both'
+let SPEED = .75;      // how fast the night runs
+const T = (en, zh) => `<span class="t-en">${en}</span><span class="t-zh" lang="zh-TW">${zh}</span>`;   // show text in English, Chinese or both
 let RUBY = true;
 function ruby(z) {
   const ch = [...z[0]], sy = (LANG === 'yue' ? z[2] : z[1]).split(' ');
@@ -414,6 +437,9 @@ try { const p = JSON.parse(localStorage.getItem(STORE) || 'null'); if (p) prefs 
 function savePrefs() { try { localStorage.setItem(STORE, JSON.stringify(prefs)); } catch (e) { /* storage blocked */ } }
 // Cantonese is the default for everyone; earlier versions saved a confusing toggle, so start fresh once.
 if (prefs.langV !== 3) { prefs.lang = 'yue'; prefs.ruby = true; prefs.nmode = 'both'; prefs.langV = 3; savePrefs(); }
+if (!['en', 'zh', 'both'].includes(prefs.tmode)) prefs.tmode = 'both';
+if (typeof prefs.speed !== 'number') prefs.speed = .75;
+TMODE = prefs.tmode; SPEED = prefs.speed;
 LANG = prefs.lang === 'cmn' ? 'cmn' : 'yue';
 RUBY = prefs.ruby !== false;
 
@@ -433,18 +459,18 @@ const ITEMS = [
 function hintFor(key, s, d) {
   const n = s.n, P = d.P;
   switch (key) {
-    case 'buildings': return [`Room for ${d.cap} people (the park fits ${MMSim.PARK}, each building ${MMSim.PER_BUILDING} more)`, P > d.cap];
-    case 'adults': return [n.adults ? `${n.adults} grown-ups can watch ${n.adults * MMSim.KIDS_PER_ADULT} kids` : 'Grown-ups keep kids safe and play mahjong', false];
-    case 'kids': return [d.unsupervised ? `${d.unsupervised} kids with nobody watching them!` : 'Kids love lanterns. 1 grown-up for every 3 kids', d.unsupervised > 0];
-    case 'lanterns': { const need = Math.ceil(P * 0.4); return [P ? `${need} lanterns light up ${P} people (1 for every 2–3)` : 'Paper lanterns once held real candles', false]; }
-    case 'mooncakes': { const need = Math.ceil(P / MMSim.WEDGES); return [P ? `${need} is right for ${P} people: each cake is cut in 4 wedges` : 'Very rich: families cut them in 4 and share', d.wedgesEach > 1.25]; }
-    case 'tea': { const need = Math.ceil(P / MMSim.TEA_SERVES); return [P ? `${need} pots serve ${P} people. Tea helps with rich mooncakes` : 'One pot serves 6 people', false]; }
-    case 'mahjong': return [n.mahjong ? `${n.mahjong * MMSim.SEATS} seats, but the tiles are LOUD` : '4 players a table. Clack, clack, clack…', false];
-    case 'snacks': { const need = Math.ceil(P / MMSim.SNACK_SERVES); return [P ? `${need} platters for ${P} people: pomelo, star fruit, persimmon, taro, water caltrops, peanuts, river snails. Too many brings monkeys!` : 'Pomelo, star fruit, persimmon, taro, water caltrops…', S.n.snacks > P / MMSim.SNACK_SERVES + 2]; }
-    case 'fireworks': return ['Exciting! But each one adds noise and fire risk', n.fireworks > 3];
-    case 'secret': return [`Each one tells 4 grown-ups. Informed: ${s.informed} of ${n.adults}. Need at least 12 and 6 in 10`, false];
+    case 'buildings': return [`Room for ${d.cap} people (the park fits ${MMSim.PARK}, each building ${MMSim.PER_BUILDING} more)`, `可容納 ${d.cap} 人（公園 ${MMSim.PARK} 人，每座大樓多 ${MMSim.PER_BUILDING} 人）`, P > d.cap];
+    case 'adults': return n.adults ? [`${n.adults} grown-ups can watch ${n.adults * MMSim.KIDS_PER_ADULT} kids`, `${n.adults} 個大人可以照顧 ${n.adults * MMSim.KIDS_PER_ADULT} 個小朋友`, false] : ['Grown-ups keep kids safe and play mahjong', '大人會照顧小朋友，也會打麻將', false];
+    case 'kids': return d.unsupervised ? [`${d.unsupervised} kids with nobody watching them!`, `${d.unsupervised} 個小朋友沒有人照顧！`, true] : ['Kids love lanterns. 1 grown-up for every 3 kids', '小朋友最愛燈籠。每 3 個小朋友要 1 個大人', false];
+    case 'lanterns': { const need = Math.ceil(P * 0.4); return P ? [`${need} lanterns light up ${P} people (1 for every 2–3)`, `${need} 個燈籠照亮 ${P} 人（每 2 至 3 人一個）`, false] : ['Paper lanterns once held real candles', '紙燈籠以前真的點蠟燭', false]; }
+    case 'mooncakes': { const need = Math.ceil(P / MMSim.WEDGES); return P ? [`${need} is right for ${P} people: each cake is cut in 4 wedges`, `${need} 個剛好給 ${P} 人：每個月餅切成 4 份`, d.wedgesEach > 1.25] : ['Very rich: families cut them in 4 and share', '月餅很飽肚：一家人切開 4 份一起吃', false]; }
+    case 'snacks': { const need = Math.ceil(P / MMSim.SNACK_SERVES); return P ? [`${need} platters for ${P} people: pomelo, star fruit, persimmon, taro, water caltrops, peanuts, river snails. Too many brings monkeys!`, `${need} 碟給 ${P} 人：柚子、楊桃、柿、芋頭、菱角、花生、田螺。太多會引來馬騮！`, n.snacks > P / MMSim.SNACK_SERVES + 2] : ['Pomelo, star fruit, persimmon, taro, water caltrops…', '柚子、楊桃、柿、芋頭、菱角……', false]; }
+    case 'tea': { const need = Math.ceil(P / MMSim.TEA_SERVES); return P ? [`${need} pots serve ${P} people. Tea helps with rich mooncakes`, `${need} 壺茶給 ${P} 人。茶可以幫助消化月餅`, false] : ['One pot serves 6 people', '一壺茶給 6 個人', false]; }
+    case 'mahjong': return n.mahjong ? [`${n.mahjong * MMSim.SEATS} seats, but the tiles are LOUD`, `${n.mahjong * MMSim.SEATS} 個座位，但麻將聲很吵`, false] : ['4 players a table. Clack, clack, clack…', '每張枱 4 個人打。劈劈啪啪……', false];
+    case 'fireworks': return ['Exciting! But each one adds noise and fire risk', '好刺激！但每支都增加噪音和火災風險', n.fireworks > 3];
+    case 'secret': return [`Each one tells 4 grown-ups. Informed: ${s.informed} of ${n.adults}. Need at least 12 and 6 in 10`, `每個可以通知 4 個大人。已通知：${s.informed} / ${n.adults}。最少 12 人，而且要十分之六`, false];
   }
-  return ['', false];
+  return ['', '', false];
 }
 
 /* ───────────── The model ───────────── */
@@ -523,7 +549,18 @@ function burst(x, y, n, o) {
     parts[parts.length - 1].max = parts[parts.length - 1].life;
   }
 }
-function say(p, text, col) { bubbles.push({ p, x: p.x, y: p.y, text, life: 1.8, col: col || '#fff' }); }
+const BUB = {
+  'Blergh!': '嘔～', 'Urrgh…': '嘔……', 'Too much cake!': '食太多月餅！', 'Uh oh…': '弊喇……', 'Oh no…': '唔係掛……', 'Can’t hold it!': '忍唔住喇！',
+  'Toilet! Toilet!': '廁所！廁所！', 'Oops…': '哎呀……', 'Don’t look!': '唔好望！', 'AAAH!': '呀！！', 'Hot hot hot!': '好熱好熱！', 'Run!': '走呀！', 'Help!': '救命!',
+  'Monkeys!': '馬騮呀!', 'My pomelo!': '我個柚子！', 'Shoo! Shoo!': '走開！走開！', 'Eww!': '咦～', 'So smelly!': '好臭!', 'What is that smell?!': '咩味嚟㗎？！', 'Yuck!': '好核突！',
+  'Pung!': '碰!', 'Mahjong!': '食糊!', 'Happy Mid-Autumn!': '中秋快樂!', 'Look at the moon!': '睇月光呀！', 'Yum, mooncake!': '月餅好好味！', 'Hahaha!': '哈哈哈！', 'Shhh! Too loud!': '噓！太嘈喇！',
+};
+const BUB_EN = Object.fromEntries(Object.entries(BUB).map(([e, z]) => [z, e]));
+function say(p, text, col) {
+  const cjk = /[\u3400-\u9fff]/.test(text), en = cjk ? BUB_EN[text] || '' : text, zhT = cjk ? text : BUB[text] || '';
+  const lines = TMODE === 'en' ? [en || zhT] : TMODE === 'zh' ? [zhT || en] : [en, zhT].filter(Boolean);
+  bubbles.push({ p, x: p.x, y: p.y, lines, life: 1.8, col: col || '#fff' });
+}
 
 /* ───────────── Drawing helpers ───────────── */
 /* ───────────── Art: pre-rendered layers ─────────────
@@ -608,9 +645,10 @@ function buildStatic() {
     }), { x0: CR() * W, y: 40 + k * 42 + CR() * 20, v: 3 + CR() * 5 });
   });
   const hx = x => x * W / 1000;
-  LAYERS.hills = makeLayer(W, G.road - 200, () => {
-    const o = -200; ctx.translate(0, o);   // layer starts at y = 200
-    const HR = srand(9);
+  const HR = srand(9);
+  const mist = (y0, y1, a) => { const g = ctx.createLinearGradient(0, y0, 0, y1); g.addColorStop(0, 'rgba(110,120,185,0)'); g.addColorStop(1, `rgba(110,120,185,${a})`); ctx.fillStyle = g; ctx.fillRect(0, y0, W, y1 - y0); };
+  LAYERS.ridgeFar = makeLayer(W, G.road - 200, () => {
+    ctx.translate(0, -200);
     const ridge = (pts, col, rim) => {
       ctx.beginPath(); ctx.moveTo(0, G.road);
       pts.forEach(([x, y], i) => i ? ctx.lineTo(hx(x), y) : ctx.lineTo(hx(x), y));
@@ -619,12 +657,27 @@ function buildStatic() {
     };
     const bumpy = (pts, amp) => { const out = []; for (let i = 0; i < pts.length - 1; i++) { const [x1, y1] = pts[i], [x2, y2] = pts[i + 1]; for (let k = 0; k < 8; k++) { const u = k / 8; out.push([x1 + (x2 - x1) * u, y1 + (y2 - y1) * u - HR() * amp]); } } out.push(pts[pts.length - 1]); return out; };
     ridge(bumpy([[0, 276], [120, 262], [240, 270], [420, 250], [560, 262], [700, 244], [860, 258], [1000, 250]], 3), '#1B2350');
+    mist(250, 300, .35);
+  });
+  LAYERS.ridgeMid = makeLayer(W, G.road - 200, () => {
+    ctx.translate(0, -200);
+    const ridge = (pts, col, rim) => {
+      ctx.beginPath(); ctx.moveTo(0, G.road);
+      pts.forEach(([x, y]) => ctx.lineTo(hx(x), y));
+      ctx.lineTo(W, G.road); ctx.closePath(); ctx.fillStyle = col; ctx.fill();
+      if (rim) { ctx.save(); ctx.clip(); ctx.strokeStyle = rim; ctx.lineWidth = 2.5; ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(hx(x), y) : ctx.moveTo(hx(x), y)); ctx.stroke(); ctx.restore(); }
+    };
+    const bumpy = (pts, amp) => { const out = []; for (let i = 0; i < pts.length - 1; i++) { const [x1, y1] = pts[i], [x2, y2] = pts[i + 1]; for (let k = 0; k < 8; k++) { const u = k / 8; out.push([x1 + (x2 - x1) * u, y1 + (y2 - y1) * u - HR() * amp]); } } out.push(pts[pts.length - 1]); return out; };
     // Lion Rock: the lion's head and back, lying down and facing west.
     ridge(bumpy([[0, 300], [140, 290], [230, 276], [262, 248], [286, 230], [308, 226], [326, 232], [340, 246], [372, 256], [440, 262], [520, 270], [640, 262], [760, 276], [880, 270], [1000, 284]], 1.5), '#151C43', 'rgba(255,230,170,.18)');
     ridge(bumpy([[0, 318], [160, 306], [330, 314], [500, 304], [680, 312], [840, 300], [1000, 310]], 2.5), '#10163A');
     // Village and road lights on the hillside.
     for (let i = 0; i < 70; i++) { const x = HR() * W, y = 296 + HR() * 22; ctx.fillStyle = HR() < .7 ? 'rgba(255,205,130,.75)' : 'rgba(210,230,255,.6)'; ctx.fillRect(x, y, 1.2, 1.2); }
-    ctx.fillStyle = '#10163A'; ctx.fillRect(0, G.waterTop - 2, W, 2);
+    mist(290, G.waterTop, .3);
+  });
+  LAYERS.shore = makeLayer(W, G.road - G.waterTop + 4, () => {
+    ctx.translate(0, -(G.waterTop - 4));
+    ctx.fillStyle = '#10163A'; ctx.fillRect(0, G.waterTop - 4, W, 4);
     // Harbour water.
     const wg = ctx.createLinearGradient(0, G.waterTop, 0, G.shore);
     wg.addColorStop(0, '#1A2560'); wg.addColorStop(1, '#0B1236');
@@ -682,6 +735,25 @@ function buildStatic() {
     }
     ctx.strokeStyle = 'rgba(10,10,25,.3)'; ctx.lineWidth = .8;
     for (let c = -40; c <= 40; c++) { ctx.beginPath(); ctx.moveTo(vx + c * 30 * ((G.roadB - vy) / (H - vy)), G.roadB + 1); ctx.lineTo(vx + c * 30, H); ctx.stroke(); }
+  });
+  LAYERS.fg = makeLayer(W + 180, H, () => {
+    const FR = srand(55), blur = 'filter' in ctx;
+    ctx.translate(90, 0);
+    if (blur) ctx.filter = 'blur(5px)';
+    for (const [cx, cy, n, sx] of [[-40, -10, 60, 1], [W + 40, -20, 50, -1]]) {
+      for (let k = 0; k < n; k++) { const a = FR() * TAU, d = FR() * 90; ctx.fillStyle = FR() < .5 ? 'rgba(8,16,14,.92)' : 'rgba(14,26,22,.9)'; ctx.beginPath(); ctx.ellipse(cx + Math.cos(a) * d * 1.3 * sx, cy + Math.abs(Math.sin(a)) * d * .7, 14 + FR() * 10, 7 + FR() * 5, a, 0, TAU); ctx.fill(); }
+      ctx.strokeStyle = 'rgba(10,10,12,.9)'; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(cx - 60 * sx, cy - 10); ctx.quadraticCurveTo(cx + 40 * sx, cy + 40, cx + 110 * sx, cy + 30); ctx.stroke();
+    }
+    if (blur) ctx.filter = 'blur(3.5px)';
+    for (const [x, y] of [[W - 70, 70], [W - 30, 96], [60, 92]]) {
+      ctx.strokeStyle = 'rgba(20,10,5,.8)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, y - 14); ctx.stroke();
+      const g = ctx.createRadialGradient(x, y, 2, x, y, 36); g.addColorStop(0, 'rgba(255,170,90,.55)'); g.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = g; ctx.fillRect(x - 36, y - 36, 72, 72);
+      const lg = ctx.createRadialGradient(x - 2, y - 3, 2, x, y, 15); lg.addColorStop(0, '#FFC08A'); lg.addColorStop(.5, '#D8402A'); lg.addColorStop(1, '#6A140C');
+      ctx.fillStyle = lg; ctx.beginPath(); ctx.ellipse(x, y, 12, 14, 0, 0, TAU); ctx.fill();
+    }
+    if (blur) ctx.filter = 'blur(2px)';
+    for (let k = 0; k < 14; k++) { const x = FR() < .5 ? FR() * 180 : W - FR() * 180, y = 30 + FR() * 200, r = 5 + FR() * 12; ctx.fillStyle = `rgba(255,${190 + FR() * 50},${120 + FR() * 60},${.08 + FR() * .12})`; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill(); }
+    ctx.filter = 'none';
   });
   LAYERS.buildings = {};
   for (let k = 0; k < 8; k++) { const b = buildingSlot(k); LAYERS.buildings[b.i] = facade(b); }
@@ -829,9 +901,10 @@ function drawBuilding(b, k, t, lit, burning) {
 
 /* ───────────── Sky, water and street, drawn each frame ───────────── */
 function drawSky(t) {
-  blit(LAYERS.sky, 0, 0);
+  setCam(.08); blit(LAYERS.sky, 0, 0);
   for (const s of stars) { ctx.globalAlpha = .35 + .55 * Math.max(0, Math.sin(t * 1.4 + s.p)); ctx.fillStyle = '#FFF6DE'; ctx.fillRect(s.x, s.y, s.r, s.r); }
   ctx.globalAlpha = 1;
+  setCam(.18);
   const m = MOON();
   const halo = ctx.createRadialGradient(m.x, m.y, m.r * .9, m.x, m.y, m.r * 4);
   halo.addColorStop(0, 'rgba(255,236,180,.32)'); halo.addColorStop(.4, 'rgba(255,220,160,.08)'); halo.addColorStop(1, 'rgba(255,220,160,0)');
@@ -843,15 +916,18 @@ function drawSky(t) {
     const pulse = .5 + .5 * Math.sin(t * 5);
     ctx.strokeStyle = `rgba(255,220,120,${.4 + .5 * pulse})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(m.x + 8, m.y + 12, 18 + pulse * 4, 0, TAU); ctx.stroke();
   }
-  for (const c of LAYERS.clouds) { const x = ((c.x0 + t * c.v) % (W + c.lw + 100)) - c.lw - 50; blit(c, x, c.y); }
+  LAYERS.clouds.forEach((c, i) => { setCam(.24 + i * .05); const x = ((c.x0 + t * c.v) % (W + c.lw + 100)) - c.lw - 50; blit(c, x, c.y); });
 }
 function drawHarbour(t) {
-  blit(LAYERS.hills, 0, 200);
+  setCam(.3); blit(LAYERS.ridgeFar, 0, 200);
+  setCam(.42); blit(LAYERS.ridgeMid, 0, 200);
   const m = MOON();
   // Far shore city, brighter the more you build.
   const city = clamp(S.n.buildings / 6, 0, 1);
+  setCam(.5);
+  if (city > 0) { ctx.globalAlpha = city; blit(LAYERS.far, 0, G.waterTop - 58); ctx.globalAlpha = 1; }
+  setCam(.6); blit(LAYERS.shore, 0, G.waterTop - 4);
   if (city > 0) {
-    ctx.globalAlpha = city; blit(LAYERS.far, 0, G.waterTop - 58);
     ctx.save(); ctx.globalAlpha = city * .28; ctx.translate(0, G.waterTop * 2 + 2); ctx.scale(1, -1); blit(LAYERS.far, 0, G.waterTop - 58 + Math.sin(t) * .5); ctx.restore();
     ctx.globalAlpha = 1;
   }
@@ -1507,11 +1583,11 @@ function drawRiddleLantern(r, t) {
 /* ───────────── Camera drift and the telescope ─────────────
    The camera sits slightly zoomed in and drifts left and right; far layers (sky, moon, hills) move less
    than the street, which gives depth. The telescope redraws the whole scene magnified inside a circle. */
-const CAM = { on: true, zoom: 1.07, pan: 0 };
+const CAM = { on: true, zoom: 1.12, pan: 0, py: 0, a: 1 };
 const LENS = { on: false, x: 500, y: 330, r: 110, z: 2.6 };
 let lensPass = false;
-function camA() { return CAM.on && !document.documentElement.classList.contains('cover-mode') ? CAM.zoom : 1; }
-function camE(f) { const A = camA(); return { e: W / 2 - (W / 2 + CAM.pan * f) * A, f: H / 2 - H / 2 * A }; }
+function camA() { return CAM.a; }
+function camE(f) { const A = CAM.a; return { e: W / 2 - (W / 2 + CAM.pan * f) * A, f: H / 2 - (H / 2 + CAM.py * f) * A }; }
 function setCam(f) {
   const A = camA(), E = camE(f);
   const lz = lensPass ? LENS.z : 1, lx = lensPass ? (1 - LENS.z) * LENS.x : 0, ly = lensPass ? (1 - LENS.z) * LENS.y : 0;
@@ -1639,12 +1715,12 @@ function updateScene(dt, t) {
         } else if (p.pose === 'bend') { puddles.push({ x: p.x + 10 * p.dir * s, y: p.y + 1, life: 26, sick: true }); p.pose = ''; }
         else p.pose = '';
       }
-    } else if (p.sick > .5 && !p.gone && !p.taken && p.seat < 0 && Math.random() < dt * .3) {
+    } else if (p.sick > .5 && !p.gone && !p.taken && p.seat < 0 && Math.random() < dt * .3 * SPEED) {
       if (Math.random() < .5) { p.pose = 'bend'; p.poseT = 1.4; say(p, pick(['Blergh!', 'Urrgh…', 'Too much cake!']), '#C9E27A'); SFX.vomit(p.x); }
       else { p.pose = 'squat'; p.poseT = 1.8; say(p, pick(['Uh oh…', 'Oh no…', 'Can’t hold it!']), '#D7A36B'); SFX.fart(p.x); }
     }
     // Speech bubbles
-    p.bubbleT -= dt;
+    p.bubbleT -= dt * SPEED;
     if (p.bubbleT <= 0 && !p.gone) {
       p.bubbleT = rnd(5, 14) * (people.length > 30 ? 2 : 1);
       if (p.state === 'flee') { say(p, pick(['AAAH!', 'Hot hot hot!', 'Run!', '救命!']), '#FFB27A'); SFX.scream(p.x, p.kind === 'kid'); }
@@ -1658,7 +1734,7 @@ function updateScene(dt, t) {
   people = people.filter(p => !(p.gone || p.taken) || (p.x > -30 && p.x < W + 30 && !(p.taken && Math.hypot(p.tx - p.x, p.ty - p.y) < 4)));
   // Fireworks launch.
   if (!inc || inc === 'rowdy') {
-    fwTimer -= dt * S.n.fireworks * .22;
+    fwTimer -= dt * S.n.fireworks * .22 * SPEED;
     if (fwTimer <= 0 && S.n.fireworks > 0) { fwTimer = 1 + Math.random(); rockets.push({ x: rnd(W * .1, W * .9), y: G.road, vy: -rnd(260, 330), fuse: rnd(.7, 1.1), c: pick(['#FF5E5E', '#FFD23F', '#63E6FF', '#FF8BEA', '#9DFF7A', '#FFFFFF']) }); SFX.whistle(); }
   }
   for (const r of rockets) {
@@ -1667,7 +1743,7 @@ function updateScene(dt, t) {
   }
   for (let i = rockets.length - 1; i >= 0; i--) if (rockets[i].done) rockets.splice(i, 1);
   // Mahjong clacks.
-  clackTimer -= dt * S.n.mahjong * .4;
+  clackTimer -= dt * S.n.mahjong * .4 * SPEED;
   if (clackTimer <= 0 && S.n.mahjong > 0) { clackTimer = rnd(.8, 1.6); SFX.clack(tbs.length ? pick(tbs).x : W / 2); }
   // Rowdy kids knock lanterns down.
   if (inc === 'rowdy') { for (let i = 0; i < 20; i++) if (Math.random() < dt * .5) lanternFall[i] = Math.min(60, (lanternFall[i] || 0) + 30); }
@@ -1697,8 +1773,8 @@ function updateScene(dt, t) {
       if (special.caught) { special.cy -= dt * (special.age > 2.2 ? 160 : 0); if (special.cy < -30) special = null; }
       else special.x += dt * (W + 80) / (special.dur || 7);
     } else if (special.kind === 'change') {
-      if (special.caught) { special.y += (G.plazaB - 40 - special.y) * dt * 1.4; special.x += (W * .5 - special.x) * dt * 1.4; if (Math.abs(special.y - (G.plazaB - 40)) < 3) { couple = { x: W * .5, y: G.plazaB - 40, t: 0 }; special = null; SFX.cheer(1.2); } }
-      else { const m = MOON(), u = clamp(special.age / (special.dur || 13), 0, 1); special.x = special.x0 + (m.x - special.x0) * u + Math.sin(u * 8) * 20 * (1 - u); special.y = special.y0 + (m.y - special.y0) * (u * u * (3 - 2 * u)); special.s = 1.1 - u * .6; }
+      if (special.caught) { special.y += (G.plazaB - 40 - special.y) * dt * 1.4; special.x += (W * .5 - special.x) * dt * 1.4; special.f = (special.f ?? 1) + (1 - (special.f ?? 1)) * Math.min(1, dt * 1.4); if (Math.abs(special.y - (G.plazaB - 40)) < 3) { couple = { x: W * .5, y: G.plazaB - 40, t: 0 }; special = null; SFX.cheer(1.2); } }
+      else { const m = MOON(), u = clamp(special.age / (special.dur || 13), 0, 1); special.x = special.x0 + (m.x - special.x0) * u + Math.sin(u * 8) * 20 * (1 - u); special.y = special.y0 + (m.y - special.y0) * (u * u * (3 - 2 * u)); special.s = 1.1 - u * .6; special.f = 1 - .82 * u; }
     } else if (special.kind === 'riddle') {
       special.x += dt * (W + 80) / (special.dur || 12);
     } else if (special.kind === 'dragon') {
@@ -1735,7 +1811,10 @@ function drawBanquet(by) {
   for (const [type, k] of items) { const x = bx + slot * (++i); if (type === 'snack') drawSnack(x, by - 13, k % SNACKS.length); else { plate(x); drawMooncake(x, by - 14, 1, type === 'secret'); } }
 }
 function drawScene(t) {
-  CAM.pan = CAM.on && running ? Math.sin(t * TAU / 110) * (W * (CAM.zoom - 1) / (2 * CAM.zoom)) * .95 : 0;
+  const camOn = CAM.on && !document.documentElement.classList.contains('cover-mode');
+  CAM.a = camOn ? CAM.zoom * (1 + .006 * (1 + Math.sin(t * TAU / 130))) : 1;
+  CAM.pan = camOn ? Math.sin(t * TAU / 90) * (W * (CAM.zoom - 1) / (2 * CAM.zoom)) * .92 : 0;
+  CAM.py = camOn ? Math.sin(t * TAU / 70) * 5 : 0;
   ctx.setTransform(scale, 0, 0, scale, 0, 0); ctx.clearRect(0, 0, W, H);
   renderWorld(t);
   if (LENS.on && running) {
@@ -1748,9 +1827,9 @@ function drawScene(t) {
 function renderWorld(t) {
   lights = []; collectLights = true;
   try {
-    setCam(.3); drawSky(t);
-    setCam(.55); drawHarbour(t);
-    setCam(1);
+    drawSky(t);
+    drawHarbour(t);
+    setCam(.7);
     // Fireworks glow over the harbour, in front of the hills.
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
     for (const q of parts) {
@@ -1765,7 +1844,8 @@ function renderWorld(t) {
     for (const r of rockets) { const g = ctx.createLinearGradient(r.x, r.y, r.x, r.y + 26); g.addColorStop(0, 'rgba(255,230,170,.9)'); g.addColorStop(1, 'rgba(255,160,60,0)'); ctx.strokeStyle = g; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(r.x, r.y); ctx.lineTo(r.x + Math.sin(r.y * .05) * 2, r.y + 26); ctx.stroke(); }
     ctx.restore();
     for (const q of parts) if (q.kind === 'flash') addLight(q.x, q.y, q.r * 1.4, q.c);
-    if (special && special.kind === 'change') drawChangE(special.x, special.y, special.s || 1, t);
+    if (special && special.kind === 'change') { setCam(special.f ?? 1); drawChangE(special.x, special.y, special.s || 1, t); }
+    setCam(.82);
     const inc = incidentKind();
     const lit = buildingLit();
     fireTarget = null;
@@ -1791,7 +1871,8 @@ function renderWorld(t) {
     }
     if (inc === 'fire' && S.n.buildings === 0 && !ruins.length) { drawFire(W * .37, G.shore + 16, 60, 44, t); fireTarget = { x: W * .37, y: G.shore }; }
     if (flag) { const top = S.n.buildings ? Math.max(...Array.from({ length: S.n.buildings }, (_, k) => buildingSlot(k)).map(b => b.h)) : 0; const b = S.n.buildings ? Array.from({ length: S.n.buildings }, (_, k) => buildingSlot(k)).find(b => b.h === top) : { x: W * .5 }; drawFlag(b.x, G.road - top - 70 * flag.rise, t, 1); }
-    drawStringLanterns(t);
+    setCam(.92); drawStringLanterns(t);
+    setCam(1);
     for (const q of parts) if (q.kind === 'smoke') {
       const a = clamp(q.life / q.max, 0, 1) * .7, rr = q.r * (2.2 - q.life / q.max);
       const g = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, rr); g.addColorStop(0, q.c); g.addColorStop(1, 'rgba(60,60,70,0)');
@@ -1817,6 +1898,7 @@ function renderWorld(t) {
     draw.sort((a, b) => a.y - b.y).forEach(o => o.f());
     lightPass();
     drawSmell(t);
+    if (!lensPass && LAYERS.fg) { setCam(1.3); blit(LAYERS.fg, -90, 0); setCam(1); }
     // Loose particles (vomit, water, petals, hearts, embers).
     for (const q of parts) {
       if (q.kind === 'spark' || q.kind === 'smoke' || q.kind === 'flash') continue;
@@ -1832,19 +1914,20 @@ function renderWorld(t) {
     ctx.font = `700 11px ${FBODY}`; ctx.textAlign = 'center';
     for (const b of bubbles) {
       const p = b.p, x = clamp(p.x, 30, W - 30), y = p.y - 46 * depth(p.y) - (1.8 - b.life) * 6;
-      const w = ctx.measureText(b.text).width + 12;
+      const L = b.lines || [b.text], hh = L.length * 13 + 3;
+      const w = Math.max(...L.map(l => ctx.measureText(l).width)) + 12;
       ctx.globalAlpha = clamp(b.life * 2, 0, 1);
-      ctx.fillStyle = 'rgba(250,246,236,.92)'; roundRect(x - w / 2, y - 12, w, 16, 7); ctx.fill();
+      ctx.fillStyle = 'rgba(250,246,236,.92)'; roundRect(x - w / 2, y - hh + 4, w, hh, 7); ctx.fill();
       ctx.beginPath(); ctx.moveTo(x - 3, y + 4); ctx.lineTo(x, y + 8); ctx.lineTo(x + 3, y + 4); ctx.fill();
-      ctx.fillStyle = '#1A1A2A'; ctx.fillText(b.text, x, y);
+      L.forEach((l, i) => { ctx.fillStyle = i ? '#8A5A10' : '#1A1A2A'; ctx.font = i || /[\u3400-\u9fff]/.test(l) ? `700 11px ${FZH}` : `700 11px ${FBODY}`; ctx.fillText(l, x, y - (L.length - 1 - i) * 13); });
     }
     ctx.globalAlpha = 1;
     // Tap hints on visitors.
     if (special && !special.caught && special.kind !== 'dragon' || special && special.kind === 'dragon' && !special.caught && !special.leaving) {
       const hp = hitPoint();
-      if (hp) { const pulse = .5 + .5 * Math.sin(t * 8); ctx.strokeStyle = `rgba(255,230,140,${.5 + pulse * .5})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(hp.x, hp.y, hp.r + pulse * 5, 0, TAU); ctx.stroke(); ctx.fillStyle = '#FFE58A'; ctx.font = `700 12px ${FBODY}`; ctx.fillText('Tap!', hp.x, hp.y - hp.r - 8); }
+      if (hp) { const pulse = .5 + .5 * Math.sin(t * 8); ctx.strokeStyle = `rgba(255,230,140,${.5 + pulse * .5})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(hp.x, hp.y, hp.r + pulse * 5, 0, TAU); ctx.stroke(); ctx.fillStyle = '#FFE58A'; ctx.font = `700 12px ${FBODY}`; ctx.fillText(TMODE === 'en' ? 'Tap!' : TMODE === 'zh' ? '點我！' : 'Tap! 點我', hp.x, hp.y - hp.r - 8); }
     }
-    if (running && !people.length && S.n.buildings === 0) { ctx.fillStyle = 'rgba(246,236,214,.6)'; ctx.font = `italic 16px ${FDISP}`; ctx.fillText('Just the moon, the crickets and the sea. Add some people…', W / 2, G.roadB + 60); }
+    if (running && !people.length && S.n.buildings === 0) { ctx.fillStyle = 'rgba(246,236,214,.6)'; ctx.font = `italic 16px ${FDISP}`; if (TMODE !== 'zh') ctx.fillText('Just the moon, the crickets and the sea. Add some people…', W / 2, G.roadB + 60); if (TMODE !== 'en') { ctx.font = `700 16px ${FZH}`; ctx.fillText('只有月亮、蟋蟀和大海。加些人吧……', W / 2, G.roadB + (TMODE === 'zh' ? 60 : 84)); } }
   } finally { collectLights = false; }
 }
 function hitPoint() {
@@ -1930,7 +2013,7 @@ const Narr = { q: [], cur: null, said: {}, last: {}, meter: { fire: 0, tummy: 0,
 function storyLine(en, yue, col) {
   const li = document.createElement('li'); li.className = 'line';
   if (col) li.style.setProperty('--lc', `var(${col})`);
-  li.innerHTML = `<span class="when">${S.t > 0 ? fmtClock(S.t) : 'Before the party'}</span><p class="en"></p>${yue ? '<p class="yue" lang="zh-HK"></p>' : ''}`;
+  li.innerHTML = `<span class="when">${S.t > 0 ? fmtClock(S.t) : T('Before the party', '派對開始前')}</span><p class="en"></p>${yue ? '<p class="yue" lang="zh-HK"></p>' : ''}`;
   li.querySelector('.en').textContent = en;
   if (yue) {
     li.querySelector('.yue').textContent = yue;
@@ -1947,10 +2030,11 @@ function narrate(key, vars = {}, prio = 1) {
   const fill = t => t.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
   const yue = fill(L[1]), el = storyLine(fill(L[0]), yue, L[2]);
   if (!narrationOn()) return;
+  if (narrMode() === 'both' && prio < 1) return;   // two languages take twice as long: keep the voice for what matters
   // Big news pushes aside smaller news that is still waiting.
   if (prio >= 3) { Narr.q = Narr.q.filter(x => x.prio >= 3); if (Narr.cur && Narr.cur.prio < 3) stopSpeech(); }
   Narr.q.push({ parts: narrParts(fill(L[0]), yue), prio, el });
-  while (Narr.q.length > 3) { let k = 0; Narr.q.forEach((x, i) => { if (x.prio < Narr.q[k].prio) k = i; }); Narr.q.splice(k, 1); }
+  while (Narr.q.length > (narrMode() === 'both' ? 2 : 3)) { let k = 0; Narr.q.forEach((x, i) => { if (x.prio < Narr.q[k].prio) k = i; }); Narr.q.splice(k, 1); }
   pumpSpeech();
 }
 function yueVoice() { if (!voices.length) loadVoices(); return voiceFor('yue'); }
@@ -2115,7 +2199,7 @@ function openRiddle() {
   if (!pool.length) { rdUsed = []; pool = RIDDLES.map((r, i) => i); }
   const R = RIDDLES[pick(pool)]; rdUsed.push(RIDDLES.indexOf(R));
   holdGame = true;
-  $('#rdTitle').textContent = `“${R.q}”`;
+  $('#rdTitle').innerHTML = `<span class="t-en">“${R.q}”</span>`;
   $('#rdZh').textContent = R.zh; $('#rdZh').dataset.say = R.zh;
   const opts = [...R.o].sort(() => Math.random() - .5);
   $('#rdOpts').innerHTML = opts.map(c => `<button type="button" data-c="${c}" lang="zh-TW"><ruby>${c}<rt>${ROM[c][LANG === 'yue' ? 1 : 0]}</rt></ruby></button>`).join('');
@@ -2129,7 +2213,7 @@ function openRiddle() {
     $('#rdOpts').querySelector(`[data-c="${R.a}"]`).classList.add('right');
     const pts = MMSim.answer(S, right);
     for (const ev of S.events) if (ev.type !== 'caught') handleEvent(ev); S.events.length = 0;
-    $('#rdResult').innerHTML = `<b>${right ? `Correct! +${pts}` : 'Not quite.'}</b> ${R.en}<br><span class="zh" lang="zh-HK">${R.yue}</span>`;
+    $('#rdResult').innerHTML = `<b>${right ? T(`Correct! +${pts}`, `答對了！+${pts}`) : T('Not quite.', '差一點！')}</b> <span class="tb">${T(R.en, R.yue)}</span>`;
     $('#rdResult').hidden = false; $('#rdDone').hidden = false; $('#rdDone').focus();
     narrate(right ? 'riddle_ok' : 'riddle_wrong', { exp: R.en, expz: R.yue, p: pts, ans: R.a }, 3);
     if (right) { SFX.sparkle(true); SFX.cheer(.8); }
@@ -2141,9 +2225,9 @@ $('#rdDone').addEventListener('click', () => { $('#riddleOv').hidden = true; hol
 function toLogical(ev) { const r = canvas.getBoundingClientRect(); return { x: (ev.clientX - r.left) / r.width * W, y: (ev.clientY - r.top) / r.height * H }; }
 let dragLens = false;
 function hitAt(q) {
-  const w = toWorld(q, 1), hp = hitPoint();
+  const w = toWorld(q, special && special.kind === 'change' ? special.f ?? 1 : 1), hp = hitPoint();
   if (hp && !special.caught && Math.hypot(w.x - hp.x, w.y - hp.y) < hp.r + 14) return 'special';
-  const mw = toWorld(q, .3), m = MOON();
+  const mw = toWorld(q, .18), m = MOON();
   if (Math.hypot(mw.x - m.x, mw.y - m.y) < m.r + 6) return 'moon';
   return '';
 }
@@ -2170,11 +2254,11 @@ $('#camBtn').addEventListener('click', () => { CAM.on = !CAM.on; $('#camBtn').se
 
 /* ───────────── Controls ───────────── */
 const METERS = [['fire', 'Fire risk', '--m-fire'], ['tummy', 'Tummy ache', '--m-tummy'], ['smell', 'Smell', '--m-smell'], ['noise', 'Noise', '--m-noise'], ['rowdy', 'Mischief', '--m-rowdy'], ['monkeys', 'Monkeys', '--m-monkeys']];
-$('#meters').innerHTML = METERS.map(([k, name, c]) => `<div class="meter" id="m-${k}" style="--c: var(${c})"><span>${name} ${zh(k)}</span><em>0</em><i></i></div>`).join('');
+$('#meters').innerHTML = METERS.map(([k, name, c]) => `<div class="meter" id="m-${k}" style="--c: var(${c})"><span><span class="t-en">${name}</span> ${zh(k)}</span><em>0</em><i></i></div>`).join('');
 $('#items').innerHTML = ITEMS.map(it => `
   <div class="item" data-key="${it.key}" ${it.locked ? 'hidden' : ''}>
     <canvas width="80" height="80" aria-hidden="true"></canvas>
-    <div class="lbl"><span class="name">${it.name} ${zh(it.key)}</span><small></small></div>
+    <div class="lbl"><span class="name"><span class="t-en">${it.name}</span> ${zh(it.key)}</span><small class="tb"></small></div>
     <div class="stepper">
       <button type="button" data-d="-1" aria-label="Fewer ${it.name.toLowerCase()}">−</button>
       <output>0</output>
@@ -2207,8 +2291,8 @@ function refreshControls() {
     row.querySelector('output').textContent = v;
     row.querySelector('[data-d="-1"]').disabled = v <= 0;
     row.querySelector('[data-d="1"]').disabled = v >= MMSim.LIMITS[key] || !running;
-    const [txt, warn] = hintFor(key, S, d);
-    const sm = row.querySelector('small'); sm.textContent = txt; sm.classList.toggle('warn', !!warn);
+    const [txt, tzh, warn] = hintFor(key, S, d);
+    const sm = row.querySelector('small'); const html = T(txt, tzh); if (sm.dataset.h !== html) { sm.innerHTML = html; sm.dataset.h = html; } sm.classList.toggle('warn', !!warn);
   });
 }
 /* Item icons, drawn with the scene's own drawing code. */
@@ -2249,7 +2333,7 @@ const TALES = [
     body: ['Wu Gang wanted to become an immortal, but he never finished anything he started. He studied a little medicine, then got bored. He learned a little magic, then wandered off.',
       'As a punishment, he was sent to the moon and told he could leave once he chopped down the great osmanthus tree growing there. But every cut Wu Gang makes heals up straight away. He has been chopping ever since.',
       'Osmanthus flowers bloom in autumn and smell sweet like apricots. People drink osmanthus tea and wine at Mid-Autumn, and some say the scent drifts down from Wu Gang’s tree.'],
-    game: 'Look closely at the moon: Wu Gang is chopping. When a glowing ring appears around him, tap the moon. Osmanthus flowers fall and the city calms down (less noise and mischief).' },
+    game: 'Look closely at the moon: Wu Gang is chopping. When a glowing ring appears around him, tap the moon. Osmanthus flowers fall and the city calms down: less noise, mischief and smell.' },
   { id: 'cakes', zh: 't_cakes', title: 'The Mooncake Messages',
     body: ['About 650 years ago, China was ruled by the Yuan dynasty, and many people wanted to be free of it. Gatherings were watched closely, so it was hard for anyone to make plans together.',
       'Legend says a rebel named Liu Bowen had an idea. Mooncakes were given as gifts at Mid-Autumn, so nobody would look twice at them. Messages were baked inside, telling people to rise up together on the 15th night of the 8th month.',
@@ -2261,6 +2345,14 @@ const TALES = [
       'Tai Hang still dances its fire dragon every Mid-Autumn. The dragon is about 67 metres long and carries thousands of incense sticks. It is now on China’s national list of intangible cultural heritage.'],
     game: 'When the city has plenty of lanterns and grown-ups and the fire risk is low, the fire dragon may come down the street. Tap it: it dances, clears everyone’s tummy ache and calms the mischief.' },
 ];
+const TALE_ZH = {
+  change: { body: ['很久以前，天上同時出現了十個太陽，大地開始燃燒。神射手后羿射下了九個太陽，只留下一個溫暖世界。', '西王母送給他一瓶仙藥，吃了可以長生不老，還會飛上天。后羿捨不得妻子嫦娥，就把仙藥藏在家裡。', '有一天后羿出門，他的壞徒弟逢蒙想偷仙藥。嫦娥為了不讓逢蒙得到，自己把仙藥喝了。她越飛越高，一直飛到月亮上，到今天還住在那裡。后羿非常想念她，在月圓之夜把她最愛的水果和糕點擺在院子裡。從此以後，人們也一直這樣做。'], game: '嫦娥在遊戲中飛上天時，趁她未到月亮前點一下。你可以為故事寫一個快樂結局：她回到后羿身邊，全城會加倍慶祝 40 秒。' },
+  suns: { body: ['十個太陽是天帝的孩子。他們本來要輪流走過天空，但有一天早上，十個太陽一起出來玩。', '河流乾涸，農作物燒焦，人們都躲起來避熱。后羿爬上高山，拉開紅色的弓，把太陽一個一個射下來。每個太陽落到地上，都變成一隻三足金烏。', '人們求他留下一個太陽，免得世界又冷又黑。所以天上只有一個太陽，后羿也成為人人記得的英雄。'], game: '如果你把嫦娥帶回來，后羿會拿著弓出現。這是嫦娥故事的開頭，所以先讀這一篇吧！' },
+  rabbit: { body: ['從前有三位肚餓的老人，向狐狸、猴子和兔子討食物。狐狸帶來一條魚，猴子帶來水果，兔子卻只找到人不能吃的草。', '於是兔子獻出牠唯一擁有的東西：牠自己。牠跳向煮食的火堆。原來那三位老人是神仙變的，他們把兔子救了出來，毫髮無損，被牠的善良深深感動。', '神仙讓兔子住在月亮上，陪伴嫦娥，用杵和臼搗藥。看看圓月，你也許能看到牠的樣子，連耳朵都看得見。'], game: '有時會有一隻白兔跳過廣場。及時點一下，牠會搗藥：大家的肚痛立刻消失，還可得 300 分。' },
+  wugang: { body: ['吳剛想成為神仙，但他做甚麼都半途而廢。學了一點醫術就覺得悶，學了一點法術又走開了。', '為了懲罰他，他被送到月亮上，只要砍倒那裡的大桂花樹就可以離開。可是吳剛每砍一斧，樹上的傷口就立刻癒合。他一直砍到今天。', '桂花在秋天開花，香甜得像杏子。中秋節大家會喝桂花茶和桂花酒，有人說那香味是從吳剛的桂花樹飄下來的。'], game: '仔細看看月亮：吳剛正在砍樹。當他身邊出現發光的圓圈時，點一下月亮。桂花會飄下來，城市會安靜下來，噪音、搗蛋和臭味都會減少。' },
+  cakes: { body: ['大約六百五十年前，中國由元朝統治，很多人都想擺脫他們。聚會受到嚴密監視，大家很難一起計劃。', '傳說一個叫劉伯溫的人想到一個辦法。中秋節大家會互送月餅，沒有人會多看一眼。於是他們把字條藏在月餅裡，叫大家在八月十五晚上一起起義。', '起義成功了，明朝在一三六八年開始。歷史學家不肯定月餅的部分是不是真的，但這是最有名的中秋故事之一。'], game: '警察第一次到場或晚上九點後解鎖。派發密信月餅，讓最少 12 個大人（而且每 10 人中有 6 人）收到消息，大家就會升起自己的旗，警察會永遠離開。如果知道的人太少，秘密就會洩漏！' },
+  dragon: { body: ['一八八零年，颱風吹襲香港大坑村，之後一場可怕的瘟疫蔓延開來。有智者說，村民必須在中秋節舞火龍三晚。', '村民用禾草紮成一條巨龍，全身插滿燃點的香枝。他們打鼓、燒炮仗，舞著火龍走遍大街小巷，瘟疫就消失了。', '大坑到今天每年中秋仍然舞火龍。火龍長約六十七米，插上數以萬計的香枝，現在已列入國家級非物質文化遺產。'], game: '當城市有足夠燈籠和大人，而且火災風險低，火龍可能會沿街走來。點一下：火龍會跳舞，治好大家的肚痛，也平息搗蛋。' },
+};
 let taleIdx = 0;
 function openTales(id) {
   if (id) taleIdx = Math.max(0, TALES.findIndex(t => t.id === id));
@@ -2273,9 +2365,9 @@ $('#talesClose').addEventListener('click', closeTales);
 $('#tales').addEventListener('click', e => { if (e.target.id === 'tales') closeTales(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#tales').hidden) closeTales(); });
 function renderTale() {
-  $('#taleTabs').innerHTML = TALES.map((t, i) => `<button type="button" role="tab" aria-selected="${i === taleIdx}" data-i="${i}">${t.title}</button>`).join('');
-  const t = TALES[taleIdx];
-  $('#taleBody').innerHTML = `<canvas width="560" height="420" aria-hidden="true"></canvas><div><h3>${t.title}</h3>${zh(t.zh)}${t.body.map(p => `<p>${p}</p>`).join('')}<p class="ingame"><b>In the game:</b> ${t.game}</p></div>`;
+  $('#taleTabs').innerHTML = TALES.map((t, i) => `<button type="button" role="tab" aria-selected="${i === taleIdx}" data-i="${i}">${T(t.title, ZH[t.zh][0])}</button>`).join('');
+  const t = TALES[taleIdx], z = TALE_ZH[t.id];
+  $('#taleBody').innerHTML = `<canvas width="560" height="420" aria-hidden="true"></canvas><div><h3 class="t-en">${t.title}</h3>${zh(t.zh)}${t.body.map((p, i) => `<p class="tb">${T(p, z.body[i])}</p>`).join('')}<p class="ingame tb">${T(`<b>In the game:</b> ${t.game}`, `<b>遊戲中：</b>${z.game}`)}</p></div>`;
   paintTale(t.id, $('#taleBody canvas'));
 }
 $('#taleTabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { taleIdx = +b.dataset.i; renderTale(); } });
@@ -2546,7 +2638,8 @@ function updateHud(d) {
     el.style.setProperty('--v', v + '%'); el.querySelector('em').textContent = v; el.classList.toggle('hot', v >= 75);
   }
   const inc = incidentKind();
-  $('#pill').textContent = inc ? { fire: 'Fire! Everyone runs', tummy: 'Tummy trouble', police: 'Police visit', rowdy: 'Kids gone wild' }[inc] : d.P ? `${Math.round(S.celebrating)} of ${d.P} people celebrating` : 'An empty, quiet night';
+  const pill = inc ? { fire: T('Fire! Everyone runs', '火災！大家逃跑'), tummy: T('Tummy trouble', '肚痛風波'), police: T('Police visit', '警察到場'), rowdy: T('Kids gone wild', '小朋友失控'), monkeys: T('Monkey raid!', '馬騮入侵！') }[inc] : d.P ? T(`${Math.round(S.celebrating)} of ${d.P} people celebrating`, `${d.P} 人中有 ${Math.round(S.celebrating)} 人在慶祝`) : T('An empty, quiet night', '寧靜的空夜');
+  if ($('#pill').dataset.h !== pill) { $('#pill').innerHTML = pill; $('#pill').dataset.h = pill; }
   refreshControls();
   watchStory(d);
 }
@@ -2556,7 +2649,7 @@ function frame(ms) {
   const t = ms / 1000; const dt = Math.min(.05, t - (lastT || t)); lastT = t;
   if (running && !paused && !holdGame) {
     // The model runs in 0.1 s steps.
-    clock += dt;
+    clock += dt * SPEED;
     while (clock >= .1) { clock -= .1; MMSim.step(S, .1); for (const e of S.events) handleEvent(e); S.events.length = 0; }
   }
   const d = MMSim.derive(S);
@@ -2580,55 +2673,57 @@ function startNight() {
   updateHud(MMSim.derive(S));
 }
 $('#startBtn').addEventListener('click', () => { userActed = true; startNight(); });
-function syncPause() { $('#pauseBtn').setAttribute('aria-pressed', paused); $('#pauseBtn').textContent = paused ? 'Resume' : 'Pause'; if (AC) { paused ? AC.suspend() : prefs.sound && AC.resume(); } if (paused) { Narr.q = []; stopSpeech(); } }
+function syncPause() { $('#pauseBtn').setAttribute('aria-pressed', paused); $('#pauseBtn').innerHTML = paused ? T('Resume', '繼續') : T('Pause', '暫停'); if (AC) { paused ? AC.suspend() : prefs.sound && AC.resume(); } if (paused) { Narr.q = []; stopSpeech(); } }
 $('#pauseBtn').addEventListener('click', () => { if (!running) return; paused = !paused; syncPause(); });
 $('#soundBtn').addEventListener('click', () => { prefs.sound = !prefs.sound; savePrefs(); syncSound(); if (prefs.sound) audioStart(); else { Narr.q = []; stopSpeech(); } });
 $('#voiceBtn').addEventListener('click', testVoice);
 function setNarr(m) { prefs.nmode = m; savePrefs(); syncNarr(); Narr.q = []; stopSpeech(); }
 [['nBoth', 'both'], ['nYue', 'yue'], ['nOff', 'off']].forEach(([id, m]) => $('#' + id).addEventListener('click', () => setNarr(m)));
 function syncNarr() { const m = narrMode(); $('#nBoth').setAttribute('aria-pressed', m === 'both'); $('#nYue').setAttribute('aria-pressed', m === 'yue'); $('#nOff').setAttribute('aria-pressed', m === 'off'); }
-function syncSound() { $('#soundBtn').setAttribute('aria-pressed', prefs.sound); $('#soundBtn').textContent = prefs.sound ? 'Sound on' : 'Sound off'; if (master) master.gain.setTargetAtTime(prefs.sound ? .9 : 0, AC.currentTime, .1); }
+function syncSound() { $('#soundBtn').setAttribute('aria-pressed', prefs.sound); $('#soundBtn').innerHTML = prefs.sound ? T('Sound on', '聲音開') : T('Sound off', '聲音關'); if (master) master.gain.setTargetAtTime(prefs.sound ? .9 : 0, AC.currentTime, .1); }
 function setLang(l) { LANG = l; prefs.lang = l; savePrefs(); syncLang(); rerenderZh(); userActed = true; speak(l === 'yue' ? '廣東話' : '普通話'); }
 $('#yueBtn').addEventListener('click', () => setLang('yue'));
 $('#cmnBtn').addEventListener('click', () => setLang('cmn'));
-function syncLang() { $('#yueBtn').setAttribute('aria-pressed', LANG === 'yue'); $('#cmnBtn').setAttribute('aria-pressed', LANG === 'cmn'); $('#rubyBtn').textContent = LANG === 'yue' ? 'Show Jyutping' : 'Show Pinyin'; }
+function syncLang() { $('#yueBtn').setAttribute('aria-pressed', LANG === 'yue'); $('#cmnBtn').setAttribute('aria-pressed', LANG === 'cmn'); $('#rubyBtn').innerHTML = LANG === 'yue' ? T('Show Jyutping', '顯示粵拼') : T('Show Pinyin', '顯示拼音'); }
 $('#rubyBtn').addEventListener('click', () => { RUBY = !RUBY; prefs.ruby = RUBY; savePrefs(); syncRuby(); });
+const SPEEDS = [.5, .75, 1, 1.25, 1.5];
+function syncSpeed() { $('#speedOut').textContent = SPEED + '×'; $('#slowBtn').disabled = SPEED <= SPEEDS[0]; $('#fastBtn').disabled = SPEED >= SPEEDS[SPEEDS.length - 1]; }
+$('#slowBtn').addEventListener('click', () => { SPEED = SPEEDS[Math.max(0, SPEEDS.indexOf(SPEED) - 1)] ?? .75; prefs.speed = SPEED; savePrefs(); syncSpeed(); });
+$('#fastBtn').addEventListener('click', () => { SPEED = SPEEDS[Math.min(SPEEDS.length - 1, SPEEDS.indexOf(SPEED) + 1)] ?? .75; prefs.speed = SPEED; savePrefs(); syncSpeed(); });
+function syncText() { const r = document.documentElement.classList; r.remove('text-en', 'text-zh', 'text-both'); r.add('text-' + TMODE); [['tEn', 'en'], ['tZh', 'zh'], ['tBoth', 'both']].forEach(([id, m]) => $('#' + id).setAttribute('aria-pressed', TMODE === m)); }
+[['tEn', 'en'], ['tZh', 'zh'], ['tBoth', 'both']].forEach(([id, m]) => $('#' + id).addEventListener('click', () => { TMODE = m; prefs.tmode = m; savePrefs(); syncText(); refreshControls(); }));
 function syncRuby() { document.documentElement.classList.toggle('show-ruby', RUBY); $('#rubyBtn').setAttribute('aria-pressed', RUBY); }
 function endNight() {
   running = false;
   const g = MMSim.grade(S.score);
   const key = { legend: 'legend', great: 'great', happy: 'good', quiet: 'quiet', empty: 'empty' }[g];
   const names = { legend: 'A legendary night', great: 'A lively, bustling night', happy: 'A happy night', quiet: 'A quiet night', empty: 'A still, empty night' };
-  const T = S.tally;
+  const TL = S.tally;
   const best = Math.max(prefs.best || 0, Math.round(S.score)); const isBest = best > (prefs.best || 0); prefs.best = best; savePrefs();
-  const tip = T.police > 1 ? 'Tip: fewer mahjong tables and fireworks keep the neighbours happy.' : T.fire ? 'Tip: every firework needs grown-ups watching. Keep 1 grown-up for every 3 kids.' : T.tummy ? 'Tip: one mooncake feeds 4 people, and tea helps.' : T.rowdy ? 'Tip: 1 grown-up for every 3 kids keeps the mischief down.' : !S.uprising ? 'Tip: try the secret mooncakes after 9 pm. Tell enough grown-ups and the whole city joins in.' : 'You found every secret. Can you beat your best score?';
+  const tip = TL.police > 1 ? 'Tip: fewer mahjong tables and fireworks keep the neighbours happy.' : TL.fire ? 'Tip: every firework needs grown-ups watching. Keep 1 grown-up for every 3 kids.' : TL.tummy ? 'Tip: one mooncake feeds 4 people, and tea helps.' : TL.rowdy ? 'Tip: 1 grown-up for every 3 kids keeps the mischief down.' : !S.uprising ? 'Tip: try the secret mooncakes after 9 pm. Tell enough grown-ups and the whole city joins in.' : 'You found every secret. Can you beat your best score?';
+  const GZ = { legend: '花好月圓', great: '好熱鬧嘅一晚', happy: '開心嘅一晚', quiet: '冷冷清清嘅一晚', empty: '好靜嘅一晚' };
+  const GZW = { legend: '傳奇之夜', great: '熱鬧的一晚', happy: '開心的一晚', quiet: '冷清的一晚', empty: '寧靜的空夜' };
+  const tipZh = TL.police > 1 ? '提示：少一點麻將枱和煙花，鄰居就不會投訴。' : TL.fire ? '提示：每支煙花都要有大人看著。每 3 個小朋友要 1 個大人。' : TL.tummy ? '提示：一個月餅給 4 個人吃，喝茶也有幫助。' : TL.rowdy ? '提示：每 3 個小朋友要 1 個大人，就不會太搗蛋。' : !S.uprising ? '提示：晚上九點後試試密信月餅。通知夠多大人，全城都會一起慶祝。' : '你已經找到所有秘密。能打破自己的最高分嗎？';
+  const li = (en, zhT, v) => `<li>${T(en, zhT)} <b>${v}</b></li>`;
   $('#endCard').innerHTML = `
     <div class="grade">${zh(key)}</div>
-    <h2>Midnight. ${names[g]}.</h2>
-    <p><b style="color:var(--gold);font-size:22px">${Math.round(S.score).toLocaleString('en')}</b> Reunion points ${zh('reunion')} ${isBest ? '· <b>New best!</b>' : `· Best ${best.toLocaleString('en')}`}</p>
+    <h2 class="tb">${T(`Midnight. ${names[g]}.`, `午夜了。${GZW[g]}。`)}</h2>
+    <p><b style="color:var(--gold);font-size:22px">${Math.round(S.score).toLocaleString('en')}</b> ${T('Reunion points', '團圓分')} ${isBest ? `· <b>${T('New best!', '新紀錄！')}</b>` : `· ${T('Best', '最高分')} ${best.toLocaleString('en')}`}</p>
     <ul class="tally">
-      <li>Most celebrating <b>${Math.round(S.peak)}</b></li>
-      <li>Bonus points <b>${S.bonus.toLocaleString('en')}</b></li>
-      <li>Fires <b>${T.fire}</b></li>
-      <li>Ambulances <b>${T.tummy}</b></li>
-      <li>Police visits <b>${T.police}</b></li>
-      <li>Kids gone wild <b>${T.rowdy}</b></li>
-      <li>Buildings lost <b>${T.burned}</b></li>
-      <li>Monkey raids <b>${T.monkeys}</b></li>
-      <li>Riddles solved <b>${T.riddlesRight} of ${T.riddles}</b></li>
-      <li>Visitors caught <b>${T.rabbit + T.change + T.dragon}</b></li>
+      ${li('Most celebrating', '最多人慶祝', Math.round(S.peak))}${li('Bonus points', '獎勵分', S.bonus.toLocaleString('en'))}${li('Fires', '火災', TL.fire)}${li('Ambulances', '救護車', TL.tummy)}${li('Police visits', '警察到場', TL.police)}
+      ${li('Kids gone wild', '小朋友失控', TL.rowdy)}${li('Buildings lost', '燒毀大樓', TL.burned)}${li('Monkey raids', '馬騮搶劫', TL.monkeys)}${li('Riddles solved', '猜中燈謎', `${TL.riddlesRight} / ${TL.riddles}`)}${li('Visitors caught', '捉到訪客', TL.rabbit + TL.change + TL.dragon)}
     </ul>
-    <p>${tip}</p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="againBtn" type="button">Play again</button><button class="tool" id="endTales" type="button">Read the Moon Tales</button></div>
+    <p class="tb">${T(tip, tipZh)}</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="againBtn" type="button">${T('Play again', '再玩一次')}</button><button class="tool" id="endTales" type="button">${T('Read the Moon Tales', '看月亮故事')}</button></div>
     <div class="more">
-      <h3>More from the Game Shelf</h3>
-      <a class="more-game" href="../aquarium/"><img src="../aquarium/cover.png" alt="" onerror="this.remove()"><span><b>James’s Nature Aquarium</b> <span class="zh" lang="zh-TW">水草</span><small>Build a planted aquarium and keep a tiny ecosystem in balance.</small></span></a>
-      <p class="grownups"><b>For grown-ups:</b> we’re a family making little games about the things we’re curious about, and the next one is already brewing. <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Follow us on Ko-fi</a> to hear when it’s out, or <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">♥ support the next game</a>.</p>
+      <h3>${T('More from the Game Shelf', '遊戲架上的其他遊戲')}</h3>
+      <a class="more-game" href="../aquarium/"><img src="../aquarium/cover.png" alt="" onerror="this.remove()"><span><b>${T('James’s Nature Aquarium', '水草缸')}</b><small class="tb">${T('Build a planted aquarium and keep a tiny ecosystem in balance.', '建立一個水草缸，讓小小的生態系統保持平衡。')}</small></span></a>
+      <p class="more-fb">${T('Tell us what you think:', '話我哋知你覺得點：')} <a href="../feedback/?game=mid-autumn&amp;v=1.4">${T('Share your thoughts', '分享意見')}</a> · <a href="../feedback/?game=mid-autumn&amp;v=1.4&amp;kind=bug">${T('Report a bug', '報告問題')}</a></p>
+      <p class="grownups tb">${T(`<b>For grown-ups:</b> we’re a family making little games about the things we’re curious about, and the next one is already brewing. <a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">Follow us on Ko-fi</a> to hear when it’s out, or <a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">♥ support the next game</a>.`, `<b>給大人：</b>我們是一家人，把好奇的事做成小遊戲，下一個已在製作中。<a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">在 Ko-fi 關注我們</a>，新遊戲推出時就會知道，或者<a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">♥ 支持下一個遊戲</a>。`)}</p>
     </div>`;
   $('#endOv').hidden = false;
   $('#againBtn').addEventListener('click', startNight);
   $('#againBtn').focus();
-  const GZ = { legend: '花好月圓', great: '好熱鬧嘅一晚', happy: '開心嘅一晚', quiet: '冷冷清清嘅一晚', empty: '好靜嘅一晚' };
   narrate('end', { en: names[g], zh: GZ[g], score: Math.round(S.score).toLocaleString('en'), n: Math.round(S.score) }, 3);
   $('#endTales').addEventListener('click', () => openTales());
   refreshControls();
@@ -2636,7 +2731,7 @@ function endNight() {
 
 /* ───────────── Boot ───────────── */
 // Drawing functions use the shared `ctx`; icons and tale pictures swap it for their own canvas.
-hydrate(); syncLang(); syncRuby(); syncSound(); syncNarr();
+hydrate(); syncLang(); syncRuby(); syncSound(); syncNarr(); syncText(); syncSpeed();
 storyLine(LINES.intro[0], LINES.intro[1]);
 resize();
 ctxRef = null;

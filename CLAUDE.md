@@ -55,11 +55,22 @@ Audio API, started only from a button press.
 - The family's Ko-fi page is **https://ko-fi.com/magicmakers**. It is for grown-ups: plain links only (never the Ko-fi
   widget or any script, which would load third-party code and cookies), no pop-ups during play, and never
   an email box that kids could type into.
-- Every game shows the links in its bottom line ("Follow for new games · ♥ Support on Ko-fi") and on its
-  end screen, together with a "More from the Game Shelf" card for the other games. The shelf has a
+- Every game ends with the shelf footer ("Made by Magic Makers. More games are on the way. Like this? Buy us
+  a mooncake: Ko-fi" / "These games don’t collect any information…") under its version line, and shows the
+  Ko-fi links on its end screen, together with a "More from the Game Shelf" card for the other games. The shelf has a
   "For grown-ups" strip above the footer.
 - When a new game or a big update ships, draft a short Ko-fi post for the user to publish (what the game
   is, what James was curious about, the play link). Ko-fi notifies followers.
+
+## Feedback page
+
+- `feedback/index.html` is a form for players and parents (which game, what kind, rating, message,
+  optional name and reply email, optional version and browser details). It is the one page allowed to
+  send data out: on Send it posts to Web3Forms (`api.web3forms.com`), which emails the family. The
+  `WEB3FORMS_KEY` in the page only allows sending; with it empty the page says feedback is not on yet.
+- Games link to it from their bottom line and end screen as `../feedback/?game=<folder>&v=<version>`
+  (add `&kind=bug` for "Report a bug"). Update the version in those links on every release, and add each
+  new game to the page's game choices and `GAMES` map.
 
 ## Git
 

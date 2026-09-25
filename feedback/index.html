@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Share your thoughts · The Game Shelf</title>
+<meta name="description" content="Tell Magic Makers what you think of our games, suggest an idea, or report a bug.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Share your thoughts · The Game Shelf">
+<meta property="og:description" content="Tell us what you think of our games, suggest an idea, or report a bug.">
+<meta property="og:image" content="https://magicmakersfamily.github.io/games/mid-autumn/cover.png">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232C5E86'/%3E%3Cpath d='M14 18h36v22H30l-10 8v-8h-6z' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Noto+Serif+TC:wght@700&display=swap">
+<style>
+:root {
+  --paper: #ECF0F2; --card: #FFFFFF; --ink: #14202A; --ink-2: #4E5E6B; --ink-3: #7A8894; --line: #D5DDE3;
+  --accent: #2C5E86; --accent-ink: #FFFFFF; --chip: #E1E9EF; --good: #2D7A4C; --bad: #B03E2C;
+  --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
+  color-scheme: light;
+  padding-block: env(safe-area-inset-top, 0px) env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root { --paper: #0E151B; --card: #151F27; --ink: #E4ECF1; --ink-2: #A3B2BD; --ink-3: #74838F; --line: #24323D; --accent: #7FB2DA; --accent-ink: #0E151B; --chip: #1D2A34; --good: #6FCB94; --bad: #F08C7A; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { background: var(--paper); }
+body { margin: 0; color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.wrap { max-width: 680px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 56px; display: grid; gap: 24px; }
+.back { font-size: 14px; color: var(--ink-3); text-decoration: none; }
+.back:hover { color: var(--ink); text-decoration: underline; }
+h1 { margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(32px, 6vw, 46px); line-height: 1.05; letter-spacing: -.02em; }
+h1 span { font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif; font-size: .55em; color: #B3432E; margin-left: 8px; letter-spacing: 0; }
+.lede { margin: 8px 0 0; color: var(--ink-2); font-size: 18px; max-width: 54ch; }
+form { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px 24px; display: grid; gap: 20px; }
+fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
+legend, label.q { font-weight: 700; font-size: 15px; padding: 0; margin-bottom: 2px; }
+.hint { font-size: 13.5px; color: var(--ink-3); margin: -4px 0 0; }
+.choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.choices label { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; background: var(--paper); font-size: 15px; }
+.choices input { accent-color: var(--accent); margin: 0; }
+.choices label:has(input:checked) { border-color: var(--accent); background: var(--chip); font-weight: 700; }
+.stars { display: flex; gap: 4px; }
+.stars button { font-size: 30px; line-height: 1; background: none; border: 0; padding: 2px; cursor: pointer; color: var(--line); }
+.stars button[aria-pressed="true"] { color: #E8A41E; }
+select, textarea, input[type="text"], input[type="email"] { font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; width: 100%; }
+textarea { min-height: 140px; resize: vertical; }
+.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.row > div { display: grid; gap: 6px; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--ink-2); }
+.check input { margin-top: 4px; accent-color: var(--accent); }
+.check code { font-size: 12px; color: var(--ink-3); word-break: break-all; }
+.send { justify-self: start; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 12px; padding: 12px 24px; font: inherit; font-weight: 700; font-size: 17px; cursor: pointer; }
+.send:disabled { opacity: .6; cursor: default; }
+.status { margin: 0; font-weight: 700; }
+.status.ok { color: var(--good); }
+.status.err { color: var(--bad); }
+.done { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 24px; display: grid; gap: 10px; text-align: center; }
+.done h2 { margin: 0; font-family: var(--display); font-size: 28px; }
+.done p { margin: 0; color: var(--ink-2); }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.privacy { font-size: 13.5px; color: var(--ink-3); margin: 0; }
+footer { border-top: 1px solid var(--line); padding-top: 18px; color: var(--ink-3); font-size: 14px; display: grid; gap: 6px; }
+footer a { color: var(--ink-2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../">← All games</a>
+  <header>
+    <h1>Share your thoughts<span lang="zh-TW">意見</span></h1>
+    <p class="lede">Loved a game, have an idea for a new one, or found something broken? Tell us. We read every message.</p>
+  </header>
+
+  <form id="fb" novalidate>
+    <fieldset>
+      <legend>Which game?</legend>
+      <div class="choices" id="games">
+        <label><input type="radio" name="game" value="Mid-Autumn Mayhem"> Mid-Autumn Mayhem</label>
+        <label><input type="radio" name="game" value="James’s Nature Aquarium"> James’s Nature Aquarium</label>
+        <label><input type="radio" name="game" value="Something else"> Something else</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>What kind of message?</legend>
+      <div class="choices">
+        <label><input type="radio" name="kind" value="I love it" checked> I love it</label>
+        <label><input type="radio" name="kind" value="An idea"> An idea</label>
+        <label><input type="radio" name="kind" value="Something is broken"> Something is broken</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>How much did you enjoy it?</legend>
+      <div class="stars" id="stars" role="group" aria-label="Rating out of 5">
+        <button type="button" data-v="1" aria-pressed="false" aria-label="1 star">★</button><button type="button" data-v="2" aria-pressed="false" aria-label="2 stars">★</button><button type="button" data-v="3" aria-pressed="false" aria-label="3 stars">★</button><button type="button" data-v="4" aria-pressed="false" aria-label="4 stars">★</button><button type="button" data-v="5" aria-pressed="false" aria-label="5 stars">★</button>
+      </div>
+    </fieldset>
+
+    <div style="display:grid;gap:6px">
+      <label class="q" for="msg">Your message</label>
+      <p class="hint" id="msgHint">What did you like? What should we add?</p>
+      <textarea id="msg" name="message" required aria-describedby="msgHint"></textarea>
+    </div>
+
+    <div class="row">
+      <div>
+        <label class="q" for="name">Your first name <span style="font-weight:400;color:var(--ink-3)">(optional)</span></label>
+        <input type="text" id="name" name="name" autocomplete="given-name" maxlength="60">
+      </div>
+      <div>
+        <label class="q" for="email">Email for a reply <span style="font-weight:400;color:var(--ink-3)">(optional, grown-ups only)</span></label>
+        <input type="email" id="email" name="email" autocomplete="email" maxlength="120">
+      </div>
+    </div>
+
+    <label class="check" id="techRow"><input type="checkbox" id="tech" checked> <span>Include the game version and browser, to help us fix bugs:<br><code id="techText"></code></span></label>
+
+    <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+    <p class="privacy">Kids: ask a grown-up before sending. We only receive what you type here (plus the version and browser if the box is ticked). We don’t use it for anything except making the games better.</p>
+    <button class="send" id="send" type="submit">Send</button>
+    <p class="status" id="status" role="status"></p>
+  </form>
+
+  <div class="done" id="done" hidden>
+    <h2>Thank you! 多謝！</h2>
+    <p>Your message is on its way to us.</p>
+    <p><a href="../">Back to the games</a></p>
+  </div>
+
+  <footer>
+    <span>Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></span>
+    <span>Our games don’t collect any information. This page sends only what you type, and only when you press Send.</span>
+  </footer>
+</div>
+<script>
+'use strict';
+// Web3Forms delivers each message to the family's inbox; the key only allows sending, never reading.
+// Leave it empty and the page explains that feedback is not switched on yet.
+const WEB3FORMS_KEY = '2115927c-3f99-4c82-9462-546f1055e436';
+const $ = s => document.querySelector(s);
+const params = new URLSearchParams(location.search);
+const GAMES = { 'mid-autumn': 'Mid-Autumn Mayhem', aquarium: 'James’s Nature Aquarium' };
+const from = GAMES[params.get('game')];
+if (from) { const r = document.querySelector(`input[name="game"][value="${from}"]`); if (r) r.checked = true; }
+const version = (params.get('v') || '').replace(/[^0-9.]/g, '').slice(0, 8);
+const kind = params.get('kind');
+if (kind === 'bug') document.querySelector('input[name="kind"][value="Something is broken"]').checked = true;
+const techText = `${from || 'Game Shelf'}${version ? ' v' + version : ''} · ${navigator.userAgent}`;
+$('#techText').textContent = techText;
+let rating = 0;
+$('#stars').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  rating = +b.dataset.v === rating ? 0 : +b.dataset.v;
+  document.querySelectorAll('#stars button').forEach(x => x.setAttribute('aria-pressed', +x.dataset.v <= rating));
+});
+function syncHint() {
+  const broken = document.querySelector('input[name="kind"]:checked').value === 'Something is broken';
+  $('#msgHint').textContent = broken ? 'What were you doing when it went wrong? What did you expect to happen?' : 'What did you like? What should we add?';
+}
+document.querySelectorAll('input[name="kind"]').forEach(r => r.addEventListener('change', syncHint));
+syncHint();
+$('#fb').addEventListener('submit', async e => {
+  e.preventDefault();
+  const status = $('#status'); status.className = 'status'; status.textContent = '';
+  const msg = $('#msg').value.trim();
+  if (!msg) { status.className = 'status err'; status.textContent = 'Please write a message first.'; $('#msg').focus(); return; }
+  if (!WEB3FORMS_KEY) { status.className = 'status err'; status.textContent = 'Feedback isn’t switched on yet. Please try again soon.'; return; }
+  const game = (document.querySelector('input[name="game"]:checked') || {}).value || 'Not chosen';
+  const kindV = document.querySelector('input[name="kind"]:checked').value;
+  const email = $('#email').value.trim();
+  const data = {
+    access_key: WEB3FORMS_KEY,
+    subject: `Game Shelf: ${kindV} (${game})`,
+    from_name: 'The Game Shelf',
+    game, kind: kindV, rating: rating ? `${rating} / 5` : 'No rating',
+    message: msg, name: $('#name').value.trim() || '(not given)',
+    details: $('#tech').checked ? techText : '(not included)',
+    botcheck: document.querySelector('.hp').checked,
+  };
+  if (email) { data.email = email; data.replyto = email; }
+  $('#send').disabled = true; status.textContent = 'Sending…';
+  try {
+    const r = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || j.success === false) throw new Error(j.message || 'Something went wrong.');
+    $('#fb').hidden = true; $('#done').hidden = false; $('#done').scrollIntoView({ block: 'center' });
+  } catch (err) {
+    status.className = 'status err'; status.textContent = 'Sorry, that didn’t send. Check your internet connection and try again.';
+    $('#send').disabled = false;
+  }
+});
+</script>
+</body>
+</html>
