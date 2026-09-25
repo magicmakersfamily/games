@@ -255,6 +255,7 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
             <li class="tb"><span class="t-en">Every happy, celebrating person earns <b>Reunion points</b>.</span><span class="t-zh" lang="zh-TW">每個開心慶祝的人都會帶來團圓分。</span></li>
             <li class="tb"><span class="t-en">Watch the six trouble meters. If one fills up, trouble arrives: fire trucks, ambulances, police, monkeys…</span><span class="t-zh" lang="zh-TW">留意六個麻煩指數。任何一個滿了，麻煩就會來：消防車、救護車、警察、馬騮……</span></li>
             <li class="tb"><span class="t-en">Tap surprise visitors before they disappear. Point at any Chinese word to hear it.</span><span class="t-zh" lang="zh-TW">趁驚喜訪客未離開前點一下。指著任何中文字就可以聽到讀音。</span></li>
+            <li class="tb"><span class="t-en">Too much food makes a stink. Tap poop to clean it up; tea helps too.</span><span class="t-zh" lang="zh-TW">食物太多會發臭。點一下便便就可以清理，喝茶也有幫助。</span></li>
             <li class="tb"><span class="t-en">Too fast? Use <b>Speed −</b> to slow the night down.</span><span class="t-zh" lang="zh-TW">太快？用「速度 −」令晚上慢一點。</span></li>
           </ul>
           <button class="go" id="startBtn" type="button"><span class="t-en">Start the night</span><span class="t-zh" lang="zh-TW">開始今晚</span></button>
@@ -278,7 +279,7 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
     </section>
   </div>
 
-  <p class="about">Version 1.4 · Launched <time datetime="2026-09-25">September 25, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="../feedback/?game=mid-autumn&amp;v=1.4"><span class="t-en">Share your thoughts</span><span class="t-zh" lang="zh-TW">分享意見</span></a> · <a href="../feedback/?game=mid-autumn&amp;v=1.4&amp;kind=bug"><span class="t-en">Report a bug</span><span class="t-zh" lang="zh-TW">報告問題</span></a></p>
+  <p class="about">Version 1.5 · Launched <time datetime="2026-09-25">September 25, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="../feedback/?game=mid-autumn&amp;v=1.5"><span class="t-en">Share your thoughts</span><span class="t-zh" lang="zh-TW">分享意見</span></a> · <a href="../feedback/?game=mid-autumn&amp;v=1.5&amp;kind=bug"><span class="t-en">Report a bug</span><span class="t-zh" lang="zh-TW">報告問題</span></a></p>
   <p class="about tb"><span class="t-en">Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></span><span class="t-zh" lang="zh-TW">由 Magic Makers 製作。更多遊戲陸續推出。喜歡嗎？請我們食個月餅：<a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></span></p>
   <p class="about tb"><span class="t-en">These games don’t collect any information. Saved progress stays in your own browser.</span><span class="t-zh" lang="zh-TW">這些遊戲不會收集任何資料。儲存的進度只會留在你自己的瀏覽器。</span></p>
 </div>
@@ -465,7 +466,7 @@ function hintFor(key, s, d) {
     case 'lanterns': { const need = Math.ceil(P * 0.4); return P ? [`${need} lanterns light up ${P} people (1 for every 2–3)`, `${need} 個燈籠照亮 ${P} 人（每 2 至 3 人一個）`, false] : ['Paper lanterns once held real candles', '紙燈籠以前真的點蠟燭', false]; }
     case 'mooncakes': { const need = Math.ceil(P / MMSim.WEDGES); return P ? [`${need} is right for ${P} people: each cake is cut in 4 wedges`, `${need} 個剛好給 ${P} 人：每個月餅切成 4 份`, d.wedgesEach > 1.25] : ['Very rich: families cut them in 4 and share', '月餅很飽肚：一家人切開 4 份一起吃', false]; }
     case 'snacks': { const need = Math.ceil(P / MMSim.SNACK_SERVES); return P ? [`${need} platters for ${P} people: pomelo, star fruit, persimmon, taro, water caltrops, peanuts, river snails. Too many brings monkeys!`, `${need} 碟給 ${P} 人：柚子、楊桃、柿、芋頭、菱角、花生、田螺。太多會引來馬騮！`, n.snacks > P / MMSim.SNACK_SERVES + 2] : ['Pomelo, star fruit, persimmon, taro, water caltrops…', '柚子、楊桃、柿、芋頭、菱角……', false]; }
-    case 'tea': { const need = Math.ceil(P / MMSim.TEA_SERVES); return P ? [`${need} pots serve ${P} people. Tea helps with rich mooncakes`, `${need} 壺茶給 ${P} 人。茶可以幫助消化月餅`, false] : ['One pot serves 6 people', '一壺茶給 6 個人', false]; }
+    case 'tea': { const need = Math.ceil(P / MMSim.TEA_SERVES); return P ? [`${need} pots serve ${P} people. Tea helps tummies and clears bad smells`, `${need} 壺茶給 ${P} 人。茶可以幫助消化，也能驅走臭味`, false] : ['One pot serves 6 people', '一壺茶給 6 個人', false]; }
     case 'mahjong': return n.mahjong ? [`${n.mahjong * MMSim.SEATS} seats, but the tiles are LOUD`, `${n.mahjong * MMSim.SEATS} 個座位，但麻將聲很吵`, false] : ['4 players a table. Clack, clack, clack…', '每張枱 4 個人打。劈劈啪啪……', false];
     case 'fireworks': return ['Exciting! But each one adds noise and fire risk', '好刺激！但每支都增加噪音和火災風險', n.fireworks > 3];
     case 'secret': return [`Each one tells 4 grown-ups. Informed: ${s.informed} of ${n.adults}. Need at least 12 and 6 in 10`, `每個可以通知 4 個大人。已通知：${s.informed} / ${n.adults}。最少 12 人，而且要十分之六`, false];
@@ -1523,7 +1524,7 @@ function updateMonkeys(dt, t) {
       else { m.tx = rnd(20, W - 20); m.ty = rnd(G.roadB + 10, G.plazaB - 8); m.perch = false; }
       m.wait = rnd(.4, 1.6);
       if (m.ty > G.plazaB - 22 && inc === 'monkeys') m.carry = 1 + Math.floor(Math.random() * 3);
-      if (Math.random() < (inc === 'monkeys' ? .45 : .15)) { puddles.push({ x: m.x, y: Math.max(G.roadB + 6, m.y), life: 30, monkey: true }); burst(m.x, m.y - 4, 5, { c: '#6A4526', v0: 20, v1: 50, g: 200, l0: .4, l1: .7, r0: 1.5, r1: 2.5 }); SFX.splat(m.x); }
+      if (Math.random() < (inc === 'monkeys' ? .45 : .15)) { puddles.push({ x: m.x, y: Math.max(G.roadB + 6, m.y), life: 120, monkey: true }); burst(m.x, m.y - 4, 5, { c: '#6A4526', v0: 20, v1: 50, g: 200, l0: .4, l1: .7, r0: 1.5, r1: 2.5 }); SFX.splat(m.x); }
     }
     const dx = m.tx - m.x, dy = m.ty - m.y, d = Math.hypot(dx, dy), sp = 120;
     if (d > 1) { const k = Math.min(1, sp * dt / d); m.x += dx * k; m.y += dy * k; if (Math.abs(dx) > 1) m.dir = dx > 0 ? 1 : -1; }
@@ -1658,6 +1659,8 @@ const rockets = [];
 function incidentKind() { return S.incident ? S.incident.kind : null; }
 function updateScene(dt, t) {
   syncPeople();
+  if (puddles.length > 40) puddles.splice(0, puddles.length - 40);
+  S.mess = puddles.length;   // the model's smell grows with every mess left lying around
   updateMonkeys(dt, t);
   const inc = incidentKind();
   const d = MMSim.derive(S);
@@ -1708,11 +1711,11 @@ function updateScene(dt, t) {
       if (p.pose === 'bend' && Math.random() < dt * 16) burst(p.x + 11 * p.dir * s, p.y - 20 * s, 3, { a: Math.PI / 2 + (p.dir > 0 ? -.5 : .5), spread: .35, v0: 25, v1: 55, g: 260, c: () => pick(['#9DBE3B', '#C4D65A', '#7FA43A', '#D8C27A']), l0: .4, l1: .7, r0: 1.4, r1: 2.6 });
       if (p.poseT <= 0) {
         if (p.pose === 'squat') {
-          puddles.push({ x: p.x, y: p.y + 1, life: 30 });
+          puddles.push({ x: p.x, y: p.y + 1, life: 120 });
           burst(p.x - 1, p.y - 5 * s, 6, { a: Math.PI / 2, spread: .3, v0: 10, v1: 30, g: 200, c: '#6A4526', l0: .3, l1: .5, r0: 1.6, r1: 2.6 });
           p.pose = 'hold'; p.poseT = 2.5; const q = plazaPoint(); p.tx = q.x; p.ty = q.y;
           say(p, pick(['Toilet! Toilet!', 'Oops…', 'Don’t look!']), '#D7A36B'); once('poop', {}, 2);
-        } else if (p.pose === 'bend') { puddles.push({ x: p.x + 10 * p.dir * s, y: p.y + 1, life: 26, sick: true }); p.pose = ''; }
+        } else if (p.pose === 'bend') { puddles.push({ x: p.x + 10 * p.dir * s, y: p.y + 1, life: 90, sick: true }); p.pose = ''; }
         else p.pose = '';
       }
     } else if (p.sick > .5 && !p.gone && !p.taken && p.seat < 0 && Math.random() < dt * .3 * SPEED) {
@@ -1999,8 +2002,9 @@ const LINES = {
   toomuchfood: ['That is a lot of food left out… The wild monkeys on the hills can smell it.', '枱面啲嘢食太多喇……山上面啲野生馬騮聞到喇。', '--m-monkeys'],
   warn_monkeys: ['Uh oh. The monkeys are creeping closer to the food!', '弊喇，啲馬騮越行越近啲嘢食！', '--m-monkeys'],
   monkeys: ['Monkeys! A troop of wild macaques swarms the party, grabbing fruit and mooncakes. And they are pooping everywhere!', '馬騮嚟喇！成班野生馬騮衝入派對，搶晒啲生果同月餅，仲周圍屙屎！', '--m-monkeys'],
-  warn_smell: ['Something smells bad… People are holding their noses.', '有陣怪味……啲人揸住個鼻。', '--m-smell'],
-  smell_bad: ['What a stink! Everyone is miserable. Osmanthus flowers from Wu Gang’s tree on the moon could freshen the air.', '好臭呀！大家都好唔開心。月亮上面吳剛棵桂花樹啲花，可以令空氣清新返。', '--m-smell'],
+  warn_smell: ['Something smells bad… People are holding their noses. Tap the poop to clean it up, and serve some tea.', '有陣怪味……啲人揸住個鼻。撳啲屎清理吓，再斟啲茶啦。', '--m-smell'],
+  clean: ['Good job! Every mess you pick up makes the air a little fresher.', '做得好！執走啲污糟嘢，空氣就清新啲。', '--jade'],
+  smell_bad: ['What a stink! Everyone is miserable. Clean up the poop, pour some tea, or let Wu Gang’s osmanthus flowers freshen the air.', '好臭呀！大家都好唔開心。執吓啲屎，斟啲茶，或者等吳剛啲桂花令空氣清新返。', '--m-smell'],
   poop: ['Oh no! Someone couldn’t make it to the toilet in time!', '弊喇！有人趕唔切去廁所！', '--m-tummy'],
   riddle: ['A riddle lantern is floating by! Tap it to guess the riddle.', '有個燈謎燈籠飄緊過嚟！撳佢嚟估燈謎。', '--gold'],
   riddle_q: ['Lantern riddle: “{en}”. Guess the character!', '燈謎嚟喇！{zh}，估一個字。', '--gold'],
@@ -2229,7 +2233,21 @@ function hitAt(q) {
   if (hp && !special.caught && Math.hypot(w.x - hp.x, w.y - hp.y) < hp.r + 14) return 'special';
   const mw = toWorld(q, .18), m = MOON();
   if (Math.hypot(mw.x - m.x, mw.y - m.y) < m.r + 6) return 'moon';
+  if (messAt(w) >= 0) return 'mess';
   return '';
+}
+function messAt(w) {
+  let best = -1, bd = 14;
+  puddles.forEach((pd, i) => { const d = Math.hypot(w.x - pd.x, (w.y - pd.y) * 1.4); if (d < bd) { bd = d; best = i; } });
+  return best;
+}
+function cleanMess(q) {
+  const w = toWorld(q, 1), i = messAt(w); if (i < 0) return;
+  const pd = puddles.splice(i, 1)[0];
+  MMSim.clean(S, pd.monkey ? 8 : 6);
+  burst(pd.x, pd.y - 4, 12, { c: () => pick(['#FFFFFF', '#CFF5E0', '#FFE9A8']), v0: 20, v1: 60, g: -20, l0: .4, l1: .8, r0: 1, r1: 2, kind: 'glint' });
+  SFX.scoop(pd.x);
+  once('clean', {}, 1);
 }
 canvas.addEventListener('pointerdown', ev => {
   const q = toLogical(ev);
@@ -2237,6 +2255,7 @@ canvas.addEventListener('pointerdown', ev => {
   if (!running || paused || holdGame) return;
   const h = hitAt(q);
   if (h === 'special') { MMSim.tap(S, special.kind); return; }
+  if (h === 'mess') { cleanMess(q); return; }
   if (h === 'moon' && !MMSim.tap(S, 'wugang')) every('wg_rest', 8, {}, 0);
 });
 canvas.addEventListener('pointermove', ev => {
@@ -2472,6 +2491,7 @@ const SFX = {
   drumRoll(big) { if (!AC || !prefs.sound) return; const t = AC.currentTime; for (let i = 0; i < (big ? 32 : 12); i++) { tone(t + i * .12, 130, .2, 'sine', i % 4 ? .15 : .3, sfxBus, { to: 60 }); } },
   cracker(x) { if (!this.ok()) return; const t = AC.currentTime; for (let i = 0; i < 12; i++) noiseHit(t + i * rnd(.03, .07), .04, 'highpass', 1500, 1, .35, sfxBus, x); },
   monkey(x) { if (!AC || !prefs.sound || !running) return; const t = AC.currentTime; for (let i = 0; i < 3; i++) voice(t + i * .16, rnd(650, 900), .14, .12, x, { to: rnd(1000, 1500), vowel: i < 2 ? [320, 800] : [800, 1200], kid: true }); },
+  scoop(x) { if (!AC || !prefs.sound || !running) return; const t = AC.currentTime; noiseHit(t, .08, 'bandpass', 1200, 2, .25, sfxBus, x); tone(t + .05, 700, .15, 'sine', .08, sfxBus, { to: 1400, x }); },
   splat(x) { if (!AC || !prefs.sound || !running) return; noiseHit(AC.currentTime, .12, 'lowpass', 500, 2, .35, sfxBus, x); },
   cricket() { if (!AC || !prefs.sound) return; const t = AC.currentTime, f = rnd(4200, 5200); for (let i = 0; i < 3; i++) tone(t + i * .05, f, .03, 'sine', .04, cricketGain, { x: rnd(0, W) }); },
 };
@@ -2711,14 +2731,14 @@ function endNight() {
     <p><b style="color:var(--gold);font-size:22px">${Math.round(S.score).toLocaleString('en')}</b> ${T('Reunion points', '團圓分')} ${isBest ? `· <b>${T('New best!', '新紀錄！')}</b>` : `· ${T('Best', '最高分')} ${best.toLocaleString('en')}`}</p>
     <ul class="tally">
       ${li('Most celebrating', '最多人慶祝', Math.round(S.peak))}${li('Bonus points', '獎勵分', S.bonus.toLocaleString('en'))}${li('Fires', '火災', TL.fire)}${li('Ambulances', '救護車', TL.tummy)}${li('Police visits', '警察到場', TL.police)}
-      ${li('Kids gone wild', '小朋友失控', TL.rowdy)}${li('Buildings lost', '燒毀大樓', TL.burned)}${li('Monkey raids', '馬騮搶劫', TL.monkeys)}${li('Riddles solved', '猜中燈謎', `${TL.riddlesRight} / ${TL.riddles}`)}${li('Visitors caught', '捉到訪客', TL.rabbit + TL.change + TL.dragon)}
+      ${li('Kids gone wild', '小朋友失控', TL.rowdy)}${li('Buildings lost', '燒毀大樓', TL.burned)}${li('Monkey raids', '馬騮搶劫', TL.monkeys)}${li('Riddles solved', '猜中燈謎', `${TL.riddlesRight} / ${TL.riddles}`)}${li('Messes cleaned', '清理污糟', TL.cleaned)}${li('Visitors caught', '捉到訪客', TL.rabbit + TL.change + TL.dragon)}
     </ul>
     <p class="tb">${T(tip, tipZh)}</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="againBtn" type="button">${T('Play again', '再玩一次')}</button><button class="tool" id="endTales" type="button">${T('Read the Moon Tales', '看月亮故事')}</button></div>
     <div class="more">
       <h3>${T('More from the Game Shelf', '遊戲架上的其他遊戲')}</h3>
       <a class="more-game" href="../aquarium/"><img src="../aquarium/cover.png" alt="" onerror="this.remove()"><span><b>${T('James’s Nature Aquarium', '水草缸')}</b><small class="tb">${T('Build a planted aquarium and keep a tiny ecosystem in balance.', '建立一個水草缸，讓小小的生態系統保持平衡。')}</small></span></a>
-      <p class="more-fb">${T('Tell us what you think:', '話我哋知你覺得點：')} <a href="../feedback/?game=mid-autumn&amp;v=1.4">${T('Share your thoughts', '分享意見')}</a> · <a href="../feedback/?game=mid-autumn&amp;v=1.4&amp;kind=bug">${T('Report a bug', '報告問題')}</a></p>
+      <p class="more-fb">${T('Tell us what you think:', '話我哋知你覺得點：')} <a href="../feedback/?game=mid-autumn&amp;v=1.5">${T('Share your thoughts', '分享意見')}</a> · <a href="../feedback/?game=mid-autumn&amp;v=1.5&amp;kind=bug">${T('Report a bug', '報告問題')}</a></p>
       <p class="grownups tb">${T(`<b>For grown-ups:</b> we’re a family making little games about the things we’re curious about, and the next one is already brewing. <a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">Follow us on Ko-fi</a> to hear when it’s out, or <a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">♥ support the next game</a>.`, `<b>給大人：</b>我們是一家人，把好奇的事做成小遊戲，下一個已在製作中。<a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">在 Ko-fi 關注我們</a>，新遊戲推出時就會知道，或者<a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">♥ 支持下一個遊戲</a>。`)}</p>
     </div>`;
   $('#endOv').hidden = false;

@@ -27,7 +27,7 @@ mid-autumn/         Mid-Autumn Mayhem
 | Game | Folder | Version | Launched |
 |---|---|---|---|
 | James’s Nature Aquarium | `aquarium/` | 3.3 | 2026-09-24 |
-| Mid-Autumn Mayhem | `mid-autumn/` | 1.4 | 2026-09-25 |
+| Mid-Autumn Mayhem | `mid-autumn/` | 1.5 | 2026-09-25 |
 
 ## Adding a game
 

@@ -40,7 +40,7 @@
       special: null,                                 // the special visitor on screen now
       next: { rabbit: 30, change: 125, dragon: 95, wugang: 0, riddle: 45 },
       seen: { change: false, dragon: false },
-      tally: { fire: 0, tummy: 0, police: 0, rowdy: 0, monkeys: 0, riddles: 0, riddlesRight: 0, rabbit: 0, change: 0, dragon: 0, wugang: 0, burned: 0, sent: 0, arrested: 0 },
+      tally: { fire: 0, tummy: 0, police: 0, rowdy: 0, monkeys: 0, riddles: 0, riddlesRight: 0, cleaned: 0, rabbit: 0, change: 0, dragon: 0, wugang: 0, burned: 0, sent: 0, arrested: 0 },
       events: [],
       rand: rand || Math.random,
     };
@@ -160,9 +160,14 @@
       }
     }
 
-    // Smell: sick people and monkey mess make it worse; it slowly blows away on the sea breeze.
-    const sickness = Math.max(0, m.tummy - 40) / 60;
-    m.smell = clamp(m.smell + (sickness * 7 * PACE - 1.2) * dt, 0, 100);
+    // Smell only comes from food: sick tummies, mess left lying around (s.mess, counted by the picture),
+    // and monkeys, which always make a stink. Tea and the sea breeze clear it; with no food out it fades faster.
+    const food = s.n.mooncakes + s.n.secret + s.n.snacks > 0;
+    const sickness = food ? Math.max(0, m.tummy - 40) / 60 : 0;
+    const monkeysHere = s.incident && s.incident.kind === 'monkeys' ? 6 : m.monkeys > 60 ? 1 : 0;
+    const rise = sickness * 7 + (s.mess || 0) * .12 + monkeysHere;
+    const fall = 1.2 + d.teaCov * 2.5 + (food ? 0 : 1.5);
+    m.smell = clamp(m.smell + (rise * PACE - fall) * dt, 0, 100);
 
     // Who is celebrating right now, and the Reunion score.
     const keep = s.incident ? INCIDENTS[s.incident.kind].keep : 1;
@@ -230,6 +235,11 @@
     return true;
   }
 
+  // The player picked up some poop (or worse): the air gets a little fresher.
+  function clean(s, amount) {
+    s.m.smell = Math.max(0, s.m.smell - amount); s.score += 5; s.bonus += 5; s.tally.cleaned++;
+  }
+
   // The player answered a lantern riddle.
   function answer(s, right) {
     if (!right) return 0;
@@ -243,6 +253,6 @@
   ];
   function grade(score) { return GRADES.find(g => score >= g[0])[1]; }
 
-  const api = { NIGHT, LIMITS, PARK, PER_BUILDING, SEATS, WEDGES, TEA_SERVES, KIDS_PER_ADULT, SNACK_SERVES, INCIDENTS, GRADES, create, set, derive, step, tap, answer, grade };
+  const api = { NIGHT, LIMITS, PARK, PER_BUILDING, SEATS, WEDGES, TEA_SERVES, KIDS_PER_ADULT, SNACK_SERVES, INCIDENTS, GRADES, create, set, derive, step, tap, answer, clean, grade };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.MMSim = api;
 })(this);
