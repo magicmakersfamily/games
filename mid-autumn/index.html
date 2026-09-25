@@ -76,11 +76,23 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .meter.hot { animation: hot .6s ease-in-out infinite alternate; }
 .stage.narrow .meters { gap: 3px; width: 40%; } .stage.narrow .meter { padding: 2px 6px 4px; } .stage.narrow .meter span { font-size: 10px; } .stage.narrow .meter rt { display: none; }
 @keyframes hot { to { background: rgba(120, 20, 20, .7); } }
-.toasts { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); display: grid; gap: 6px; width: min(460px, 56%); pointer-events: none; justify-items: center; }
-.stage.narrow .toasts { top: auto; bottom: 10px; width: 92%; }
-.toast { background: rgba(10, 14, 40, .88); border: 1px solid var(--line); border-left: 4px solid var(--tc, var(--gold)); border-radius: 10px; padding: 7px 12px; font-size: 13.5px; line-height: 1.35; animation: tin .25s ease-out; pointer-events: auto; }
-.toast b { color: var(--tc, var(--gold)); }
-@keyframes tin { from { opacity: 0; transform: translateY(-6px); } }
+.left { display: grid; gap: 10px; min-width: 0; }
+/* Tonight's story: narration lines stay under the scene until newer ones push them down. */
+.story { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px 12px; display: grid; gap: 8px; }
+.story-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.story-head h2 { margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); font-weight: 700; display: flex; gap: 8px; align-items: baseline; }
+.story-head h2 .zh { text-transform: none; letter-spacing: 0; font-size: 13px; }
+.story-log { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; max-height: 236px; overflow: auto; }
+.line { border-left: 3px solid var(--lc, var(--gold)); padding: 5px 10px 6px; border-radius: 4px; cursor: pointer; opacity: .6; display: grid; gap: 2px; animation: lin .3s ease-out; }
+.line:first-child { opacity: 1; background: rgba(255, 255, 255, .045); }
+.line:hover, .line.speaking { opacity: 1; }
+.line .en { margin: 0; font-size: 14.5px; line-height: 1.4; text-wrap: pretty; }
+.line .yue { margin: 0; font-family: var(--zh); color: var(--gold); font-size: 14.5px; line-height: 1.5; }
+.line:first-child .en, .line:first-child .yue { font-size: 16px; }
+.line .when { font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.line.speaking .when::after { content: " · speaking Cantonese"; color: var(--gold); }
+@keyframes lin { from { opacity: 0; transform: translateY(-4px); } }
+.endmodal { position: fixed; inset: 0; z-index: 15; display: grid; place-items: center; padding: 16px; background: rgba(4, 6, 20, .72); overflow: auto; }
 .celebrate-pill { position: absolute; right: 10px; top: 10px; background: rgba(8,12,34,.62); border-radius: 8px; padding: 4px 9px; font-size: 12px; color: var(--ink-2); }
 .stage.narrow .celebrate-pill { display: none; }
 
@@ -152,12 +164,12 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
 /* #cover: the scene alone, for the shelf card image */
 .cover-mode body { overflow: hidden; }
 .cover-mode .app { padding: 0; max-width: none; display: block; }
-.cover-mode .shelf-back, .cover-mode .top, .cover-mode .controls, .cover-mode .about, .cover-mode .meters, .cover-mode .celebrate-pill { display: none; }
+.cover-mode .shelf-back, .cover-mode .top, .cover-mode .controls, .cover-mode .about, .cover-mode .meters, .cover-mode .celebrate-pill, .cover-mode .story { display: none; }
 .cover-mode .main { display: block; }
 .cover-mode .stage { width: 1329px; max-width: none; height: 744px; aspect-ratio: auto; margin-left: -64px; border: 0; border-radius: 0; }
 .about { margin: 4px 0 0; font-size: 12.5px; color: var(--ink-3); text-align: center; }
 .about a { color: var(--ink-2); }
-@media (prefers-reduced-motion: reduce) { .meter.hot, .toast { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .meter.hot, .line { animation: none; } }
 </style>
 
 </head>
@@ -181,11 +193,11 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
   </div>
 
   <div class="main">
+    <div class="left">
     <div class="stage" id="stage">
       <canvas id="scene" aria-label="A city under the full moon on the night of the Mid-Autumn Festival"></canvas>
       <div class="meters" id="meters"></div>
       <div class="celebrate-pill" id="pill"></div>
-      <div class="toasts" id="toasts" aria-live="polite"></div>
 
       <div class="overlay" id="startOv">
         <div class="card">
@@ -196,14 +208,20 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
             <li>Every happy, celebrating person earns <b>Reunion points</b>.</li>
             <li>Watch the four trouble meters. If one fills up, trouble arrives: fire trucks, ambulances, police…</li>
             <li>Tap surprise visitors before they disappear. Point at any Chinese word to hear it.</li>
+            <li>A storyteller tells you what is happening, in English and Chinese words and spoken Cantonese.</li>
           </ul>
           <button class="go" id="startBtn" type="button">Start the night</button>
         </div>
       </div>
 
-      <div class="overlay" id="endOv" hidden>
-        <div class="card" id="endCard"></div>
+    </div>
+    <section class="story" aria-label="Tonight's story">
+      <div class="story-head">
+        <h2>Tonight’s story <span class="zh" lang="zh-HK">今晚嘅故事</span></h2>
+        <button class="tool" id="narrBtn" type="button" aria-pressed="true">Cantonese narration on</button>
       </div>
+      <ol class="story-log" id="storyLog" aria-live="polite"></ol>
+    </section>
     </div>
 
     <section class="controls" aria-label="Things to add">
@@ -212,7 +230,11 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
     </section>
   </div>
 
-  <p class="about">Version 1.0 · Launched <time datetime="2026-09-25">September 25, 2026</time> · Made for James and friends · <a href="../">The Game Shelf</a></p>
+  <p class="about">Version 1.1 · Launched <time datetime="2026-09-25">September 25, 2026</time> · Made for James and friends · <a href="../">The Game Shelf</a></p>
+</div>
+
+<div class="endmodal" id="endOv" hidden>
+  <div class="card" id="endCard" role="dialog" aria-modal="true" aria-label="The night is over"></div>
 </div>
 
 <div class="tales" id="tales" hidden>
@@ -310,15 +332,16 @@ function speak(text, el) {
   try {
     const sp = window.speechSynthesis;
     if (!sp) return;
-    sp.cancel();
+    stopSpeech();
     const u = new SpeechSynthesisUtterance(text);
     let v = voiceFor(LANG);
-    if (LANG === 'yue') { u.lang = 'zh-HK'; if (!v && voices.length && !spokeWarn) { spokeWarn = true; toast('This device has no Cantonese voice, so words are read in Mandarin.', '--ink-3'); } }
+    if (LANG === 'yue') { u.lang = 'zh-HK'; if (!v && voices.length && !spokeWarn) { spokeWarn = true; storyLine('This device has no Cantonese voice, so words are read in Mandarin.', '', '--ink-3'); } }
     else u.lang = 'zh-TW';
     if (!v && LANG === 'yue') { v = voiceFor('cmn'); u.lang = 'zh-TW'; }
     if (v) u.voice = v;
     u.rate = 0.75;
-    if (el) { el.classList.add('speaking'); u.onend = u.onerror = () => el.classList.remove('speaking'); }
+    if (el) el.classList.add('speaking');
+    u.onend = u.onerror = () => { if (el) el.classList.remove('speaking'); setTimeout(pumpSpeech, 300); };
     sp.speak(u);
   } catch (e) { /* speech unavailable */ }
 }
@@ -865,13 +888,13 @@ function updateScene(dt, t) {
     special.age += dt;
     if (special.kind === 'rabbit') {
       if (special.caught) { special.cy -= dt * (special.age > 2.2 ? 160 : 0); if (special.cy < -30) special = null; }
-      else special.x += dt * (W + 80) / 5;
+      else special.x += dt * (W + 80) / (special.dur || 7);
     } else if (special.kind === 'change') {
       if (special.caught) { special.y += (G.plazaB - 40 - special.y) * dt * 1.4; special.x += (W * .5 - special.x) * dt * 1.4; if (Math.abs(special.y - (G.plazaB - 40)) < 3) { couple = { x: W * .5, y: G.plazaB - 40, t: 0 }; special = null; SFX.cheer(1.2); } }
-      else { const m = MOON(), u = clamp(special.age / 9, 0, 1); special.x = special.x0 + (m.x - special.x0) * u + Math.sin(u * 8) * 20 * (1 - u); special.y = special.y0 + (m.y - special.y0) * (u * u * (3 - 2 * u)); special.s = 1.1 - u * .6; }
+      else { const m = MOON(), u = clamp(special.age / (special.dur || 13), 0, 1); special.x = special.x0 + (m.x - special.x0) * u + Math.sin(u * 8) * 20 * (1 - u); special.y = special.y0 + (m.y - special.y0) * (u * u * (3 - 2 * u)); special.s = 1.1 - u * .6; }
     } else if (special.kind === 'dragon') {
       if (special.caught) { special.dance -= dt; if (Math.random() < dt * 6) { burst(special.cx + rnd(-90, 90), special.cy + rnd(-30, 30), 10, { c: () => pick(['#FF5E3A', '#FFD23F', '#FFF']), v0: 30, v1: 90, g: 80, l0: .3, l1: .7 }); SFX.cracker(special.cx); } if (special.dance <= 0) { special.caught = false; special.leaving = true; special.dance = 0; special.x = special.cx + 70; } }
-      else special.x += dt * (W + 300) / 8;
+      else special.x += dt * (W + 300) / (special.dur || 11);
       if (special.leaving && special.x > W + 280) special = null;
     }
   }
@@ -970,54 +993,180 @@ function hitPoint() {
 }
 
 /* ───────────── Model events → story, sound and scene ───────────── */
-const TCOL = { fire: '--m-fire', tummy: '--m-tummy', police: '--m-noise', rowdy: '--m-rowdy' };
-function toast(html, col, ms = 5200) {
-  const el = document.createElement('div'); el.className = 'toast'; if (col) el.style.setProperty('--tc', `var(${col})`);
-  el.innerHTML = html; $('#toasts').prepend(el);
-  const all = $('#toasts').children; while (all.length > 3) all[all.length - 1].remove();
-  setTimeout(() => el.remove(), ms);
+/* ───────────── Storyteller: English on screen, spoken in Cantonese ─────────────
+   Each line is [English, written Cantonese (spoken aloud), colour]. The Cantonese is everyday Hong Kong speech,
+   so it matches what the voice says word for word. */
+const LINES = {
+  intro: ['It’s a quiet night. The full moon is rising over the harbour, and up on the moon, Wu Gang is chopping the osmanthus tree. Add some buildings and people to start the party!', '今晚好靜。圓圓嘅月亮喺海港上面慢慢升起，月亮上面，吳剛仲喺度斬緊桂花樹。加啲大樓同人，開始個派對啦！'],
+  novoice: ['This device has no Cantonese voice, so the story is shown as text only.', '呢部機冇廣東話聲音，所以故事只會用文字顯示。', '--ink-3'],
+  first_buildings: ['A new building goes up! Each one gives 8 more people a place to celebrate.', '起咗一座新大樓！每座大樓可以俾多八個人一齊慶祝。'],
+  first_adults: ['The grown-ups arrive. Each grown-up can keep an eye on 3 kids.', '大人嚟咗喇。每個大人可以睇住三個小朋友。'],
+  first_kids: ['Here come the kids, ready to play with lanterns!', '小朋友嚟喇，準備好玩燈籠！'],
+  first_lanterns: ['Lanterns glow red and gold. Long ago, lanterns had real candles inside.', '燈籠發出紅色同金色嘅光。以前啲燈籠入面係點真蠟燭㗎。'],
+  first_mooncakes: ['Mooncakes! They are very rich, so families cut each one into 4 pieces and share.', '月餅嚟喇！月餅好飽肚，所以一家人會將每個月餅切開四份，一齊分嚟食。'],
+  first_tea: ['Hot tea helps everyone’s tummy with the rich mooncakes.', '飲杯熱茶，食完月餅個肚會舒服啲。'],
+  first_mahjong: ['Clack, clack! Four grown-ups sit down at each mahjong table. It gets noisy!', '劈劈啪啪！每張麻將枱坐四個大人。好嘈㗎！'],
+  first_fireworks: ['Fireworks light up the sky! Exciting, but noisy and a little dangerous.', '煙花照亮成個天空！好刺激，不過好嘈，仲有少少危險。'],
+  first_secret: ['Secret mooncakes are on the table. Each one carries a hidden message to 4 grown-ups.', '密信月餅擺咗上枱。每個入面都收埋咗一張字條，可以傳俾四個大人。', '--gold'],
+  nine: ['It’s 9 o’clock. Half the night is gone!', '而家九點，已經過咗一半晚喇！', '--ink-3'],
+  eleven: ['It’s 11 o’clock. Only one hour until midnight!', '而家十一點，仲有一個鐘就到十二點喇！', '--ink-3'],
+  m10: ['Ten people are celebrating. The party is starting!', '有十個人喺度慶祝，派對開始喇！', '--jade'],
+  m25: ['Twenty-five people are celebrating. Listen to that crowd!', '有二十五個人慶祝緊，聽下幾熱鬧！', '--jade'],
+  m50: ['Fifty people are celebrating! What a festival!', '有五十個人慶祝緊！真係好熱鬧！', '--jade'],
+  crowded: ['It’s too crowded! Build more buildings so everyone has room.', '太迫喇！起多啲大樓，等大家都有位。'],
+  unsup: ['Some kids have no grown-up watching them. Uh oh!', '有啲小朋友冇大人睇住。弊喇！', '--m-rowdy'],
+  nokids: ['Mid-Autumn is a festival for families. Invite some kids too!', '中秋節係一家人團圓嘅節日，叫埋啲小朋友嚟啦！'],
+  dark: ['It’s dark down here. Add some lanterns!', '下面好黑呀，加啲燈籠啦！'],
+  nocake: ['No mooncakes yet? It isn’t Mid-Autumn without mooncakes!', '仲未有月餅？冇月餅點過中秋呀！'],
+  warn_fire: ['Careful! The fire risk is rising. Too many fireworks, and not enough grown-ups watching.', '小心！火災風險越嚟越高。煙花太多，睇住嘅大人又唔夠。', '--m-fire'],
+  warn_tummy: ['Tummies are starting to hurt. Too much mooncake! Try some tea.', '啲人開始肚痛喇。食太多月餅喇！試下飲啲茶。', '--m-tummy'],
+  warn_noise: ['It’s getting loud. The neighbours are getting grumpy.', '越嚟越嘈喇，啲鄰居開始唔高興。', '--m-noise'],
+  warn_rowdy: ['The kids are getting wild. They need more grown-ups.', '啲小朋友開始曳喇，要多啲大人睇住佢哋。', '--m-rowdy'],
+  almost: ['Watch out! The {en} meter is almost full. Fix it fast!', '小心！{zh}就快爆錶喇！快啲想辦法！', '--red'],
+  phew: ['Phew! The {en} is going down.', '好彩！{zh}開始跌返落嚟。', '--jade'],
+  fire: ['Fire! A building is burning! Everyone runs and screams. The firefighters are on their way!', '火燭呀！有座大樓着咗火！大家一路走一路嗌。消防員嚟緊喇！', '--m-fire'],
+  fire_park: ['Fire! A tree in the park is burning! The firefighters are on their way!', '火燭呀！公園棵樹着咗火！消防員嚟緊喇！', '--m-fire'],
+  burned: ['The building burned down. Everyone got out safely, but now there is less room.', '座大樓燒冧咗。大家都安全走咗出嚟，不過而家少咗好多位。', '--m-fire'],
+  tummy: ['Oh no, tummy trouble! People are throwing up everywhere. Call the ambulance!', '弊喇，肚痛呀！啲人周圍嘔。快啲叫白車！', '--m-tummy'],
+  sent: ['{n} people went to hospital, and half the mooncakes went in the bin.', '有{n}個人要去醫院，一半月餅都要掉咗。', '--m-tummy'],
+  police: ['Too loud! The neighbours called the police.', '太嘈喇！啲鄰居報咗警。', '--m-noise'],
+  arrested: ['The police took {n} grown-ups away and packed up half the mahjong tables.', '警察帶走咗{n}個大人，仲收埋一半麻將枱。', '--m-noise'],
+  rowdy: ['The kids have gone wild! Lanterns are falling and mooncakes are flying!', '啲小朋友玩到癲晒！燈籠跌晒落嚟，月餅周圍飛！', '--m-rowdy'],
+  resolved: ['Phew. Everything is calm again.', '好彩，終於靜返落嚟。', '--jade'],
+  rabbit: ['Look! A white rabbit! Is it the Jade Rabbit from the moon? Tap it quickly!', '睇下！有隻白兔！係咪月亮上面嘅玉兔呢？快啲撳佢！', '--gold'],
+  rabbit_ok: ['You caught the Jade Rabbit! It makes medicine, and everyone’s tummy feels better. +{p} points', '你捉到玉兔喇！佢整咗啲藥，大家個肚都舒服晒。加{p}分！', '--gold'],
+  rabbit_miss: ['The rabbit hopped away. Maybe it will come back.', '隻兔仔跳走咗，可能等陣會返嚟。', '--ink-3'],
+  change: ['Chang’e is floating up to the moon! Tap her so she can stay with Hou Yi!', '嫦娥飛緊上月亮！快啲撳佢，等佢可以留低陪后羿！', '--gold'],
+  change_ok: ['Chang’e came home to Hou Yi! A real family reunion. Everyone celebrates even more. +{p} points', '嫦娥返嚟搵后羿喇！一家人終於團圓，大家慶祝得更加開心。加{p}分！', '--gold'],
+  change_miss: ['Chang’e reached the moon. In the old story she still lives there, and Hou Yi looks up at her every Mid-Autumn.', '嫦娥飛咗上月亮。傳說佢到而家仲住喺度，后羿每年中秋都會望住月亮掛住佢。', '--ink-3'],
+  dragon: ['The fire dragon of Tai Hang is coming down the street! Tap it to make it dance!', '大坑火龍沿住條街行緊過嚟！撳佢，等佢跳舞！', '--gold'],
+  dragon_ok: ['The fire dragon dances! Long ago, its dance chased away sickness. +{p} points', '火龍跳舞喇！好耐以前，佢跳舞係為咗趕走瘟疫。加{p}分！', '--gold'],
+  dragon_miss: ['The fire dragon went on its way.', '火龍繼續行，走咗去。', '--ink-3'],
+  wg_ready: ['Look at the moon! Wu Gang is ready. Tap the moon to make osmanthus flowers fall.', '望下個月亮！吳剛準備好喇。撳個月亮，等桂花飄落嚟。', '--gold'],
+  wg_ok: ['Wu Gang chops the tree. Sweet osmanthus flowers drift down, and everyone calms down. +{p} points', '吳剛一斧斬落棵樹度，香噴噴嘅桂花飄落嚟，大家都靜返落嚟。加{p}分！', '--gold'],
+  wg_rest: ['Wu Gang is resting. The tree needs time to grow back.', '吳剛休息緊，棵樹要啲時間生返。', '--ink-3'],
+  unlock: ['A secret recipe! Long ago, people hid messages in mooncakes to plan an uprising. Now you can serve secret mooncakes.', '有個秘密食譜！好耐以前，啲人將字條收埋喺月餅入面，約定一齊起義。而家你都可以派密信月餅喇。', '--gold'],
+  leaked: ['The secret leaked! Too few grown-ups had the message, and the police found out.', '個秘密漏咗出去！收到字條嘅大人太少，俾警察發現咗。', '--m-noise'],
+  uprising: ['The people rise up together and raise their own flag! The police go home, and the party gets even bigger!', '大家一齊企出嚟，升起自己嘅旗！警察返晒屋企，個派對仲熱鬧！', '--gold'],
+  end: ['Midnight! {en}. You scored {score} Reunion points.', '十二點喇！{zh}！你攞到{n}分團圓分。', '--gold'],
+};
+const Narr = { q: [], cur: null, said: {}, last: {}, meter: { fire: 0, tummy: 0, noise: 0, rowdy: 0 }, wg: -1, wgCount: 0 };
+function storyLine(en, yue, col) {
+  const li = document.createElement('li'); li.className = 'line';
+  if (col) li.style.setProperty('--lc', `var(${col})`);
+  li.innerHTML = `<span class="when">${S.t > 0 ? fmtClock(S.t) : 'Before the party'}</span><p class="en"></p>${yue ? '<p class="yue" lang="zh-HK"></p>' : ''}`;
+  li.querySelector('.en').textContent = en;
+  if (yue) {
+    li.querySelector('.yue').textContent = yue;
+    li.title = 'Click to hear it again';
+    li.addEventListener('click', () => { if (!yueVoice()) return; stopSpeech(); Narr.q.unshift({ text: yue, prio: 9, el: li }); pumpSpeech(); });
+  }
+  const log = $('#storyLog'); log.prepend(li);
+  while (log.children.length > 40) log.lastChild.remove();
+  log.scrollTop = 0;
+  return li;
 }
+function narrate(key, vars = {}, prio = 1) {
+  const L = LINES[key]; if (!L) return;
+  const fill = t => t.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
+  const yue = fill(L[1]), el = storyLine(fill(L[0]), yue, L[2]);
+  if (!narrationOn()) return;
+  // Big news pushes aside smaller news that is still waiting.
+  if (prio >= 3) { Narr.q = Narr.q.filter(x => x.prio >= 3); if (Narr.cur && Narr.cur.prio < 3) stopSpeech(); }
+  Narr.q.push({ text: yue, prio, el });
+  while (Narr.q.length > 3) { let k = 0; Narr.q.forEach((x, i) => { if (x.prio < Narr.q[k].prio) k = i; }); Narr.q.splice(k, 1); }
+  pumpSpeech();
+}
+function yueVoice() { return voiceFor('yue'); }
+function narrationOn() { return prefs.narr !== false && prefs.sound && !!yueVoice(); }
+function stopSpeech() {
+  const c = Narr.cur; Narr.cur = null;
+  if (c && c.el) c.el.classList.remove('speaking');
+  try { speechSynthesis.cancel(); } catch (e) { /* no speech */ }
+  duck(false);
+}
+function pumpSpeech() {
+  if (Narr.cur || !Narr.q.length || paused) return;
+  const it = Narr.q.shift(); Narr.cur = it;
+  try {
+    const u = new SpeechSynthesisUtterance(it.text);
+    u.lang = 'zh-HK'; const v = yueVoice(); if (v) u.voice = v; u.rate = .95;
+    const done = () => { if (Narr.cur !== it) return; Narr.cur = null; if (it.el) it.el.classList.remove('speaking'); duck(false); setTimeout(pumpSpeech, 350); };
+    u.onend = done; u.onerror = done;
+    if (it.el) it.el.classList.add('speaking');
+    duck(true);
+    speechSynthesis.speak(u);
+    setTimeout(() => { if (Narr.cur === it) done(); }, 3000 + it.text.length * 330);   // some browsers never fire onend
+  } catch (e) { Narr.cur = null; }
+}
+// Music and crowd step back while the storyteller talks.
+function duck(on) { if (!AC) return; const t = AC.currentTime; musicBus.gain.setTargetAtTime(on ? .22 : .5, t, .25); ambBus.gain.setTargetAtTime(on ? .4 : .6, t, .25); }
+function once(key, vars, prio) { if (Narr.said[key]) return; Narr.said[key] = 1; narrate(key, vars, prio); }
+function every(key, gap, vars, prio) { if (S.t - (Narr.last[key] ?? -1e9) < gap) return; Narr.last[key] = S.t; narrate(key, vars, prio); }
+const MNAME = { fire: ['fire risk', '火災風險'], tummy: ['tummy ache', '肚痛'], noise: ['noise', '噪音'], rowdy: ['mischief', '搗蛋'] };
+const METER_OF = { fire: 'fire', tummy: 'tummy', police: 'noise', rowdy: 'rowdy' };
+// Looks at the city a few times a second and tells the story of what changed.
+function watchStory(d) {
+  if (!running) return;
+  const N = MMSim.NIGHT;
+  if (S.t >= N / 2) once('nine', {}, 1);
+  if (S.t >= N * 5 / 6) once('eleven', {}, 1);
+  if (S.celebrating >= 10) once('m10', {}, 1);
+  if (S.celebrating >= 25) once('m25', {}, 1);
+  if (S.celebrating >= 50) once('m50', {}, 1);
+  if (S.incident) return;
+  if (d.P > d.cap + 2) every('crowded', 45, {}, 1);
+  if (d.unsupervised > 2) every('unsup', 45, {}, 1);
+  if (S.n.adults >= 6 && !S.n.kids) every('nokids', 70, {}, 0);
+  if (d.P >= 8 && !S.n.lanterns) every('dark', 70, {}, 0);
+  if (d.P >= 8 && !d.cakes && S.t > 25) every('nocake', 80, {}, 0);
+  for (const k of ['fire', 'tummy', 'noise', 'rowdy']) {
+    const v = S.m[k], st = Narr.meter[k];
+    if (v >= 80 && st < 2) { Narr.meter[k] = 2; narrate('almost', { en: MNAME[k][0], zh: MNAME[k][1] }, 2); }
+    else if (v >= 50 && st < 1) { Narr.meter[k] = 1; narrate('warn_' + k, {}, 2); }
+    else if (v < 30 && st >= 1) { Narr.meter[k] = 0; narrate('phew', { en: MNAME[k][0], zh: MNAME[k][1] }, 0); }
+  }
+  if (S.t >= S.next.wugang && S.t > 45 && Narr.wg !== S.next.wugang && Narr.wgCount < 3) { Narr.wg = S.next.wugang; Narr.wgCount++; narrate('wg_ready', {}, 1); }
+}
+
+/* ───────────── Model events → story, sound and scene ───────────── */
 function handleEvent(e) {
   const V = x => vehicles.push({ kind: x, x: W + 120, tx: W * (x === 'fire' ? .55 : x === 'amb' ? .72 : .38), dir: -1, state: 'in' });
   if (e.type === 'incident') {
-    if (e.kind === 'fire') { toast(`<b>Fire! ${zh('fire')}</b> Too many fireworks and lanterns without enough grown-ups watching. The firefighters ${zh('firefighters')} are on the way.`, TCOL.fire, 7000); V('fire'); SFX.siren('fire'); SFX.cheer(0, true); }
-    if (e.kind === 'tummy') { toast(`<b>Tummy trouble! ${zh('tummy')}</b> Too much mooncake and not enough tea. Call the ambulance ${zh('ambulance')}!`, TCOL.tummy, 7000); V('amb'); SFX.siren('amb'); }
-    if (e.kind === 'police') { toast(`<b>Too loud! ${zh('noise')}</b> The neighbours complained about the mahjong and fireworks. Here come the police ${zh('police')}.`, TCOL.police, 7000); V('police'); SFX.siren('police'); SFX.whistleBlow(); }
-    if (e.kind === 'rowdy') { toast(`<b>Mischief! ${zh('rowdy')}</b> Too many kids and not enough grown-ups. Lanterns are falling and mooncakes are flying!`, TCOL.rowdy, 7000); SFX.cheer(.5, false, true); for (let i = 0; i < 12; i++) burst(rnd(W * .3, W * .7), G.plazaB - 20, 1, { a: -Math.PI / 2, spread: 1, v0: 120, v1: 220, g: 300, c: '#D89148', l0: 1, l1: 1.4, r0: 4, r1: 6 }); }
-    hydrate($('#toasts'));
+    if (e.kind === 'fire') { narrate(S.n.buildings ? 'fire' : 'fire_park', {}, 3); V('fire'); SFX.siren('fire'); SFX.cheer(0, true); }
+    if (e.kind === 'tummy') { narrate('tummy', {}, 3); V('amb'); SFX.siren('amb'); }
+    if (e.kind === 'police') { narrate('police', {}, 3); V('police'); SFX.siren('police'); SFX.whistleBlow(); }
+    if (e.kind === 'rowdy') { narrate('rowdy', {}, 3); SFX.cheer(.5, false, true); for (let i = 0; i < 12; i++) burst(rnd(W * .3, W * .7), G.plazaB - 20, 1, { a: -Math.PI / 2, spread: 1, v0: 120, v1: 220, g: 300, c: '#D89148', l0: 1, l1: 1.4, r0: 4, r1: 6 }); }
   }
-  if (e.type === 'burned') { ruins.push({ k: S.n.buildings, life: 14 }); toast('A building burned down. Everyone got out, but now there is less room for people.', TCOL.fire); SFX.crash(); }
-  if (e.type === 'sent') { const amb = vehicles.find(v => v.kind === 'amb'); takeMixed(e.count, amb ? amb.x : W * .72); toast(`${e.count} people with sore tummies went to hospital. Half the mooncakes went in the bin.`, TCOL.tummy); }
-  if (e.type === 'arrested') { const pv = vehicles.find(v => v.kind === 'police'); takeMixed(e.count, pv ? pv.x : W * .38); toast(`${e.count} grown-ups taken away for noise. Half the mahjong tables were packed up.`, TCOL.police); }
-  if (e.type === 'resolved') { vehicles.forEach(v => { v.state = 'out'; v.dir = -1; }); }
+  if (e.type === 'burned') { ruins.push({ k: S.n.buildings, life: 14 }); narrate('burned', {}, 2); SFX.crash(); }
+  if (e.type === 'sent') { const amb = vehicles.find(v => v.kind === 'amb'); takeMixed(e.count, amb ? amb.x : W * .72); narrate('sent', { n: e.count }, 2); }
+  if (e.type === 'arrested') { const pv = vehicles.find(v => v.kind === 'police'); takeMixed(e.count, pv ? pv.x : W * .38); narrate('arrested', { n: e.count }, 2); }
+  if (e.type === 'resolved') { vehicles.forEach(v => { v.state = 'out'; v.dir = -1; }); Narr.meter[METER_OF[e.kind]] = 0; narrate('resolved', {}, 1); }
   if (e.type === 'unlock') {
-    toast(`<b>A secret recipe…</b> Legend says that long ago, people hid messages inside mooncakes to plan an uprising on the night of the full moon. You can now serve <b>secret mooncakes</b> ${zh('secret')}. Read the story in Moon Tales.`, '--gold', 11000);
+    narrate('unlock', {}, 3);
     const row = document.querySelector('.item[data-key="secret"]'); row.hidden = false; row.classList.add('new'); SFX.gong();
   }
-  if (e.type === 'discovered') { toast('The secret leaked! Too few grown-ups had the message, so the police found out.', TCOL.police, 7000); }
-  if (e.type === 'uprising') {
-    flag = { rise: 0 }; toast(`<b>The people rise up!</b> Enough grown-ups read the message. The crowd raises its own flag ${zh('flag')}, the police go home, and the party gets even bigger. +1,500`, '--gold', 11000);
-    vehicles.forEach(v => { v.state = 'out'; }); SFX.gong(); SFX.cheer(1.5); hydrate($('#toasts'));
-  }
+  if (e.type === 'discovered') narrate('leaked', {}, 3);
+  if (e.type === 'uprising') { flag = { rise: 0 }; narrate('uprising', {}, 3); vehicles.forEach(v => { v.state = 'out'; }); SFX.gong(); SFX.cheer(1.5); }
   if (e.type === 'special') {
-    const k = e.kind;
-    if (k === 'rabbit') { special = { kind: k, x: -40, cy: rnd(G.roadB + 40, G.plazaB - 20), age: 0 }; toast(`A white rabbit! Is it the Jade Rabbit ${zh('rabbit')}? Tap it quickly!`, '--gold', 4000); SFX.sparkle(); }
-    if (k === 'change') { const bl = S.n.buildings ? buildingSlot(0) : { x: W * .3, h: 0 }; special = { kind: k, x0: bl.x, y0: G.road - bl.h - 10, x: bl.x, y: G.road - bl.h - 10, age: 0, s: 1.1 }; toast(`Chang'e ${zh('change')} is floating up to the moon! Tap her before she gets there, so she can stay with Hou Yi ${zh('houyi')}.`, '--gold', 7000); SFX.rise(); }
-    if (k === 'dragon') { special = { kind: k, x: -60, cx: W * .5, cy: 488, dance: 0, age: 0 }; toast(`The fire dragon ${zh('dragon')} of Tai Hang is coming down the street! Tap it to make it dance.`, '--gold', 6000); SFX.drumRoll(); }
-    hydrate($('#toasts'));
+    const k = e.kind, dur = S.special ? S.special.dur : 0;
+    if (k === 'rabbit') { special = { kind: k, x: -40, cy: rnd(G.roadB + 40, G.plazaB - 20), age: 0, dur }; SFX.sparkle(); }
+    if (k === 'change') { const bl = S.n.buildings ? buildingSlot(0) : { x: W * .3, h: 0 }; special = { kind: k, x0: bl.x, y0: G.road - bl.h - 10, x: bl.x, y: G.road - bl.h - 10, age: 0, s: 1.1, dur }; SFX.rise(); }
+    if (k === 'dragon') { special = { kind: k, x: -60, cx: W * .5, cy: 488, dance: 0, age: 0, dur }; SFX.drumRoll(); }
+    narrate(k, {}, 3);
   }
   if (e.type === 'missed') {
-    if (e.kind === 'change') { toast(`Chang'e reached the moon. In the old story she lives there still, and Hou Yi looks up at her every Mid-Autumn night.`, '--ink-3', 7000); special = null; }
-    else if (e.kind === 'dragon') { if (special) special.leaving = true; }
-    else if (e.kind === 'rabbit') { special = null; }
+    if (e.kind === 'change') { narrate('change_miss', {}, 2); special = null; }
+    else if (e.kind === 'dragon') { if (special) special.leaving = true; narrate('dragon_miss', {}, 0); }
+    else if (e.kind === 'rabbit') { special = null; narrate('rabbit_miss', {}, 0); }
   }
   if (e.type === 'caught') {
     const p = e.points;
-    if (e.kind === 'rabbit' && special) { special.caught = true; special.age = 0; toast(`You caught the Jade Rabbit ${zh('rabbit')}! It pounds a little medicine: everyone's tummy feels better. +${p}`, '--gold'); SFX.sparkle(true); burst(special.x, special.cy - 10, 30, { c: '#FFF6C8', v0: 20, v1: 80, g: -10, l0: .8, l1: 1.4 }); }
-    if (e.kind === 'change' && special) { special.caught = true; toast(`Chang'e comes home to Hou Yi ${zh('houyi')}! A real family reunion ${zh('reunion')}. Everyone celebrates harder for a while. +${p}`, '--gold', 7000); SFX.reunion(); }
-    if (e.kind === 'dragon' && special) { special.caught = true; special.dance = 8; special.cx = W * .5; toast(`The fire dragon dances! In 1880 its dance was said to chase away sickness. Tummies and mischief calm down. +${p}`, '--gold', 7000); SFX.drumRoll(true); }
-    if (e.kind === 'wugang') { toast(`Wu Gang ${zh('wugang')} chops the moon tree and osmanthus ${zh('osmanthus')} flowers drift down. Everyone breathes in and quiets down. +${p}`, '--gold'); for (let i = 0; i < 90; i++) burst(rnd(0, W), rnd(-30, 60), 1, { a: Math.PI / 2, spread: .6, v0: 20, v1: 50, g: 12, c: pick(['#FFD35C', '#F4B63A', '#FFE9A0']), l0: 5, l1: 8, r0: 2.2, r1: 3.4, kind: 'petal', drag: .995 }); SFX.chop(); }
-    hydrate($('#toasts'));
+    if (e.kind === 'rabbit' && special) { special.caught = true; special.age = 0; SFX.sparkle(true); burst(special.x, special.cy - 10, 30, { c: '#FFF6C8', v0: 20, v1: 80, g: -10, l0: .8, l1: 1.4 }); }
+    if (e.kind === 'change' && special) { special.caught = true; SFX.reunion(); }
+    if (e.kind === 'dragon' && special) { special.caught = true; special.dance = 8; special.cx = W * .5; SFX.drumRoll(true); }
+    if (e.kind === 'wugang') { for (let i = 0; i < 90; i++) burst(rnd(0, W), rnd(-30, 60), 1, { a: Math.PI / 2, spread: .6, v0: 20, v1: 50, g: 12, c: pick(['#FFD35C', '#F4B63A', '#FFE9A0']), l0: 5, l1: 8, r0: 2.2, r1: 3.4, kind: 'petal', drag: .995 }); SFX.chop(); }
+    narrate({ rabbit: 'rabbit_ok', change: 'change_ok', dragon: 'dragon_ok', wugang: 'wg_ok' }[e.kind], { p }, 3);
   }
   if (e.type === 'end') endNight();
 }
@@ -1030,7 +1179,7 @@ canvas.addEventListener('pointerdown', ev => {
   const hp = hitPoint();
   if (hp && !special.caught && Math.hypot(q.x - hp.x, q.y - hp.y) < hp.r + 14) { MMSim.tap(S, special.kind); return; }
   const m = MOON();
-  if (Math.hypot(q.x - m.x, q.y - m.y) < m.r + 6) { if (!MMSim.tap(S, 'wugang')) toast('Wu Gang is still resting. The osmanthus tree needs time to grow back.', '--ink-3', 2500); }
+  if (Math.hypot(q.x - m.x, q.y - m.y) < m.r + 6) { if (!MMSim.tap(S, 'wugang')) every('wg_rest', 8, {}, 0); }
 });
 canvas.addEventListener('pointermove', ev => {
   const q = toLogical(ev), hp = hitPoint(), m = MOON();
@@ -1054,6 +1203,7 @@ function change(key, dir) {
   const it = ITEMS.find(i => i.key === key);
   const before = S.n[key];
   MMSim.set(S, key, before + dir * it.step);
+  if (S.n[key] !== before && dir > 0 && before === 0 && running) once('first_' + key, {}, 1);
   if (S.n[key] !== before) { SFX.tick(dir > 0); if (key === 'buildings' && dir > 0) SFX.build(); if (key === 'fireworks' && dir > 0 && !running) { /* nothing */ } }
   refreshControls();
 }
@@ -1164,7 +1314,7 @@ function paintTale(id, c) {
 }
 
 /* ───────────── Sound: Web Audio, all generated ───────────── */
-let AC = null, master, musicBus, sfxBus, ambBus, verb, crowdGain, crowdHi, cricketGain, windGain, noiseBuf;
+let AC = null, master, musicBus, sfxBus, ambBus, verb, cricketGain, windGain, noiseBuf;
 function audioStart() {
   if (AC) { if (AC.state === 'suspended') AC.resume(); return; }
   const C = window.AudioContext || window.webkitAudioContext; if (!C) return;
@@ -1181,9 +1331,7 @@ function audioStart() {
   const wind = loopNoise(); const wf = AC.createBiquadFilter(); wf.type = 'lowpass'; wf.frequency.value = 400; windGain = AC.createGain(); windGain.gain.value = .12;
   const lfo = AC.createOscillator(); lfo.frequency.value = .07; const lg = AC.createGain(); lg.gain.value = 240; lfo.connect(lg); lg.connect(wf.frequency); lfo.start();
   wind.connect(wf); wf.connect(windGain); windGain.connect(ambBus);
-  // The crowd: two bands of filtered noise, plus voices added in the loop.
-  const cr = loopNoise(); const cf = AC.createBiquadFilter(); cf.type = 'bandpass'; cf.frequency.value = 650; cf.Q.value = .8; crowdGain = AC.createGain(); crowdGain.gain.value = 0; cr.connect(cf); cf.connect(crowdGain); crowdGain.connect(ambBus);
-  const ch = loopNoise(); const chf = AC.createBiquadFilter(); chf.type = 'bandpass'; chf.frequency.value = 1800; chf.Q.value = 1.2; crowdHi = AC.createGain(); crowdHi.gain.value = 0; ch.connect(chf); chf.connect(crowdHi); crowdHi.connect(ambBus);
+  Crowd.init();
   cricketGain = AC.createGain(); cricketGain.gain.value = .5; cricketGain.connect(ambBus);
   Music.start();
 }
@@ -1249,6 +1397,78 @@ const SFX = {
   drumRoll(big) { if (!AC || !prefs.sound) return; const t = AC.currentTime; for (let i = 0; i < (big ? 32 : 12); i++) { tone(t + i * .12, 130, .2, 'sine', i % 4 ? .15 : .3, sfxBus, { to: 60 }); } },
   cracker(x) { if (!this.ok()) return; const t = AC.currentTime; for (let i = 0; i < 12; i++) noiseHit(t + i * rnd(.03, .07), .04, 'highpass', 1500, 1, .35, sfxBus, x); },
   cricket() { if (!AC || !prefs.sound) return; const t = AC.currentTime, f = rnd(4200, 5200); for (let i = 0; i < 3; i++) tone(t + i * .05, f, .03, 'sine', .04, cricketGain, { x: rnd(0, W) }); },
+};
+
+/* The crowd. Each talker is a buzzy voice through three vowel formants that move syllable by syllable, with
+   little consonant hisses, speaking in phrases with pauses between them. Nearby talkers are clear; far ones are
+   muffled. For big crowds a murmur of speech-shaped noise swells and dips underneath, like distant chatter. */
+const VOW = [[730, 1090, 2440], [270, 2290, 3010], [300, 870, 2240], [530, 1840, 2480], [570, 840, 2410], [440, 1020, 2240], [660, 1720, 2410], [490, 1350, 1690]];
+const Crowd = {
+  talkers: [], bed: null, bedMod: null, bedT: 0, bus: null,
+  init() {
+    this.bus = AC.createGain(); this.bus.connect(ambBus);
+    const send = AC.createGain(); send.gain.value = .45; this.bus.connect(send); send.connect(verb);
+    const src = loopNoise();
+    const f1 = AC.createBiquadFilter(); f1.type = 'bandpass'; f1.frequency.value = 500; f1.Q.value = 1.4;
+    const f2 = AC.createBiquadFilter(); f2.type = 'bandpass'; f2.frequency.value = 1400; f2.Q.value = 2;
+    const g2 = AC.createGain(); g2.gain.value = .5;
+    this.bedMod = AC.createGain(); this.bedMod.gain.value = 0;
+    this.bed = AC.createGain(); this.bed.gain.value = 0;
+    const lp = AC.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400;
+    src.connect(f1); src.connect(f2); f2.connect(g2); f1.connect(this.bedMod); g2.connect(this.bedMod);
+    this.bedMod.connect(lp); lp.connect(this.bed); this.bed.connect(this.bus);
+  },
+  talker(kid) {
+    const t = { kid, f0: kid ? rnd(240, 330) : Math.random() < .5 ? rnd(95, 135) : rnd(170, 235), next: AC.currentTime + rnd(0, .8), left: 0, near: Math.random() < .4, pos: 0 };
+    t.base = t.f0;
+    t.osc = AC.createOscillator(); t.osc.type = 'sawtooth'; t.osc.frequency.value = t.f0;
+    const tilt = AC.createBiquadFilter(); tilt.type = 'lowpass'; tilt.frequency.value = kid ? 4200 : 3200; t.osc.connect(tilt);
+    t.amp = AC.createGain(); t.amp.gain.value = 0;
+    t.f = [0, 1, 2].map(i => {
+      const f = AC.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = [7, 10, 12][i]; f.frequency.value = VOW[0][i];
+      const g = AC.createGain(); g.gain.value = [3, 1.7, .8][i];
+      tilt.connect(f); f.connect(g); g.connect(t.amp); return f;
+    });
+    t.cons = AC.createGain(); t.cons.gain.value = 0;
+    t.src = loopNoise(); const hp = AC.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 3500; t.src.connect(hp); hp.connect(t.cons);
+    t.pan = pan(rnd(0, W)); t.amp.connect(t.pan); t.cons.connect(t.pan);
+    t.out = AC.createGain(); t.out.gain.value = t.near ? 1 : .5; t.pan.connect(t.out);
+    if (t.near) t.out.connect(this.bus);
+    else { const far = AC.createBiquadFilter(); far.type = 'lowpass'; far.frequency.value = 1500; t.out.connect(far); far.connect(this.bus); }
+    t.osc.start();
+    return t;
+  },
+  kill(t) {
+    t.out.gain.setTargetAtTime(0, AC.currentTime, .2);
+    setTimeout(() => { try { t.osc.stop(); t.src.stop(); t.out.disconnect(); } catch (e) { /* already stopped */ } }, 1500);
+  },
+  update(P, kids, chaos) {
+    const now = AC.currentTime;
+    const want = prefs.sound ? Math.min(12, Math.round(Math.sqrt(P) * 1.7)) : 0;
+    while (this.talkers.length < want) this.talkers.push(this.talker(Math.random() < kids / Math.max(1, P)));
+    while (this.talkers.length > want) this.kill(this.talkers.pop());
+    const bedLevel = prefs.sound ? clamp((P - 8) / 60, 0, 1) * (.22 + chaos * .2) : 0;
+    this.bed.gain.setTargetAtTime(bedLevel, now, .5);
+    if (now > this.bedT) { this.bedT = now + rnd(.07, .16); this.bedMod.gain.setTargetAtTime(rnd(.35, 1), now, .04); }
+    // Trouble makes people talk faster and higher.
+    const speed = 1 - chaos * .3, lift = 1 + chaos * .35;
+    for (const t of this.talkers) {
+      while (t.next < now + .25) {
+        let at = Math.max(t.next, now);
+        if (t.left <= 0) { at += rnd(.25, 1.1) * speed; t.left = 2 + Math.floor(Math.random() * 8); t.base = t.f0 * rnd(.92, 1.12); t.pos = 0; }
+        const dur = rnd(.1, .22) * speed * (t.kid ? .85 : 1);
+        const v = pick(VOW), k = t.kid ? 1.18 : t.f0 > 160 ? 1.1 : 1;
+        t.f.forEach((f, i) => f.frequency.setTargetAtTime(v[i] * k, at, .025));
+        const f0 = t.base * lift * (1 + rnd(-.07, .12) - t.pos * .025 + (t.kid ? rnd(-.1, .2) : 0));
+        t.osc.frequency.setTargetAtTime(f0, at, .04);
+        const lvl = (t.near ? .06 : .04) * rnd(.6, 1) * (1 + chaos * .5);
+        t.amp.gain.setTargetAtTime(lvl, at, .018);
+        t.amp.gain.setTargetAtTime(0, at + dur * .75, .035);
+        if (Math.random() < .45) { t.cons.gain.setTargetAtTime(lvl * .35, Math.max(now, at - .01), .006); t.cons.gain.setTargetAtTime(0, at + .03, .01); }
+        t.pos++; t.left--; t.next = at + dur;
+      }
+    }
+  },
 };
 
 /* Music: a small sequencer. The mood follows what is happening on screen. */
@@ -1319,19 +1539,10 @@ function updateAudio(dt, d) {
   else if (S.celebrating >= 3) mood = 'festive';
   Music.setMood(mood);
   const now = AC.currentTime, crowd = Math.sqrt(P / 80);
-  crowdGain.gain.setTargetAtTime(prefs.sound ? crowd * (.35 + chaos * .35) : 0, now, .4);
-  crowdHi.gain.setTargetAtTime(prefs.sound ? Math.sqrt(S.n.kids / 40) * (.12 + chaos * .25) : 0, now, .4);
+  Crowd.update(P, S.n.kids, chaos);
   windGain.gain.setTargetAtTime(.12 * (1 - crowd * .6), now, 1);
   // Crickets only when it is quiet.
   if (Math.random() < dt * 3 * clamp(1 - P / 15, 0, 1)) SFX.cricket();
-  // Voices in the crowd.
-  babbleTimer -= dt * Math.min(24, P * .35 * (1 + chaos));
-  while (babbleTimer <= 0 && P > 0 && prefs.sound) {
-    babbleTimer += 1;
-    const kid = Math.random() < S.n.kids / Math.max(1, P);
-    const f = kid ? rnd(260, 420) : rnd(100, 220);
-    voice(now + Math.random() * .1, f * (1 + chaos * .4), rnd(.1, .28), .035 + chaos * .02, rnd(0, W), { to: f * rnd(.8, 1.3), kid });
-  }
   // Fire crackles while a building burns.
   if (inc === 'fire' && Math.random() < dt * 20) noiseHit(now, .02, 'highpass', 2500, 1, .2, sfxBus);
   if (inc === 'fire' && Math.random() < dt * .5 && fireTarget) noiseHit(now, .6, 'highpass', 3000, .5, .08, sfxBus);
@@ -1351,6 +1562,7 @@ function updateHud(d) {
   const inc = incidentKind();
   $('#pill').textContent = inc ? { fire: 'Fire! Everyone runs', tummy: 'Tummy trouble', police: 'Police visit', rowdy: 'Kids gone wild' }[inc] : d.P ? `${Math.round(S.celebrating)} of ${d.P} people celebrating` : 'An empty, quiet night';
   refreshControls();
+  watchStory(d);
 }
 
 /* ───────────── Main loop ───────────── */
@@ -1374,12 +1586,19 @@ function startNight() {
   running = true; paused = false; syncPause();
   $('#startOv').hidden = true; $('#endOv').hidden = true;
   document.querySelector('.item[data-key="secret"]').hidden = true; document.querySelector('.item[data-key="secret"]').classList.remove('new');
-  audioStart(); refreshControls(); updateHud(MMSim.derive(S));
+  audioStart(); refreshControls();
+  Narr.q = []; stopSpeech(); Narr.said = {}; Narr.last = {}; Narr.meter = { fire: 0, tummy: 0, noise: 0, rowdy: 0 }; Narr.wg = -1; Narr.wgCount = 0;
+  $('#storyLog').innerHTML = '';
+  if (prefs.sound && prefs.narr !== false && !yueVoice()) storyLine(LINES.novoice[0], LINES.novoice[1], '--ink-3');
+  narrate('intro', {}, 2);
+  updateHud(MMSim.derive(S));
 }
 $('#startBtn').addEventListener('click', () => { userActed = true; startNight(); });
-function syncPause() { $('#pauseBtn').setAttribute('aria-pressed', paused); $('#pauseBtn').textContent = paused ? 'Resume' : 'Pause'; if (AC) { paused ? AC.suspend() : prefs.sound && AC.resume(); } }
+function syncPause() { $('#pauseBtn').setAttribute('aria-pressed', paused); $('#pauseBtn').textContent = paused ? 'Resume' : 'Pause'; if (AC) { paused ? AC.suspend() : prefs.sound && AC.resume(); } if (paused) { Narr.q = []; stopSpeech(); } }
 $('#pauseBtn').addEventListener('click', () => { if (!running) return; paused = !paused; syncPause(); });
-$('#soundBtn').addEventListener('click', () => { prefs.sound = !prefs.sound; savePrefs(); syncSound(); if (prefs.sound) audioStart(); });
+$('#soundBtn').addEventListener('click', () => { prefs.sound = !prefs.sound; savePrefs(); syncSound(); if (prefs.sound) audioStart(); else { Narr.q = []; stopSpeech(); } });
+$('#narrBtn').addEventListener('click', () => { prefs.narr = prefs.narr === false; savePrefs(); syncNarr(); if (prefs.narr === false) { Narr.q = []; stopSpeech(); } });
+function syncNarr() { const on = prefs.narr !== false; $('#narrBtn').setAttribute('aria-pressed', on); $('#narrBtn').textContent = on ? 'Cantonese narration on' : 'Cantonese narration off'; }
 function syncSound() { $('#soundBtn').setAttribute('aria-pressed', prefs.sound); $('#soundBtn').textContent = prefs.sound ? 'Sound on' : 'Sound off'; if (master) master.gain.setTargetAtTime(prefs.sound ? .9 : 0, AC.currentTime, .1); }
 $('#langBtn').addEventListener('click', () => { LANG = LANG === 'yue' ? 'cmn' : 'yue'; prefs.lang = LANG; savePrefs(); syncLang(); rerenderZh(); });
 function syncLang() { $('#langBtn').innerHTML = LANG === 'yue' ? 'Cantonese <span class="zh" lang="zh-TW">粵</span>' : 'Mandarin <span class="zh" lang="zh-TW">普</span>'; $('#rubyBtn').textContent = LANG === 'yue' ? 'Jyutping' : 'Pinyin'; }
@@ -1408,16 +1627,20 @@ function endNight() {
       <li>Visitors caught <b>${T.rabbit + T.change + T.dragon}</b></li>
     </ul>
     <p>${tip}</p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="againBtn" type="button">Play another night</button><button class="tool" id="endTales" type="button">Read the Moon Tales</button></div>`;
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="againBtn" type="button">Play again</button><button class="tool" id="endTales" type="button">Read the Moon Tales</button></div>`;
   $('#endOv').hidden = false;
   $('#againBtn').addEventListener('click', startNight);
+  $('#againBtn').focus();
+  const GZ = { legend: '花好月圓', great: '好熱鬧嘅一晚', happy: '開心嘅一晚', quiet: '冷冷清清嘅一晚', empty: '好靜嘅一晚' };
+  narrate('end', { en: names[g], zh: GZ[g], score: Math.round(S.score).toLocaleString('en'), n: Math.round(S.score) }, 3);
   $('#endTales').addEventListener('click', () => openTales());
   refreshControls();
 }
 
 /* ───────────── Boot ───────────── */
 // Drawing functions use the shared `ctx`; icons and tale pictures swap it for their own canvas.
-hydrate(); syncLang(); syncRuby(); syncSound();
+hydrate(); syncLang(); syncRuby(); syncSound(); syncNarr();
+storyLine(LINES.intro[0], LINES.intro[1]);
 resize();
 ctxRef = null;
 document.querySelectorAll('.item').forEach(row => { const c = row.querySelector('canvas'), g = c.getContext('2d'); g.setTransform(2, 0, 0, 2, 0, 0); ctxRef = g; ICON[row.dataset.key](); });

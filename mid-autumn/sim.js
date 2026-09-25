@@ -5,7 +5,8 @@
 (function (root) {
   'use strict';
 
-  const NIGHT = 240;               // seconds of play for 6 pm → midnight
+  const NIGHT = 320;               // seconds of play for 6 pm → midnight
+  const PACE = 0.75;               // how fast trouble meters fill (1 = the original, faster pace)
   const LIMITS = {
     buildings: 8, adults: 40, kids: 40, lanterns: 30, mooncakes: 20, tea: 10, mahjong: 10, fireworks: 10, secret: 10,
   };
@@ -17,10 +18,10 @@
   const KIDS_PER_ADULT = 3;        // one grown-up can keep an eye on 3 kids
 
   const INCIDENTS = {
-    fire:   { dur: 14, keep: 0.15, cause: 'fire' },
-    tummy:  { dur: 12, keep: 0.35, cause: 'tummy' },
-    police: { dur: 12, keep: 0.30, cause: 'noise' },
-    rowdy:  { dur: 10, keep: 0.40, cause: 'rowdy' },
+    fire:   { dur: 18, keep: 0.15, cause: 'fire' },
+    tummy:  { dur: 16, keep: 0.35, cause: 'tummy' },
+    police: { dur: 16, keep: 0.30, cause: 'noise' },
+    rowdy:  { dur: 13, keep: 0.40, cause: 'rowdy' },
   };
 
   function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
@@ -35,7 +36,7 @@
       secretUnlocked: false, informed: 0, plotClock: 0, riskClock: 0, uprising: false,
       glow: 0,                                       // seconds of Chang'e reunion glow left
       special: null,                                 // the special visitor on screen now
-      next: { rabbit: 25, change: 95, dragon: 70, wugang: 0 },
+      next: { rabbit: 30, change: 125, dragon: 95, wugang: 0 },
       seen: { change: false, dragon: false },
       tally: { fire: 0, tummy: 0, police: 0, rowdy: 0, rabbit: 0, change: 0, dragon: 0, wugang: 0, burned: 0, sent: 0, arrested: 0 },
       events: [],
@@ -124,7 +125,7 @@
 
     // Trouble meters.
     if (!s.incident) {
-      const up = s.calm > 0 ? 0 : 1;
+      const up = s.calm > 0 ? 0 : PACE;
       m.fire  = clamp(m.fire  + (d.fireP  > 0 ? d.fireP * 5 * up  : d.fireP * 3 - 2) * dt, 0, 100);
       m.tummy = clamp(m.tummy + (d.tummyP > 0 ? d.tummyP * 9 * up : d.tummyP * 6 - 1.5) * dt, 0, 100);
       m.noise = clamp(m.noise + (d.noiseP > 0 ? d.noiseP * 4 * up : d.noiseP * 2 - 2) * dt, 0, 100);
@@ -140,7 +141,7 @@
       if (!inc.applied && inc.left <= inc.dur * 0.55) { inc.applied = true; applyIncident(s, inc.kind); }
       if (inc.left <= 0) {
         const key = INCIDENTS[inc.kind].cause;
-        m[key] = 20; s.calm = 6; s.incident = null;
+        m[key] = 20; s.calm = 8; s.incident = null;
         emit(s, 'resolved', { kind: inc.kind });
       }
     }
@@ -150,7 +151,7 @@
     s.joy = d.joy;
     s.celebrating = d.inside * Math.min(1, d.joy) * keep;
     s.peak = Math.max(s.peak, s.celebrating);
-    s.score += s.celebrating * dt * 0.5;
+    s.score += s.celebrating * dt * 0.5 * (240 / NIGHT);   // grades were set for a 240 s night
     if (s.glow > 0) s.glow = Math.max(0, s.glow - dt);
 
     // The secret mooncakes (unlocked by the first police visit, or at 9 pm).
@@ -160,7 +161,7 @@
       const enough = s.n.adults >= 12 && s.informed >= 12 && s.informed >= 0.6 * s.n.adults;
       if (s.n.secret > 0 && enough && !s.incident) {
         s.plotClock += dt; s.riskClock = 0;
-        if (s.plotClock >= 5) {
+        if (s.plotClock >= 6) {
           s.uprising = true; s.bonus += 1500; s.score += 1500;
           s.n.secret = 0; m.noise = 0;
           emit(s, 'uprising');
@@ -168,7 +169,7 @@
       } else if (s.n.secret > 0 && !s.incident) {
         // Too few people know: the note gets passed to the wrong person.
         s.plotClock = 0; s.riskClock += dt;
-        if (s.riskClock >= 12) { s.riskClock = 0; s.n.secret = 0; emit(s, 'discovered'); m.noise = 100; startIncident(s, 'police'); }
+        if (s.riskClock >= 15) { s.riskClock = 0; s.n.secret = 0; emit(s, 'discovered'); m.noise = 100; startIncident(s, 'police'); }
       } else { s.plotClock = 0; s.riskClock = 0; }
     }
 
@@ -179,11 +180,11 @@
     } else {
       const R = s.rand;
       if (s.t >= s.next.rabbit) {
-        s.special = { kind: 'rabbit', left: 5, dur: 5 }; s.next.rabbit = s.t + 40 + R() * 30; emit(s, 'special', { kind: 'rabbit' });
+        s.special = { kind: 'rabbit', left: 7, dur: 7 }; s.next.rabbit = s.t + 50 + R() * 35; emit(s, 'special', { kind: 'rabbit' });
       } else if (!s.seen.change && s.t >= s.next.change && s.celebrating >= 8) {
-        s.special = { kind: 'change', left: 9, dur: 9 }; s.seen.change = true; emit(s, 'special', { kind: 'change' });
+        s.special = { kind: 'change', left: 13, dur: 13 }; s.seen.change = true; emit(s, 'special', { kind: 'change' });
       } else if (!s.seen.dragon && s.t >= s.next.dragon && s.n.lanterns >= 10 && s.n.adults >= 10 && m.fire < 50) {
-        s.special = { kind: 'dragon', left: 8, dur: 8 }; s.seen.dragon = true; emit(s, 'special', { kind: 'dragon' });
+        s.special = { kind: 'dragon', left: 11, dur: 11 }; s.seen.dragon = true; emit(s, 'special', { kind: 'dragon' });
       }
     }
 
@@ -195,7 +196,7 @@
   function tap(s, kind) {
     if (kind === 'wugang') {
       if (s.t < s.next.wugang) return false;
-      s.next.wugang = s.t + 45; s.m.noise = Math.max(0, s.m.noise - 50); s.m.rowdy = Math.max(0, s.m.rowdy - 25);
+      s.next.wugang = s.t + 60; s.m.noise = Math.max(0, s.m.noise - 50); s.m.rowdy = Math.max(0, s.m.rowdy - 25);
       s.bonus += 100; s.score += 100; s.tally.wugang++; emit(s, 'caught', { kind, points: 100 }); return true;
     }
     if (!s.special || s.special.kind !== kind) return false;
@@ -210,7 +211,7 @@
 
   // The best possible celebrating crowd, for the grade.
   const GRADES = [
-    [9500, 'legend'], [6000, 'great'], [3500, 'happy'], [1200, 'quiet'], [0, 'empty'],
+    [10500, 'legend'], [6000, 'great'], [3500, 'happy'], [1200, 'quiet'], [0, 'empty'],
   ];
   function grade(score) { return GRADES.find(g => score >= g[0])[1]; }
 
