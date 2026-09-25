@@ -59,6 +59,10 @@ Audio API, started only from a button press.
   a mooncake: Ko-fi" / "These games don’t collect any information…") under its version line, and shows the
   Ko-fi links on its end screen, together with a "More from the Game Shelf" card for the other games. The shelf has a
   "For grown-ups" strip above the footer.
+- Every game also has "Know someone who might like this? Tell a friend" (Web Share API with the game
+  link, falling back to copying it), in its footer and end screen, and the shelf has one too. Games with
+  an end screen can offer "Share my night": a picture drawn from the game canvas, shared through the
+  share sheet or saved; nothing is sent to us.
 - When a new game or a big update ships, draft a short Ko-fi post for the user to publish (what the game
   is, what James was curious about, the play link). Ko-fi notifies followers.
 
