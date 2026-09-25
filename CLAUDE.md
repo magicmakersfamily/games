@@ -50,6 +50,17 @@ Audio API, started only from a button press.
    poll `https://magicmakersfamily.github.io/games/<game>/` until it returns 200 and contains the
    new version string (usually 30–60 seconds after the push).
 
+## Follow and support links
+
+- The family's Ko-fi page is **https://ko-fi.com/magicmakers**. It is for grown-ups: plain links only (never the Ko-fi
+  widget or any script, which would load third-party code and cookies), no pop-ups during play, and never
+  an email box that kids could type into.
+- Every game shows the links in its bottom line ("Follow for new games · ♥ Support on Ko-fi") and on its
+  end screen, together with a "More from the Game Shelf" card for the other games. The shelf has a
+  "For grown-ups" strip above the footer.
+- When a new game or a big update ships, draft a short Ko-fi post for the user to publish (what the game
+  is, what James was curious about, the play link). Ko-fi notifies followers.
+
 ## Git
 
 - Account: **magicmakersfamily** only. Commit identity for this repository is

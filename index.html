@@ -55,6 +55,13 @@ h1 { margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(
 .play { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: var(--accent-ink); text-decoration: none; font-weight: 700; font-size: 17px; padding: 12px 22px; border-radius: 12px; }
 .play:hover { filter: brightness(1.08); }
 .play svg { width: 18px; height: 18px; }
+.grownups { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px 24px; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; justify-content: space-between; }
+.grownups h2 { margin: 0 0 4px; font-family: var(--display); font-weight: 800; font-size: 22px; }
+.grownups p { margin: 0; color: var(--ink-2); max-width: 60ch; }
+.grownups-links { display: flex; gap: 10px; flex-wrap: wrap; }
+.support { display: inline-flex; align-items: center; font-weight: 700; font-size: 17px; padding: 12px 20px; border-radius: 12px; border: 1px solid var(--line); color: var(--ink); text-decoration: none; background: var(--chip); }
+.support:hover { border-color: var(--accent); }
+footer a { color: var(--ink-2); }
 footer { border-top: 1px solid var(--line); padding-top: 20px; color: var(--ink-3); font-size: 14px; display: grid; gap: 6px; max-width: 70ch; }
 </style>
 </head>
@@ -71,7 +78,7 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; color: var(--ink-
       <a class="cover" href="aquarium/" aria-label="Play James’s Nature Aquarium"><img src="aquarium/cover.png" alt="A planted aquarium with driftwood, grey stones, green and red plants, blue-and-red tetras and red shrimp" width="1200" height="744"></a>
       <div class="info">
         <h2>James’s Nature Aquarium<span lang="zh-TW">水草</span></h2>
-        <p class="version"><b>Version 3.1</b> · Launched <time datetime="2026-09-24">September 24, 2026</time></p>
+        <p class="version"><b>Version 3.2</b> · Launched <time datetime="2026-09-24">September 24, 2026</time></p>
         <p>Start with an empty tank and build a living ecosystem in the style of Takashi Amano. Add plants, stones, shrimp, fish, light — even a turtle — then watch a week go by. Keep everything in balance to reach a Harmony score of 90.</p>
         <ul class="tags">
           <li>Photosynthesis</li><li>Nitrogen cycle</li><li>Food webs</li><li>Systems thinking</li><li>Chinese words</li><li>Music</li>
@@ -90,8 +97,8 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; color: var(--ink-
       <a class="cover" href="mid-autumn/" aria-label="Play Mid-Autumn Mayhem"><img src="mid-autumn/cover.png" alt="A Hong Kong harbour city at night under a huge full moon, with neon signs, lanterns, a crowd celebrating and Chang'e floating up toward the moon" width="1200" height="744"></a>
       <div class="info">
         <h2>Mid-Autumn Mayhem<span lang="zh-TW">中秋大混亂</span></h2>
-        <p class="version"><b>Version 1.2</b> · Launched <time datetime="2026-09-25">September 25, 2026</time></p>
-        <p>Build the biggest Mid-Autumn party under the full moon: buildings, families, lanterns, mooncakes, tea, mahjong and fireworks. Overdo anything and the fire trucks, ambulances or police show up. Tap the Jade Rabbit and Chang’e in time, and read the moon legends behind them. A storyteller explains everything in English and Chinese, spoken in Cantonese.</p>
+        <p class="version"><b>Version 1.3</b> · Launched <time datetime="2026-09-25">September 25, 2026</time></p>
+        <p>Build the biggest Mid-Autumn party under the full moon: buildings, families, lanterns, mooncakes, tea, mahjong and fireworks. Overdo anything and the fire trucks, ambulances or police show up. Tap the Jade Rabbit and Chang’e in time, and read the moon legends behind them. Fruit brings monkeys, too much food brings a terrible smell, and lantern riddles test your Chinese. A storyteller explains everything in English and Cantonese, and a telescope lets you look up close.</p>
         <ul class="tags">
           <li>Cause and effect</li><li>Ratios</li><li>Chinese legends</li><li>Cantonese narration</li><li>Hong Kong</li><li>Music</li>
         </ul>
@@ -107,8 +114,19 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; color: var(--ink-
     </article>
   </main>
 
+  <aside class="grownups" aria-label="For grown-ups">
+    <div>
+      <h2>For grown-ups</h2>
+      <p>We’re a family making little games about the things we’re learning and curious about. New ones come out whenever we get curious about something new.</p>
+    </div>
+    <div class="grownups-links">
+      <a class="play" href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Follow for new games</a>
+      <a class="support" href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">♥ Support the next game</a>
+    </div>
+  </aside>
+
   <footer>
-    <span>Made at home by Magic Makers Family. More games are on the way.</span>
+    <span>Made at home by Magic Makers Family. More games are on the way. <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></span>
     <span>These games don’t collect any information. Saved progress stays in your own browser.</span>
   </footer>
 </div>

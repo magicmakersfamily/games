@@ -8,7 +8,7 @@
   const NIGHT = 320;               // seconds of play for 6 pm → midnight
   const PACE = 0.75;               // how fast trouble meters fill (1 = the original, faster pace)
   const LIMITS = {
-    buildings: 8, adults: 40, kids: 40, lanterns: 30, mooncakes: 20, tea: 10, mahjong: 10, fireworks: 10, secret: 10,
+    buildings: 8, adults: 40, kids: 40, lanterns: 30, mooncakes: 20, snacks: 20, tea: 10, mahjong: 10, fireworks: 10, secret: 10,
   };
   const PARK = 10;                 // people who fit in the park with no buildings
   const PER_BUILDING = 8;          // people each building holds (balconies and rooftops)
@@ -16,12 +16,14 @@
   const WEDGES = 4;                // a mooncake is rich: families cut it into 4 wedges and share
   const TEA_SERVES = 6;            // one teapot serves 6 people
   const KIDS_PER_ADULT = 3;        // one grown-up can keep an eye on 3 kids
+  const SNACK_SERVES = 5;          // a platter of fruit and snacks feeds 5 people
 
   const INCIDENTS = {
     fire:   { dur: 18, keep: 0.15, cause: 'fire' },
     tummy:  { dur: 16, keep: 0.35, cause: 'tummy' },
     police: { dur: 16, keep: 0.30, cause: 'noise' },
     rowdy:  { dur: 13, keep: 0.40, cause: 'rowdy' },
+    monkeys: { dur: 16, keep: 0.25, cause: 'monkeys' },
   };
 
   function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
@@ -29,16 +31,16 @@
   function create(rand) {
     return {
       t: 0, over: false,
-      n: { buildings: 0, adults: 0, kids: 0, lanterns: 0, mooncakes: 0, tea: 0, mahjong: 0, fireworks: 0, secret: 0 },
-      m: { fire: 0, tummy: 0, noise: 0, rowdy: 0 },
+      n: { buildings: 0, adults: 0, kids: 0, lanterns: 0, mooncakes: 0, snacks: 0, tea: 0, mahjong: 0, fireworks: 0, secret: 0 },
+      m: { fire: 0, tummy: 0, noise: 0, rowdy: 0, monkeys: 0, smell: 0 },
       score: 0, bonus: 0, celebrating: 0, joy: 0, peak: 0,
       incident: null, calm: 0,                       // calm: seconds of grace after an incident
       secretUnlocked: false, informed: 0, plotClock: 0, riskClock: 0, uprising: false,
       glow: 0,                                       // seconds of Chang'e reunion glow left
       special: null,                                 // the special visitor on screen now
-      next: { rabbit: 30, change: 125, dragon: 95, wugang: 0 },
+      next: { rabbit: 30, change: 125, dragon: 95, wugang: 0, riddle: 45 },
       seen: { change: false, dragon: false },
-      tally: { fire: 0, tummy: 0, police: 0, rowdy: 0, rabbit: 0, change: 0, dragon: 0, wugang: 0, burned: 0, sent: 0, arrested: 0 },
+      tally: { fire: 0, tummy: 0, police: 0, rowdy: 0, monkeys: 0, riddles: 0, riddlesRight: 0, rabbit: 0, change: 0, dragon: 0, wugang: 0, burned: 0, sent: 0, arrested: 0 },
       events: [],
       rand: rand || Math.random,
     };
@@ -64,32 +66,38 @@
     const teaCov = P ? Math.min(1, (n.tea * TEA_SERVES) / P) : 0;
     const seatCov = n.adults ? Math.min(1, (n.mahjong * SEATS) / n.adults) : 0;
     const fwJoy = Math.min(1, n.fireworks / 3);
+    const snackCov = P ? Math.min(1, (n.snacks * SNACK_SERVES) / P) : 0;
+    const snackEach = P ? (n.snacks * SNACK_SERVES) / P : 0;
     const unsupervised = Math.max(0, n.kids - KIDS_PER_ADULT * n.adults);
     const adultShare = P ? n.adults / P : 0;
     // Mid-Autumn is a reunion festival: it is best when families (kids AND grown-ups) are together.
     const family = P ? 1 - 0.5 * Math.min(1, Math.abs(adultShare - 0.5) / 0.5) : 0;
 
-    let joy = 0.2 + 0.25 * lanternCov + 0.18 * cakeCov + 0.08 * teaCov + 0.12 * adultShare * seatCov + 0.12 * fwJoy;
+    let joy = 0.2 + 0.25 * lanternCov + 0.18 * cakeCov + 0.1 * snackCov + 0.08 * teaCov + 0.12 * adultShare * seatCov + 0.12 * fwJoy;
     joy *= 1 - Math.min(0.6, crowd * 0.8);
     joy *= family;
+    // A bad smell makes everyone miserable.
+    joy *= 1 - 0.6 * s.m.smell / 100;
     if (s.glow > 0) joy *= 1.25;
     if (s.uprising) joy *= 1.15;
     joy = clamp(joy, 0, 1.2);
 
     // Pressure on each trouble meter; a meter rises while pressure is above zero, and falls while below.
     const fireP = n.fireworks * 1.0 + n.lanterns * 0.06 + unsupervised * 0.15 - (2 + n.adults * 0.1);
-    const tummyP = Math.max(0, wedgesEach - 1) * 2.2 - 0.9 * teaCov - 0.35;
+    const tummyP = Math.max(0, wedgesEach - 1) * 2.6 + Math.max(0, snackEach - 1.2) * 1.4 - 0.9 * teaCov - 0.3;
+    // Too much food left out brings the wild monkeys down from the hills.
+    const monkeyP = Math.max(0, n.snacks - (P / SNACK_SERVES + 2)) * 0.7 + Math.max(0, wedgesEach - 1.6) * 1.5 - 1;
     const noiseP = s.uprising ? -1 : n.mahjong * 1.3 + n.fireworks * 0.9 + P * 0.08 + Math.max(0, P - cap) * 0.2 - 14;
     const rowdyP = unsupervised * 0.6 + Math.max(0, wedgesEach - 1.3) * (P ? n.kids / P : 0) * 4 + crowd * 8 - 1.5;
 
-    return { P, cap, inside, crowd, cakes, wedgesEach, lanternCov, cakeCov, teaCov, seatCov, fwJoy, unsupervised, family, joy, fireP, tummyP, noiseP, rowdyP };
+    return { P, cap, inside, crowd, cakes, wedgesEach, lanternCov, cakeCov, snackCov, snackEach, teaCov, seatCov, fwJoy, unsupervised, family, joy, fireP, tummyP, noiseP, rowdyP, monkeyP };
   }
 
   function emit(s, type, data) { s.events.push(Object.assign({ type, t: s.t }, data || {})); }
 
   function startIncident(s, kind) {
     s.incident = { kind, left: INCIDENTS[kind].dur, dur: INCIDENTS[kind].dur, applied: false };
-    s.tally[kind === 'police' ? 'police' : kind]++;
+    s.tally[kind]++;
     emit(s, 'incident', { kind });
   }
 
@@ -104,13 +112,17 @@
       const P = n.adults + n.kids, take = Math.ceil(P * 0.15);
       const kidsTaken = Math.min(n.kids, Math.round(take * (P ? n.kids / P : 0)));
       n.kids -= kidsTaken; n.adults = Math.max(0, n.adults - (take - kidsTaken));
-      n.mooncakes = Math.floor(n.mooncakes / 2); n.secret = Math.floor(n.secret / 2);
+      n.mooncakes = Math.floor(n.mooncakes / 2); n.secret = Math.floor(n.secret / 2); n.snacks = Math.floor(n.snacks / 2);
+      s.m.smell = Math.min(100, s.m.smell + 45);
       s.tally.sent += take; emit(s, 'sent', { count: take });
     } else if (kind === 'police') {
       const take = Math.min(6, Math.ceil(n.adults * 0.2));
       n.adults -= take; n.mahjong = Math.floor(n.mahjong / 2); n.fireworks = Math.floor(n.fireworks / 2);
       s.tally.arrested += take; emit(s, 'arrested', { count: take });
       if (!s.secretUnlocked) { s.secretUnlocked = true; emit(s, 'unlock'); }
+    } else if (kind === 'monkeys') {
+      n.snacks = 0; n.mooncakes = Math.floor(n.mooncakes / 2); n.lanterns = Math.floor(n.lanterns * 0.8);
+      s.m.smell = Math.min(100, s.m.smell + 40);
     } else if (kind === 'rowdy') {
       n.lanterns = Math.floor(n.lanterns * 0.7); n.mooncakes = Math.floor(n.mooncakes * 0.75);
       s.m.fire = Math.min(95, s.m.fire + 35);
@@ -130,11 +142,13 @@
       m.tummy = clamp(m.tummy + (d.tummyP > 0 ? d.tummyP * 9 * up : d.tummyP * 6 - 1.5) * dt, 0, 100);
       m.noise = clamp(m.noise + (d.noiseP > 0 ? d.noiseP * 4 * up : d.noiseP * 2 - 2) * dt, 0, 100);
       m.rowdy = clamp(m.rowdy + (d.rowdyP > 0 ? d.rowdyP * 6 * up : d.rowdyP * 4 - 2) * dt, 0, 100);
+      m.monkeys = clamp(m.monkeys + (d.monkeyP > 0 ? d.monkeyP * 6 * up : d.monkeyP * 3 - 2) * dt, 0, 100);
       s.calm = Math.max(0, s.calm - dt);
       if (m.fire >= 100) startIncident(s, 'fire');
       else if (m.tummy >= 100) startIncident(s, 'tummy');
       else if (m.noise >= 100) startIncident(s, 'police');
       else if (m.rowdy >= 100) startIncident(s, 'rowdy');
+      else if (m.monkeys >= 100) startIncident(s, 'monkeys');
     } else {
       const inc = s.incident;
       inc.left -= dt;
@@ -145,6 +159,10 @@
         emit(s, 'resolved', { kind: inc.kind });
       }
     }
+
+    // Smell: sick people and monkey mess make it worse; it slowly blows away on the sea breeze.
+    const sickness = Math.max(0, m.tummy - 40) / 60;
+    m.smell = clamp(m.smell + (sickness * 7 * PACE - 1.2) * dt, 0, 100);
 
     // Who is celebrating right now, and the Reunion score.
     const keep = s.incident ? INCIDENTS[s.incident.kind].keep : 1;
@@ -183,6 +201,8 @@
         s.special = { kind: 'rabbit', left: 7, dur: 7 }; s.next.rabbit = s.t + 50 + R() * 35; emit(s, 'special', { kind: 'rabbit' });
       } else if (!s.seen.change && s.t >= s.next.change && s.celebrating >= 8) {
         s.special = { kind: 'change', left: 13, dur: 13 }; s.seen.change = true; emit(s, 'special', { kind: 'change' });
+      } else if (s.t >= s.next.riddle && s.celebrating >= 4) {
+        s.special = { kind: 'riddle', left: 12, dur: 12 }; s.next.riddle = s.t + 55 + R() * 30; emit(s, 'special', { kind: 'riddle' });
       } else if (!s.seen.dragon && s.t >= s.next.dragon && s.n.lanterns >= 10 && s.n.adults >= 10 && m.fire < 50) {
         s.special = { kind: 'dragon', left: 11, dur: 11 }; s.seen.dragon = true; emit(s, 'special', { kind: 'dragon' });
       }
@@ -196,7 +216,7 @@
   function tap(s, kind) {
     if (kind === 'wugang') {
       if (s.t < s.next.wugang) return false;
-      s.next.wugang = s.t + 60; s.m.noise = Math.max(0, s.m.noise - 50); s.m.rowdy = Math.max(0, s.m.rowdy - 25);
+      s.next.wugang = s.t + 60; s.m.noise = Math.max(0, s.m.noise - 50); s.m.rowdy = Math.max(0, s.m.rowdy - 25); s.m.smell = Math.max(0, s.m.smell - 60);
       s.bonus += 100; s.score += 100; s.tally.wugang++; emit(s, 'caught', { kind, points: 100 }); return true;
     }
     if (!s.special || s.special.kind !== kind) return false;
@@ -204,17 +224,25 @@
     if (kind === 'rabbit') { pts = 300; s.m.tummy = 0; }
     if (kind === 'change') { pts = 1000; s.glow = 40; }
     if (kind === 'dragon') { pts = 500; s.m.tummy = 0; s.m.rowdy = 0; }
+    if (kind === 'riddle') { s.special = null; s.tally.riddles++; emit(s, 'riddleOpen'); return true; }
     s.bonus += pts; s.score += pts; s.tally[kind]++; s.special = null;
     emit(s, 'caught', { kind, points: pts });
     return true;
   }
 
+  // The player answered a lantern riddle.
+  function answer(s, right) {
+    if (!right) return 0;
+    s.tally.riddlesRight++; s.bonus += 300; s.score += 300; s.glow = Math.max(s.glow, 10);
+    emit(s, 'caught', { kind: 'riddle', points: 300 }); return 300;
+  }
+
   // The best possible celebrating crowd, for the grade.
   const GRADES = [
-    [10500, 'legend'], [6000, 'great'], [3500, 'happy'], [1200, 'quiet'], [0, 'empty'],
+    [12000, 'legend'], [6000, 'great'], [3500, 'happy'], [1200, 'quiet'], [0, 'empty'],
   ];
   function grade(score) { return GRADES.find(g => score >= g[0])[1]; }
 
-  const api = { NIGHT, LIMITS, PARK, PER_BUILDING, SEATS, WEDGES, TEA_SERVES, KIDS_PER_ADULT, INCIDENTS, GRADES, create, set, derive, step, tap, grade };
+  const api = { NIGHT, LIMITS, PARK, PER_BUILDING, SEATS, WEDGES, TEA_SERVES, KIDS_PER_ADULT, SNACK_SERVES, INCIDENTS, GRADES, create, set, derive, step, tap, answer, grade };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.MMSim = api;
 })(this);

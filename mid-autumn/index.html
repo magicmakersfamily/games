@@ -25,7 +25,7 @@ img { max-width: 100%; }
   --night: #0B1230; --night-2: #111A40; --panel: #162051; --panel-2: #1D2A62; --line: #2C3A78;
   --ink: #F6ECD6; --ink-2: #C9C0AA; --ink-3: #928EA8;
   --gold: #F4C24F; --gold-ink: #2A1A00; --red: #E3493A; --jade: #56B98E;
-  --m-fire: #FF6B3D; --m-tummy: #A6D13A; --m-noise: #7FA8FF; --m-rowdy: #FF7EC7;
+  --m-fire: #FF6B3D; --m-tummy: #A6D13A; --m-noise: #7FA8FF; --m-rowdy: #FF7EC7; --m-monkeys: #E0A466; --m-smell: #B5C24A;
   --display: "Young Serif", Georgia, serif;
   --body: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
   --zh: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
@@ -71,8 +71,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .stage { position: relative; border-radius: 16px; overflow: hidden; background: #081026; border: 1px solid var(--line); aspect-ratio: 1000 / 560; max-width: 100%; touch-action: manipulation; }
 .stage.narrow { aspect-ratio: 700 / 560; }
 #scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.meters { position: absolute; left: 10px; top: 10px; display: grid; gap: 5px; width: min(210px, 42%); pointer-events: auto; }
-.meter { display: grid; grid-template-columns: 1fr auto; gap: 2px 6px; background: rgba(8, 12, 34, .62); border-radius: 8px; padding: 4px 8px 5px; backdrop-filter: blur(3px); }
+.meters { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+@media (max-width: 760px) { .meters { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.meter { display: grid; grid-template-columns: 1fr auto; gap: 2px 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 5px 9px 7px; }
 .meter span { font-size: 11.5px; font-weight: 700; display: flex; gap: 5px; align-items: baseline; }
 .meter span .zh { font-weight: 500; color: var(--ink-2); }
 .meter em { font-style: normal; font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
@@ -97,6 +98,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .line .when { font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .line.speaking .when::after { content: " · speaking Cantonese"; color: var(--gold); }
 @keyframes lin { from { opacity: 0; transform: translateY(-4px); } }
+.rd-eyebrow { margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--gold); font-weight: 700; }
+.rd-eyebrow .zh { text-transform: none; }
+.rd-zh { margin: 0; font-size: 34px; color: var(--gold); font-weight: 900; letter-spacing: .08em; }
+.rd-opts { display: flex; gap: 10px; flex-wrap: wrap; }
+.rd-opts button { font-family: var(--zh); font-size: 34px; font-weight: 700; width: 84px; height: 92px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; display: grid; place-items: center; }
+.rd-opts button:hover { background: #26357A; }
+.rd-opts rt { display: ruby-text !important; font-size: 12px; color: var(--ink-2); }
+.rd-opts button.right { background: #1F6B45; border-color: var(--jade); }
+.rd-opts button.wrong { background: #7A2A22; border-color: var(--red); }
+.rd-result { margin: 0; }
+.rd-result .zh { color: var(--gold); cursor: default; }
 .endmodal { position: fixed; inset: 0; z-index: 15; display: grid; place-items: center; padding: 16px; background: rgba(4, 6, 20, .72); overflow: auto; }
 .celebrate-pill { position: absolute; right: 10px; top: 10px; background: rgba(8,12,34,.62); border-radius: 8px; padding: 4px 9px; font-size: 12px; color: var(--ink-2); }
 .stage.narrow .celebrate-pill { display: none; }
@@ -174,6 +186,14 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
 .cover-mode .stage { width: 1329px; max-width: none; height: 744px; aspect-ratio: auto; margin-left: -64px; border: 0; border-radius: 0; }
 .about { margin: 4px 0 0; font-size: 12.5px; color: var(--ink-3); text-align: center; }
 .about a { color: var(--ink-2); }
+.more { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 8px; }
+.more h3 { margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); }
+.more-game { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 10px; align-items: center; color: var(--ink); text-decoration: none; background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 6px; }
+.more-game:hover { border-color: var(--gold); }
+.more-game img { width: 96px; aspect-ratio: 1200 / 744; object-fit: cover; border-radius: 6px; display: block; }
+.more-game small { display: block; color: var(--ink-3); font-size: 12.5px; }
+.grownups { margin: 0; font-size: 13px; color: var(--ink-2); background: rgba(244, 194, 79, .08); border-radius: 10px; padding: 8px 10px; }
+.grownups a { color: var(--gold); font-weight: 700; }
 @media (prefers-reduced-motion: reduce) { .meter.hot, .line { animation: none; } }
 </style>
 
@@ -197,6 +217,8 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
       </div>
       <button class="tool" id="rubyBtn" type="button" aria-pressed="true">Show Jyutping</button>
       <button class="tool" id="talesBtn" type="button">Moon Tales <span class="zh" lang="zh-TW">故事</span></button>
+      <button class="tool" id="scopeBtn" type="button" aria-pressed="false">Telescope <span class="zh" lang="zh-TW">望遠鏡</span></button>
+      <button class="tool" id="camBtn" type="button" aria-pressed="true">Camera drift</button>
     </div>
   </div>
 
@@ -204,7 +226,6 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
     <div class="left">
     <div class="stage" id="stage">
       <canvas id="scene" aria-label="A city under the full moon on the night of the Mid-Autumn Festival"></canvas>
-      <div class="meters" id="meters"></div>
       <div class="celebrate-pill" id="pill"></div>
 
       <div class="overlay" id="startOv">
@@ -223,10 +244,11 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
       </div>
 
     </div>
+    <div class="meters" id="meters"></div>
     <section class="story" aria-label="Tonight's story">
       <div class="story-head">
         <h2>Tonight’s story <span class="zh" lang="zh-HK">今晚嘅故事</span></h2>
-        <span class="tools"><button class="tool" id="voiceBtn" type="button">Test voice</button><button class="tool" id="narrBtn" type="button" aria-pressed="true">Cantonese narration on</button></span>
+        <span class="tools"><span class="seg" role="group" aria-label="Narration"><button class="tool" id="nBoth" type="button" aria-pressed="true">English + <span class="zh" lang="zh-HK">粵</span></button><button class="tool" id="nYue" type="button" aria-pressed="false"><span class="zh" lang="zh-HK">粵</span> only</button><button class="tool" id="nOff" type="button" aria-pressed="false">Off</button></span><button class="tool" id="voiceBtn" type="button">Test voice</button></span>
       </div>
       <ol class="story-log" id="storyLog" aria-live="polite"></ol>
     </section>
@@ -238,7 +260,18 @@ ruby rt { font-family: var(--body); font-size: 9.5px; font-weight: 400; color: v
     </section>
   </div>
 
-  <p class="about">Version 1.2 · Launched <time datetime="2026-09-25">September 25, 2026</time> · Made for James and friends · <a href="../">The Game Shelf</a></p>
+  <p class="about">Version 1.3 · Launched <time datetime="2026-09-25">September 25, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Follow for new games</a> · <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">♥ Support on Ko-fi</a></p>
+</div>
+
+<div class="endmodal" id="riddleOv" hidden>
+  <div class="card riddle" role="dialog" aria-modal="true" aria-labelledby="rdTitle">
+    <p class="rd-eyebrow">Lantern riddle <span class="zh" lang="zh-HK">燈謎</span> · guess the Chinese character</p>
+    <h2 id="rdTitle"></h2>
+    <p class="rd-zh zh" id="rdZh" lang="zh-HK"></p>
+    <div class="rd-opts" id="rdOpts"></div>
+    <p class="rd-result" id="rdResult" hidden></p>
+    <button class="go" id="rdDone" type="button" hidden>Keep partying</button>
+  </div>
 </div>
 
 <div class="endmodal" id="endOv" hidden>
@@ -278,6 +311,11 @@ const ZH = {
   kids: ['小朋友', 'xiǎo péng yǒu', 'siu2 pang4 jau5', 'kids'],
   lanterns: ['燈籠', 'dēng lóng', 'dang1 lung4', 'lantern'],
   mooncakes: ['月餅', 'yuè bǐng', 'jyut6 beng2', 'mooncake'],
+  snacks: ['生果', 'shēng guǒ', 'saang1 gwo2', 'fruit'],
+  monkeys: ['馬騮', 'mǎ liú', 'maa5 lau1', 'monkey'],
+  smell: ['臭味', 'chòu wèi', 'cau3 mei6', 'bad smell'],
+  telescope: ['望遠鏡', 'wàng yuǎn jìng', 'mong6 jyun5 geng3', 'telescope'],
+  riddle: ['燈謎', 'dēng mí', 'dang1 mai4', 'lantern riddle'],
   tea: ['茶', 'chá', 'caa4', 'tea'],
   mahjong: ['麻將', 'má jiàng', 'maa4 zoeng3', 'mahjong'],
   fireworks: ['煙花', 'yān huā', 'jin1 faa1', 'fireworks'],
@@ -375,7 +413,7 @@ let prefs = { lang: 'yue', ruby: true, sound: true, best: 0, seenTales: {} };
 try { const p = JSON.parse(localStorage.getItem(STORE) || 'null'); if (p) prefs = Object.assign(prefs, p); } catch (e) { /* storage blocked */ }
 function savePrefs() { try { localStorage.setItem(STORE, JSON.stringify(prefs)); } catch (e) { /* storage blocked */ } }
 // Cantonese is the default for everyone; earlier versions saved a confusing toggle, so start fresh once.
-if (prefs.langV !== 2) { prefs.lang = 'yue'; prefs.ruby = true; prefs.langV = 2; savePrefs(); }
+if (prefs.langV !== 3) { prefs.lang = 'yue'; prefs.ruby = true; prefs.nmode = 'both'; prefs.langV = 3; savePrefs(); }
 LANG = prefs.lang === 'cmn' ? 'cmn' : 'yue';
 RUBY = prefs.ruby !== false;
 
@@ -386,6 +424,7 @@ const ITEMS = [
   { key: 'kids', name: 'Kids', step: 2 },
   { key: 'lanterns', name: 'Lanterns', step: 2 },
   { key: 'mooncakes', name: 'Mooncakes', step: 1 },
+  { key: 'snacks', name: 'Fruit & snacks', step: 1 },
   { key: 'tea', name: 'Pots of tea', step: 1 },
   { key: 'mahjong', name: 'Mahjong tables', step: 1 },
   { key: 'fireworks', name: 'Fireworks', step: 1 },
@@ -401,6 +440,7 @@ function hintFor(key, s, d) {
     case 'mooncakes': { const need = Math.ceil(P / MMSim.WEDGES); return [P ? `${need} is right for ${P} people: each cake is cut in 4 wedges` : 'Very rich: families cut them in 4 and share', d.wedgesEach > 1.25]; }
     case 'tea': { const need = Math.ceil(P / MMSim.TEA_SERVES); return [P ? `${need} pots serve ${P} people. Tea helps with rich mooncakes` : 'One pot serves 6 people', false]; }
     case 'mahjong': return [n.mahjong ? `${n.mahjong * MMSim.SEATS} seats, but the tiles are LOUD` : '4 players a table. Clack, clack, clack…', false];
+    case 'snacks': { const need = Math.ceil(P / MMSim.SNACK_SERVES); return [P ? `${need} platters for ${P} people: pomelo, star fruit, persimmon, taro, water caltrops, peanuts, river snails. Too many brings monkeys!` : 'Pomelo, star fruit, persimmon, taro, water caltrops…', S.n.snacks > P / MMSim.SNACK_SERVES + 2]; }
     case 'fireworks': return ['Exciting! But each one adds noise and fire risk', n.fireworks > 3];
     case 'secret': return [`Each one tells 4 grown-ups. Informed: ${s.informed} of ${n.adults}. Need at least 12 and 6 in 10`, false];
   }
@@ -476,6 +516,7 @@ function tables() {
 
 /* ───────────── Particles and bubbles ───────────── */
 function burst(x, y, n, o) {
+  if (lensPass) return;
   for (let i = 0; i < n; i++) {
     const a = o.a != null ? o.a + rnd(-o.spread, o.spread) : Math.random() * TAU, v = rnd(o.v0 || 20, o.v1 || 80);
     parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, g: o.g ?? 60, life: rnd(o.l0 || .6, o.l1 || 1.4), max: 1, c: typeof o.c === 'function' ? o.c() : o.c, r: rnd(o.r0 || 1, o.r1 || 2.4), kind: o.kind || 'dot', drag: o.drag ?? .98 });
@@ -497,15 +538,20 @@ function shadeCol(hex, k) {
   const n = parseInt(hex.slice(1), 16), f = c => Math.round(k < 0 ? c * (1 + k) : c + (255 - c) * k);
   v = `rgb(${f(n >> 16)},${f(n >> 8 & 255)},${f(n & 255)})`; _shade.set(key, v); return v;
 }
-function makeLayer(w, h, fn) {
+function makeLayer(w, h, fn, res = 1) {
+  const k = scale * res;
   const c = document.createElement('canvas');
-  c.width = Math.max(1, Math.ceil(w * scale)); c.height = Math.max(1, Math.ceil(h * scale));
-  const g = c.getContext('2d'); g.setTransform(scale, 0, 0, scale, 0, 0);
+  c.width = Math.max(1, Math.ceil(w * k)); c.height = Math.max(1, Math.ceil(h * k));
+  const g = c.getContext('2d'); g.setTransform(k, 0, 0, k, 0, 0);
   const keep = ctx; ctx = g; try { fn(g); } finally { ctx = keep; }
   c.lw = w; c.lh = h; return c;
 }
 function blit(c, x, y) { ctx.drawImage(c, x, y, c.lw, c.lh); }
-function addLight(x, y, r, col) { if (collectLights) lights.push({ x, y, r, col }); }
+function addLight(x, y, r, col) {
+  if (!collectLights) return;
+  const m = ctx.getTransform();
+  lights.push({ x: (m.a * x + m.c * y + m.e) / scale, y: (m.b * x + m.d * y + m.f) / scale, r: r * Math.hypot(m.a, m.b) / scale, col });
+}
 // Where the current drawing origin sits in scene coordinates (works inside nested transforms).
 function here() { const m = ctx.getTransform(); return { x: m.e / scale, y: m.f / scale, k: Math.hypot(m.a, m.b) / scale }; }
 
@@ -547,8 +593,9 @@ function buildStatic() {
     const limb = ctx.createRadialGradient(c, c, r * .6, c, c, r);
     limb.addColorStop(0, 'rgba(120,90,50,0)'); limb.addColorStop(1, 'rgba(120,90,50,.35)');
     ctx.fillStyle = limb; ctx.fillRect(0, 0, c * 2, c * 2);
+    moonEngraving(c, r);
     ctx.restore();
-  });
+  }, 3);
   LAYERS.clouds = [0, 1, 2, 3].map(k => {
     const CR = srand(100 + k), w = 160 + CR() * 120, h = 34 + CR() * 16;
     return Object.assign(makeLayer(w, h, () => {
@@ -643,63 +690,106 @@ function buildStatic() {
 /* ───────────── Buildings: Hong Kong towers ───────────── */
 const FACADE = ['#2E3148', '#3A3446', '#2C3845', '#3B3350', '#2D3B3A', '#403631', '#2A2F45', '#38333A'];
 const AWNING = ['#B8352C', '#2F7D5B', '#C98A1E', '#2E5F9E', '#9C2F6E', '#B8352C', '#3F8C8C', '#C95A1E'];
+const WY0 = 20;   // first window row, below the painted estate name
 function winGrid(b) {
-  const cols = Math.max(3, Math.floor((b.w - 12) / 13)), rows = Math.max(1, Math.floor((b.h - 42) / 16)), cw = (b.w - 12) / cols;
+  const cols = Math.max(3, Math.floor((b.w - 12) / 13)), rows = Math.max(1, Math.floor((b.h - WY0 - 34) / 16)), cw = (b.w - 12) / cols;
   return { cols, rows, cw };
 }
+// Real Hong Kong public housing estates, and the shop on each ground floor.
+const ESTATES = [['彩虹邨', 'CHOI HUNG ESTATE'], ['華富邨', 'WAH FU ESTATE'], ['石硤尾邨', 'SHEK KIP MEI ESTATE'], ['蘇屋邨', 'SO UK ESTATE'], ['愛民邨', 'OI MAN ESTATE'], ['南山邨', 'NAM SHAN ESTATE'], ['坪石邨', 'PING SHEK ESTATE'], ['樂富邨', 'LOK FU ESTATE']];
+const SHOPS = [
+  { zh: '月記餅家', en: 'BAKERY', col: '#B8302A', kind: 'bakery' }, { zh: '廿四味涼茶', en: 'HERBAL TEA', col: '#1F6B45', kind: 'herbal' },
+  { zh: '好運茶餐廳', en: 'CHA CHAAN TENG', col: '#C9901E', kind: 'cafe' }, { zh: '明記燒臘', en: 'ROAST MEATS', col: '#9C2A1E', kind: 'bbq' },
+  { zh: '新興士多', en: 'STORE', col: '#2E5F9E', kind: 'store' }, { zh: '仁心藥房', en: 'PHARMACY', col: '#2F8C5E', kind: 'pharmacy' },
+  { zh: '德記粥麵', en: 'CONGEE & NOODLES', col: '#B8451E', kind: 'noodle' }, { zh: '海景酒家', en: 'SEAFOOD RESTAURANT', col: '#1E4F8C', kind: 'seafood' },
+];
+const RAINBOW = ['#E85D5D', '#F29B4B', '#F2D24B', '#7CC47A', '#4FA3D9', '#8E6BD9'];
 function facade(b) {
-  const PAD = 14, TOP = 36, w = b.w, h = b.h, R = srand(300 + b.i), col = FACADE[b.i];
+  const PAD = 14, TOP = 36, w = b.w, h = b.h, R = srand(300 + b.i), col = FACADE[b.i], shop = SHOPS[b.i];
   return Object.assign(makeLayer(w + PAD * 2, h + TOP, () => {
     ctx.translate(PAD, TOP);
-    // Side wall, for depth.
     ctx.fillStyle = shadeCol(col, -.45); ctx.beginPath(); ctx.moveTo(w, 0); ctx.lineTo(w + 9, -5); ctx.lineTo(w + 9, h - 3); ctx.lineTo(w, h); ctx.fill();
+    for (let y = 0; y < h; y += 4) { ctx.fillStyle = `rgba(0,0,0,${R() * .08})`; ctx.fillRect(w, y, 9, 2); }
     const fg = ctx.createLinearGradient(0, 0, w, 0); fg.addColorStop(0, shadeCol(col, -.15)); fg.addColorStop(.35, shadeCol(col, .06)); fg.addColorStop(1, shadeCol(col, -.1));
     ctx.fillStyle = fg; ctx.fillRect(0, 0, w, h);
+    const { cols, rows, cw } = winGrid(b);
+    // Choi Hung Estate is famous for its rainbow-painted walls.
+    if (b.i === 0) for (let c = 0; c < cols; c++) { ctx.fillStyle = shadeCol(RAINBOW[c % RAINBOW.length], -.5); ctx.fillRect(4 + c * cw, WY0 - 3, cw - 1, rows * 16 + 2); }
     const mg = ctx.createLinearGradient(0, 0, 0, h); mg.addColorStop(0, 'rgba(255,235,190,.1)'); mg.addColorStop(1, 'rgba(0,0,0,.25)');
     ctx.fillStyle = mg; ctx.fillRect(0, 0, w, h);
-    for (let x = 0; x < w; x += 2) { ctx.fillStyle = `rgba(${R() < .5 ? '255,255,255' : '0,0,0'},${R() * .04})`; ctx.fillRect(x, 0, 2, h); }
-    const { cols, rows, cw } = winGrid(b);
-    for (let r = 0; r <= rows; r++) { ctx.fillStyle = 'rgba(0,0,0,.22)'; ctx.fillRect(0, 8 + r * 16, w, 1); }
+    // Mosaic tiles and rain stains.
+    for (let y = 0; y < h - 24; y += 2.2) for (let x = 0; x < w; x += 2.2) if (R() < .25) { ctx.fillStyle = `rgba(${R() < .5 ? '255,255,255' : '0,0,0'},${.03 + R() * .05})`; ctx.fillRect(x, y, 2, 2); }
+    for (let k = 0; k < 6; k++) { const x = R() * w, sg = ctx.createLinearGradient(0, R() * h * .5, 0, h); sg.addColorStop(0, 'rgba(0,0,0,.14)'); sg.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = sg; ctx.fillRect(x, 0, 2 + R() * 4, h - 24); }
+    // The estate's name, painted near the top.
+    const [ezh, een] = ESTATES[b.i];
+    ctx.fillStyle = 'rgba(236,224,196,.88)'; ctx.textAlign = 'center';
+    ctx.font = `900 8px ${FZH}`; ctx.fillText(ezh, w / 2, 10);
+    ctx.font = `700 3.6px ${FBODY}`; ctx.fillText(een, w / 2, 15.2);
+    ctx.textAlign = 'left';
+    for (let r = 0; r <= rows; r++) { ctx.fillStyle = 'rgba(0,0,0,.22)'; ctx.fillRect(0, WY0 - 2 + r * 16, w, 1); }
     const balcony = b.i % 3 === 1;
     for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-      const wx = 6 + c * cw, wy = 10 + r * 16, ww = cw - 4;
+      const wx = 6 + c * cw, wy = WY0 + r * 16, ww = cw - 4;
       ctx.fillStyle = shadeCol(col, .18); ctx.fillRect(wx - .8, wy - .8, ww + 1.6, 10.6);
       const gg = ctx.createLinearGradient(wx, wy, wx + ww, wy + 9); gg.addColorStop(0, '#1A2040'); gg.addColorStop(1, '#0C1024');
       ctx.fillStyle = gg; ctx.fillRect(wx, wy, ww, 9);
       ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.fillRect(wx + ww / 2 - .3, wy, .6, 9);
-      if (balcony) { ctx.strokeStyle = shadeCol(col, .3); ctx.lineWidth = .6; ctx.beginPath(); ctx.moveTo(wx - 1, wy + 7); ctx.lineTo(wx + ww + 1, wy + 7); for (let x = wx; x <= wx + ww; x += 2) { ctx.moveTo(x, wy + 7); ctx.lineTo(x, wy + 10); } ctx.stroke(); }
-      if (R() < .38) {   // air-conditioner box and its drip stain
+      ctx.fillStyle = 'rgba(255,255,255,.06)'; ctx.fillRect(wx, wy, ww, 1);
+      if (balcony) { ctx.strokeStyle = shadeCol(col, .3); ctx.lineWidth = .5; ctx.beginPath(); ctx.moveTo(wx - 1, wy + 7); ctx.lineTo(wx + ww + 1, wy + 7); for (let x = wx; x <= wx + ww; x += 1.6) { ctx.moveTo(x, wy + 7); ctx.lineTo(x, wy + 10); } ctx.stroke(); }
+      if (R() < .38) {
         const ax = wx + (R() < .5 ? 0 : ww - 6);
         const sg = ctx.createLinearGradient(0, wy + 13, 0, wy + 26); sg.addColorStop(0, 'rgba(0,0,0,.25)'); sg.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.fillStyle = sg; ctx.fillRect(ax + 2, wy + 13, 2, 13);
         ctx.fillStyle = '#9C9A94'; ctx.fillRect(ax, wy + 9.5, 6, 4); ctx.fillStyle = '#6E6C68'; ctx.fillRect(ax, wy + 12.5, 6, 1);
         ctx.fillStyle = 'rgba(40,40,40,.6)'; for (let g = 0; g < 3; g++) ctx.fillRect(ax + 1 + g * 1.6, wy + 10.3, .8, 2);
+        ctx.strokeStyle = 'rgba(40,40,40,.5)'; ctx.lineWidth = .3; ctx.beginPath(); ctx.arc(ax + 4.6, wy + 11.4, 1, 0, TAU); ctx.stroke();
       }
-      if (r < rows - 1 && R() < .12) {   // laundry on a bamboo pole
+      if (r < rows - 1 && R() < .14) {
         const px = c === 0 ? -9 : c === cols - 1 ? wx + ww + 9 : null;
         if (px !== null) {
           const sx = c === 0 ? 0 : w; ctx.strokeStyle = '#9B8A5A'; ctx.lineWidth = .8; ctx.beginPath(); ctx.moveTo(sx, wy + 3); ctx.lineTo(px, wy + 2); ctx.stroke();
-          for (let k = 0; k < 3; k++) { ctx.fillStyle = pick(['#C9C2B0', '#6E88B8', '#B85A5A', '#E0D6A8', '#7FA77F']); const cx = sx + (px - sx) * (.25 + k * .25); ctx.fillRect(cx - 1.5, wy + 2.5, 3, 4 + R() * 3); }
+          for (let k = 0; k < 3; k++) { ctx.fillStyle = pick(['#C9C2B0', '#6E88B8', '#B85A5A', '#E0D6A8', '#7FA77F']); const cx = sx + (px - sx) * (.25 + k * .25); ctx.fillRect(cx - 1.5, wy + 2.5, 3, 4 + R() * 3); ctx.fillStyle = 'rgba(0,0,0,.2)'; ctx.fillRect(cx - 1.5, wy + 2.5, 1, 4); }
         }
       }
-      if (r > rows - 3 && R() < .5) { ctx.strokeStyle = 'rgba(160,160,170,.35)'; ctx.lineWidth = .5; ctx.beginPath(); for (let x = wx + 1; x < wx + ww; x += 1.6) { ctx.moveTo(x, wy); ctx.lineTo(x, wy + 9); } ctx.stroke(); }   // window bars
+      if (r > rows - 3 && R() < .5) { ctx.strokeStyle = 'rgba(160,160,170,.35)'; ctx.lineWidth = .5; ctx.beginPath(); for (let x = wx + 1; x < wx + ww; x += 1.6) { ctx.moveTo(x, wy); ctx.lineTo(x, wy + 9); } ctx.stroke(); }
+      if (R() < .08) { ctx.fillStyle = pick(['#3E7A3E', '#5A8A3A']); for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.arc(wx + 2 + k * 1.5, wy + 8.5, 1.3, 0, TAU); ctx.fill(); } ctx.fillStyle = '#8A5A3A'; ctx.fillRect(wx + 1, wy + 9, ww * .5, 1.5); }   // pot plants
     }
-    // Ground floor shop with a striped awning.
-    const gy = h - 22;
-    ctx.fillStyle = '#0D0F1E'; ctx.fillRect(2, gy + 6, w - 4, 16);
-    const sg = ctx.createLinearGradient(0, gy + 6, 0, h); sg.addColorStop(0, 'rgba(255,200,120,.75)'); sg.addColorStop(1, 'rgba(255,160,80,.35)');
-    ctx.fillStyle = sg; ctx.fillRect(5, gy + 9, w * .55, 12);
-    ctx.fillStyle = 'rgba(40,20,10,.7)'; for (let k = 0; k < 4; k++) ctx.fillRect(8 + k * (w * .12), gy + 12, 2, 9);
-    ctx.fillStyle = AWNING[b.i]; ctx.beginPath(); ctx.moveTo(0, gy + 2); ctx.lineTo(w, gy + 2); ctx.lineTo(w + 3, gy + 8); ctx.lineTo(-3, gy + 8); ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,.25)'; for (let x = 0; x < w; x += 8) ctx.fillRect(x, gy + 2, 4, 6);
+    drawShop(shop, w, h);
     // Roof: parapet, water tank, aerial.
     ctx.fillStyle = shadeCol(col, -.25); ctx.fillRect(-1, -3, w + 2, 4);
     const tx = w * (.15 + R() * .4);
-    ctx.fillStyle = '#4A5068'; ctx.fillRect(tx, -16, 14, 13); ctx.fillStyle = '#5E6680'; ctx.beginPath(); ctx.ellipse(tx + 7, -16, 7, 2, 0, 0, TAU); ctx.fill();
-    ctx.strokeStyle = '#3A3F55'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(tx + 2, -3); ctx.lineTo(tx + 2, -1); ctx.moveTo(tx + 12, -3); ctx.lineTo(tx + 12, -1); ctx.stroke();
+    const tg = ctx.createLinearGradient(tx, 0, tx + 14, 0); tg.addColorStop(0, '#3A4058'); tg.addColorStop(.5, '#5E6680'); tg.addColorStop(1, '#343A50');
+    ctx.fillStyle = tg; ctx.fillRect(tx, -16, 14, 13); ctx.fillStyle = '#6A7290'; ctx.beginPath(); ctx.ellipse(tx + 7, -16, 7, 2, 0, 0, TAU); ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,.3)'; ctx.lineWidth = .4; for (let y = -13; y < -3; y += 3) { ctx.beginPath(); ctx.moveTo(tx, y); ctx.lineTo(tx + 14, y); ctx.stroke(); }
     ctx.strokeStyle = '#6A6F86'; ctx.lineWidth = .8; ctx.beginPath(); ctx.moveTo(w * .75, -3); ctx.lineTo(w * .75, -30); ctx.moveTo(w * .75 - 5, -24); ctx.lineTo(w * .75 + 5, -24); ctx.moveTo(w * .75 - 3, -19); ctx.lineTo(w * .75 + 3, -19); ctx.stroke();
-    if (b.i % 3 === 0) { ctx.fillStyle = '#20243A'; ctx.fillRect(w * .1, -26, w * .45, 14); ctx.strokeStyle = '#555B75'; ctx.strokeRect(w * .1, -26, w * .45, 14); ctx.fillStyle = 'rgba(244,194,79,.35)'; ctx.fillRect(w * .12, -24, w * .41, 10); }
-  }), { pad: PAD, top: TOP });
+    if (b.i % 3 === 0) { ctx.fillStyle = '#20243A'; ctx.fillRect(w * .1, -26, w * .45, 14); ctx.strokeStyle = '#555B75'; ctx.lineWidth = .6; ctx.strokeRect(w * .1, -26, w * .45, 14); ctx.fillStyle = 'rgba(244,194,79,.35)'; ctx.fillRect(w * .12, -24, w * .41, 10); ctx.fillStyle = 'rgba(40,20,10,.6)'; ctx.font = `700 6px ${FZH}`; ctx.fillText('中秋快樂', w * .14, -16.5); }
+  }, 3), { pad: PAD, top: TOP });
+}
+// A ground-floor shop: signboard, awning and a lit window full of the right things.
+function drawShop(shop, w, h) {
+  const gy = h - 26, R = srand(shop.zh.length * 31 + w);
+  ctx.fillStyle = shop.col; ctx.fillRect(0, gy, w, 8);
+  ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.fillRect(0, gy + 7, w, 1);
+  ctx.fillStyle = '#FFF4D6'; ctx.font = `900 6px ${FZH}`; ctx.fillText(shop.zh, 3, gy + 6);
+  ctx.font = `700 2.8px ${FBODY}`; ctx.textAlign = 'right'; ctx.fillText(shop.en, w - 3, gy + 5.6); ctx.textAlign = 'left';
+  ctx.fillStyle = '#0D0F1E'; ctx.fillRect(2, gy + 8, w - 4, 18);
+  const lg = ctx.createLinearGradient(0, gy + 8, 0, h); lg.addColorStop(0, shop.kind === 'seafood' ? 'rgba(120,200,255,.7)' : 'rgba(255,214,150,.85)'); lg.addColorStop(1, 'rgba(255,170,90,.35)');
+  ctx.fillStyle = lg; ctx.fillRect(4, gy + 9, w * .62, 16);
+  const x0 = 6, y0 = gy + 11, ww = w * .58;
+  if (shop.kind === 'bakery') { for (let r = 0; r < 3; r++) for (let c = 0; c < 6; c++) { ctx.fillStyle = (r + c) % 2 ? '#C8302A' : '#E0A83A'; ctx.fillRect(x0 + c * ww / 6, y0 + 8 - r * 3.4, ww / 6 - 1, 3); ctx.fillStyle = '#F4D27A'; ctx.fillRect(x0 + c * ww / 6 + 1, y0 + 9 - r * 3.4, 1.4, .6); } }
+  if (shop.kind === 'herbal') { for (const gx of [x0 + 4, x0 + ww - 8]) { const g = ctx.createRadialGradient(gx, y0 + 6, .5, gx + 1, y0 + 7, 5); g.addColorStop(0, '#FFE7A0'); g.addColorStop(1, '#A8781E'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(gx + 1, y0 + 9, 3.6, 0, TAU); ctx.arc(gx + 1, y0 + 4, 2.4, 0, TAU); ctx.fill(); ctx.fillRect(gx + .5, y0, 1, 2); } ctx.fillStyle = '#3A1A10'; for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.ellipse(x0 + 12 + k * 4, y0 + 11, 1.5, .7, 0, 0, TAU); ctx.fill(); } }
+  if (shop.kind === 'cafe') { for (let k = 0; k < 3; k++) { const tx = x0 + 3 + k * ww / 3; ctx.fillStyle = '#E8E0CC'; ctx.fillRect(tx, y0 + 8, 7, 1); ctx.fillStyle = 'rgba(20,10,8,.8)'; ctx.beginPath(); ctx.arc(tx + 1, y0 + 4, 1.4, 0, TAU); ctx.arc(tx + 6, y0 + 4.5, 1.4, 0, TAU); ctx.fill(); ctx.fillRect(tx, y0 + 5.5, 2.2, 3); ctx.fillRect(tx + 5, y0 + 6, 2.2, 3); } ctx.fillStyle = '#F4F0E0'; ctx.fillRect(x0 + ww - 6, y0 - 1, 5, 7); ctx.fillStyle = '#C8302A'; for (let k = 0; k < 4; k++) ctx.fillRect(x0 + ww - 5.5, y0 + k * 1.6, 4, .5); }
+  if (shop.kind === 'bbq') { ctx.fillStyle = '#6A5A4A'; ctx.fillRect(x0, y0 - 1, ww, .6); for (let k = 0; k < 5; k++) { const dx = x0 + 3 + k * ww / 5; const g = ctx.createLinearGradient(dx - 2, 0, dx + 2, 0); g.addColorStop(0, '#6A2A0E'); g.addColorStop(.5, '#C0641E'); g.addColorStop(1, '#6A2A0E'); ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(dx, y0); ctx.quadraticCurveTo(dx + 3.4, y0 + 5, dx, y0 + 10); ctx.quadraticCurveTo(dx - 3.4, y0 + 5, dx, y0); ctx.fill(); } ctx.fillStyle = '#B8281E'; for (let k = 0; k < 4; k++) ctx.fillRect(x0 + ww * .1 + k * 3, y0 + 11, 1.4, 3); }
+  if (shop.kind === 'store') { ctx.fillStyle = 'rgba(210,230,255,.5)'; ctx.fillRect(x0, y0 - 1, ww * .45, 13); for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) { ctx.fillStyle = pick(['#E83A2A', '#2E8AE0', '#F2C230', '#3AB85A', '#F4F4F4']); ctx.fillRect(x0 + 1 + c * 2.2, y0 + r * 4, 1.4, 3); } ctx.fillStyle = '#C9A15C'; for (let k = 0; k < 3; k++) ctx.fillRect(x0 + ww * .55 + k * 4, y0 + 6, 3, 6); }
+  if (shop.kind === 'pharmacy') { ctx.fillStyle = '#3AE07A'; ctx.fillRect(x0 + ww - 7, y0, 5, 1.6); ctx.fillRect(x0 + ww - 5.3, y0 - 1.7, 1.6, 5); for (let r = 0; r < 3; r++) for (let c = 0; c < 6; c++) { ctx.fillStyle = pick(['#F4F4F4', '#E8D6A0', '#9AD0E8', '#F2A0A0']); ctx.fillRect(x0 + c * 2.6, y0 + 3 + r * 3.5, 2, 2.6); } }
+  if (shop.kind === 'noodle') { ctx.fillStyle = '#8A8E9A'; ctx.fillRect(x0 + 2, y0 + 6, 8, 6); ctx.fillStyle = 'rgba(255,255,255,.35)'; for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.ellipse(x0 + 4 + k * 2, y0 + 2 - k, 1.2, 2.4, 0, 0, TAU); ctx.fill(); } for (let k = 0; k < 4; k++) { ctx.fillStyle = '#F4F0E0'; ctx.beginPath(); ctx.ellipse(x0 + 16 + k * 5, y0 + 11, 2, .9, 0, 0, TAU); ctx.fill(); } }
+  if (shop.kind === 'seafood') { const g = ctx.createLinearGradient(0, y0, 0, y0 + 12); g.addColorStop(0, 'rgba(90,200,255,.7)'); g.addColorStop(1, 'rgba(20,80,160,.8)'); ctx.fillStyle = g; ctx.fillRect(x0, y0, ww * .7, 12); for (let k = 0; k < 6; k++) { ctx.fillStyle = pick(['#FF8A3A', '#F4D27A', '#E8E8F0']); const fx = x0 + 3 + R() * ww * .6, fy = y0 + 2 + R() * 8; ctx.beginPath(); ctx.ellipse(fx, fy, 2, .9, 0, 0, TAU); ctx.fill(); ctx.beginPath(); ctx.moveTo(fx - 2, fy); ctx.lineTo(fx - 3.2, fy - 1); ctx.lineTo(fx - 3.2, fy + 1); ctx.fill(); } }
+  ctx.fillStyle = '#1A1C2A'; ctx.fillRect(w * .68, gy + 9, w * .12, 17);
+  ctx.fillStyle = 'rgba(255,220,160,.5)'; ctx.fillRect(w * .69, gy + 10, w * .1, 7);
+  ctx.fillStyle = AWNING[shop.kind.length % AWNING.length];
+  ctx.beginPath(); ctx.moveTo(0, gy + 8); ctx.lineTo(w, gy + 8); ctx.lineTo(w + 3, gy + 12); ctx.lineTo(-3, gy + 12); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.3)'; for (let x = 0; x < w; x += 6) ctx.fillRect(x, gy + 8, 3, 4);
+  ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.moveTo(-3, gy + 12); for (let x = -3; x <= w + 3; x += 3) ctx.lineTo(x, gy + 12 + (x % 6 ? 1.2 : 0)); ctx.lineTo(w + 3, gy + 12); ctx.fill();
 }
 function buildingLit() { const d = MMSim.derive(S); const housed = Math.max(0, d.inside - MMSim.PARK); return clamp(housed / Math.max(1, S.n.buildings * MMSim.PER_BUILDING), 0, 1); }
 const SIGNS = ['月餅', '茶樓', '酒家', '麻將', '涼茶', '燒臘', '士多', '冰室'];
@@ -710,32 +800,31 @@ function drawBuilding(b, k, t, lit, burning) {
   const { cols, rows, cw } = winGrid(b);
   for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
     const seed = Math.abs(Math.sin((b.i * 97 + r * 13 + c * 7) * 12.9898) * 43758.5453 % 1);
-    const wx = x0 + 6 + c * cw, wy = y0 + 10 + r * 16, ww = cw - 4;
+    const wx = x0 + 6 + c * cw, wy = y0 + WY0 + r * 16, ww = cw - 4;
     if (burning && seed < .55) { ctx.fillStyle = Math.sin(t * 18 + r + c * 2) > 0 ? '#FF7A2E' : '#FFB347'; ctx.fillRect(wx, wy, ww, 9); continue; }
     if (seed > .12 + lit * .72) continue;
     const tv = seed < .03;
     const g = ctx.createLinearGradient(wx, wy, wx, wy + 9);
     g.addColorStop(0, tv ? '#9FC4FF' : seed < .08 ? '#FFE7A8' : '#FFC878'); g.addColorStop(1, tv ? '#5E86D0' : '#E89A4A');
     ctx.fillStyle = g; ctx.fillRect(wx, wy, ww, 9);
-    if (seed > .3) { ctx.fillStyle = 'rgba(120,50,20,.45)'; ctx.fillRect(wx, wy, ww * .3, 9); ctx.fillRect(wx + ww * .72, wy, ww * .28, 9); }   // curtains
-    if (seed > .18 && seed < .24) { ctx.fillStyle = 'rgba(30,15,10,.7)'; ctx.beginPath(); ctx.arc(wx + ww * .55, wy + 4.2, 1.6, 0, TAU); ctx.fill(); ctx.fillRect(wx + ww * .55 - 2.2, wy + 6, 4.4, 3); }   // someone at the window
+    if (seed > .3) { ctx.fillStyle = 'rgba(120,50,20,.45)'; ctx.fillRect(wx, wy, ww * .3, 9); ctx.fillRect(wx + ww * .72, wy, ww * .28, 9); }
+    if (seed > .18 && seed < .26) { ctx.fillStyle = 'rgba(30,15,10,.7)'; ctx.beginPath(); ctx.arc(wx + ww * .55, wy + 4.2, 1.6, 0, TAU); ctx.fill(); ctx.fillRect(wx + ww * .55 - 2.2, wy + 6, 4.4, 3); }
+    if (seed > .26 && seed < .3) { ctx.fillStyle = 'rgba(220,40,30,.9)'; ctx.beginPath(); ctx.ellipse(wx + ww * .3, wy + 3, 1.4, 1.8, 0, 0, TAU); ctx.fill(); }   // a lantern in the window
     ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillRect(wx + ww / 2 - .3, wy, .6, 9);
   }
-  // Neon sign, buzzing now and then.
   const sign = SIGNS[b.i], col = NEON[b.i];
   const on = Math.sin(t * 23 + b.i * 5) > -.97 || Math.random() < .5;
-  const sx = x0 + b.w - 19, sy = y0 + 18, sh = sign.length * 15 + 6;
+  const sx = x0 + b.w - 19, sy = y0 + WY0 + 8, sh = sign.length * 15 + 6;
   ctx.fillStyle = '#0A0C1C'; ctx.fillRect(sx, sy, 16, sh);
   ctx.strokeStyle = on ? col : shadeCol(col, -.6); ctx.lineWidth = 1; ctx.strokeRect(sx + .5, sy + .5, 15, sh - 1);
   ctx.save(); ctx.font = `700 13px ${FZH}`; ctx.fillStyle = on ? col : shadeCol(col, -.6);
-  if (on) { ctx.shadowColor = col; ctx.shadowBlur = 8; }
+  if (on) { ctx.shadowColor = col; ctx.shadowBlur = 8 * (lensPass ? LENS.z : 1); }
   [...sign].forEach((ch, i) => ctx.fillText(ch, sx + 1.5, sy + 16 + i * 15));
   ctx.restore();
   if (on) addLight(sx + 8, sy + sh / 2, 30, col);
-  // Blinking red aircraft light on the aerial.
   if (Math.sin(t * 2.5 + b.i) > .6) { ctx.fillStyle = '#FF3B30'; ctx.beginPath(); ctx.arc(x0 + b.w * .75, y0 - 30, 1.4, 0, TAU); ctx.fill(); addLight(x0 + b.w * .75, y0 - 30, 10, '#FF3B30'); }
-  // Red lanterns along the awning once the city has lanterns.
-  if (S.n.lanterns > 4) for (let x = x0 + 8; x < x0 + b.w - 6; x += 16) drawLantern(x, G.road - 12, .55, true, 0);
+  addLight(x0 + b.w * .35, G.road - 8, 34, SHOPS[b.i].kind === 'seafood' ? '#7ACBFF' : '#FFC878');
+  if (S.n.lanterns > 4) for (let x = x0 + 8; x < x0 + b.w - 6; x += 16) drawLantern(x, G.road - 12, .5, true, 0);
 }
 
 /* ───────────── Sky, water and street, drawn each frame ───────────── */
@@ -748,19 +837,11 @@ function drawSky(t) {
   halo.addColorStop(0, 'rgba(255,236,180,.32)'); halo.addColorStop(.4, 'rgba(255,220,160,.08)'); halo.addColorStop(1, 'rgba(255,220,160,0)');
   ctx.fillStyle = halo; ctx.fillRect(m.x - m.r * 4, m.y - m.r * 4, m.r * 8, m.r * 8);
   blit(LAYERS.moon, m.x - m.r - 2, m.y - m.r - 2);
-  // The osmanthus tree, Wu Gang with his axe, and the rabbit, faint on the moon's face.
-  ctx.fillStyle = 'rgba(140,105,60,.33)';
-  ctx.fillRect(m.x + 10, m.y + 2, 2.2, 15);
-  for (const [dx, dy, r] of [[11, -3, 7], [6, 0, 5], [16, 0, 5], [11, -8, 5]]) { ctx.beginPath(); ctx.arc(m.x + dx, m.y + dy, r, 0, TAU); ctx.fill(); }
-  const chop = Math.sin(t * 6) > 0 ? -.7 : .25;
-  ctx.strokeStyle = 'rgba(115,82,40,.5)'; ctx.lineWidth = 1.4; ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.arc(m.x - 1, m.y + 6, 1.8, 0, TAU); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(m.x - 1, m.y + 8); ctx.lineTo(m.x - 1, m.y + 14); ctx.lineTo(m.x - 3, m.y + 19); ctx.moveTo(m.x - 1, m.y + 14); ctx.lineTo(m.x + 1, m.y + 19);
-  ctx.moveTo(m.x - 1, m.y + 10); ctx.lineTo(m.x - 1 + Math.cos(chop) * 7, m.y + 10 + Math.sin(chop) * 7); ctx.stroke();
-  ctx.fillStyle = 'rgba(140,105,60,.3)'; ctx.beginPath(); ctx.ellipse(m.x - 22, m.y + 24, 6, 4, 0, 0, TAU); ctx.ellipse(m.x - 26, m.y + 17, 1.6, 5, -.3, 0, TAU); ctx.fill();
+  drawWuGang(m.x + m.r * .02, m.y + m.r * .44, 1, t);
+  drawMoonRabbit(m.x - m.r * .44, m.y + m.r * .5, 1, t);
   if (running && S.t >= S.next.wugang) {
     const pulse = .5 + .5 * Math.sin(t * 5);
-    ctx.strokeStyle = `rgba(255,220,120,${.4 + .5 * pulse})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(m.x + 4, m.y + 8, 14 + pulse * 4, 0, TAU); ctx.stroke();
+    ctx.strokeStyle = `rgba(255,220,120,${.4 + .5 * pulse})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(m.x + 8, m.y + 12, 18 + pulse * 4, 0, TAU); ctx.stroke();
   }
   for (const c of LAYERS.clouds) { const x = ((c.x0 + t * c.v) % (W + c.lw + 100)) - c.lw - 50; blit(c, x, c.y); }
 }
@@ -824,7 +905,7 @@ function drawLamp(x, t) {
 function roundRect(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h); }
 function drawLantern(x, y, s, glow, kind) {
   ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
-  if (glow) { const h = here(); if (collectLights) addLight(h.x, h.y, 22 * h.k, kind === 1 ? '#FFE9C8' : '#FF9A4A'); else { const g = ctx.createRadialGradient(0, 0, 1, 0, 0, 16); g.addColorStop(0, 'rgba(255,170,80,.5)'); g.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = g; ctx.fillRect(-16, -16, 32, 32); } }
+  if (glow) { if (collectLights) addLight(0, 0, 22, kind === 1 ? '#FFE9C8' : '#FF9A4A'); else { const g = ctx.createRadialGradient(0, 0, 1, 0, 0, 16); g.addColorStop(0, 'rgba(255,170,80,.5)'); g.addColorStop(1, 'rgba(255,120,40,0)'); ctx.fillStyle = g; ctx.fillRect(-16, -16, 32, 32); } }
   if (kind === 1) {   // rabbit lantern, white paper lit from inside
     const g = ctx.createRadialGradient(0, 0, 1, 0, 0, 8); g.addColorStop(0, '#FFF6E0'); g.addColorStop(1, '#E8D6C0');
     ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, 0, 7.5, 5, 0, 0, TAU); ctx.fill();
@@ -933,6 +1014,9 @@ function outfit(kind) {
   if (o.dress === 'skirt') o.skirt = pick(['#2F3F5C', '#8A2F2F', '#D9CFC0', '#6E2C5A', '#1E1E24']);
   o.jacket = !kid && !o.dress && Math.random() < .3 ? pick(['#2A2E38', '#5A4A3A', '#3E4A5E', '#6A2A2A']) : null;
   o.cap = pick(['#1F3F6E', '#8A2F2F', '#E4E0D6']);
+  o.pattern = Math.random() < (kid ? .5 : .3) ? pick(['stripe', 'stripe', 'dots']) : '';
+  o.glasses = elder ? Math.random() < .6 : !kid && Math.random() < .15;
+  o.bag = !kid && female && Math.random() < .35 ? pick(['#6A2A2A', '#2A2E38', '#C9A56B', '#E4E0D6']) : null;
   o.h = kid ? rnd(.9, 1.08) : rnd(.94, 1.06) * (elder ? .95 : 1) * (female ? .95 : 1);
   return o;
 }
@@ -949,28 +1033,32 @@ function newPerson(kind) {
 function drawPerson(p, t) {
   const kid = p.kind === 'kid';
   const s = (p.scale || depth(p.y)) * (kid ? .74 : 1) * (p.h || 1);
-  const moving = Math.hypot(p.tx - p.x, p.ty - p.y) > 2 && p.seat < 0;
-  const flee = p.state === 'flee', seated = p.seat >= 0, sick = p.sick > .5 && !flee;
-  const party = p.state === 'party' && !moving && !seated && !sick;
+  const pose = p.pose || '';
+  const moving = Math.hypot(p.tx - p.x, p.ty - p.y) > 2 && p.seat < 0 && pose !== 'squat' && pose !== 'bend';
+  const flee = p.state === 'flee' || pose === 'hold', seated = p.seat >= 0, sick = p.sick > .5 && !flee;
+  const squat = pose === 'squat', bend = pose === 'bend';
+  const party = p.state === 'party' && !moving && !seated && !sick && !pose;
+  const pinch = p.stink && !flee && !seated && !pose;
   let lift = 0;
   if (party) lift = Math.max(0, Math.sin(t * 7 + p.ph)) * 4.5;
   if (flee) lift = Math.abs(Math.sin(t * 15 + p.ph)) * 2.5;
-  ctx.save(); ctx.translate(p.x, p.y); ctx.scale(s, s);
+  ctx.save(); ctx.translate(p.x + (squat ? Math.sin(t * 40) * .4 : 0), p.y); ctx.scale(s, s);
   ctx.fillStyle = 'rgba(5,6,22,.42)'; ctx.beginPath(); ctx.ellipse(0, 0, 7 - lift * .4, 2, 0, 0, TAU); ctx.fill();
   ctx.translate(0, -lift); ctx.scale(p.dir || 1, 1);
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   const ph = t * (flee ? 16 : kid ? 11 : 8.5) + p.ph;
   const sw = moving ? Math.sin(ph) : 0, amp = flee ? .8 : .5;
   const LEG = kid ? 12 : 17, TOR = kid ? 10 : 13.5;
-  const hipY = seated ? -9 : -LEG, shY = hipY - TOR;
-  const lean = flee ? 3 : sick ? 3.5 : p.elder ? 1.6 : 0;
-  const skin = p.skin || '#E6BC98', top = p.top || p.cloth || '#3F6E9E';
+  const hipY = seated ? -9 : squat ? -6 : -LEG, shY = hipY - TOR + (bend ? 3 : 0);
+  const lean = bend ? 7 : flee ? 3 : sick ? 3.5 : p.elder ? 1.6 : 0;
+  const skin = p.skin || '#E6BC98', top = p.top || '#3F6E9E';
   const qipao = p.dress === 'qipao';
   const legCol = qipao || p.dress === 'skirt' ? shadeCol(skin, -.1) : (p.pants || '#2B3445');
   const legW = kid ? 3 : 3.5, half = LEG / 2;
   const leg = (dirv, back) => {
-    let hx = dirv * .9, kx, ky, fx, fy;
+    const hx = dirv * .9; let kx, ky, fx, fy;
     if (seated) { kx = 7; ky = hipY + 1; fx = 7.5 + dirv * .8; fy = 0; }
+    else if (squat) { kx = 6 + dirv; ky = -8; fx = 2 + dirv * 1.5; fy = 0; }
     else {
       const v = sw * dirv, a1 = v * amp, a2 = a1 - Math.max(0, -v) * .9 * (moving ? 1 : 0);
       kx = hx + Math.sin(a1) * half; ky = hipY + Math.cos(a1) * half;
@@ -978,16 +1066,20 @@ function drawPerson(p, t) {
     }
     ctx.strokeStyle = back ? shadeCol(legCol.startsWith('#') ? legCol : '#2B3445', -.3) : legCol; ctx.lineWidth = legW;
     ctx.beginPath(); ctx.moveTo(hx, hipY); ctx.lineTo(kx, ky); ctx.lineTo(fx, fy); ctx.stroke();
-    ctx.fillStyle = back ? shadeCol(p.shoe || '#1A1A1E', -.3) : (p.shoe || '#1A1A1E');
-    ctx.beginPath(); ctx.ellipse(fx + 1.3, fy - .7, 2.5, 1.3, 0, 0, TAU); ctx.fill();
+    const sh = p.shoe || '#1A1A1E';
+    ctx.fillStyle = back ? shadeCol(sh, -.3) : sh; ctx.beginPath(); ctx.ellipse(fx + 1.3, fy - .7, 2.5, 1.3, 0, 0, TAU); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(fx - 1, fy - .3, 4.6, .4);
   };
   leg(-1, true); leg(1, false);
-  // Arms: angle 0 hangs straight down, positive swings forward.
-  const shX = (kid ? 3.2 : p.female ? 3.6 : 4.3);
+  const shX = kid ? 3.2 : p.female ? 3.6 : 4.3;
   const armAngles = front => {
+    if (pose === 'hold') return front ? [-.9, -2.2] : [-2.4 + Math.sin(ph * 1.2) * .4, -2.8];
+    if (bend) return [.9, .5];
+    if (squat) return [1.2, .6];
     if (flee) return [-2.5 + Math.sin(ph * 1.2 + front) * .45, -2.8];
     if (party) return front ? [-2.7, -2.4 + Math.sin(t * 9 + p.ph) * .5] : [-2.4, -2.9];
     if (seated) return [.8, 1.5];
+    if (front && pinch) return [1.7, 3.4];
     if (sick) return front ? [.35, 2.1] : [.1, .3];
     if (front && p.lantern) return [.55, 1.05];
     const v = -sw * (front ? 1 : -1) * .55; return [v, v + .3];
@@ -1006,45 +1098,70 @@ function drawPerson(p, t) {
     if (front) hand = { x: hx, y: hy };
   };
   arm(false);
+  if (p.bag) { ctx.strokeStyle = 'rgba(30,20,15,.7)'; ctx.lineWidth = .5; ctx.beginPath(); ctx.moveTo(-shX + 1.5 + lean, shY + 1); ctx.lineTo(-shX - .5, hipY + 1); ctx.stroke(); ctx.fillStyle = p.bag; roundRect(-shX - 3.2, hipY - 1, 5, 4, 1); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.2)'; ctx.fillRect(-shX - 2.6, hipY - .4, 3.8, .5); }
   // Torso, lit from the front.
   const wa = kid ? 3.2 : p.female ? 3.1 : 3.9;
+  const torso = () => { ctx.beginPath(); ctx.moveTo(-wa, hipY + 1.5); ctx.lineTo(-shX + lean * .7, shY + 2); ctx.quadraticCurveTo(-shX + lean, shY, -shX * .4 + lean, shY - .2); ctx.lineTo(shX * .4 + lean, shY - .2); ctx.quadraticCurveTo(shX + lean, shY, shX + lean * .8, shY + 2); ctx.lineTo(wa, hipY + 1.5); ctx.closePath(); };
   const tg = ctx.createLinearGradient(-shX, 0, shX, 0);
   tg.addColorStop(0, shadeCol(top, -.35)); tg.addColorStop(.6, top); tg.addColorStop(1, shadeCol(top, .12));
-  ctx.fillStyle = tg;
-  ctx.beginPath(); ctx.moveTo(-wa, hipY + 1.5); ctx.lineTo(-shX + lean * .7, shY + 2); ctx.quadraticCurveTo(-shX + lean, shY, -shX * .4 + lean, shY - .2);
-  ctx.lineTo(shX * .4 + lean, shY - .2); ctx.quadraticCurveTo(shX + lean, shY, shX + lean * .8, shY + 2); ctx.lineTo(wa, hipY + 1.5); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = tg; torso(); ctx.fill();
+  if (p.pattern || qipao) {
+    ctx.save(); torso(); ctx.clip();
+    if (qipao) { ctx.strokeStyle = 'rgba(240,200,110,.45)'; ctx.lineWidth = .4; for (let k = 0; k < 5; k++) { ctx.beginPath(); ctx.arc(-2 + k * 1.6 + lean, shY + 3 + (k % 2) * 4, 1, 0, TAU); ctx.stroke(); } }
+    else if (p.pattern === 'stripe') { ctx.fillStyle = shadeCol(top, top > '#888888' ? -.35 : .4); for (let y = shY + 1; y < hipY + 2; y += 2.2) ctx.fillRect(-shX - 1 + lean, y, shX * 2 + 2, .8); }
+    else { ctx.fillStyle = shadeCol(top, .45); for (let y = shY + 1.5; y < hipY + 1; y += 2.4) for (let x = -shX + (y * 3 % 2); x < shX + lean; x += 2.4) ctx.fillRect(x, y, .8, .8); }
+    ctx.restore();
+  }
+  ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.beginPath(); ctx.moveTo(lean - 1.4, shY - .1); ctx.lineTo(lean + .2, shY + 2); ctx.lineTo(lean + 1.6, shY - .1); ctx.fill();   // collar
+  if (!kid && !p.jacket && !qipao && !p.pattern) { ctx.fillStyle = 'rgba(255,255,255,.35)'; for (let k = 1; k < 4; k++) ctx.fillRect(lean * .9 + .3, shY + k * 3, .6, .6); }
   if (p.jacket) { ctx.fillStyle = p.jacket; ctx.beginPath(); ctx.moveTo(-wa - .3, hipY + 1.8); ctx.lineTo(-shX + lean * .7 - .2, shY + 2); ctx.quadraticCurveTo(-shX + lean, shY, -shX * .3 + lean, shY - .2); ctx.lineTo(lean * .8 + .4, hipY + 1.8); ctx.fill(); ctx.fillStyle = shadeCol(p.jacket, .15); ctx.fillRect(shX * .35 + lean * .9, shY + .5, 1.4, TOR); }
   if (qipao) {
-    ctx.fillStyle = top; ctx.beginPath(); ctx.moveTo(-wa, hipY + 1); ctx.lineTo(-wa - 1, -3); ctx.lineTo(wa + 1, -3); ctx.lineTo(wa, hipY + 1); ctx.fill();
+    ctx.fillStyle = top; ctx.beginPath(); ctx.moveTo(-wa, hipY + 1); ctx.lineTo(-wa - 1, squat ? -2 : -3); ctx.lineTo(wa + 1, squat ? -2 : -3); ctx.lineTo(wa, hipY + 1); ctx.fill();
     ctx.strokeStyle = '#E8C45A'; ctx.lineWidth = .6; ctx.beginPath(); ctx.moveTo(lean - 1.5, shY); ctx.quadraticCurveTo(lean + 1, shY + 3, shX * .6 + lean, shY + 4); ctx.moveTo(-wa - 1, -3); ctx.lineTo(wa + 1, -3); ctx.stroke();
   } else if (p.dress === 'skirt') {
     ctx.fillStyle = p.skirt; ctx.beginPath(); ctx.moveTo(-wa, hipY); ctx.lineTo(-wa - 2.6, hipY * .42); ctx.lineTo(wa + 2.6, hipY * .42); ctx.lineTo(wa, hipY); ctx.fill();
-  } else if (!seated) { ctx.fillStyle = shadeCol(legCol.startsWith('#') ? legCol : '#2B3445', -.1); ctx.fillRect(-wa, hipY - .5, wa * 2, 2.5); }
-  if (kid && p.top) { ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.fillRect(-1.5 + lean, shY + 4, 3, 2); }
+    ctx.fillStyle = 'rgba(0,0,0,.15)'; ctx.fillRect(-1, hipY, .6, -hipY * .55);
+  } else if (!seated) { ctx.fillStyle = shadeCol(legCol.startsWith('#') ? legCol : '#2B3445', -.25); ctx.fillRect(-wa, hipY - .5, wa * 2, 1.6); ctx.fillStyle = '#C9A15C'; ctx.fillRect(lean * .2 - .6, hipY - .5, 1.2, 1.6); }
   // Head.
-  const hr = kid ? 3.9 : 3.4, hy = shY - (kid ? 4.6 : 4.4) - .3, hx = lean * 1.15 + .5;
-  ctx.fillStyle = shadeCol(skin, -.12); ctx.fillRect(hx - 1.2, shY - 2.2, 2.4, 2.6);
+  const hr = kid ? 3.9 : 3.4, hy = shY - (kid ? 4.6 : 4.4) - .3 + (bend ? 2 : 0), hx = lean * 1.15 + .5 + (bend ? 2 : 0);
+  ctx.fillStyle = shadeCol(skin, -.12); ctx.fillRect(hx - 1.2 - (bend ? 1 : 0), shY - 2.2, 2.4, 2.6);
   if (p.hair === 1) { ctx.fillStyle = p.hairC; ctx.beginPath(); ctx.moveTo(hx - hr, hy - 1); ctx.quadraticCurveTo(hx - hr - 1.2, hy + 5, hx - hr + .6, shY + 3.5); ctx.lineTo(hx - .5, shY + 1); ctx.lineTo(hx + 1, hy); ctx.fill(); }
-  if (p.hair === 3) { ctx.strokeStyle = p.hairC; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(hx - hr + .5, hy - 1.5); ctx.quadraticCurveTo(hx - hr - 3 + Math.sin(ph) * (moving ? 1.5 : .3), hy + 1, hx - hr - 2 + Math.sin(ph) * (moving ? 2 : .4), hy + 5); ctx.stroke(); }
-  const face = sick ? '#A7C77A' : skin;
-  const fg = ctx.createRadialGradient(hx + 1, hy - 1, .5, hx, hy, hr * 1.2); fg.addColorStop(0, shadeCol(face.startsWith('#') ? face : '#E6BC98', .12)); fg.addColorStop(1, shadeCol(face.startsWith('#') ? face : '#E6BC98', -.18));
+  if (p.hair === 3) { ctx.strokeStyle = p.hairC; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(hx - hr + .5, hy - 1.5); ctx.quadraticCurveTo(hx - hr - 3 + Math.sin(ph) * (moving ? 1.5 : .3), hy + 1, hx - hr - 2 + Math.sin(ph) * (moving ? 2 : .4), hy + 5); ctx.stroke(); ctx.fillStyle = '#E3493A'; ctx.beginPath(); ctx.arc(hx - hr + .4, hy - 1.4, .7, 0, TAU); ctx.fill(); }
+  const face = sick || bend || squat ? '#A7C77A' : skin;
+  const fg = ctx.createRadialGradient(hx + 1, hy - 1, .5, hx, hy, hr * 1.2); fg.addColorStop(0, shadeCol(face, .12)); fg.addColorStop(1, shadeCol(face, -.18));
   ctx.fillStyle = fg; ctx.beginPath(); ctx.ellipse(hx, hy, hr * .92, hr, 0, 0, TAU); ctx.fill();
+  ctx.fillStyle = shadeCol(face, -.08); ctx.beginPath(); ctx.moveTo(hx + hr * .82, hy - .6); ctx.lineTo(hx + hr * 1.12, hy + .9); ctx.lineTo(hx + hr * .82, hy + 1.1); ctx.fill();   // nose
   ctx.fillStyle = shadeCol(skin, -.2); ctx.beginPath(); ctx.ellipse(hx - .9, hy + .4, .7, 1, 0, 0, TAU); ctx.fill();
+  if (kid) { ctx.fillStyle = 'rgba(240,120,120,.35)'; ctx.beginPath(); ctx.arc(hx + hr * .45, hy + 1.3, .9, 0, TAU); ctx.fill(); }
   ctx.fillStyle = p.hairC || '#15110E';
   if (p.hair === 4) { ctx.beginPath(); ctx.ellipse(hx - 1.6, hy, 1.8, 2.6, 0, 0, TAU); ctx.fill(); }
-  else if (p.hair === 5) { ctx.fillStyle = p.cap; ctx.beginPath(); ctx.ellipse(hx - .2, hy - 1.4, hr + .3, hr * .72, 0, Math.PI, TAU); ctx.fill(); ctx.fillRect(hx, hy - 1.7, hr + 2.4, 1); }
+  else if (p.hair === 5) { ctx.fillStyle = p.cap; ctx.beginPath(); ctx.ellipse(hx - .2, hy - 1.4, hr + .3, hr * .72, 0, Math.PI, TAU); ctx.fill(); ctx.fillRect(hx, hy - 1.7, hr + 2.4, 1); ctx.fillStyle = 'rgba(255,255,255,.3)'; ctx.fillRect(hx - 1, hy - 3.4, 1.6, .5); }
   else {
     ctx.beginPath(); ctx.ellipse(hx - .4, hy - .8, hr + .3, hr * .85, 0, Math.PI * .92, Math.PI * 2.02); ctx.fill();
     ctx.beginPath(); ctx.ellipse(hx - 1.8, hy - .2, 2, hr * .8, 0, 0, TAU); ctx.fill();
-    if (p.hair === 2) { ctx.beginPath(); ctx.arc(hx - 2.6, hy - 2.8, 1.9, 0, TAU); ctx.fill(); }
+    if (p.hair === 2) { ctx.beginPath(); ctx.arc(hx - 2.6, hy - 2.8, 1.9, 0, TAU); ctx.fill(); ctx.strokeStyle = '#C9A15C'; ctx.lineWidth = .4; ctx.beginPath(); ctx.moveTo(hx - 4.4, hy - 4); ctx.lineTo(hx - 1, hy - 1.8); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(255,255,255,.18)'; ctx.lineWidth = .5; ctx.beginPath(); ctx.arc(hx - .2, hy - .6, hr * .8, Math.PI * 1.2, Math.PI * 1.6); ctx.stroke();
   }
-  ctx.fillStyle = '#16120F'; ctx.beginPath(); ctx.arc(hx + hr * .55, hy - .2, .5, 0, TAU); ctx.fill();
-  ctx.strokeStyle = 'rgba(40,20,15,.6)'; ctx.lineWidth = .4; ctx.beginPath(); ctx.moveTo(hx + hr * .3, hy - 1.3); ctx.lineTo(hx + hr * .8, hy - 1.4); ctx.stroke();
-  if (flee || party) { ctx.fillStyle = '#5A1E1E'; ctx.beginPath(); ctx.ellipse(hx + hr * .62, hy + 1.8, .7, flee ? 1.1 : .6, 0, 0, TAU); ctx.fill(); }
-  else { ctx.strokeStyle = 'rgba(90,40,30,.6)'; ctx.beginPath(); ctx.moveTo(hx + hr * .4, hy + 1.8); ctx.lineTo(hx + hr * .8, hy + 1.7); ctx.stroke(); }
+  // Pomelo-peel hat: a real Mid-Autumn joke in Hong Kong.
+  if (p.hat) { const g = ctx.createRadialGradient(hx - 1, hy - hr, .5, hx, hy - hr * .6, hr * 1.4); g.addColorStop(0, '#F2F0A0'); g.addColorStop(1, '#A8C040'); ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(hx - .2, hy - hr * .55, hr + .8, hr * .8, 0, Math.PI, TAU); ctx.fill(); ctx.fillStyle = '#F4E8D8'; ctx.fillRect(hx - hr - .6, hy - hr * .6, hr * 2 + .8, .7); }
+  // Eyes, brows, mouth.
+  const ex = hx + hr * .5, ey = hy - .3;
+  if (squat || bend) { ctx.strokeStyle = '#16120F'; ctx.lineWidth = .45; ctx.beginPath(); ctx.moveTo(ex - .7, ey - .5); ctx.lineTo(ex + .5, ey); ctx.lineTo(ex - .7, ey + .5); ctx.stroke(); }
+  else {
+    ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.ellipse(ex, ey, .8, flee ? .8 : .55, 0, 0, TAU); ctx.fill();
+    ctx.fillStyle = '#16120F'; ctx.beginPath(); ctx.arc(ex + .25, ey, .42, 0, TAU); ctx.fill();
+    ctx.fillStyle = '#FFF'; ctx.fillRect(ex + .3, ey - .35, .2, .2);
+  }
+  ctx.strokeStyle = shadeCol(p.hairC || '#15110E', .1); ctx.lineWidth = .4; ctx.beginPath(); ctx.moveTo(ex - .8, ey - 1.2 - (flee ? .5 : 0)); ctx.lineTo(ex + .8, ey - 1.3 - (sick ? -.3 : 0)); ctx.stroke();
+  if (p.glasses) { ctx.strokeStyle = 'rgba(30,30,40,.85)'; ctx.lineWidth = .35; ctx.beginPath(); ctx.arc(ex, ey, 1.1, 0, TAU); ctx.moveTo(ex - 1.1, ey); ctx.lineTo(hx - .6, ey - .2); ctx.stroke(); }
+  const mx = hx + hr * .62, my = hy + 1.8;
+  if (bend) { ctx.fillStyle = '#5A1E1E'; ctx.beginPath(); ctx.ellipse(mx + .3, my, .9, 1.2, 0, 0, TAU); ctx.fill(); }
+  else if (flee || party) { ctx.fillStyle = '#5A1E1E'; ctx.beginPath(); ctx.ellipse(mx, my, .75, flee ? 1.1 : .6, 0, 0, TAU); ctx.fill(); if (party) { ctx.fillStyle = '#FFF'; ctx.fillRect(mx - .5, my - .5, 1, .3); } }
+  else if (squat) { ctx.strokeStyle = 'rgba(90,40,30,.8)'; ctx.lineWidth = .4; ctx.beginPath(); ctx.moveTo(mx - .6, my); for (let k = 0; k < 4; k++) ctx.lineTo(mx - .6 + k * .45, my + (k % 2 ? .35 : -.35)); ctx.stroke(); }
+  else { ctx.strokeStyle = 'rgba(90,40,30,.6)'; ctx.lineWidth = .4; ctx.beginPath(); ctx.moveTo(hx + hr * .4, my); ctx.quadraticCurveTo(hx + hr * .6, my + (sick ? -.4 : .4), hx + hr * .8, my - .1); ctx.stroke(); }
+  if (sick || squat) { ctx.fillStyle = 'rgba(150,220,255,.8)'; ctx.beginPath(); ctx.ellipse(hx - hr * .2, hy - hr * .7, .5, .8, 0, 0, TAU); ctx.fill(); }   // a bead of sweat
   arm(true);
-  // Carried lantern on a stick.
-  if (p.lantern && hand && !seated && !flee) {
+  if (p.lantern && hand && !seated && !flee && !pose && !pinch) {
     const sx2 = hand.x + 6, sy2 = hand.y - 9 + Math.sin(ph) * (moving ? .8 : .3);
     ctx.strokeStyle = '#8B6B3A'; ctx.lineWidth = .8; ctx.beginPath(); ctx.moveTo(hand.x, hand.y); ctx.lineTo(sx2, sy2); ctx.stroke();
     ctx.strokeStyle = 'rgba(30,20,10,.8)'; ctx.lineWidth = .4; ctx.beginPath(); ctx.moveTo(sx2, sy2); ctx.lineTo(sx2, sy2 + 3); ctx.stroke();
@@ -1222,13 +1339,232 @@ function drawDragon(d, t) {
   ctx.fillStyle = '#FF7A2E'; for (let k = 0; k < 6; k++) ctx.fillRect(hx + 10 + k * 2, hy + 4 + Math.sin(t * 20 + k), 1.4, 1.4);
 }
 
+// The legend painted on the moon: the palace, the osmanthus tree, Wu Gang and the rabbit.
+function moonEngraving(c, r) {
+  const ink = a => `rgba(112,80,42,${a})`;
+  // Moon palace (廣寒宮), faint at the upper left.
+  const px = c - r * .42, py = c - r * .38;
+  ctx.strokeStyle = ink(.35); ctx.lineWidth = .6;
+  for (const [yy, ww] of [[0, 14], [-6, 10], [-11, 6]]) { ctx.beginPath(); ctx.moveTo(px - ww, py + yy + 1.5); ctx.quadraticCurveTo(px, py + yy - 2, px + ww, py + yy + 1.5); ctx.stroke(); }
+  for (const dx of [-8, -3, 3, 8]) { ctx.beginPath(); ctx.moveTo(px + dx, py + 1); ctx.lineTo(px + dx, py + 7); ctx.stroke(); }
+  ctx.fillStyle = ink(.18); ctx.fillRect(px - 9, py + 1, 18, 6);
+  // The osmanthus tree.
+  const tx = c + r * .26, ty = c + r * .42;
+  ctx.strokeStyle = ink(.6); ctx.lineCap = 'round';
+  ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(tx, ty); ctx.quadraticCurveTo(tx - 1, ty - r * .25, tx + 1, ty - r * .42); ctx.stroke();
+  ctx.lineWidth = 1.2;
+  for (const [ax, ay, bx, by] of [[1, -.3, -.18, -.5], [1, -.36, .2, -.55], [0, -.2, -.14, -.3], [1, -.4, .05, -.62]]) { ctx.beginPath(); ctx.moveTo(tx + ax, ty + ay * r); ctx.quadraticCurveTo(tx + (ax + bx * r) / 2, ty + (ay + by) / 2 * r - 2, tx + bx * r, ty + by * r); ctx.stroke(); }
+  ctx.strokeStyle = ink(.25); ctx.lineWidth = .4; for (let k = 0; k < 6; k++) { ctx.beginPath(); ctx.moveTo(tx - 1, ty - k * 3); ctx.lineTo(tx + 1, ty - k * 3 - 1.5); ctx.stroke(); }
+  const TR = srand(77);
+  for (let k = 0; k < 90; k++) { const a = TR() * TAU, d = Math.sqrt(TR()); const x = tx + Math.cos(a) * d * r * .3, y = ty - r * .55 + Math.sin(a) * d * r * .2; ctx.fillStyle = ink(.18 + TR() * .25); ctx.beginPath(); ctx.ellipse(x, y, 1.4 + TR() * 1.6, 1 + TR(), a, 0, TAU); ctx.fill(); }
+  for (let k = 0; k < 50; k++) { const a = TR() * TAU, d = Math.sqrt(TR()); ctx.fillStyle = 'rgba(245,200,90,.75)'; ctx.fillRect(tx + Math.cos(a) * d * r * .3, ty - r * .55 + Math.sin(a) * d * r * .2, .7, .7); }
+  // The rabbit's mortar.
+  const mx = c - r * .28, my = c + r * .5;
+  ctx.fillStyle = ink(.5); ctx.beginPath(); ctx.moveTo(mx - 4, my - 4); ctx.lineTo(mx + 4, my - 4); ctx.lineTo(mx + 3, my + 1); ctx.lineTo(mx - 3, my + 1); ctx.fill();
+  ctx.fillStyle = ink(.3); ctx.beginPath(); ctx.ellipse(mx, my - 4, 4, 1.1, 0, 0, TAU); ctx.fill();
+  // Clouds under the palace.
+  ctx.strokeStyle = ink(.25); ctx.lineWidth = .5; for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.arc(px - 8 + k * 7, py + 10, 3, Math.PI, 0); ctx.stroke(); }
+}
+// Wu Gang, drawn as part of the moon's markings, swinging his axe.
+function drawWuGang(x, y, s, t) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  const body = 'rgba(96,66,34,.72)', line = 'rgba(255,244,215,.35)';
+  const ph = (t * .55) % 1, raise = ph < .72 ? ph / .72 : ph < .8 ? 1 - (ph - .72) / .08 : 0;
+  const a = -2.4 * raise + .35 * (1 - raise);   // arm angle: raised behind the head, then down into the trunk
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.strokeStyle = body; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(-.8, -6); ctx.lineTo(-2.6, 0); ctx.moveTo(.8, -6); ctx.lineTo(2.8, 0); ctx.stroke();
+  ctx.fillStyle = body; ctx.beginPath(); ctx.moveTo(-2.6, -12.5); ctx.lineTo(2.6, -12.5); ctx.lineTo(3.8, -5); ctx.lineTo(-3.4, -5); ctx.fill();
+  ctx.strokeStyle = line; ctx.lineWidth = .35; ctx.beginPath(); ctx.moveTo(-3, -8); ctx.lineTo(3.2, -8); ctx.moveTo(0, -12.5); ctx.lineTo(.6, -5); ctx.stroke();
+  ctx.fillStyle = body; ctx.beginPath(); ctx.arc(.3, -14.6, 2, 0, TAU); ctx.fill(); ctx.beginPath(); ctx.arc(-.4, -17, 1, 0, TAU); ctx.fill();
+  ctx.strokeStyle = line; ctx.lineWidth = .3; ctx.beginPath(); ctx.moveTo(-1.6, -15.3); ctx.lineTo(2.2, -15.3); ctx.stroke();
+  ctx.save(); ctx.translate(1.4, -11.6); ctx.rotate(a);
+  ctx.strokeStyle = body; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(4.5, 2); ctx.stroke();
+  ctx.strokeStyle = 'rgba(80,52,26,.8)'; ctx.lineWidth = .7; ctx.beginPath(); ctx.moveTo(4, 1.8); ctx.lineTo(11, 3.6); ctx.stroke();
+  ctx.fillStyle = 'rgba(70,60,50,.85)'; ctx.beginPath(); ctx.moveTo(10.4, 1); ctx.quadraticCurveTo(13.6, 2.6, 12.2, 6.4); ctx.lineTo(10.6, 4.2); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,250,235,.5)'; ctx.lineWidth = .3; ctx.beginPath(); ctx.moveTo(12.7, 2.4); ctx.quadraticCurveTo(13.1, 4, 12.2, 6.2); ctx.stroke();
+  ctx.restore();
+  if (ph > .72 && ph < .86) { ctx.fillStyle = 'rgba(245,205,110,.9)'; for (let k = 0; k < 4; k++) { const u = (ph - .72) / .14; ctx.fillRect(10 + u * (4 + k * 2), -9 - u * (3 + k * 1.5) + u * u * 6, .8, .8); } }
+  ctx.restore();
+}
+function drawMoonRabbit(x, y, s, t) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  const body = 'rgba(112,80,42,.62)';
+  const pound = Math.abs(Math.sin(t * 3.2));
+  ctx.fillStyle = body;
+  ctx.beginPath(); ctx.ellipse(0, -4, 3.6, 4.6, -.15, 0, TAU); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(1.4, -9.6, 2.4, 2.1, .2, 0, TAU); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(.4, -14, .8, 3.4, -.2, 0, TAU); ctx.ellipse(1.8, -14, .8, 3.4, .15, 0, TAU); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(-3, -1.5, 1.4, 1.2, 0, 0, TAU); ctx.fill();
+  ctx.strokeStyle = 'rgba(96,66,34,.8)'; ctx.lineWidth = .8; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(2.4, -6); ctx.lineTo(5.6, -5 - pound * 3); ctx.stroke();
+  ctx.lineWidth = .9; ctx.beginPath(); ctx.moveTo(5.4, -9.5 - pound * 3); ctx.lineTo(6.6, -.5 - pound * 3); ctx.stroke();
+  ctx.fillStyle = 'rgba(255,248,230,.6)'; ctx.fillRect(2.2, -10.2, .5, .5);
+  ctx.restore();
+}
+const SNACKS = [
+  ['pomelo', '柚子'], ['star fruit', '楊桃'], ['persimmons', '柿'], ['taro', '芋頭'], ['water caltrops', '菱角'], ['peanuts', '花生'], ['river snails', '田螺'],
+];
+function drawSnack(x, y, kind, s = 1) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(0, 2.5, 10, 2.4, 0, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#F2EEE4'; ctx.beginPath(); ctx.ellipse(0, 1.5, 10, 3, 0, 0, TAU); ctx.fill();
+  ctx.strokeStyle = '#2F5FA8'; ctx.lineWidth = .4; ctx.beginPath(); ctx.ellipse(0, 1.5, 8.6, 2.4, 0, 0, TAU); ctx.stroke();
+  const ball = (bx, by, r, c1, c2) => { const g = ctx.createRadialGradient(bx - r * .35, by - r * .4, r * .1, bx, by, r); g.addColorStop(0, c1); g.addColorStop(1, c2); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(bx, by, r, 0, TAU); ctx.fill(); };
+  if (kind === 0) {   // pomelo, one whole and one peeled open
+    ball(-3, -3.5, 5.5, '#F2F0A0', '#9DB83A'); ctx.fillStyle = 'rgba(80,110,30,.35)'; for (let k = 0; k < 10; k++) ctx.fillRect(-6 + (k * 37 % 7), -6 + (k * 23 % 6), .5, .5);
+    ctx.fillStyle = '#3E7A2E'; ctx.beginPath(); ctx.ellipse(-2, -9, 2, .8, -.4, 0, TAU); ctx.fill();
+    ctx.fillStyle = '#F2B8B0'; for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.ellipse(4 + k * 1.3, -1 - (k % 2) * .8, 1.4, 2.2, .3, 0, TAU); ctx.fill(); }
+  } else if (kind === 1) {   // star fruit slices
+    for (const [sx, sy] of [[-4, -1], [1, -2], [5, -.5], [-1, .5]]) { ctx.save(); ctx.translate(sx, sy); ctx.scale(1, .6); ctx.fillStyle = '#F2D23A'; ctx.beginPath(); for (let k = 0; k < 10; k++) { const a = k / 10 * TAU - Math.PI / 2, rr = k % 2 ? 1.5 : 3.4; ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } ctx.fill(); ctx.fillStyle = '#FFF3A8'; ctx.beginPath(); ctx.arc(0, 0, .8, 0, TAU); ctx.fill(); ctx.restore(); }
+  } else if (kind === 2) {   // persimmons
+    for (const [px, py] of [[-4, -2], [2, -2.6], [-1, -5.5], [5, -1]]) { ball(px, py, 3, '#FFB060', '#D8601A'); ctx.fillStyle = '#3E6A2A'; ctx.beginPath(); for (let k = 0; k < 4; k++) { const a = k / 4 * TAU; ctx.ellipse(px + Math.cos(a), py - 2.6 + Math.sin(a) * .4, 1.1, .45, a, 0, TAU); } ctx.fill(); }
+  } else if (kind === 3) {   // taro, one cut to show purple speckles
+    for (const [px, py, rr] of [[-3, -2.5, 4], [3, -2, 3.4]]) { ctx.fillStyle = '#6A4A34'; ctx.beginPath(); ctx.ellipse(px, py, rr, rr * .8, .2, 0, TAU); ctx.fill(); ctx.strokeStyle = 'rgba(40,25,15,.6)'; ctx.lineWidth = .4; for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.arc(px, py + k * 1.2, rr * .8, Math.PI * 1.1, Math.PI * 1.9); ctx.stroke(); } }
+    ctx.fillStyle = '#EDE4F0'; ctx.beginPath(); ctx.ellipse(3, -2, 2.6, 2, .2, 0, TAU); ctx.fill(); ctx.fillStyle = '#9A6AB8'; for (let k = 0; k < 8; k++) ctx.fillRect(1.6 + (k * 7 % 3), -3.4 + (k * 5 % 3), .4, .4);
+  } else if (kind === 4) {   // water caltrops: black, horned like a bat
+    for (const [px, py] of [[-4, -1.5], [1, -2], [5, -1], [-1, -4.5], [3, -5]]) { ctx.fillStyle = '#1E1814'; ctx.beginPath(); ctx.moveTo(px - 4, py - 1); ctx.quadraticCurveTo(px - 2, py + .6, px, py + 1.2); ctx.quadraticCurveTo(px + 2, py + .6, px + 4, py - 1); ctx.quadraticCurveTo(px + 1.5, py - .2, px, py - 1.6); ctx.quadraticCurveTo(px - 1.5, py - .2, px - 4, py - 1); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.25)'; ctx.fillRect(px - .6, py - .8, 1, .4); }
+  } else if (kind === 5) {   // peanuts in the shell
+    for (let k = 0; k < 9; k++) { const px = -6 + (k % 5) * 3, py = -1.5 - Math.floor(k / 5) * 2.4; ctx.fillStyle = '#D8B47A'; ctx.beginPath(); ctx.ellipse(px, py, 1.6, 1, .5 + k, 0, TAU); ctx.ellipse(px + 1.3, py + .5, 1.5, .95, .5 + k, 0, TAU); ctx.fill(); ctx.fillStyle = 'rgba(120,80,30,.4)'; ctx.fillRect(px - .5, py - .2, 1.6, .3); }
+  } else {   // river snails in a bowl of black bean sauce
+    ctx.fillStyle = '#4A2E1A'; ctx.beginPath(); ctx.ellipse(0, -.5, 7, 2.2, 0, 0, TAU); ctx.fill();
+    for (let k = 0; k < 7; k++) { const px = -5 + k * 1.7, py = -1.6 - (k % 2); ctx.fillStyle = '#3A3226'; ctx.beginPath(); ctx.arc(px, py, 1.3, 0, TAU); ctx.fill(); ctx.strokeStyle = 'rgba(200,180,140,.5)'; ctx.lineWidth = .3; ctx.beginPath(); ctx.arc(px, py, .7, 0, Math.PI * 1.5); ctx.stroke(); }
+  }
+  ctx.restore();
+}
+let monkeys = [];
+function updateMonkeys(dt, t) {
+  const inc = incidentKind();
+  const want = inc === 'monkeys' ? 12 : S.m.monkeys > 60 ? 2 : 0;
+  while (monkeys.filter(m => !m.leave).length < want) { const side = Math.random() < .5; monkeys.push({ x: side ? -20 : W + 20, y: rnd(G.roadB + 10, G.plazaB - 10), tx: W / 2, ty: G.plazaB - 18, ph: Math.random() * TAU, dir: 1, carry: 0, wait: 0, perch: null, leave: false }); if (running) SFX.monkey(side ? 0 : W); }
+  let extra = monkeys.filter(m => !m.leave).length - want;
+  for (const m of monkeys) if (extra > 0 && !m.leave) { m.leave = true; m.tx = m.x < W / 2 ? -40 : W + 40; extra--; }
+  for (const m of monkeys) {
+    m.wait -= dt;
+    if (!m.leave && m.wait <= 0 && Math.hypot(m.tx - m.x, m.ty - m.y) < 4) {
+      const r = Math.random();
+      if (r < .3) { m.tx = rnd(W * .25, W * .75); m.ty = G.plazaB - 18; m.carry = 0; }   // raid the banquet table
+      else if (r < .45) { const L = pick(LAMPS); m.tx = W * L + 10; m.ty = G.roadB - 62; m.perch = true; }   // sit on a street lamp
+      else { m.tx = rnd(20, W - 20); m.ty = rnd(G.roadB + 10, G.plazaB - 8); m.perch = false; }
+      m.wait = rnd(.4, 1.6);
+      if (m.ty > G.plazaB - 22 && inc === 'monkeys') m.carry = 1 + Math.floor(Math.random() * 3);
+      if (Math.random() < (inc === 'monkeys' ? .45 : .15)) { puddles.push({ x: m.x, y: Math.max(G.roadB + 6, m.y), life: 30, monkey: true }); burst(m.x, m.y - 4, 5, { c: '#6A4526', v0: 20, v1: 50, g: 200, l0: .4, l1: .7, r0: 1.5, r1: 2.5 }); SFX.splat(m.x); }
+    }
+    const dx = m.tx - m.x, dy = m.ty - m.y, d = Math.hypot(dx, dy), sp = 120;
+    if (d > 1) { const k = Math.min(1, sp * dt / d); m.x += dx * k; m.y += dy * k; if (Math.abs(dx) > 1) m.dir = dx > 0 ? 1 : -1; }
+    if (running && Math.random() < dt * .25) SFX.monkey(m.x);
+  }
+  monkeys = monkeys.filter(m => !m.leave || (m.x > -30 && m.x < W + 30));
+}
+function drawMonkey(m, t) {
+  const moving = Math.hypot(m.tx - m.x, m.ty - m.y) > 2, s = m.perch && !moving ? .9 : depth(Math.max(G.roadB, m.y)) * 1.05;
+  ctx.save(); ctx.translate(m.x, m.y); ctx.scale(s * m.dir, s);
+  if (!m.perch || moving) { ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(0, 0, 8, 2, 0, 0, TAU); ctx.fill(); }
+  const ph = t * 14 + m.ph, bob = moving ? Math.abs(Math.sin(ph)) * 2 : 0;
+  ctx.translate(0, -bob);
+  const fur = ctx.createLinearGradient(0, -14, 0, 0); fur.addColorStop(0, '#9A8468'); fur.addColorStop(1, '#6E5A44');
+  ctx.strokeStyle = '#6E5A44'; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(-6, -8); ctx.quadraticCurveTo(-11, -12 + Math.sin(ph * .3) * 2, -9, -16); ctx.stroke();
+  const leg = (x, ph2) => { ctx.beginPath(); ctx.moveTo(x, -7); ctx.lineTo(x + (moving ? Math.sin(ph2) * 3 : 0), 0); ctx.stroke(); };
+  ctx.lineWidth = 2; if (m.perch && !moving) { ctx.beginPath(); ctx.moveTo(-3, -5); ctx.lineTo(1, -1); ctx.moveTo(3, -5); ctx.lineTo(5, -1); ctx.stroke(); }
+  else { leg(-5, ph); leg(-3, ph + Math.PI); leg(4, ph + Math.PI); leg(6, ph); }
+  ctx.fillStyle = fur; ctx.beginPath(); ctx.ellipse(0, -9, 7.5, 4.8, m.perch && !moving ? -.9 : -.15, 0, TAU); ctx.fill();
+  const hx = m.perch && !moving ? 3 : 7.5, hy = m.perch && !moving ? -16 : -12;
+  ctx.fillStyle = '#8A7458'; ctx.beginPath(); ctx.arc(hx, hy, 3.8, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#E8A8A0'; ctx.beginPath(); ctx.ellipse(hx + 1.4, hy + .6, 2.3, 2.6, 0, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#8A7458'; ctx.beginPath(); ctx.arc(hx - 2.8, hy - 1, 1.2, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#1A1210'; ctx.beginPath(); ctx.arc(hx + 1, hy - .4, .55, 0, TAU); ctx.arc(hx + 2.6, hy - .4, .55, 0, TAU); ctx.fill();
+  ctx.fillStyle = '#B86A64'; ctx.fillRect(hx + 1.2, hy + 1.6, 1.6, .5);
+  if (m.carry) { ctx.save(); ctx.translate(hx + 4, hy + 4); if (m.carry === 1) { ctx.fillStyle = '#B8D04A'; ctx.beginPath(); ctx.arc(0, 0, 3.4, 0, TAU); ctx.fill(); } else if (m.carry === 2) drawMooncake(0, 0, .5, false); else { ctx.fillStyle = '#FF9A40'; ctx.beginPath(); ctx.arc(0, 0, 2.4, 0, TAU); ctx.fill(); } ctx.restore(); }
+  ctx.restore();
+}
+// Flies and stink lines, the uglier the smell the more of them.
+function drawSmell(t) {
+  const sm = S.m.smell / 100;
+  if (sm < .2) return;
+  const srcs = puddles.slice(0, 20);
+  people.forEach((p, i) => { if (p.sick > .5 || p.pose === 'hold') srcs.push({ x: p.x, y: p.y - 10 }); });
+  ctx.strokeStyle = `rgba(150,190,60,${.25 + sm * .4})`; ctx.lineWidth = 1;
+  srcs.forEach((s, i) => { for (let k = -1; k <= 1; k++) { const x = s.x + k * 3, y = s.y - 4; ctx.beginPath(); ctx.moveTo(x, y); for (let j = 1; j <= 6; j++) ctx.lineTo(x + Math.sin(t * 4 + j + i + k) * 1.8, y - j * 2.6 - sm * 4); ctx.stroke(); } });
+  const flies = Math.floor(sm * 40);
+  for (let i = 0; i < flies; i++) {
+    const s = srcs.length ? srcs[i % srcs.length] : { x: W * (i / flies), y: G.roadB + 40 };
+    const x = s.x + Math.sin(t * (6 + i % 3) + i) * 9, y = s.y - 8 + Math.cos(t * (8 + i % 4) + i * 2) * 6;
+    ctx.fillStyle = '#111'; ctx.fillRect(x - .7, y - .5, 1.4, 1);
+    ctx.fillStyle = 'rgba(220,230,255,.5)'; ctx.fillRect(x - 1.4, y - 1.4 + Math.sin(t * 60 + i) * .4, 1, .6); ctx.fillRect(x + .4, y - 1.4 - Math.sin(t * 60 + i) * .4, 1, .6);
+  }
+  ctx.fillStyle = `rgba(140,170,60,${sm * .08})`; ctx.fillRect(0, G.roadB - 30, W, H - G.roadB + 30);
+}
+function drawRiddleLantern(r, t) {
+  const y = r.y + Math.sin(t * 2) * 4;
+  ctx.strokeStyle = '#8B6B3A'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(r.x, y - 28); ctx.lineTo(r.x, y - 16); ctx.stroke();
+  drawLantern(r.x, y, 2.2, true, 0);
+  ctx.save(); ctx.translate(r.x, y + 20 + Math.sin(t * 3) * 1.5);
+  ctx.fillStyle = '#F4E4A8'; ctx.fillRect(-5, 0, 10, 20); ctx.strokeStyle = 'rgba(120,80,20,.5)'; ctx.lineWidth = .5; ctx.strokeRect(-5, 0, 10, 20);
+  ctx.fillStyle = '#A5281B'; ctx.font = `900 8px ${FZH}`; ctx.textAlign = 'center'; ctx.fillText('謎', 0, 12);
+  ctx.restore();
+  addLight(r.x, y, 70, '#FFB060');
+}
+/* ───────────── Camera drift and the telescope ─────────────
+   The camera sits slightly zoomed in and drifts left and right; far layers (sky, moon, hills) move less
+   than the street, which gives depth. The telescope redraws the whole scene magnified inside a circle. */
+const CAM = { on: true, zoom: 1.07, pan: 0 };
+const LENS = { on: false, x: 500, y: 330, r: 110, z: 2.6 };
+let lensPass = false;
+function camA() { return CAM.on && !document.documentElement.classList.contains('cover-mode') ? CAM.zoom : 1; }
+function camE(f) { const A = camA(); return { e: W / 2 - (W / 2 + CAM.pan * f) * A, f: H / 2 - H / 2 * A }; }
+function setCam(f) {
+  const A = camA(), E = camE(f);
+  const lz = lensPass ? LENS.z : 1, lx = lensPass ? (1 - LENS.z) * LENS.x : 0, ly = lensPass ? (1 - LENS.z) * LENS.y : 0;
+  ctx.setTransform(scale * lz * A, 0, 0, scale * lz * A, scale * (lz * E.e + lx), scale * (lz * E.f + ly));
+}
+function toWorld(q, f = 1) {
+  let x = q.x, y = q.y;
+  if (LENS.on && Math.hypot(x - LENS.x, y - LENS.y) < LENS.r) { x = LENS.x + (x - LENS.x) / LENS.z; y = LENS.y + (y - LENS.y) / LENS.z; }
+  const A = camA(), E = camE(f); return { x: (x - E.e) / A, y: (y - E.f) / A };
+}
+function drawLensRim() {
+  ctx.save(); ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  const { x, y, r } = LENS;
+  const g = ctx.createLinearGradient(x - r, y - r, x + r, y + r); g.addColorStop(0, '#F2D58A'); g.addColorStop(.5, '#9A6A22'); g.addColorStop(1, '#E8C070');
+  ctx.strokeStyle = g; ctx.lineWidth = 9; ctx.beginPath(); ctx.arc(x, y, r + 4, 0, TAU); ctx.stroke();
+  ctx.strokeStyle = 'rgba(40,20,5,.6)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.stroke();
+  const gl = ctx.createRadialGradient(x - r * .4, y - r * .5, 1, x, y, r); gl.addColorStop(0, 'rgba(255,255,255,.05)'); gl.addColorStop(.3, 'rgba(255,255,255,0)'); gl.addColorStop(.85, 'rgba(0,0,20,0)'); gl.addColorStop(1, 'rgba(0,0,20,.3)');
+  ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,.12)'; ctx.lineWidth = .6; ctx.beginPath(); ctx.moveTo(x - 8, y); ctx.lineTo(x + 8, y); ctx.moveTo(x, y - 8); ctx.lineTo(x, y + 8); ctx.stroke();
+  ctx.fillStyle = 'rgba(255,240,200,.85)'; ctx.font = `700 10px ${FBODY}`; ctx.textAlign = 'center'; ctx.fillText(`×${LENS.z}  望遠鏡`, x, y + r + 18);
+  ctx.restore();
+}
+// Beautiful when the party is happy, grey-green and gloomy when it stinks or falls apart.
+function colourGrade(t) {
+  ctx.save(); ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  const chaos = S.incident ? 1 : Math.max(S.m.fire, S.m.tummy, S.m.noise, S.m.rowdy, S.m.monkeys) / 100;
+  const ugly = running ? clamp(Math.max(S.m.smell / 100, chaos * .5), 0, 1) : 0;
+  const beauty = running ? clamp(S.celebrating / 45, 0, 1) * (1 - ugly) : .25;
+  if (ugly > .05) {
+    ctx.globalCompositeOperation = 'saturation'; ctx.fillStyle = `rgba(128,128,128,${ugly * .6})`; ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = `rgba(180,195,120,${ugly * .55})`; ctx.fillRect(0, 0, W, H);
+  }
+  if (beauty > .05) {
+    ctx.globalCompositeOperation = 'screen';
+    const g = ctx.createRadialGradient(W * .6, H * .35, 20, W * .5, H * .5, W * .7);
+    g.addColorStop(0, `rgba(255,200,130,${beauty * .14})`); g.addColorStop(1, 'rgba(255,160,90,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+  ctx.globalCompositeOperation = 'source-over';
+  const v = ctx.createRadialGradient(W / 2, H * .5, H * .35, W / 2, H * .5, W * .72);
+  v.addColorStop(0, 'rgba(0,0,12,0)'); v.addColorStop(1, `rgba(0,0,12,${.42 + ugly * .2})`);
+  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+  ctx.restore();
+}
+
 /* ───────────── Lighting: night tint, then every light source glows ───────────── */
 function lightPass() {
-  ctx.save();
+  ctx.save(); setCam(1);
   ctx.globalCompositeOperation = 'multiply';
   const g = ctx.createLinearGradient(0, G.road - 60, 0, H);
   g.addColorStop(0, 'rgb(255,255,255)'); g.addColorStop(.25, 'rgb(170,178,225)'); g.addColorStop(1, 'rgb(150,158,210)');
   ctx.fillStyle = g; ctx.fillRect(0, G.road - 60, W, H - G.road + 60);
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
   ctx.globalCompositeOperation = 'lighter';
   for (const L of lights) {
     const r = L.r, n = parseInt(L.col.slice(1), 16), rgb = `${n >> 16},${n >> 8 & 255},${n & 255}`;
@@ -1246,6 +1582,7 @@ const rockets = [];
 function incidentKind() { return S.incident ? S.incident.kind : null; }
 function updateScene(dt, t) {
   syncPeople();
+  updateMonkeys(dt, t);
   const inc = incidentKind();
   const d = MMSim.derive(S);
   // Seats at mahjong tables.
@@ -1266,6 +1603,7 @@ function updateScene(dt, t) {
     if (p.taken || p.gone) { p.state = 'walk'; }
     else if (inc === 'fire') p.state = 'flee';
     else if (inc === 'rowdy' && p.kind === 'kid') p.state = 'flee';
+    else if (inc === 'monkeys') p.state = idx % 2 ? 'flee' : 'walk';
     else p.state = (idx * .6180339887 % 1) < celebratingShare ? 'party' : 'walk';
     if (!p.gone && !p.taken) housedCount++;
     // Movement
@@ -1278,23 +1616,40 @@ function updateScene(dt, t) {
       else if (Math.hypot(p.tx - p.x, p.ty - p.y) < 3 && p.wait <= 0) { const q = plazaPoint(); p.tx = clamp(p.x + rnd(-160, 160), 16, W - 16); p.ty = q.y; p.wait = rnd(1, 5); }
     }
     const dx = p.tx - p.x, dy = p.ty - p.y, dist = Math.hypot(dx, dy);
-    const sp = p.sp * (p.state === 'flee' ? 3 : 1) * (p.seat >= 0 ? 3 : 1);
+    const sp = p.sp * (p.state === 'flee' || p.pose === 'hold' ? 3 : 1) * (p.seat >= 0 ? 3 : 1);
     if (dist > 1) { const k = Math.min(1, sp * dt / dist); p.x += dx * k; p.y += dy * k; if (Math.abs(dx) > 1 && p.seat < 0) p.dir = dx > 0 ? 1 : -1; }
     else if (p.seat >= 0) p.x = p.tx, p.y = p.ty;
-    // Sickness shows during tummy trouble.
-    const tummyHigh = S.m.tummy > 60 || inc === 'tummy';
-    p.sick = tummyHigh && (idx * .7548776662 % 1) < (inc === 'tummy' ? .45 : (S.m.tummy - 60) / 100) ? 1 : Math.max(0, p.sick - dt);
+    // Sickness: tummy aches make people throw up, or squat where they stand (then run for the toilet).
+    const tummyHigh = S.m.tummy > 45 || inc === 'tummy';
+    p.sick = tummyHigh && (idx * .7548776662 % 1) < (inc === 'tummy' ? .5 : (S.m.tummy - 45) / 90) ? 1 : Math.max(0, p.sick - dt);
     p.smoke = inc === 'fire' && idx % 4 === 0 ? 1 : 0;
-    if (p.sick > .5 && !p.gone && Math.random() < dt * .35) {
-      const s = depth(p.y);
-      if (Math.random() < .55) { burst(p.x + 6 * p.dir * s, p.y - 27 * s, 14, { a: p.dir > 0 ? -.2 : Math.PI + .2, spread: .5, v0: 30, v1: 70, g: 200, c: () => pick(['#9DBE3B', '#C4D65A', '#7FA43A']), l0: .5, l1: .8, r0: 1.4, r1: 2.6 }); say(p, pick(['Blergh!', 'Urrgh…', 'Too much cake!']), '#C9E27A'); SFX.vomit(p.x); }
-      else { puddles.push({ x: p.x - 4 * p.dir, y: p.y + 1, life: 22 }); say(p, pick(['Uh oh…', 'Toilet! Toilet!', 'Oops!']), '#D7A36B'); SFX.fart(p.x); }
+    p.stink = S.m.smell > 45 && idx % 3 === 0;
+    p.hat = p.kind === 'kid' && S.n.snacks >= 3 && idx % 3 === 1;
+    if (p.poseT > 0 && !p.gone && !p.taken) {
+      p.poseT -= dt;
+      if (p.pose !== 'hold') { p.tx = p.x; p.ty = p.y; }
+      const s = depth(p.y) * (p.kind === 'kid' ? .74 : 1);
+      if (p.pose === 'bend' && Math.random() < dt * 16) burst(p.x + 11 * p.dir * s, p.y - 20 * s, 3, { a: Math.PI / 2 + (p.dir > 0 ? -.5 : .5), spread: .35, v0: 25, v1: 55, g: 260, c: () => pick(['#9DBE3B', '#C4D65A', '#7FA43A', '#D8C27A']), l0: .4, l1: .7, r0: 1.4, r1: 2.6 });
+      if (p.poseT <= 0) {
+        if (p.pose === 'squat') {
+          puddles.push({ x: p.x, y: p.y + 1, life: 30 });
+          burst(p.x - 1, p.y - 5 * s, 6, { a: Math.PI / 2, spread: .3, v0: 10, v1: 30, g: 200, c: '#6A4526', l0: .3, l1: .5, r0: 1.6, r1: 2.6 });
+          p.pose = 'hold'; p.poseT = 2.5; const q = plazaPoint(); p.tx = q.x; p.ty = q.y;
+          say(p, pick(['Toilet! Toilet!', 'Oops…', 'Don’t look!']), '#D7A36B'); once('poop', {}, 2);
+        } else if (p.pose === 'bend') { puddles.push({ x: p.x + 10 * p.dir * s, y: p.y + 1, life: 26, sick: true }); p.pose = ''; }
+        else p.pose = '';
+      }
+    } else if (p.sick > .5 && !p.gone && !p.taken && p.seat < 0 && Math.random() < dt * .3) {
+      if (Math.random() < .5) { p.pose = 'bend'; p.poseT = 1.4; say(p, pick(['Blergh!', 'Urrgh…', 'Too much cake!']), '#C9E27A'); SFX.vomit(p.x); }
+      else { p.pose = 'squat'; p.poseT = 1.8; say(p, pick(['Uh oh…', 'Oh no…', 'Can’t hold it!']), '#D7A36B'); SFX.fart(p.x); }
     }
     // Speech bubbles
     p.bubbleT -= dt;
     if (p.bubbleT <= 0 && !p.gone) {
       p.bubbleT = rnd(5, 14) * (people.length > 30 ? 2 : 1);
       if (p.state === 'flee') { say(p, pick(['AAAH!', 'Hot hot hot!', 'Run!', '救命!']), '#FFB27A'); SFX.scream(p.x, p.kind === 'kid'); }
+      else if (inc === 'monkeys' && Math.random() < .6) say(p, pick(['Monkeys!', '馬騮呀!', 'My pomelo!', 'Shoo! Shoo!']), '#FFD8A0');
+      else if (S.m.smell > 45 && Math.random() < .5) say(p, pick(['Eww!', '好臭!', 'What is that smell?!', 'Yuck!']), '#C9E27A');
       else if (p.seat >= 0 && Math.random() < .5) say(p, pick(['碰!', '食糊!', 'Pung!', 'Mahjong!']), '#9FF0C4');
       else if (p.state === 'party') { say(p, pick(['中秋快樂!', 'Happy Mid-Autumn!', 'Look at the moon!', 'Yum, mooncake!', 'Hahaha!']), '#FFE7A6'); if (Math.random() < .5) SFX.laugh(p.x, p.kind === 'kid'); }
       else if (S.m.noise > 70 && Math.random() < .4) say(p, 'Shhh! Too loud!', '#A9C4FF');
@@ -1344,36 +1699,58 @@ function updateScene(dt, t) {
     } else if (special.kind === 'change') {
       if (special.caught) { special.y += (G.plazaB - 40 - special.y) * dt * 1.4; special.x += (W * .5 - special.x) * dt * 1.4; if (Math.abs(special.y - (G.plazaB - 40)) < 3) { couple = { x: W * .5, y: G.plazaB - 40, t: 0 }; special = null; SFX.cheer(1.2); } }
       else { const m = MOON(), u = clamp(special.age / (special.dur || 13), 0, 1); special.x = special.x0 + (m.x - special.x0) * u + Math.sin(u * 8) * 20 * (1 - u); special.y = special.y0 + (m.y - special.y0) * (u * u * (3 - 2 * u)); special.s = 1.1 - u * .6; }
+    } else if (special.kind === 'riddle') {
+      special.x += dt * (W + 80) / (special.dur || 12);
     } else if (special.kind === 'dragon') {
       if (special.caught) { special.dance -= dt; if (Math.random() < dt * 6) { burst(special.cx + rnd(-90, 90), special.cy + rnd(-30, 30), 10, { c: () => pick(['#FF5E3A', '#FFD23F', '#FFF']), v0: 30, v1: 90, g: 80, l0: .3, l1: .7 }); SFX.cracker(special.cx); } if (special.dance <= 0) { special.caught = false; special.leaving = true; special.dance = 0; special.x = special.cx + 70; } }
       else special.x += dt * (W + 300) / (special.dur || 11);
       if (special.leaving && special.x > W + 280) special = null;
     }
   }
+  if (flag) flag.rise = Math.min(1, flag.rise + dt * .24);
+  if (S.celebrating > 30 && !inc && S.m.smell < 20 && Math.random() < dt * 6) burst(rnd(0, W), rnd(60, G.roadB), 1, { c: '#FFE9A8', v0: 2, v1: 8, g: -4, l0: 1.5, l1: 2.5, r0: .8, r1: 1.8, kind: 'glint' });
   if (couple) { couple.t += dt; if (Math.random() < dt * 3) burst(couple.x, couple.y - 50, 1, { c: '#FF8BB0', v0: 10, v1: 25, g: -30, l0: 1, l1: 1.6, r0: 3, r1: 4, kind: 'heart' }); }
 }
 let fireTarget = null;
 function rgbaOf(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${n >> 8 & 255},${n & 255},${a})`; }
 function drawBanquet(by) {
-  const cakes = S.n.mooncakes + S.n.secret;
-  const bw = Math.min(W * .62, 70 + (cakes + S.n.tea) * 17), bx = W / 2 - bw / 2;
+  const cakes = S.n.mooncakes + S.n.secret, snacks = S.n.snacks;
+  const count = cakes + S.n.tea + snacks;
+  const bw = Math.min(W * .9, 70 + count * 15), bx = W / 2 - bw / 2;
   ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.beginPath(); ctx.ellipse(W / 2, by + 7, bw / 2 + 8, 5, 0, 0, TAU); ctx.fill();
   const cg = ctx.createLinearGradient(0, by - 10, 0, by + 7); cg.addColorStop(0, '#C8342A'); cg.addColorStop(1, '#7A1810');
   ctx.fillStyle = cg; ctx.fillRect(bx, by - 10, bw, 17);
   ctx.fillStyle = 'rgba(0,0,0,.18)'; for (let x = bx + 6; x < bx + bw; x += 12) ctx.fillRect(x, by - 5, 3, 12);
   ctx.fillStyle = '#E8B84A'; ctx.fillRect(bx, by - 5, bw, 1.4); ctx.fillRect(bx, by + 5, bw, 1);
+  ctx.fillStyle = '#E8B84A'; ctx.font = `900 6px ${FZH}`; ctx.textAlign = 'center'; for (let x = bx + 20; x < bx + bw - 10; x += 60) ctx.fillText('福', x, by + 3.5); ctx.textAlign = 'left';
   ctx.fillStyle = '#D84A3A'; ctx.fillRect(bx - 2, by - 12, bw + 4, 3);
-  let i = 0; const slot = bw / (cakes + S.n.tea + 1);
+  let i = 0; const slot = bw / (count + 1);
+  const plate = x => { ctx.fillStyle = '#F2EEE4'; ctx.beginPath(); ctx.ellipse(x, by - 12, 10, 3.2, 0, 0, TAU); ctx.fill(); };
   for (let k = 0; k < S.n.tea; k++) drawTeapot(bx + slot * (++i), by - 16, 1);
-  for (let k = 0; k < S.n.mooncakes; k++) { const x = bx + slot * (++i); ctx.fillStyle = '#F2EEE4'; ctx.beginPath(); ctx.ellipse(x, by - 12, 10, 3.2, 0, 0, TAU); ctx.fill(); drawMooncake(x, by - 14, 1, false); }
-  for (let k = 0; k < S.n.secret; k++) { const x = bx + slot * (++i); ctx.fillStyle = '#F2EEE4'; ctx.beginPath(); ctx.ellipse(x, by - 12, 10, 3.2, 0, 0, TAU); ctx.fill(); drawMooncake(x, by - 14, 1, true); }
+  // Mooncakes and fruit take turns along the table.
+  const items = [];
+  for (let k = 0; k < S.n.mooncakes; k++) items.push(['cake', k]);
+  for (let k = 0; k < snacks; k++) items.splice(Math.min(items.length, k * 2 + 1), 0, ['snack', k]);
+  for (let k = 0; k < S.n.secret; k++) items.push(['secret', k]);
+  for (const [type, k] of items) { const x = bx + slot * (++i); if (type === 'snack') drawSnack(x, by - 13, k % SNACKS.length); else { plate(x); drawMooncake(x, by - 14, 1, type === 'secret'); } }
 }
 function drawScene(t) {
-  ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  CAM.pan = CAM.on && running ? Math.sin(t * TAU / 110) * (W * (CAM.zoom - 1) / (2 * CAM.zoom)) * .95 : 0;
+  ctx.setTransform(scale, 0, 0, scale, 0, 0); ctx.clearRect(0, 0, W, H);
+  renderWorld(t);
+  if (LENS.on && running) {
+    ctx.save(); ctx.setTransform(scale, 0, 0, scale, 0, 0); ctx.beginPath(); ctx.arc(LENS.x, LENS.y, LENS.r, 0, TAU); ctx.clip();
+    lensPass = true; try { renderWorld(t); } finally { lensPass = false; ctx.restore(); }
+  }
+  colourGrade(t);
+  if (LENS.on && running) drawLensRim();
+}
+function renderWorld(t) {
   lights = []; collectLights = true;
   try {
-    drawSky(t);
-    drawHarbour(t);
+    setCam(.3); drawSky(t);
+    setCam(.55); drawHarbour(t);
+    setCam(1);
     // Fireworks glow over the harbour, in front of the hills.
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
     for (const q of parts) {
@@ -1413,7 +1790,7 @@ function drawScene(t) {
       if (!fireTarget && inc === 'fire') fireTarget = { x: b.x, y: G.road - 40 };
     }
     if (inc === 'fire' && S.n.buildings === 0 && !ruins.length) { drawFire(W * .37, G.shore + 16, 60, 44, t); fireTarget = { x: W * .37, y: G.shore }; }
-    if (flag) { const top = S.n.buildings ? Math.max(...Array.from({ length: S.n.buildings }, (_, k) => buildingSlot(k)).map(b => b.h)) : 0; const b = S.n.buildings ? Array.from({ length: S.n.buildings }, (_, k) => buildingSlot(k)).find(b => b.h === top) : { x: W * .5 }; drawFlag(b.x, G.road - top - 70 * flag.rise, t, 1); flag.rise = Math.min(1, flag.rise + .004); }
+    if (flag) { const top = S.n.buildings ? Math.max(...Array.from({ length: S.n.buildings }, (_, k) => buildingSlot(k)).map(b => b.h)) : 0; const b = S.n.buildings ? Array.from({ length: S.n.buildings }, (_, k) => buildingSlot(k)).find(b => b.h === top) : { x: W * .5 }; drawFlag(b.x, G.road - top - 70 * flag.rise, t, 1); }
     drawStringLanterns(t);
     for (const q of parts) if (q.kind === 'smoke') {
       const a = clamp(q.life / q.max, 0, 1) * .7, rr = q.r * (2.2 - q.life / q.max);
@@ -1430,6 +1807,8 @@ function drawScene(t) {
     LAMPS.forEach(u => draw.push({ y: G.roadB + 3, f: () => drawLamp(W * u, t) }));
     tables().forEach(tb => draw.push({ y: tb.y, f: () => drawTable(tb.x, tb.y, depth(tb.y) * 1.2) }));
     people.forEach(p => draw.push({ y: p.y, f: () => drawPerson(p, t) }));
+    monkeys.forEach(m => draw.push({ y: m.perch && Math.hypot(m.tx - m.x, m.ty - m.y) < 3 ? G.roadB + 4 : m.y, f: () => drawMonkey(m, t) }));
+    if (special && special.kind === 'riddle') draw.push({ y: 9999, f: () => drawRiddleLantern(special, t) });
     if (S.n.mooncakes + S.n.secret || S.n.tea) draw.push({ y: G.plazaB - 12, f: () => drawBanquet(G.plazaB - 12) });
     if (couple) draw.push({ y: couple.y, f: () => { drawHouYi(couple.x - 10, couple.y, 1.1); drawChangE(couple.x + 12, couple.y + 14, .85, t); } });
     if (special && special.kind === 'rabbit') draw.push({ y: special.cy, f: () => { const hop = Math.abs(Math.sin(special.age * 9)); drawRabbit(special.x, special.cy - (special.caught ? 0 : hop * 18), 1.2, t, special.caught ? 0 : hop); if (special.caught && special.age < 2.2) { ctx.fillStyle = '#B8A07A'; ctx.beginPath(); ctx.moveTo(special.x - 22, special.cy - 9); ctx.lineTo(special.x - 10, special.cy - 9); ctx.lineTo(special.x - 12, special.cy); ctx.lineTo(special.x - 20, special.cy); ctx.fill(); ctx.strokeStyle = '#8A6B3A'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(special.x - 16, special.cy - 8 - Math.abs(Math.sin(special.age * 12)) * 10); ctx.lineTo(special.x - 6, special.cy - 20); ctx.stroke(); } addLight(special.x, special.cy - 10, 40, '#DDE8FF'); } });
@@ -1437,12 +1816,14 @@ function drawScene(t) {
     if (couple) addLight(couple.x, couple.y - 30, 50, '#FFD8E8');
     draw.sort((a, b) => a.y - b.y).forEach(o => o.f());
     lightPass();
+    drawSmell(t);
     // Loose particles (vomit, water, petals, hearts, embers).
     for (const q of parts) {
       if (q.kind === 'spark' || q.kind === 'smoke' || q.kind === 'flash') continue;
       ctx.globalAlpha = clamp(q.life / q.max * 1.5, 0, 1); ctx.fillStyle = q.c;
       if (q.kind === 'heart') { ctx.beginPath(); const x = q.x, y = q.y, r = q.r; ctx.moveTo(x, y + r); ctx.bezierCurveTo(x - r * 2, y - r * .5, x - r * .5, y - r * 2, x, y - r * .6); ctx.bezierCurveTo(x + r * .5, y - r * 2, x + r * 2, y - r * .5, x, y + r); ctx.fill(); }
       else if (q.kind === 'petal') { ctx.beginPath(); ctx.ellipse(q.x, q.y, q.r, q.r * .55, q.x * .05, 0, TAU); ctx.fill(); }
+      else if (q.kind === 'glint') { ctx.save(); ctx.globalCompositeOperation = 'lighter'; const a = Math.sin(q.life / q.max * Math.PI); ctx.globalAlpha = a; ctx.fillRect(q.x - q.r * 1.5, q.y - .3, q.r * 3, .6); ctx.fillRect(q.x - .3, q.y - q.r * 1.5, .6, q.r * 3); ctx.restore(); }
       else if (q.kind === 'ember') { ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.beginPath(); ctx.arc(q.x, q.y, q.r, 0, TAU); ctx.fill(); ctx.restore(); }
       else { ctx.beginPath(); ctx.arc(q.x, q.y, q.r * .6, 0, TAU); ctx.fill(); }
     }
@@ -1471,6 +1852,7 @@ function hitPoint() {
   if (special.kind === 'rabbit') return { x: special.x, y: special.cy - 12, r: 30 };
   if (special.kind === 'change') return { x: special.x, y: special.y - 20, r: 34 * (special.s || 1) + 8 };
   if (special.kind === 'dragon') return { x: special.x, y: 482, r: 40 };
+  if (special.kind === 'riddle') return { x: special.x, y: special.y + 8, r: 32 };
   return null;
 }
 
@@ -1530,6 +1912,18 @@ const LINES = {
   unlock: ['A secret recipe! Long ago, people hid messages in mooncakes to plan an uprising. Now you can serve secret mooncakes.', '有個秘密食譜！好耐以前，啲人將字條收埋喺月餅入面，約定一齊起義。而家你都可以派密信月餅喇。', '--gold'],
   leaked: ['The secret leaked! Too few grown-ups had the message, and the police found out.', '個秘密漏咗出去！收到字條嘅大人太少，俾警察發現咗。', '--m-noise'],
   uprising: ['The people rise up together and raise their own flag! The police go home, and the party gets even bigger!', '大家一齊企出嚟，升起自己嘅旗！警察返晒屋企，個派對仲熱鬧！', '--gold'],
+  first_snacks: ['Fruit and snacks! Pomelo, star fruit, persimmons, taro, water caltrops, peanuts and river snails. One platter feeds 5 people.', '生果同小食嚟喇！有柚子、楊桃、柿、芋頭、菱角、花生同田螺。每碟可以俾五個人食。'],
+  toomuchfood: ['That is a lot of food left out… The wild monkeys on the hills can smell it.', '枱面啲嘢食太多喇……山上面啲野生馬騮聞到喇。', '--m-monkeys'],
+  warn_monkeys: ['Uh oh. The monkeys are creeping closer to the food!', '弊喇，啲馬騮越行越近啲嘢食！', '--m-monkeys'],
+  monkeys: ['Monkeys! A troop of wild macaques swarms the party, grabbing fruit and mooncakes. And they are pooping everywhere!', '馬騮嚟喇！成班野生馬騮衝入派對，搶晒啲生果同月餅，仲周圍屙屎！', '--m-monkeys'],
+  warn_smell: ['Something smells bad… People are holding their noses.', '有陣怪味……啲人揸住個鼻。', '--m-smell'],
+  smell_bad: ['What a stink! Everyone is miserable. Osmanthus flowers from Wu Gang’s tree on the moon could freshen the air.', '好臭呀！大家都好唔開心。月亮上面吳剛棵桂花樹啲花，可以令空氣清新返。', '--m-smell'],
+  poop: ['Oh no! Someone couldn’t make it to the toilet in time!', '弊喇！有人趕唔切去廁所！', '--m-tummy'],
+  riddle: ['A riddle lantern is floating by! Tap it to guess the riddle.', '有個燈謎燈籠飄緊過嚟！撳佢嚟估燈謎。', '--gold'],
+  riddle_q: ['Lantern riddle: “{en}”. Guess the character!', '燈謎嚟喇！{zh}，估一個字。', '--gold'],
+  riddle_ok: ['Correct! {exp} Plus {p} points.', '啱晒！{expz}加{p}分！', '--jade'],
+  riddle_wrong: ['Not quite. The answer is {ans}. {exp}', '唔啱呀。答案係「{ans}」。{expz}', '--ink-3'],
+  scope: ['Telescope out! Move it around to look closely at the city.', '拎出望遠鏡喇！郁下佢，睇清楚成個城市。', '--jade'],
   end: ['Midnight! {en}. You scored {score} Reunion points.', '十二點喇！{zh}！你攞到{n}分團圓分。', '--gold'],
 };
 const Narr = { q: [], cur: null, said: {}, last: {}, meter: { fire: 0, tummy: 0, noise: 0, rowdy: 0 }, wg: -1, wgCount: 0 };
@@ -1541,7 +1935,7 @@ function storyLine(en, yue, col) {
   if (yue) {
     li.querySelector('.yue').textContent = yue;
     li.title = 'Click to hear it again';
-    li.addEventListener('click', () => { if (!('speechSynthesis' in window)) return; stopSpeech(); Narr.q.unshift({ text: yue, prio: 9, el: li }); pumpSpeech(); });
+    li.addEventListener('click', () => { if (!('speechSynthesis' in window)) return; stopSpeech(); Narr.q.unshift({ parts: narrParts(en, yue), prio: 9, el: li }); pumpSpeech(); });
   }
   const log = $('#storyLog'); log.prepend(li);
   while (log.children.length > 40) log.lastChild.remove();
@@ -1555,13 +1949,19 @@ function narrate(key, vars = {}, prio = 1) {
   if (!narrationOn()) return;
   // Big news pushes aside smaller news that is still waiting.
   if (prio >= 3) { Narr.q = Narr.q.filter(x => x.prio >= 3); if (Narr.cur && Narr.cur.prio < 3) stopSpeech(); }
-  Narr.q.push({ text: yue, prio, el });
+  Narr.q.push({ parts: narrParts(fill(L[0]), yue), prio, el });
   while (Narr.q.length > 3) { let k = 0; Narr.q.forEach((x, i) => { if (x.prio < Narr.q[k].prio) k = i; }); Narr.q.splice(k, 1); }
   pumpSpeech();
 }
 function yueVoice() { if (!voices.length) loadVoices(); return voiceFor('yue'); }
+function enVoice() {
+  if (!voices.length) loadVoices();
+  return voices.find(v => /^en[-_]GB/i.test(v.lang) && /Daniel|Kate|Serena|Google UK/i.test(v.name)) || voices.find(v => /^en[-_]GB/i.test(v.lang)) || voices.find(v => /^en[-_](US|AU|IE|HK)/i.test(v.lang)) || voices.find(v => /^en/i.test(v.lang));
+}
+function narrMode() { return prefs.nmode || 'both'; }
 // Speak whenever speech exists: with lang zh-HK the browser picks a Cantonese voice itself if we cannot name one.
-function narrationOn() { return prefs.narr !== false && prefs.sound && 'speechSynthesis' in window; }
+function narrationOn() { return narrMode() !== 'off' && prefs.sound && 'speechSynthesis' in window; }
+function narrParts(en, yue) { return narrMode() === 'both' && en ? [{ text: en, lang: 'en' }, { text: yue, lang: 'yue' }] : [{ text: yue, lang: 'yue' }]; }
 let lastCancel = 0, speechErr = '';
 function stopSpeech() {
   const c = Narr.cur; Narr.cur = null;
@@ -1569,46 +1969,49 @@ function stopSpeech() {
   try { if (speechSynthesis.speaking || speechSynthesis.pending) { speechSynthesis.cancel(); lastCancel = performance.now(); } } catch (e) { /* no speech */ }
   duck(false);
 }
-// Build and speak one Cantonese utterance. Chrome drops speech started right after cancel(), forgets
-// utterances it holds no reference to, and can be left paused after the tab was hidden; this works around all three.
-function sayYue(text, onDone) {
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'zh-HK'; const v = yueVoice(); if (v) u.voice = v; u.rate = .95;
+// One utterance, English or Cantonese. Chrome drops speech started right after cancel(), forgets utterances
+// it holds no reference to, and can be left paused after the tab was hidden; this works around all three.
+function sayPart(part, onDone) {
+  const u = new SpeechSynthesisUtterance(part.text);
+  if (part.lang === 'en') { u.lang = 'en-GB'; const v = enVoice(); if (v) u.voice = v; u.rate = 1; }
+  else { u.lang = 'zh-HK'; const v = yueVoice(); if (v) u.voice = v; u.rate = .95; }
   u.onend = () => onDone && onDone();
   u.onerror = ev => { const why = ev && ev.error || 'unknown'; if (why !== 'interrupted' && why !== 'canceled' && speechErr !== why) { speechErr = why; storyLine(`The browser would not speak (${why}). Press "Test voice" to try again.`, '', '--red'); } onDone && onDone(); };
   Narr.u = u;
   try { if (speechSynthesis.paused) speechSynthesis.resume(); } catch (e) { /* no speech */ }
   speechSynthesis.speak(u);
-  return u;
 }
 function pumpSpeech() {
   if (Narr.cur || !Narr.q.length || paused) return;
   const wait = 180 - (performance.now() - lastCancel);
   if (wait > 0) { setTimeout(pumpSpeech, wait); return; }
   const it = Narr.q.shift(); Narr.cur = it;
+  const parts = it.parts || [{ text: it.text, lang: 'yue' }];
+  let i = 0;
+  const done = () => { if (Narr.cur !== it) return; Narr.cur = null; if (it.el) it.el.classList.remove('speaking'); duck(false); setTimeout(pumpSpeech, 350); };
+  const next = () => { if (Narr.cur !== it) return; if (i >= parts.length) { done(); return; } sayPart(parts[i++], next); };
   try {
-    const done = () => { if (Narr.cur !== it) return; Narr.cur = null; if (it.el) it.el.classList.remove('speaking'); duck(false); setTimeout(pumpSpeech, 350); };
     if (it.el) it.el.classList.add('speaking');
-    duck(true);
-    sayYue(it.text, done);
-    setTimeout(() => { if (Narr.cur === it) done(); }, 3000 + it.text.length * 330);   // some browsers never fire onend
+    duck(true); next();
+    const est = parts.reduce((a, p) => a + p.text.length * (p.lang === 'en' ? 75 : 330), 3000);
+    setTimeout(() => { if (Narr.cur === it) done(); }, est);   // some browsers never fire onend
   } catch (e) { Narr.cur = null; }
 }
 function testVoice() {
   userActed = true; stopSpeech(); Narr.q = []; speechErr = '';
   if (!('speechSynthesis' in window)) { storyLine('This browser cannot speak out loud.', '', '--red'); return; }
   loadVoices();
-  const v = yueVoice();
-  const hk = voices.filter(x => /yue|zh[-_]HK/i.test(x.lang)).map(x => x.name).join(', ');
-  const el = storyLine(v ? `Testing the storyteller’s voice: ${v.name} (${v.lang}).` : `No Cantonese voice is listed (${voices.length} voices in total), so the browser will choose one.` + (hk ? '' : ' On a Mac, add one in System Settings › Accessibility › Spoken Content › System Voice › Manage Voices › Chinese (Hong Kong).'), '你好！我係講故事嘅人。今晚一齊過中秋節啦！', '--jade');
-  setTimeout(() => { Narr.q.unshift({ text: '你好！我係講故事嘅人。今晚一齊過中秋節啦！', prio: 9, el }); pumpSpeech(); }, 50);
+  const v = yueVoice(), e = enVoice();
+  const en = 'Hello! I am the storyteller. Let’s celebrate Mid-Autumn together!', yue = '你好！我係講故事嘅人。今晚一齊過中秋節啦！';
+  const el = storyLine((v ? `Voices: ${e ? e.name + ' (English), ' : ''}${v.name} (Cantonese). ` : `No Cantonese voice is listed, so the browser will choose one. On a Mac, add one in System Settings › Accessibility › Spoken Content › System Voice › Manage Voices › Chinese (Hong Kong). `) + en, yue, '--jade');
+  setTimeout(() => { Narr.q.unshift({ parts: narrParts(en, yue).length > 1 ? narrParts(en, yue) : [{ text: en, lang: 'en' }, { text: yue, lang: 'yue' }], prio: 9, el }); pumpSpeech(); }, 50);
 }
 // Music and crowd step back while the storyteller talks.
 function duck(on) { if (!AC) return; const t = AC.currentTime; musicBus.gain.setTargetAtTime(on ? .22 : .5, t, .25); ambBus.gain.setTargetAtTime(on ? .4 : .6, t, .25); }
 function once(key, vars, prio) { if (Narr.said[key]) return; Narr.said[key] = 1; narrate(key, vars, prio); }
 function every(key, gap, vars, prio) { if (S.t - (Narr.last[key] ?? -1e9) < gap) return; Narr.last[key] = S.t; narrate(key, vars, prio); }
-const MNAME = { fire: ['fire risk', '火災風險'], tummy: ['tummy ache', '肚痛'], noise: ['noise', '噪音'], rowdy: ['mischief', '搗蛋'] };
-const METER_OF = { fire: 'fire', tummy: 'tummy', police: 'noise', rowdy: 'rowdy' };
+const MNAME = { fire: ['fire risk', '火災風險'], tummy: ['tummy ache', '肚痛'], noise: ['noise', '噪音'], rowdy: ['mischief', '搗蛋'], monkeys: ['monkey', '馬騮'], smell: ['smell', '臭味'] };
+const METER_OF = { fire: 'fire', tummy: 'tummy', police: 'noise', rowdy: 'rowdy', monkeys: 'monkeys' };
 // Looks at the city a few times a second and tells the story of what changed.
 function watchStory(d) {
   if (!running) return;
@@ -1624,8 +2027,13 @@ function watchStory(d) {
   if (S.n.adults >= 6 && !S.n.kids) every('nokids', 70, {}, 0);
   if (d.P >= 8 && !S.n.lanterns) every('dark', 70, {}, 0);
   if (d.P >= 8 && !d.cakes && S.t > 25) every('nocake', 80, {}, 0);
-  for (const k of ['fire', 'tummy', 'noise', 'rowdy']) {
-    const v = S.m[k], st = Narr.meter[k];
+  const sm = S.m.smell, sst = Narr.meter.smell || 0;
+  if (sm >= 75 && sst < 2) { Narr.meter.smell = 2; narrate('smell_bad', {}, 2); }
+  else if (sm >= 40 && sst < 1) { Narr.meter.smell = 1; narrate('warn_smell', {}, 2); }
+  else if (sm < 20 && sst >= 1) { Narr.meter.smell = 0; narrate('phew', { en: 'smell', zh: '臭味' }, 0); }
+  if (S.n.snacks > d.P / MMSim.SNACK_SERVES + 3) every('toomuchfood', 60, {}, 1);
+  for (const k of ['fire', 'tummy', 'noise', 'rowdy', 'monkeys']) {
+    const v = S.m[k], st = Narr.meter[k] || 0;
     if (v >= 80 && st < 2) { Narr.meter[k] = 2; narrate('almost', { en: MNAME[k][0], zh: MNAME[k][1] }, 2); }
     else if (v >= 50 && st < 1) { Narr.meter[k] = 1; narrate('warn_' + k, {}, 2); }
     else if (v < 30 && st >= 1) { Narr.meter[k] = 0; narrate('phew', { en: MNAME[k][0], zh: MNAME[k][1] }, 0); }
@@ -1640,6 +2048,7 @@ function handleEvent(e) {
     if (e.kind === 'fire') { narrate(S.n.buildings ? 'fire' : 'fire_park', {}, 3); V('fire'); SFX.siren('fire'); SFX.cheer(0, true); }
     if (e.kind === 'tummy') { narrate('tummy', {}, 3); V('amb'); SFX.siren('amb'); }
     if (e.kind === 'police') { narrate('police', {}, 3); V('police'); SFX.siren('police'); SFX.whistleBlow(); }
+    if (e.kind === 'monkeys') { narrate('monkeys', {}, 3); SFX.monkey(W * .3); SFX.monkey(W * .7); SFX.cheer(.6, true); }
     if (e.kind === 'rowdy') { narrate('rowdy', {}, 3); SFX.cheer(.5, false, true); for (let i = 0; i < 12; i++) burst(rnd(W * .3, W * .7), G.plazaB - 20, 1, { a: -Math.PI / 2, spread: 1, v0: 120, v1: 220, g: 300, c: '#D89148', l0: 1, l1: 1.4, r0: 4, r1: 6 }); }
   }
   if (e.type === 'burned') { ruins.push({ k: S.n.buildings, life: 14 }); narrate('burned', {}, 2); SFX.crash(); }
@@ -1657,12 +2066,15 @@ function handleEvent(e) {
     if (k === 'rabbit') { special = { kind: k, x: -40, cy: rnd(G.roadB + 40, G.plazaB - 20), age: 0, dur }; SFX.sparkle(); }
     if (k === 'change') { const bl = S.n.buildings ? buildingSlot(0) : { x: W * .3, h: 0 }; special = { kind: k, x0: bl.x, y0: G.road - bl.h - 10, x: bl.x, y: G.road - bl.h - 10, age: 0, s: 1.1, dur }; SFX.rise(); }
     if (k === 'dragon') { special = { kind: k, x: -60, cx: W * .5, cy: 488, dance: 0, age: 0, dur }; SFX.drumRoll(); }
+    if (k === 'riddle') { special = { kind: k, x: -40, y: G.roadB - 16, age: 0, dur }; SFX.sparkle(); }
     narrate(k, {}, 3);
   }
+  if (e.type === 'riddleOpen') { special = null; openRiddle(); }
   if (e.type === 'missed') {
     if (e.kind === 'change') { narrate('change_miss', {}, 2); special = null; }
     else if (e.kind === 'dragon') { if (special) special.leaving = true; narrate('dragon_miss', {}, 0); }
     else if (e.kind === 'rabbit') { special = null; narrate('rabbit_miss', {}, 0); }
+    else if (e.kind === 'riddle') special = null;
   }
   if (e.type === 'caught') {
     const p = e.points;
@@ -1675,23 +2087,89 @@ function handleEvent(e) {
   if (e.type === 'end') endNight();
 }
 
+/* ───────────── Lantern riddles (猜燈謎) ─────────────
+   Classic character riddles: the clue describes how the answer is built from smaller parts. */
+const RIDDLES = [
+  { q: 'Two moons', zh: '兩個月亮', a: '朋', o: ['朋', '明', '用'], en: 'Two 月 (moon) side by side make 朋, “friend”.', yue: '兩個「月」字排埋一齊，就係「朋」，朋友嘅朋。' },
+  { q: 'Half a moon', zh: '半個月亮', a: '胖', o: ['胖', '肥', '朋'], en: '月 plus 半 (half) makes 胖, “chubby”. Careful with those mooncakes!', yue: '「月」加「半」，就係「胖」，肥胖嘅胖。小心食太多月餅呀！' },
+  { q: 'One moon, one sun', zh: '一月一日', a: '明', o: ['明', '朋', '旦'], en: '日 (sun) and 月 (moon) together make 明, “bright”.', yue: '「日」同「月」加埋一齊，就係「明」，光明嘅明。' },
+  { q: 'A big mouth eats a small mouth', zh: '大口吃小口', a: '回', o: ['回', '品', '呂'], en: 'A small 口 inside a big 口 makes 回, “return”.', yue: '大「口」入面有個細「口」，就係「回」，回家嘅回。' },
+  { q: 'A person among grass and trees', zh: '人在草木中', a: '茶', o: ['茶', '花', '林'], en: 'Grass 艹 on top, a person 人 in the middle, a tree 木 below: 茶, “tea”.', yue: '上面係草花頭，中間一個「人」，下面一個「木」，就係「茶」，飲茶嘅茶。' },
+  { q: 'One bite takes off the cow’s tail', zh: '一口咬掉牛尾巴', a: '告', o: ['告', '吃', '半'], en: 'A cow 牛 with its tail bitten off, on top of a mouth 口, makes 告, “to tell”.', yue: '「牛」字冇咗條尾，下面加個「口」，就係「告」，告訴嘅告。' },
+  { q: 'Ten big brothers', zh: '十個哥哥', a: '克', o: ['克', '古', '早'], en: '十 (ten) on top of 兄 (big brother) makes 克, as in “gram”.', yue: '「十」字喺上面，「兄」字喺下面，就係「克」，公克嘅克。' },
+  { q: 'One plus one', zh: '一加一', a: '王', o: ['王', '二', '土'], en: 'A line 一, a plus sign 十 and another 一, stacked up, make 王, “king”.', yue: '一橫、一個加號、再一橫，疊埋一齊，就係「王」，國王嘅王。' },
+  { q: 'One person, one mouth', zh: '一人一口', a: '合', o: ['合', '全', '會'], en: '人 as a roof, then 一, then 口: 合, “together”. Just right for a reunion festival!', yue: '「人」字做屋頂，加一橫，再加個「口」，就係「合」，合家團圓嘅合。' },
+  { q: 'A mountain on top of a mountain', zh: '山上還有山', a: '出', o: ['出', '岩', '仙'], en: 'One 山 (mountain) on top of another makes 出, “to go out”.', yue: '一座「山」上面再有一座「山」，就係「出」，出去嘅出。' },
+];
+// Pinyin and Jyutping for every answer choice.
+const ROM = {
+  朋: ['péng', 'pang4'], 明: ['míng', 'ming4'], 用: ['yòng', 'jung6'], 胖: ['pàng', 'bun6'], 肥: ['féi', 'fei4'], 旦: ['dàn', 'daan3'],
+  回: ['huí', 'wui4'], 品: ['pǐn', 'ban2'], 呂: ['lǚ', 'leoi5'], 茶: ['chá', 'caa4'], 花: ['huā', 'faa1'], 林: ['lín', 'lam4'],
+  告: ['gào', 'gou3'], 吃: ['chī', 'hek3'], 半: ['bàn', 'bun3'], 克: ['kè', 'hak1'], 古: ['gǔ', 'gu2'], 早: ['zǎo', 'zou2'],
+  王: ['wáng', 'wong4'], 二: ['èr', 'ji6'], 土: ['tǔ', 'tou2'], 合: ['hé', 'hap6'], 全: ['quán', 'cyun4'], 會: ['huì', 'wui6'],
+  出: ['chū', 'ceot1'], 岩: ['yán', 'ngaam4'], 仙: ['xiān', 'sin1'],
+};
+let holdGame = false, rdUsed = [];
+function openRiddle() {
+  let pool = RIDDLES.map((r, i) => i).filter(i => !rdUsed.includes(i));
+  if (!pool.length) { rdUsed = []; pool = RIDDLES.map((r, i) => i); }
+  const R = RIDDLES[pick(pool)]; rdUsed.push(RIDDLES.indexOf(R));
+  holdGame = true;
+  $('#rdTitle').textContent = `“${R.q}”`;
+  $('#rdZh').textContent = R.zh; $('#rdZh').dataset.say = R.zh;
+  const opts = [...R.o].sort(() => Math.random() - .5);
+  $('#rdOpts').innerHTML = opts.map(c => `<button type="button" data-c="${c}" lang="zh-TW"><ruby>${c}<rt>${ROM[c][LANG === 'yue' ? 1 : 0]}</rt></ruby></button>`).join('');
+  $('#rdResult').hidden = true; $('#rdDone').hidden = true;
+  $('#riddleOv').hidden = false;
+  narrate('riddle_q', { en: R.q, zh: R.zh }, 3);
+  $('#rdOpts').onclick = e => {
+    const b = e.target.closest('button[data-c]'); if (!b || !$('#rdDone').hidden) return;
+    const right = b.dataset.c === R.a;
+    b.classList.add(right ? 'right' : 'wrong');
+    $('#rdOpts').querySelector(`[data-c="${R.a}"]`).classList.add('right');
+    const pts = MMSim.answer(S, right);
+    for (const ev of S.events) if (ev.type !== 'caught') handleEvent(ev); S.events.length = 0;
+    $('#rdResult').innerHTML = `<b>${right ? `Correct! +${pts}` : 'Not quite.'}</b> ${R.en}<br><span class="zh" lang="zh-HK">${R.yue}</span>`;
+    $('#rdResult').hidden = false; $('#rdDone').hidden = false; $('#rdDone').focus();
+    narrate(right ? 'riddle_ok' : 'riddle_wrong', { exp: R.en, expz: R.yue, p: pts, ans: R.a }, 3);
+    if (right) { SFX.sparkle(true); SFX.cheer(.8); }
+  };
+}
+$('#rdDone').addEventListener('click', () => { $('#riddleOv').hidden = true; holdGame = false; });
+
 /* ───────────── Pointer: tapping visitors ───────────── */
 function toLogical(ev) { const r = canvas.getBoundingClientRect(); return { x: (ev.clientX - r.left) / r.width * W, y: (ev.clientY - r.top) / r.height * H }; }
+let dragLens = false;
+function hitAt(q) {
+  const w = toWorld(q, 1), hp = hitPoint();
+  if (hp && !special.caught && Math.hypot(w.x - hp.x, w.y - hp.y) < hp.r + 14) return 'special';
+  const mw = toWorld(q, .3), m = MOON();
+  if (Math.hypot(mw.x - m.x, mw.y - m.y) < m.r + 6) return 'moon';
+  return '';
+}
 canvas.addEventListener('pointerdown', ev => {
-  if (!running || paused) return;
   const q = toLogical(ev);
-  const hp = hitPoint();
-  if (hp && !special.caught && Math.hypot(q.x - hp.x, q.y - hp.y) < hp.r + 14) { MMSim.tap(S, special.kind); return; }
-  const m = MOON();
-  if (Math.hypot(q.x - m.x, q.y - m.y) < m.r + 6) { if (!MMSim.tap(S, 'wugang')) every('wg_rest', 8, {}, 0); }
+  if (LENS.on) { LENS.x = q.x; LENS.y = q.y; if (ev.pointerType !== 'mouse') { dragLens = true; try { canvas.setPointerCapture(ev.pointerId); } catch (e) { /* not supported */ } } }
+  if (!running || paused || holdGame) return;
+  const h = hitAt(q);
+  if (h === 'special') { MMSim.tap(S, special.kind); return; }
+  if (h === 'moon' && !MMSim.tap(S, 'wugang')) every('wg_rest', 8, {}, 0);
 });
 canvas.addEventListener('pointermove', ev => {
-  const q = toLogical(ev), hp = hitPoint(), m = MOON();
-  canvas.style.cursor = (hp && Math.hypot(q.x - hp.x, q.y - hp.y) < hp.r + 14) || Math.hypot(q.x - m.x, q.y - m.y) < m.r + 6 ? 'pointer' : 'default';
+  const q = toLogical(ev);
+  if (LENS.on && (ev.pointerType === 'mouse' || dragLens)) { LENS.x = q.x; LENS.y = q.y; }
+  canvas.style.cursor = LENS.on ? 'none' : hitAt(q) ? 'pointer' : 'default';
 });
+['pointerup', 'pointercancel'].forEach(n => canvas.addEventListener(n, () => { dragLens = false; }));
+$('#scopeBtn').addEventListener('click', () => {
+  LENS.on = !LENS.on; $('#scopeBtn').setAttribute('aria-pressed', LENS.on);
+  canvas.style.touchAction = LENS.on ? 'none' : ''; LENS.x = W / 2; LENS.y = H * .62;
+  if (LENS.on) once('scope', {}, 1);
+});
+$('#camBtn').addEventListener('click', () => { CAM.on = !CAM.on; $('#camBtn').setAttribute('aria-pressed', CAM.on); });
 
 /* ───────────── Controls ───────────── */
-const METERS = [['fire', 'Fire risk', '--m-fire'], ['tummy', 'Tummy ache', '--m-tummy'], ['noise', 'Noise', '--m-noise'], ['rowdy', 'Mischief', '--m-rowdy']];
+const METERS = [['fire', 'Fire risk', '--m-fire'], ['tummy', 'Tummy ache', '--m-tummy'], ['smell', 'Smell', '--m-smell'], ['noise', 'Noise', '--m-noise'], ['rowdy', 'Mischief', '--m-rowdy'], ['monkeys', 'Monkeys', '--m-monkeys']];
 $('#meters').innerHTML = METERS.map(([k, name, c]) => `<div class="meter" id="m-${k}" style="--c: var(${c})"><span>${name} ${zh(k)}</span><em>0</em><i></i></div>`).join('');
 $('#items').innerHTML = ITEMS.map(it => `
   <div class="item" data-key="${it.key}" ${it.locked ? 'hidden' : ''}>
@@ -1744,6 +2222,7 @@ const ICON = {
   tea: () => withCtx(() => drawTeapot(19, 22, 1.8)),
   mahjong: () => withCtx(() => drawTable(20, 22, 1.2)),
   fireworks: () => withCtx(() => drawRocket(20, 22, 1.4)),
+  snacks: () => withCtx(() => drawSnack(20, 24, 0, 1.55)),
   secret: () => withCtx(() => drawMooncake(20, 24, 2, true)),
 };
 function withCtx(f) { const keep = ctx; ctxSwap(ctxRef); try { f(ctxRef); } finally { ctxSwap(keep); } }
@@ -1900,6 +2379,8 @@ const SFX = {
   chop() { if (!AC || !prefs.sound) return; const t = AC.currentTime; for (let i = 0; i < 3; i++) { noiseHit(t + i * .35, .08, 'bandpass', 900, 3, .5, sfxBus); tone(t + i * .35, 220, .1, 'triangle', .2, sfxBus); } this.sparkle(); },
   drumRoll(big) { if (!AC || !prefs.sound) return; const t = AC.currentTime; for (let i = 0; i < (big ? 32 : 12); i++) { tone(t + i * .12, 130, .2, 'sine', i % 4 ? .15 : .3, sfxBus, { to: 60 }); } },
   cracker(x) { if (!this.ok()) return; const t = AC.currentTime; for (let i = 0; i < 12; i++) noiseHit(t + i * rnd(.03, .07), .04, 'highpass', 1500, 1, .35, sfxBus, x); },
+  monkey(x) { if (!AC || !prefs.sound || !running) return; const t = AC.currentTime; for (let i = 0; i < 3; i++) voice(t + i * .16, rnd(650, 900), .14, .12, x, { to: rnd(1000, 1500), vowel: i < 2 ? [320, 800] : [800, 1200], kid: true }); },
+  splat(x) { if (!AC || !prefs.sound || !running) return; noiseHit(AC.currentTime, .12, 'lowpass', 500, 2, .35, sfxBus, x); },
   cricket() { if (!AC || !prefs.sound) return; const t = AC.currentTime, f = rnd(4200, 5200); for (let i = 0; i < 3; i++) tone(t + i * .05, f, .03, 'sine', .04, cricketGain, { x: rnd(0, W) }); },
 };
 
@@ -2038,7 +2519,8 @@ function updateAudio(dt, d) {
   const chaos = inc ? 1 : Math.max(S.m.fire, S.m.tummy, S.m.noise, S.m.rowdy) / 100;
   Music.energy = clamp(S.celebrating / 40, 0, 1);
   let mood = 'nature';
-  if (inc === 'fire') mood = 'fire'; else if (inc === 'tummy') mood = 'tummy'; else if (inc === 'police') mood = 'police'; else if (inc === 'rowdy') mood = 'rowdy';
+  if (inc === 'fire') mood = 'fire'; else if (inc === 'tummy') mood = 'tummy'; else if (inc === 'police') mood = 'police'; else if (inc === 'rowdy' || inc === 'monkeys') mood = 'rowdy';
+  else if (S.m.smell > 60) mood = 'tummy';
   else if (S.uprising && flag && flag.rise < 1 || S.uprising && S.celebrating > 20) mood = 'uprising';
   else if (S.celebrating >= 3) mood = 'festive';
   Music.setMood(mood);
@@ -2072,7 +2554,7 @@ function updateHud(d) {
 /* ───────────── Main loop ───────────── */
 function frame(ms) {
   const t = ms / 1000; const dt = Math.min(.05, t - (lastT || t)); lastT = t;
-  if (running && !paused) {
+  if (running && !paused && !holdGame) {
     // The model runs in 0.1 s steps.
     clock += dt;
     while (clock >= .1) { clock -= .1; MMSim.step(S, .1); for (const e of S.events) handleEvent(e); S.events.length = 0; }
@@ -2091,9 +2573,9 @@ function startNight() {
   $('#startOv').hidden = true; $('#endOv').hidden = true;
   document.querySelector('.item[data-key="secret"]').hidden = true; document.querySelector('.item[data-key="secret"]').classList.remove('new');
   audioStart(); refreshControls();
-  Narr.q = []; stopSpeech(); Narr.said = {}; Narr.last = {}; Narr.meter = { fire: 0, tummy: 0, noise: 0, rowdy: 0 }; Narr.wg = -1; Narr.wgCount = 0;
+  Narr.q = []; stopSpeech(); Narr.said = {}; Narr.last = {}; Narr.meter = { fire: 0, tummy: 0, noise: 0, rowdy: 0, monkeys: 0, smell: 0 }; Narr.wg = -1; Narr.wgCount = 0; monkeys = []; holdGame = false; $('#riddleOv').hidden = true;
   $('#storyLog').innerHTML = '';
-  if (prefs.sound && prefs.narr !== false && voices.length && !yueVoice()) storyLine(LINES.novoice[0], LINES.novoice[1], '--ink-3');
+  if (narrationOn() && voices.length && !yueVoice()) storyLine(LINES.novoice[0], LINES.novoice[1], '--ink-3');
   narrate('intro', {}, 2);
   updateHud(MMSim.derive(S));
 }
@@ -2102,8 +2584,9 @@ function syncPause() { $('#pauseBtn').setAttribute('aria-pressed', paused); $('#
 $('#pauseBtn').addEventListener('click', () => { if (!running) return; paused = !paused; syncPause(); });
 $('#soundBtn').addEventListener('click', () => { prefs.sound = !prefs.sound; savePrefs(); syncSound(); if (prefs.sound) audioStart(); else { Narr.q = []; stopSpeech(); } });
 $('#voiceBtn').addEventListener('click', testVoice);
-$('#narrBtn').addEventListener('click', () => { prefs.narr = prefs.narr === false; savePrefs(); syncNarr(); if (prefs.narr === false) { Narr.q = []; stopSpeech(); } });
-function syncNarr() { const on = prefs.narr !== false; $('#narrBtn').setAttribute('aria-pressed', on); $('#narrBtn').textContent = on ? 'Cantonese narration on' : 'Cantonese narration off'; }
+function setNarr(m) { prefs.nmode = m; savePrefs(); syncNarr(); Narr.q = []; stopSpeech(); }
+[['nBoth', 'both'], ['nYue', 'yue'], ['nOff', 'off']].forEach(([id, m]) => $('#' + id).addEventListener('click', () => setNarr(m)));
+function syncNarr() { const m = narrMode(); $('#nBoth').setAttribute('aria-pressed', m === 'both'); $('#nYue').setAttribute('aria-pressed', m === 'yue'); $('#nOff').setAttribute('aria-pressed', m === 'off'); }
 function syncSound() { $('#soundBtn').setAttribute('aria-pressed', prefs.sound); $('#soundBtn').textContent = prefs.sound ? 'Sound on' : 'Sound off'; if (master) master.gain.setTargetAtTime(prefs.sound ? .9 : 0, AC.currentTime, .1); }
 function setLang(l) { LANG = l; prefs.lang = l; savePrefs(); syncLang(); rerenderZh(); userActed = true; speak(l === 'yue' ? '廣東話' : '普通話'); }
 $('#yueBtn').addEventListener('click', () => setLang('yue'));
@@ -2131,10 +2614,17 @@ function endNight() {
       <li>Police visits <b>${T.police}</b></li>
       <li>Kids gone wild <b>${T.rowdy}</b></li>
       <li>Buildings lost <b>${T.burned}</b></li>
+      <li>Monkey raids <b>${T.monkeys}</b></li>
+      <li>Riddles solved <b>${T.riddlesRight} of ${T.riddles}</b></li>
       <li>Visitors caught <b>${T.rabbit + T.change + T.dragon}</b></li>
     </ul>
     <p>${tip}</p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="againBtn" type="button">Play again</button><button class="tool" id="endTales" type="button">Read the Moon Tales</button></div>`;
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="againBtn" type="button">Play again</button><button class="tool" id="endTales" type="button">Read the Moon Tales</button></div>
+    <div class="more">
+      <h3>More from the Game Shelf</h3>
+      <a class="more-game" href="../aquarium/"><img src="../aquarium/cover.png" alt="" onerror="this.remove()"><span><b>James’s Nature Aquarium</b> <span class="zh" lang="zh-TW">水草</span><small>Build a planted aquarium and keep a tiny ecosystem in balance.</small></span></a>
+      <p class="grownups"><b>For grown-ups:</b> we’re a family making little games about the things we’re curious about, and the next one is already brewing. <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Follow us on Ko-fi</a> to hear when it’s out, or <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">♥ support the next game</a>.</p>
+    </div>`;
   $('#endOv').hidden = false;
   $('#againBtn').addEventListener('click', startNight);
   $('#againBtn').focus();
