@@ -78,6 +78,7 @@
     joy *= family;
     // A bad smell makes everyone miserable.
     joy *= 1 - 0.6 * s.m.smell / 100;
+    if (s.storm > 0) joy *= .5;   // everyone sheltering from a typhoon
     if (s.glow > 0) joy *= 1.25;
     if (s.uprising) joy *= 1.15;
     joy = clamp(joy, 0, 1.2);
@@ -176,6 +177,7 @@
     s.peak = Math.max(s.peak, s.celebrating);
     s.score += s.celebrating * dt * 0.5 * (240 / NIGHT);   // grades were set for a 240 s night
     if (s.glow > 0) s.glow = Math.max(0, s.glow - dt);
+    if (s.storm > 0) s.storm = Math.max(0, s.storm - dt);
 
     // The secret mooncakes (unlocked by the first police visit, or at 9 pm).
     if (!s.secretUnlocked && s.t >= NIGHT / 2) { s.secretUnlocked = true; emit(s, 'unlock'); }
@@ -235,6 +237,13 @@
     return true;
   }
 
+  // Typhoon Signal No. 8: people shelter, fireworks are off, lanterns blow away, and the rain washes the smell away.
+  function storm(s, secs) {
+    s.storm = secs; s.n.fireworks = 0; s.n.lanterns = Math.floor(s.n.lanterns * .7); s.m.smell = Math.max(0, s.m.smell - 50); s.m.fire = Math.max(0, s.m.fire - 40);
+  }
+  // A little bonus for joining in with a happening.
+  function bonus(s, pts) { s.score += pts; s.bonus += pts; }
+
   // The player picked up some poop (or worse): the air gets a little fresher.
   function clean(s, amount) {
     s.m.smell = Math.max(0, s.m.smell - amount); s.score += 5; s.bonus += 5; s.tally.cleaned++;
@@ -253,6 +262,6 @@
   ];
   function grade(score) { return GRADES.find(g => score >= g[0])[1]; }
 
-  const api = { NIGHT, LIMITS, PARK, PER_BUILDING, SEATS, WEDGES, TEA_SERVES, KIDS_PER_ADULT, SNACK_SERVES, INCIDENTS, GRADES, create, set, derive, step, tap, answer, clean, grade };
+  const api = { NIGHT, LIMITS, PARK, PER_BUILDING, SEATS, WEDGES, TEA_SERVES, KIDS_PER_ADULT, SNACK_SERVES, INCIDENTS, GRADES, create, set, derive, step, tap, answer, clean, storm, bonus, grade };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.MMSim = api;
 })(this);
