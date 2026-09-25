@@ -1,7 +1,7 @@
 # The Game Shelf
 
 Learning games for curious kids, published with GitHub Pages:
-**https://magicmakersfamily.github.io/family-games/**
+**https://magicmakersfamily.github.io/games/**
 
 Every game is a self-contained static web page (HTML, CSS and JavaScript). There is no
 server, no build step and no tracking. Progress is saved in each player's own browser
