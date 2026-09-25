@@ -185,8 +185,9 @@ $('#fb').addEventListener('submit', async e => {
     game, kind: kindV, rating: rating ? `${rating} / 5` : 'No rating',
     message: msg, name: $('#name').value.trim() || '(not given)',
     details: $('#tech').checked ? techText : '(not included)',
-    botcheck: document.querySelector('.hp').checked,
   };
+  // The hidden trap is only sent if a bot ticked it; Web3Forms quietly drops messages that include it.
+  if (document.querySelector('.hp').checked) data.botcheck = true;
   if (email) { data.email = email; data.replyto = email; }
   $('#send').disabled = true; status.textContent = 'Sending…';
   try {
