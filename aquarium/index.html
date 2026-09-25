@@ -230,6 +230,7 @@ button { font: inherit; color: inherit; }
 .about { font-size: 13px; color: var(--ink-3); max-width: 80ch; line-height: 1.6; }
 .about b { color: var(--ink-2); }
 .about a { color: var(--ink-2); }
+.linkish { background: none; border: 0; padding: 0; color: var(--ink-2); text-decoration: underline; font: inherit; cursor: pointer; }
 
 
 /* ---- v2: kanji, lens, predict, cycles, missions ---- */
@@ -591,7 +592,7 @@ h2 .kj, h3 .kj { font-size: .9em; }
 
 
   <p class="about"><b>About Takashi Amano (1954–2015).</b> A Japanese photographer and aquarist who invented the “Nature Aquarium”: underwater gardens that look like real landscapes and work like tiny ecosystems. The Amano shrimp is named after him — he made it famous as an algae eater. In this game the chemistry is simplified so a week fits in a few seconds, but the cause-and-effect is real.</p>
-  <p class="about">Version 3.3 · Launched <time datetime="2026-09-24">September 24, 2026</time> · <a href="../">The Game Shelf</a> · <a href="../mid-autumn/">Next game: Mid-Autumn Mayhem</a> · <a href="../feedback/?game=aquarium&amp;v=3.3">Share your thoughts</a> · <a href="../feedback/?game=aquarium&amp;v=3.3&amp;kind=bug">Report a bug</a></p>
+  <p class="about">Version 3.4 · Launched <time datetime="2026-09-24">September 24, 2026</time> · <a href="../">The Game Shelf</a> · <a href="../mid-autumn/">Next game: Mid-Autumn Mayhem</a> · <a href="../feedback/?game=aquarium&amp;v=3.4">Share your thoughts</a> · <a href="../feedback/?game=aquarium&amp;v=3.4&amp;kind=bug">Report a bug</a> · Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/aquarium/" data-text="A free aquarium ecosystem game for curious kids: James’s Nature Aquarium">Tell a friend</button></p>
   <p class="about">Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a><br>These games don’t collect any information. Saved progress stays in your own browser.</p>
 </div>
 
@@ -3029,5 +3030,13 @@ if (window.claude?.hot?.ready) window.claude.hot.ready(start); else start(window
 })();
 </script>
 
+<script>
+// Tell a friend: open the share sheet, or copy the link where sharing is not available.
+document.querySelectorAll('[data-tell]').forEach(b => b.addEventListener('click', async () => {
+  const url = b.dataset.tell, text = b.dataset.text;
+  try { if (navigator.share) { await navigator.share({ title: document.title, text, url }); return; } await navigator.clipboard.writeText(text + ' ' + url); b.textContent = 'Link copied! Paste it in a message.'; }
+  catch (e) { if (!(e && e.name === 'AbortError')) b.textContent = url; }
+}));
+</script>
 </body>
 </html>

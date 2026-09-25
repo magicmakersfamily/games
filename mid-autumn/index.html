@@ -119,6 +119,29 @@ html.text-en .t-zh, html.text-zh .t-en, html.text-en .zh[data-key], html.text-en
 .rd-opts button.wrong { background: #7A2A22; border-color: var(--red); }
 .rd-result { margin: 0; }
 .rd-result .zh { color: var(--gold); cursor: default; }
+.goals { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.goals-h { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); font-weight: 700; margin-right: 4px; }
+.goal { display: inline-flex; gap: 6px; align-items: baseline; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 13px; }
+.goal i { font-style: normal; color: var(--gold); }
+.goal.done { border-color: var(--gold); background: rgba(244,194,79,.14); }
+.goal.failed { opacity: .5; text-decoration: line-through; }
+.journal { max-width: 780px; width: 100%; max-height: calc(100vh - 32px); overflow: auto; }
+.journal-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.journal h3 { margin: 8px 0 0; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); display: flex; gap: 8px; align-items: baseline; }
+.journal h3 em { font-style: normal; color: var(--gold); }
+.jrank { background: linear-gradient(135deg, rgba(244,194,79,.2), rgba(244,194,79,.04)); border: 1px solid var(--gold); border-radius: 12px; padding: 10px 14px; display: grid; gap: 3px; }
+.jrank b { color: var(--gold); font-size: 18px; } .jrank span { color: var(--gold); letter-spacing: .1em; } .jrank small { color: var(--ink-2); }
+.jgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; }
+.jgrid.chars { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); }
+.jchip { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; font-size: 13px; display: grid; gap: 2px; min-height: 44px; align-content: center; }
+.jchip.on { border-color: var(--gold); }
+.jchip .lock { color: var(--ink-3); letter-spacing: .1em; }
+.jchip small { color: var(--ink-3); font-size: 11.5px; }
+.chars .jchip { text-align: center; font-family: var(--zh); } .chars .jchip ruby { font-size: 26px; } .chars .jchip rt { display: ruby-text; font-size: 10px; }
+.share-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.share-status { font-size: 13px; color: var(--ink-2); margin: 0; }
+.rank-line { margin: 0; color: var(--ink-2); font-size: 14px; } .rank-line b { color: var(--gold); }
+.linkish { background: none; border: 0; padding: 0; color: var(--ink-2); text-decoration: underline; font: inherit; cursor: pointer; }
 .endmodal { position: fixed; inset: 0; z-index: 15; display: grid; place-items: center; padding: 16px; background: rgba(4, 6, 20, .72); overflow: auto; }
 .celebrate-pill { position: absolute; right: 10px; top: 10px; background: rgba(8,12,34,.62); border-radius: 8px; padding: 4px 9px; font-size: 12px; color: var(--ink-2); }
 .stage.narrow .celebrate-pill { display: none; }
@@ -187,6 +210,7 @@ html.text-both .book .t-en + .t-zh { color: #A5281B; }
 .tale-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 .tale-tabs button { background: #E6D3AA; border: 1px solid #CDB688; border-radius: 999px; padding: 5px 12px; font-size: 13.5px; font-weight: 700; color: #2A1D12; }
 .tale-tabs button[aria-selected="true"] { background: #A5281B; color: #FFF3DF; border-color: #A5281B; }
+html.text-both .book .close .t-zh, html.text-both .book .tale-tabs button[aria-selected="true"] .t-zh, html.text-both .book .tool[aria-pressed="true"] .t-zh { color: #FFE9A8; }
 .tale { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 20px; align-items: start; }
 @media (max-width: 680px) { .tale { grid-template-columns: minmax(0, 1fr); } }
 .tale canvas { width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; background: #10183F; }
@@ -244,6 +268,7 @@ html.text-both .book .t-en + .t-zh { color: #A5281B; }
       <button class="tool" id="rubyBtn" type="button" aria-pressed="true">Show Jyutping</button>
       <button class="tool" id="talesBtn" type="button"><span class="t-en">Moon Tales</span><span class="t-zh" lang="zh-TW">月亮故事</span></button>
       <button class="tool" id="scopeBtn" type="button" aria-pressed="false"><span class="t-en">Telescope</span><span class="t-zh" lang="zh-TW">望遠鏡</span></button>
+      <button class="tool" id="journalBtn" type="button"><span class="t-en">Journal</span><span class="t-zh" lang="zh-TW">收集冊</span></button>
       <button class="tool" id="camBtn" type="button" aria-pressed="true"><span class="t-en">Camera drift</span><span class="t-zh" lang="zh-TW">鏡頭移動</span></button>
     </div>
   </div>
@@ -273,6 +298,7 @@ html.text-both .book .t-en + .t-zh { color: #A5281B; }
 
     </div>
     <div class="meters" id="meters"></div>
+    <div class="goals" id="goals" aria-live="polite"></div>
     <section class="story" aria-label="Tonight's story">
       <div class="story-head">
         <h2><span class="t-en">Tonight’s story</span><span class="t-zh" lang="zh-TW">今晚的故事</span></h2>
@@ -288,7 +314,7 @@ html.text-both .book .t-en + .t-zh { color: #A5281B; }
     </section>
   </div>
 
-  <p class="about">Version 1.6 · Launched <time datetime="2026-09-25">September 25, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="../feedback/?game=mid-autumn&amp;v=1.6"><span class="t-en">Share your thoughts</span><span class="t-zh" lang="zh-TW">分享意見</span></a> · <a href="../feedback/?game=mid-autumn&amp;v=1.6&amp;kind=bug"><span class="t-en">Report a bug</span><span class="t-zh" lang="zh-TW">報告問題</span></a></p>
+  <p class="about">Version 1.7 · Launched <time datetime="2026-09-25">September 25, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="../feedback/?game=mid-autumn&amp;v=1.7"><span class="t-en">Share your thoughts</span><span class="t-zh" lang="zh-TW">分享意見</span></a> · <a href="../feedback/?game=mid-autumn&amp;v=1.7&amp;kind=bug"><span class="t-en">Report a bug</span><span class="t-zh" lang="zh-TW">報告問題</span></a> · <button class="linkish" id="tellBtn" type="button"><span class="t-en">Know someone who might like this? Tell a friend</span><span class="t-zh" lang="zh-TW">認識會喜歡的人？告訴朋友</span></button> <span id="tellStatus"></span></p>
   <p class="about tb"><span class="t-en">Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></span><span class="t-zh" lang="zh-TW">由 Magic Makers 製作。更多遊戲陸續推出。喜歡嗎？請我們食個月餅：<a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></span></p>
   <p class="about tb"><span class="t-en">These games don’t collect any information. Saved progress stays in your own browser.</span><span class="t-zh" lang="zh-TW">這些遊戲不會收集任何資料。儲存的進度只會留在你自己的瀏覽器。</span></p>
 </div>
@@ -302,6 +328,13 @@ html.text-both .book .t-en + .t-zh { color: #A5281B; }
     <div class="rd-opts" id="rdOpts"></div>
     <p class="rd-result" id="rdResult" hidden></p>
     <button class="go" id="rdDone" type="button" hidden><span class="t-en">Keep partying</span><span class="t-zh" lang="zh-TW">繼續派對</span></button>
+  </div>
+</div>
+
+<div class="endmodal" id="journal" hidden>
+  <div class="card journal" role="dialog" aria-modal="true" aria-labelledby="journalTitle">
+    <div class="journal-head"><h2 id="journalTitle"><span class="t-en">Festival Journal</span><span class="t-zh" lang="zh-TW">中秋收集冊</span></h2><button class="tool" id="journalClose" type="button"><span class="t-en">Close</span><span class="t-zh" lang="zh-TW">關閉</span></button></div>
+    <div id="journalBody" style="display:grid;gap:8px"></div>
   </div>
 </div>
 
@@ -1846,7 +1879,7 @@ function updateScene(dt, t) {
   if (finale) updateFinale(dt, t);
   if (couple) { couple.t += dt; if (Math.random() < dt * 3) burst(couple.x, couple.y - 50, 1, { c: '#FF8BB0', v0: 10, v1: 25, g: -30, l0: 1, l1: 1.6, r0: 3, r1: 4, kind: 'heart' }); }
 }
-let fireTarget = null;
+let fireTarget = null, hideBubbles = false;
 /* ───────────── The legendary finale ─────────────
    A perfect night earns twelve seconds of spectacle before the end screen: the moon swells and shines a
    beam onto the city, Chang'e and the Jade Rabbit ride it down, every lantern rises into the sky, gold
@@ -2043,7 +2076,7 @@ function renderWorld(t) {
     ctx.globalAlpha = 1;
     // Speech bubbles.
     ctx.font = `700 11px ${FBODY}`; ctx.textAlign = 'center';
-    for (const b of bubbles) {
+    for (const b of (hideBubbles ? [] : bubbles)) {
       const p = b.p, x = clamp(p.x, 30, W - 30), y = p.y - 46 * depth(p.y) - (1.8 - b.life) * 6;
       const L = b.lines || [b.text], hh = L.length * 13 + 3;
       const w = Math.max(...L.map(l => ctx.measureText(l).width)) + 12;
@@ -2182,6 +2215,7 @@ const LINES = {
   tram: ['Ding ding! A double-decker tram rolls by. Tap it to ring the bell.', '叮叮！雙層電車經過。撳佢打鐘！', '--gold'],
   tram_tap: ['Hong Kong’s trams have run since 1904, and everyone calls them “ding ding” after the sound of their bell.', '香港電車由1904年開始行駛，因為鐘聲叮叮聲，大家都叫佢「叮叮」。', '--gold'],
   boss: ['A giant riddle lantern appears! Tap it and solve its hard riddle for 1,000 points.', '出現咗個巨型燈謎！撳佢，估中難題有1000分。', '--gold'],
+  goal: ['Goal complete: {en}! A star for you, and 200 points.', '完成目標：{zh}！送你一粒星，加200分。', '--gold'],
   eggfound: ['Surprise found! {n} of 8 tonight.', '搵到驚喜！今晚搵到{n}個，一共有8個。', '--gold'],
   end: ['Midnight! {en}. You scored {score} Reunion points.', '十二點喇！{zh}！你攞到{n}分團圓分。', '--gold'],
 };
@@ -2275,6 +2309,7 @@ const METER_OF = { fire: 'fire', tummy: 'tummy', police: 'noise', rowdy: 'rowdy'
 // Looks at the city a few times a second and tells the story of what changed.
 function watchStory(d) {
   if (!running) return;
+  checkGoals();
   const N = MMSim.NIGHT;
   if (S.t >= N / 2) once('nine', {}, 1);
   if (S.t >= N * 5 / 6) once('eleven', {}, 1);
@@ -2347,6 +2382,7 @@ function handleEvent(e) {
     if (e.kind === 'change' && special) { special.caught = true; SFX.reunion(); }
     if (e.kind === 'dragon' && special) { special.caught = true; special.dance = 8; special.cx = W * .5; SFX.drumRoll(true); }
     if (e.kind === 'wugang') { for (let i = 0; i < 90; i++) burst(rnd(0, W), rnd(-30, 60), 1, { a: Math.PI / 2, spread: .6, v0: 20, v1: 50, g: 12, c: pick(['#FFD35C', '#F4B63A', '#FFE9A0']), l0: 5, l1: 8, r0: 2.2, r1: 3.4, kind: 'petal', drag: .995 }); SFX.chop(); }
+    if (VISITORS[e.kind]) note('visitors', e.kind);
     narrate({ rabbit: 'rabbit_ok', change: 'change_ok', dragon: 'dragon_ok', wugang: 'wg_ok' }[e.kind], { p }, 3);
   }
   if (e.type === 'end') { if (MMSim.grade(S.score) === 'legend') startFinale(); else endNight(); }
@@ -2405,6 +2441,7 @@ function openRiddle(boss) {
   $('#rdOpts').onclick = e => {
     const b = e.target.closest('button[data-c]'); if (!b || !$('#rdDone').hidden) return;
     const right = b.dataset.c === R.a;
+    if (right) note('chars', R.a);
     b.classList.add(right ? 'right' : 'wrong');
     $('#rdOpts').querySelector(`[data-c="${R.a}"]`).classList.add('right');
     let pts = MMSim.answer(S, right);
@@ -2434,17 +2471,17 @@ Object.assign(ROM, { 重: ['zhòng', 'cung5'], 理: ['lǐ', 'lei5'], 野: ['yě'
 const HAP = { cur: null, next: 25, done: {} };
 function mayhem() { return S.incident ? 1 : Math.max(S.m.fire, S.m.tummy, S.m.noise, S.m.rowdy, S.m.monkeys, S.m.smell) / 100; }
 const HAPS = {
-  typhoon: { dur: 16, once: true, ok: d => S.t > MMSim.NIGHT / 3 && (S.m.fire >= 60 || S.m.smell >= 60 || d.P >= 40) },
-  parade: { dur: 14, ok: d => !S.incident && S.celebrating >= 20 && people.filter(p => p.hat && !p.gone && !p.taken).length >= 4 },
+  typhoon: { dur: 16, once: true, ok: d => TONIGHT.typhoon && S.t > MMSim.NIGHT / 3 && (S.m.fire >= 60 || S.m.smell >= 60 || d.P >= 40) },
+  parade: { dur: 14, once: true, ok: d => TONIGHT.parade && !S.incident && S.celebrating >= 20 && people.filter(p => p.hat && !p.gone && !p.taken).length >= 4 },
   waiter: { dur: 18, ok: d => S.n.tea >= 3 && d.P >= 20 },
   trolley: { dur: 18, ok: d => d.P >= 20 && d.cakeCov < .7 },
-  contest: { dur: 10, once: true, ok: d => S.n.mooncakes >= 10 && d.P >= 16 },
+  contest: { dur: 10, once: true, ok: d => TONIGHT.contest && S.n.mooncakes >= 10 && d.P >= 16 },
   cat: { dur: 16, ok: d => S.n.mahjong >= 2 },
   tram: { dur: 13, ok: d => S.n.buildings >= 4 },
 };
 function startHappening(kind) {
   const h = { kind, age: 0, dur: HAPS[kind].dur };
-  HAP.cur = h; HAP.done[kind] = (HAP.done[kind] || 0) + 1;
+  HAP.cur = h; HAP.done[kind] = (HAP.done[kind] || 0) + 1; note('haps', kind);
   if (kind === 'typhoon') {
     MMSim.storm(S, h.dur); puddles = [];
     people.forEach((p, i) => { p.umb = i % 2 === 0; p.umbFlip = 0; });
@@ -2468,21 +2505,21 @@ function endHappening() {
     else if (h.taps >= 12) { MMSim.bonus(S, 150); narrate('contest_win', { n: h.taps }, 3); SFX.cheer(1.2); }
     else narrate('contest_lose', { n: h.taps }, 2);
   }
-  HAP.next = rnd(30, 45);
+  HAP.next = rnd(40, 70);
 }
 function updateHappenings(dt, t) {
   if (!running || holdGame || finale) return;
   const d = MMSim.derive(S);
   // The giant riddle lantern comes at 11 pm if there are lanterns up.
-  if (!HAP.done.boss && S.t >= MMSim.NIGHT * 5 / 6 && S.n.lanterns >= 5 && !S.special) {
-    HAP.done.boss = 1; special = { kind: 'boss', x: -60, y: G.roadB - 40, age: 0, dur: 16 }; narrate('boss', {}, 3); SFX.gong();
+  if (!HAP.done.boss && TONIGHT.boss && S.t >= MMSim.NIGHT * 5 / 6 && S.n.lanterns >= 5 && !S.special) {
+    HAP.done.boss = 1; note('haps', 'boss'); special = { kind: 'boss', x: -60, y: G.roadB - 40, age: 0, dur: 16 }; narrate('boss', {}, 3); SFX.gong();
   }
   const h = HAP.cur;
   if (!h) {
     HAP.next -= dt * SPEED;
     if (HAP.next > 0 || S.incident && S.incident.kind !== 'fire') return;
     if (!(d.P >= 30 || mayhem() >= .6) && !(S.m.fire >= 60 || S.m.smell >= 60)) { HAP.next = 5; return; }
-    const ok = Object.keys(HAPS).filter(k => HAPS[k].ok(d) && !(HAPS[k].once && HAP.done[k]));
+    const ok = Object.keys(HAPS).filter(k => HAPS[k].ok(d) && !(HAPS[k].once && HAP.done[k]) && (HAP.done[k] || 0) < 2);
     if (!ok.length) { HAP.next = 8; return; }
     const fresh = ok.filter(k => !HAP.done[k]);
     startHappening(pick(fresh.length ? fresh : ok));
@@ -2601,6 +2638,127 @@ function drawWeather(t) {
   ctx.restore();
 }
 
+/* ───────────── Rare nights, goals, the Festival Journal, and sharing ───────────── */
+// Each night decides which rare things are "in the stars", so they feel special when they come.
+let TONIGHT = {};
+function rollTonight() {
+  TONIGHT = { typhoon: Math.random() < .35, dragon: Math.random() < .5, change: Math.random() < .75, boss: Math.random() < .6, contest: Math.random() < .6, parade: Math.random() < .6 };
+  if (!TONIGHT.dragon) S.seen.dragon = true;
+  if (!TONIGHT.change) S.seen.change = true;
+}
+
+// Tonight's goals: three picked at random, each worth a star and 200 points.
+const GOALS = [
+  { id: 'crowd40', en: 'Get 40 people celebrating at once', zh: '同一時間有 40 人慶祝', ok: () => S.celebrating >= 40 },
+  { id: 'rabbit', en: 'Catch the Jade Rabbit', zh: '捉到玉兔', ok: () => S.tally.rabbit >= 1 },
+  { id: 'nopolice', en: 'Reach 10 pm with no police visits', zh: '到晚上十點都沒有警察到場', ok: () => S.t >= MMSim.NIGHT * 2 / 3 && S.tally.police === 0, fail: () => S.tally.police > 0 },
+  { id: 'nofire', en: 'Reach 10 pm without a fire', zh: '到晚上十點都沒有火災', ok: () => S.t >= MMSim.NIGHT * 2 / 3 && S.tally.fire === 0, fail: () => S.tally.fire > 0 },
+  { id: 'clean5', en: 'Clean up 5 messes', zh: '清理 5 處污糟', ok: () => S.tally.cleaned >= 5 },
+  { id: 'riddle2', en: 'Solve 2 lantern riddles', zh: '猜中 2 個燈謎', ok: () => S.tally.riddlesRight >= 2 },
+  { id: 'score8k', en: 'Score 8,000 Reunion points', zh: '得到 8,000 團圓分', ok: () => S.score >= 8000 },
+  { id: 'egg2', en: 'Find 2 hidden surprises', zh: '找到 2 個驚喜', ok: () => Object.keys(eggsTonight).length >= 2 },
+  { id: 'happen2', en: 'See 2 happenings', zh: '看到 2 個特別事件', ok: () => Object.keys(HAP.done).filter(k => k !== 'boss').length >= 2 },
+  { id: 'change', en: 'Bring Chang’e home', zh: '把嫦娥帶回家', ok: () => S.tally.change >= 1, needs: () => TONIGHT.change },
+  { id: 'monkeyfree', en: 'Serve fruit all night without a monkey raid', zh: '整晚有生果但沒有馬騮搶劫', ok: () => S.over && S.tally.monkeys === 0 && fruitServed, fail: () => S.tally.monkeys > 0 },
+  { id: 'uprising', en: 'Start the mooncake uprising', zh: '發動月餅起義', ok: () => S.uprising },
+];
+let goals = [], fruitServed = false;
+function pickGoals() {
+  goals = shuffled(GOALS.filter(g => !g.needs || g.needs())).slice(0, 3).map(g => ({ g, done: false, failed: false }));
+  renderGoals();
+}
+function checkGoals() {
+  if (S.n.snacks > 0) fruitServed = true;
+  let changed = false;
+  for (const x of goals) {
+    if (x.done || x.failed) continue;
+    if (x.g.fail && x.g.fail()) { x.failed = true; changed = true; continue; }
+    if (x.g.ok()) {
+      x.done = true; changed = true; MMSim.bonus(S, 200);
+      J().stars = (J().stars || 0) + 1; saveJ();
+      narrate('goal', { en: x.g.en, zh: x.g.zh }, 2); SFX.sparkle(true);
+    }
+  }
+  if (changed) renderGoals();
+}
+function renderGoals() {
+  const el = $('#goals'); if (!el) return;
+  el.innerHTML = `<span class="goals-h">${T('Tonight’s goals', '今晚目標')}</span>` + goals.map(x => `<span class="goal ${x.done ? 'done' : x.failed ? 'failed' : ''}"><i>${x.done ? '★' : x.failed ? '✕' : '☆'}</i>${T(x.g.en, x.g.zh)}</span>`).join('');
+}
+
+// Ranks from stars earned across every night.
+const RANKS = [[0, 'Lantern Kid', '燈籠小孩'], [5, 'Mooncake Maker', '月餅師傅'], [15, 'Festival Host', '中秋主人'], [30, 'Moon Guardian', '月亮守護者'], [50, 'Legend of the Moon', '月亮傳奇']];
+function rank() { const st = J().stars || 0; let r = RANKS[0]; for (const x of RANKS) if (st >= x[0]) r = x; const nx = RANKS.find(x => x[0] > st); return { en: r[1], zh: r[2], stars: st, next: nx ? nx[0] : null }; }
+
+// The Festival Journal remembers everything found, across nights, in this browser.
+function J() { prefs.journal = prefs.journal || {}; for (const k of ['chars', 'haps', 'shops', 'visitors']) prefs.journal[k] = prefs.journal[k] || {}; return prefs.journal; }
+function saveJ() { savePrefs(); }
+function note(kind, key) { if (!J()[kind][key]) { J()[kind][key] = 1; saveJ(); } }
+const HAP_NAMES = { typhoon: ['Typhoon Signal No. 8', '八號風球'], parade: ['Pomelo-hat parade', '柚子帽巡遊'], waiter: ['Cha chaan teng waiter', '茶餐廳伙記'], trolley: ['Dim sum trolley', '點心車'], contest: ['Mooncake-eating contest', '食月餅大賽'], cat: ['Mahjong cat', '麻將貓'], tram: ['Ding-ding tram', '叮叮電車'], boss: ['Giant riddle lantern', '巨型燈謎'] };
+const EGG_NAMES = { shops: ['Neon shop signs', '霓虹招牌', 'Tap a glowing sign'], lucky8: ['Lucky eights', '好意頭的八', 'Three of anything… but which number?'], lion: ['Lion Rock roars', '獅子山怒吼', 'The hills behind the harbour'], junk: ['Junk boat salute', '紅帆船煙花', 'Something red on the water'], teatap: ['Tea finger-tap', '叩指謝茶', 'Something on the banquet table'], moonface: ['The winking moon', '眨眼的月亮', 'Tap tap tap tap tap…'], mahjong: ['Sik wu!', '食糊！', 'Where the tiles clack'], rabbitcall: ['Calling the rabbit', '呼喚玉兔', 'Try typing its name'] };
+const VISITORS = { rabbit: ['Jade Rabbit', '玉兔'], change: ['Chang’e', '嫦娥'], dragon: ['Fire dragon', '火龍'], wugang: ['Wu Gang', '吳剛'] };
+function openJournal() {
+  const j = J(), r = rank(), eggs = prefs.eggs || {};
+  const allChars = [...RIDDLES, ...BOSS_RIDDLES];
+  const chip = (on, html, lock) => `<span class="jchip ${on ? 'on' : ''}">${on ? html : `<span class="lock">???</span>${lock ? `<small class="tb">${lock}</small>` : ''}`}</span>`;
+  $('#journalBody').innerHTML = `
+    <section class="jrank"><b>${T(r.en, r.zh)}</b><span>${'★'.repeat(Math.min(r.stars, 10))}${r.stars > 10 ? ' ×' + r.stars : ''}</span><small class="tb">${T(r.next ? `${r.next - r.stars} more stars to the next rank. Complete tonight’s goals to earn stars.` : 'The highest rank of all!', r.next ? `再得 ${r.next - r.stars} 粒星就升級。完成今晚目標可以得到星星。` : '最高的等級！')}</small>
+      <small>${T(`Legendary nights: ${prefs.legends || 0} · Best score: ${(prefs.best || 0).toLocaleString('en')}`, `傳奇之夜：${prefs.legends || 0} · 最高分：${(prefs.best || 0).toLocaleString('en')}`)}</small></section>
+    <h3>${T('Characters learned from riddles', '從燈謎學到的字')} <em>${allChars.filter(x => j.chars[x.a]).length} / ${allChars.length}</em></h3>
+    <div class="jgrid chars">${allChars.map(x => chip(j.chars[x.a], `<ruby lang="zh-TW">${x.a}<rt>${ROM[x.a][LANG === 'yue' ? 1 : 0]}</rt></ruby><small>${x.zh}</small>`)).join('')}</div>
+    <h3>${T('Hidden surprises', '隱藏驚喜')} <em>${Object.keys(EGG_NAMES).filter(k => eggs[k]).length} / 8</em></h3>
+    <div class="jgrid">${Object.entries(EGG_NAMES).map(([k, [en, zhN, hint]]) => chip(eggs[k], T(en, zhN), T(`Hint: ${hint}`, '提示：' + ({ shops: '點一下發光的招牌', lucky8: '三樣東西都是……哪個數字？', lion: '海港後面的山', junk: '水上有紅色的東西', teatap: '宴會枱上的東西', moonface: '點點點點點……', mahjong: '麻將聲從哪裡來？', rabbitcall: '試試打出牠的名字' }[k])))).join('')}</div>
+    <h3>${T('Happenings seen', '見過的特別事件')} <em>${Object.keys(HAP_NAMES).filter(k => j.haps[k]).length} / ${Object.keys(HAP_NAMES).length}</em></h3>
+    <div class="jgrid">${Object.entries(HAP_NAMES).map(([k, [en, zhN]]) => chip(j.haps[k], T(en, zhN))).join('')}</div>
+    <h3>${T('Shop facts', '老店小知識')} <em>${SHOPS.filter((sh, i) => j.shops[i]).length} / ${SHOPS.length}</em></h3>
+    <div class="jgrid">${SHOPS.map((sh, i) => chip(j.shops[i], `<span lang="zh-TW">${sh.zh}</span><small>${sh.en}</small>`)).join('')}</div>
+    <h3>${T('Moon visitors met', '遇過的月亮訪客')} <em>${Object.keys(VISITORS).filter(k => j.visitors[k]).length} / 4</em></h3>
+    <div class="jgrid">${Object.entries(VISITORS).map(([k, [en, zhN]]) => chip(j.visitors[k], T(en, zhN))).join('')}</div>`;
+  $('#journal').hidden = false; wasPausedJ = paused; paused = true; syncPause(); $('#journalClose').focus();
+}
+let wasPausedJ = false;
+function closeJournal() { $('#journal').hidden = true; paused = wasPausedJ; syncPause(); }
+
+// Share: a picture of your city with your score, for the share sheet (phones) or saved as a file.
+const GAME_URL = 'https://magicmakersfamily.github.io/games/mid-autumn/';
+async function makeShareImage() {
+  const c = document.createElement('canvas'); c.width = 1200; c.height = 672;
+  const g = c.getContext('2d');
+  hideBubbles = true; drawScene(lastT); hideBubbles = false;   // a clean picture, without speech bubbles
+  g.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 1200, 672);
+  const band = g.createLinearGradient(0, 420, 0, 672); band.addColorStop(0, 'rgba(6,9,26,0)'); band.addColorStop(.45, 'rgba(6,9,26,.82)'); band.addColorStop(1, 'rgba(6,9,26,.95)');
+  g.fillStyle = band; g.fillRect(0, 420, 1200, 252);
+  const gr = MMSim.grade(S.score), GZ = { legend: '花好月圓', great: '熱鬧', happy: '開心', quiet: '冷清', empty: '靜夜' }, GE = { legend: 'A legendary night', great: 'A lively, bustling night', happy: 'A happy night', quiet: 'A quiet night', empty: 'A still, empty night' };
+  g.textAlign = 'left'; g.fillStyle = '#F4C24F'; g.font = `900 64px ${FZH}`; g.fillText(GZ[gr], 48, 560);
+  g.fillStyle = '#F6ECD6'; g.font = `400 34px ${FDISP}`; g.fillText(`${GE[gr]} · ${Math.round(S.score).toLocaleString('en')} Reunion points`, 48, 612);
+  const r = rank(); g.font = `700 22px ${FBODY}`; g.fillStyle = '#C9C0AA'; g.fillText(`Rank: ${r.en} ${r.zh} · ★ ${r.stars}`, 48, 646);
+  g.textAlign = 'right'; g.fillStyle = '#F6ECD6'; g.font = `400 30px ${FDISP}`; g.fillText('Mid-Autumn Mayhem', 1152, 600); g.fillStyle = '#F4C24F'; g.font = `900 28px ${FZH}`; g.fillText('中秋大混亂', 1152, 636);
+  g.fillStyle = '#928EA8'; g.font = `700 18px ${FBODY}`; g.fillText('Play free: magicmakersfamily.github.io/games', 1152, 662);
+  return new Promise(res => c.toBlob(b => res(b), 'image/png'));
+}
+function shareText() { return `I scored ${Math.round(S.score).toLocaleString('en')} Reunion points in Mid-Autumn Mayhem 中秋大混亂! Can you beat me? 🌕`; }
+async function shareNight(btn) {
+  const status = $('#shareStatus');
+  try {
+    const blob = await makeShareImage();
+    const file = new File([blob], 'mid-autumn-mayhem.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Mid-Autumn Mayhem', text: shareText() + ' ' + GAME_URL }); status.innerHTML = T('Shared!', '分享咗！'); return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'mid-autumn-mayhem.png'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    try { await navigator.clipboard.writeText(shareText() + ' ' + GAME_URL); } catch (e) { /* clipboard blocked */ }
+    status.innerHTML = T('Picture saved to your downloads, and the link is copied. Post them wherever you like!', '圖片已儲存，連結亦已複製。可以隨意分享！');
+  } catch (e) { if (e && e.name === 'AbortError') return; status.innerHTML = T('Sorry, sharing didn’t work on this device.', '對不起，這部機未能分享。'); }
+}
+// Tell a friend: share just the link.
+async function tellFriend(statusEl) {
+  const text = 'A free Mid-Autumn Festival game about Hong Kong, mooncakes and moon legends, in English and Cantonese: Mid-Autumn Mayhem 中秋大混亂';
+  try {
+    if (navigator.share) { await navigator.share({ title: 'Mid-Autumn Mayhem', text, url: GAME_URL }); return; }
+    await navigator.clipboard.writeText(text + ' ' + GAME_URL);
+    if (statusEl) statusEl.innerHTML = T('Link copied. Paste it in a message to a friend!', '連結已複製，貼上訊息傳給朋友吧！');
+  } catch (e) { if (statusEl && !(e && e.name === 'AbortError')) statusEl.innerHTML = T(`Copy this link: ${GAME_URL}`, `複製這個連結：${GAME_URL}`); }
+}
+
 /* ───────────── Pointer: tapping visitors ───────────── */
 function toLogical(ev) { const r = canvas.getBoundingClientRect(); return { x: (ev.clientX - r.left) / r.width * W, y: (ev.clientY - r.top) / r.height * H }; }
 let dragLens = false, moonTaps = [], typed = '';
@@ -2658,7 +2816,7 @@ canvas.addEventListener('pointerdown', ev => {
   if (h === 'special') { if (special.kind === 'boss') { special = null; openRiddle(true); } else MMSim.tap(S, special.kind); return; }
   if (h === 'hap') { tapHappening(); return; }
   if (h === 'mess') { cleanMess(q); return; }
-  if (h.startsWith('sign:')) { const i = +h.slice(5); FX.sign[i] = lastT + 1.6; SFX.buzz(); egg('shops', 'shop' + i); return; }
+  if (h.startsWith('sign:')) { const i = +h.slice(5); note('shops', i); FX.sign[i] = lastT + 1.6; SFX.buzz(); egg('shops', 'shop' + i); return; }
   if (h === 'teapot') { SFX.knock(); egg('teatap', 'teatap'); return; }
   if (h === 'table') { const tb = tables().find(tb => Math.hypot(toWorld(q).x - tb.x, (toWorld(q).y - tb.y) * 1.6) < 20); if (tb) { burst(tb.x, tb.y - 6, 30, { a: -Math.PI / 2, spread: 1.2, v0: 60, v1: 140, g: 260, c: () => pick(['#F2EBD6', '#2E8A5E', '#E3493A']), l0: .8, l1: 1.4, r0: 1.6, r1: 2.6 }); const pl = people.find(p => p.seat >= 0 && Math.floor(p.seat / 4) === tables().indexOf(tb)); if (pl) say(pl, '食糊!', '#9FF0C4'); } SFX.clack(tb ? tb.x : W / 2); SFX.cheer(.6); egg('mahjong', 'mahjong'); return; }
   if (h === 'boat') { const A = camA(), e6 = camE(.6), e1 = camE(1), sxp = A * HOT.boat.x + e6.e, bx1 = (sxp - e1.e) / A; for (let k = 0; k < 5; k++) setTimeout(() => { rockets.push({ x: bx1 + rnd(-20, 20), y: G.waterTop + 20, vy: -rnd(240, 300), fuse: rnd(.6, .9), c: pick(['#FF5E5E', '#FFD23F', '#63E6FF', '#FFFFFF']) }); SFX.whistle(); }, k * 250); SFX.horn(); egg('junk', 'junk'); return; }
@@ -2680,6 +2838,10 @@ $('#scopeBtn').addEventListener('click', () => {
   canvas.style.touchAction = LENS.on ? 'none' : ''; LENS.x = W / 2; LENS.y = H * .62;
   if (LENS.on) once('scope', {}, 1);
 });
+$('#journalBtn').addEventListener('click', openJournal);
+$('#journalClose').addEventListener('click', closeJournal);
+$('#journal').addEventListener('click', e => { if (e.target.id === 'journal') closeJournal(); });
+$('#tellBtn').addEventListener('click', () => tellFriend($('#tellStatus')));
 $('#camBtn').addEventListener('click', () => { CAM.on = !CAM.on; $('#camBtn').setAttribute('aria-pressed', CAM.on); });
 
 /* ───────────── Controls ───────────── */
@@ -3105,10 +3267,11 @@ function startNight() {
   $('#startOv').hidden = true; $('#endOv').hidden = true;
   document.querySelector('.item[data-key="secret"]').hidden = true; document.querySelector('.item[data-key="secret"]').classList.remove('new');
   audioStart(); refreshControls();
-  eggsTonight = {}; FX.sign = {}; FX.moonFace = 0; FX.lion = 0; HAP.cur = null; HAP.next = 25; HAP.done = {};
+  eggsTonight = {}; FX.sign = {}; FX.moonFace = 0; FX.lion = 0; HAP.cur = null; HAP.next = 35; HAP.done = {};
   Narr.q = []; stopSpeech(); Narr.said = {}; Narr.last = {}; Narr.meter = { fire: 0, tummy: 0, noise: 0, rowdy: 0, monkeys: 0, smell: 0 }; Narr.wg = -1; Narr.wgCount = 0; monkeys = []; holdGame = false; $('#riddleOv').hidden = true;
   $('#storyLog').innerHTML = '';
   if (narrationOn() && voices.length && !yueVoice()) storyLine(LINES.novoice[0], LINES.novoice[1], '--ink-3');
+  rollTonight(); fruitServed = false; pickGoals();
   narrate('intro', {}, 2);
   updateHud(MMSim.derive(S));
 }
@@ -3135,6 +3298,7 @@ document.addEventListener('click', e => { const b = e.target.closest('[data-tm]'
 [['tEn', 'en'], ['tZh', 'zh'], ['tBoth', 'both']].forEach(([id, m]) => $('#' + id).addEventListener('click', () => { TMODE = m; prefs.tmode = m; savePrefs(); syncText(); refreshControls(); }));
 function syncRuby() { document.documentElement.classList.toggle('show-ruby', RUBY); $('#rubyBtn').setAttribute('aria-pressed', RUBY); }
 function endNight(legend) {
+  checkGoals();
   running = false;
   const g = MMSim.grade(S.score);
   const key = { legend: 'legend', great: 'great', happy: 'good', quiet: 'quiet', empty: 'empty' }[g];
@@ -3156,11 +3320,13 @@ function endNight(legend) {
       ${li('Kids gone wild', '小朋友失控', TL.rowdy)}${li('Buildings lost', '燒毀大樓', TL.burned)}${li('Monkey raids', '馬騮搶劫', TL.monkeys)}${li('Riddles solved', '猜中燈謎', `${TL.riddlesRight} / ${TL.riddles}`)}${li('Messes cleaned', '清理污糟', TL.cleaned)}${li('Surprises found', '搵到驚喜', `${Object.keys(eggsTonight).length} / 8`)}${li('Visitors caught', '捉到訪客', TL.rabbit + TL.change + TL.dragon)}
     </ul>
     <p class="tb">${T(tip, tipZh)}</p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="againBtn" type="button">${T('Play again', '再玩一次')}</button><button class="tool" id="endTales" type="button">${T('Read the Moon Tales', '看月亮故事')}</button></div>
+    <p class="rank-line">${T('Goals', '目標')} ${goals.map(x => x.done ? '★' : '☆').join('')} · ${T('Your rank:', '你的等級：')} <b>${T(rank().en, rank().zh)}</b> · ★ ${rank().stars}</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="againBtn" type="button">${T('Play again', '再玩一次')}</button><button class="tool" id="endTales" type="button">${T('Read the Moon Tales', '看月亮故事')}</button><button class="tool" id="endJournal" type="button">${T('Journal', '收集冊')}</button></div>
+    <div class="share-row"><button class="tool" id="shareBtn" type="button">${T('Share my night', '分享我的晚會')}</button><button class="tool" id="endTell" type="button">${T('Tell a friend', '告訴朋友')}</button><p class="share-status" id="shareStatus"></p></div>
     <div class="more">
       <h3>${T('More from the Game Shelf', '遊戲架上的其他遊戲')}</h3>
       <a class="more-game" href="../aquarium/"><img src="../aquarium/cover.png" alt="" onerror="this.remove()"><span><b>${T('James’s Nature Aquarium', '水草缸')}</b><small class="tb">${T('Build a planted aquarium and keep a tiny ecosystem in balance.', '建立一個水草缸，讓小小的生態系統保持平衡。')}</small></span></a>
-      <p class="more-fb">${T('Tell us what you think:', '話我哋知你覺得點：')} <a href="../feedback/?game=mid-autumn&amp;v=1.6">${T('Share your thoughts', '分享意見')}</a> · <a href="../feedback/?game=mid-autumn&amp;v=1.6&amp;kind=bug">${T('Report a bug', '報告問題')}</a></p>
+      <p class="more-fb">${T('Tell us what you think:', '話我哋知你覺得點：')} <a href="../feedback/?game=mid-autumn&amp;v=1.7">${T('Share your thoughts', '分享意見')}</a> · <a href="../feedback/?game=mid-autumn&amp;v=1.7&amp;kind=bug">${T('Report a bug', '報告問題')}</a></p>
       <p class="grownups tb">${T(`<b>For grown-ups:</b> we’re a family making little games about the things we’re curious about, and the next one is already brewing. <a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">Follow us on Ko-fi</a> to hear when it’s out, or <a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">♥ support the next game</a>.`, `<b>給大人：</b>我們是一家人，把好奇的事做成小遊戲，下一個已在製作中。<a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">在 Ko-fi 關注我們</a>，新遊戲推出時就會知道，或者<a href="${'https://ko-fi.com/magicmakers'}" target="_blank" rel="noopener">♥ 支持下一個遊戲</a>。`)}</p>
     </div>`;
   $('#endOv').hidden = false;
@@ -3168,6 +3334,9 @@ function endNight(legend) {
   $('#againBtn').focus();
   narrate('end', { en: names[g], zh: GZ[g], score: Math.round(S.score).toLocaleString('en'), n: Math.round(S.score) }, 3);
   $('#endTales').addEventListener('click', () => openTales());
+  $('#endJournal').addEventListener('click', openJournal);
+  $('#shareBtn').addEventListener('click', () => shareNight());
+  $('#endTell').addEventListener('click', () => tellFriend($('#shareStatus')));
   refreshControls();
 }
 
