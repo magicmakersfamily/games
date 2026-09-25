@@ -1,0 +1,3030 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Build a planted aquarium from empty and keep it in balance. Learn photosynthesis, the nitrogen cycle, food webs, Chinese words and music along the way.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="James’s Nature Aquarium">
+<meta property="og:description" content="An ecosystem game: build a planted aquarium and keep it in balance.">
+<meta property="og:image" content="https://magicmakersfamily.github.io/family-games/aquarium/cover.png">
+<meta name="theme-color" content="#3D6A33">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%233D6A33'/%3E%3Cpath d='M32 52V30M32 30c0-9 7-15 15-15 0 9-7 15-15 15ZM32 38c0-7-5-12-12-12 0 7 5 12 12 12Z' fill='none' stroke='%23F4F8F0' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root { color-scheme: light; padding-block: env(safe-area-inset-top, 0px) env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+.shelf-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2); text-decoration: none; margin-bottom: -8px; }
+.shelf-back:hover { color: var(--ink); text-decoration: underline; }
+</style>
+<title>James’s Nature Aquarium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+TC:wght@500;700&family=Shippori+Mincho+B1:wght@600;800&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
+<style>
+:root {
+  --paper: #E8EDE8; --card: #F5F7F3; --card-2: #ECF0EB; --ink: #15201D; --ink-2: #4F5F59; --ink-3: #7A8882; --line: #D0D8D1;
+  --moss: #3D6A33; --moss-ink: #F4F8F0; --moss-soft: #DAE6D0; --sun: #A26F0C;
+  --good: #2D7A4C; --warn: #A56A10; --bad: #B03E2C; --idle: #8A968F;
+  --c-o2: #1E7C9E; --c-co2: #BC7F16; --c-nh3: #C0412F; --c-no2: #D8812A; --c-no3: #6A59AE; --c-h: #3D6A33;
+  --night: rgba(40, 60, 100, 0.09);
+  --t-photo: #3F7F2C; --t-plant: #5C7A1E; --t-micro: #6A4FA8; --t-repro: #B8457A; --t-pred: #B5452F;
+  --t-life: #7A6048; --t-bio: #1F7A83; --t-sys: #2F5E9E; --t-design: #9A6A10;
+  --seal: #B3432E; --c-waste: #8A6743; --c-light: #C8911A; --c-plant: #4C8A33; --c-algae: #8A9E22; --c-turtle: #B5452F;
+  --c-shrimp: #CF5A6E; --c-h2o: #3F92B8; --c-rot: #7D8A84; --t-mission: #B3432E;
+  --shadow: 0 1px 0 rgba(20, 30, 25, .04), 0 12px 32px -20px rgba(20, 40, 30, .4);
+  --display: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", Georgia, serif;
+  --body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", ui-rounded, system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0C1412; --card: #121C19; --card-2: #17231F; --ink: #E2EAE5; --ink-2: #9DAEA7; --ink-3: #72827B; --line: #24332E;
+    --moss: #8DC06F; --moss-ink: #0E1A10; --moss-soft: #1C2C20; --sun: #E1B04C;
+    --good: #62C089; --warn: #E2A64B; --bad: #E56C5C; --idle: #6C7B75;
+    --c-o2: #5BB8DA; --c-co2: #E2AE4E; --c-nh3: #E56C5C; --c-no2: #EE9F57; --c-no3: #A898EE; --c-h: #8DC06F;
+    --night: rgba(120, 150, 220, 0.08);
+    --t-photo: #8DC06F; --t-plant: #B6CF62; --t-micro: #B7A0F0; --t-repro: #F08DB8; --t-pred: #F08870;
+    --t-life: #CDAF8F; --t-bio: #6FCFD6; --t-sys: #8EB4F0; --t-design: #E1B04C;
+    --seal: #EE8A72; --c-waste: #C9A27A; --c-light: #F0C24E; --c-plant: #9BCB7A; --c-algae: #C6D65E; --c-turtle: #F08870;
+    --c-shrimp: #F29AAE; --c-h2o: #74BDE0; --c-rot: #93A29B; --t-mission: #EE8A72;
+    --shadow: 0 1px 0 rgba(0, 0, 0, .2), 0 14px 34px -20px rgba(0, 0, 0, .7);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0C1412; --card: #121C19; --card-2: #17231F; --ink: #E2EAE5; --ink-2: #9DAEA7; --ink-3: #72827B; --line: #24332E;
+  --moss: #8DC06F; --moss-ink: #0E1A10; --moss-soft: #1C2C20; --sun: #E1B04C;
+  --good: #62C089; --warn: #E2A64B; --bad: #E56C5C; --idle: #6C7B75;
+  --c-o2: #5BB8DA; --c-co2: #E2AE4E; --c-nh3: #E56C5C; --c-no2: #EE9F57; --c-no3: #A898EE; --c-h: #8DC06F;
+  --night: rgba(120, 150, 220, 0.08);
+  --t-photo: #8DC06F; --t-plant: #B6CF62; --t-micro: #B7A0F0; --t-repro: #F08DB8; --t-pred: #F08870;
+  --t-life: #CDAF8F; --t-bio: #6FCFD6; --t-sys: #8EB4F0; --t-design: #E1B04C;
+    --seal: #EE8A72; --c-waste: #C9A27A; --c-light: #F0C24E; --c-plant: #9BCB7A; --c-algae: #C6D65E; --c-turtle: #F08870;
+    --c-shrimp: #F29AAE; --c-h2o: #74BDE0; --c-rot: #93A29B; --t-mission: #EE8A72;
+  --shadow: 0 1px 0 rgba(0, 0, 0, .2), 0 14px 34px -20px rgba(0, 0, 0, .7);
+}
+
+* { box-sizing: border-box; }
+html, body { background: var(--paper); }
+body { color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--moss); outline-offset: 2px; }
+
+.page { max-width: 1320px; margin: 0 auto; padding-inline: 20px; padding-block: 22px 56px; display: grid; gap: 22px; }
+
+/* masthead */
+.mast { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.seal {
+  flex: none; width: 52px; height: 52px; border-radius: 12px; background: var(--moss); color: var(--moss-ink);
+  font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif; font-weight: 700; font-size: 19px; line-height: 1.02; display: grid; place-items: center;
+  writing-mode: vertical-rl; letter-spacing: .06em; padding: 4px;
+}
+.brand h1 { margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(24px, 3.2vw, 34px); line-height: 1.08; letter-spacing: -.005em; text-wrap: balance; }
+.brand p { margin: 2px 0 0; color: var(--ink-2); font-size: 14px; }
+.ghost { background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; color: var(--ink-2); font-size: 13px; }
+.ghost:hover { border-color: var(--ink-3); color: var(--ink); }
+.ghost.armed { border-color: var(--bad); color: var(--bad); }
+
+/* stage */
+[hidden] { display: none !important; }
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-rows: auto auto auto 1fr; grid-template-areas: "tank score" "cycles score" "lab score" "journal score"; gap: 22px; align-items: start; }
+.tank-col { grid-area: tank; } .score-col { grid-area: score; } .journal { grid-area: journal; } .cycles { grid-area: cycles; } .lab { grid-area: lab; }
+@media (max-width: 1020px) { .stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; grid-template-areas: "tank" "score" "cycles" "lab" "journal"; } }
+.tank-col { display: grid; gap: 14px; min-width: 0; }
+
+.tank-frame { position: relative; border-radius: 16px; overflow: hidden; background: #0c1211; box-shadow: var(--shadow); }
+#tank { display: block; width: 100%; aspect-ratio: 1000 / 620; max-width: 100%; }
+.hud { position: absolute; inset: 12px 12px auto 12px; display: flex; justify-content: space-between; gap: 8px; pointer-events: none; flex-wrap: wrap; }
+.chip-dark {
+  display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 999px;
+  background: rgba(8, 14, 13, .58); color: #E6EFEA; font-size: 12.5px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.chip-dark svg { width: 14px; height: 14px; }
+#clock { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: .01em; }
+.mood-dot { width: 8px; height: 8px; border-radius: 50%; background: #8fd18a; }
+.toast {
+  position: absolute; left: 12px; bottom: 30px; max-width: min(460px, calc(100% - 24px)); padding: 9px 13px 10px; border-radius: 12px;
+  background: rgba(8, 14, 13, .74); color: #EEF4F0; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  font-size: 13.5px; line-height: 1.35; transition: opacity .35s, transform .35s;
+}
+.toast.fade { opacity: 0; transform: translateY(6px); }
+.toast .t-topic { display: block; font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; color: #A9D79A; margin-bottom: 2px; }
+.progress { position: absolute; left: 0; right: 0; bottom: 0; height: 22px; display: flex; align-items: center; gap: 10px; padding: 0 10px; background: linear-gradient(transparent, rgba(0, 0, 0, .35)); }
+.progress .track { flex: 1; height: 4px; border-radius: 4px; background: rgba(255, 255, 255, .18); overflow: hidden; }
+.progress .fill { height: 100%; width: 0; background: #BFE7A8; }
+.progress button { background: none; border: 0; color: #E6EFEA; font-size: 12px; cursor: pointer; padding: 2px 4px; }
+
+/* controls */
+.controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.ctl { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 10px 9px; display: grid; gap: 6px; min-width: 0; }
+.ctl.changed { border-color: var(--moss); box-shadow: inset 0 0 0 1px var(--moss); }
+.ctl-head { display: flex; align-items: center; gap: 7px; font-weight: 700; font-size: 14px; }
+.ctl-head svg { width: 20px; height: 20px; flex: none; color: var(--moss); }
+.ctl-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; color: var(--ink-2); min-height: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ctl-val b { color: var(--ink); font-weight: 500; font-size: 16px; }
+.ctl-val .to { color: var(--moss); font-weight: 500; }
+.ctl-sub { font-size: 11.5px; color: var(--ink-3); line-height: 1.25; min-height: 2.5em; }
+.ctl-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.ctl-btns button {
+  height: 34px; border-radius: 9px; border: 1px solid var(--line); background: var(--card-2); cursor: pointer;
+  font-size: 19px; line-height: 1; display: grid; place-items: center; transition: background .15s, border-color .15s;
+}
+.ctl-btns button:hover:not(:disabled) { border-color: var(--moss); background: var(--moss-soft); }
+.ctl-btns button:disabled { opacity: .35; cursor: default; }
+.ctl-btns .plus { background: var(--moss-soft); }
+
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 12px 12px 14px; }
+.toggle { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 500; }
+.toggle input { width: 18px; height: 18px; accent-color: var(--moss); margin: 0; }
+.toggle small { color: var(--ink-3); font-weight: 400; font-size: 12px; }
+.plan { flex: 1 1 200px; font-size: 13px; color: var(--ink-2); min-width: 0; }
+.primary {
+  background: var(--moss); color: var(--moss-ink); border: 0; border-radius: 11px; padding: 12px 20px; font-weight: 700; font-size: 15px;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 9px; margin-left: auto; box-shadow: 0 6px 16px -10px var(--moss);
+}
+.primary:hover:not(:disabled) { filter: brightness(1.08); }
+.primary:disabled { opacity: .5; cursor: default; }
+.primary svg { width: 18px; height: 18px; }
+
+/* score column */
+.score-col { display: grid; gap: 14px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.harmony { padding: 16px 18px; display: grid; grid-template-columns: 124px 1fr; gap: 16px; align-items: center; }
+.enso { position: relative; width: 124px; height: 124px; }
+.enso svg { width: 100%; height: 100%; transform: rotate(-100deg); }
+.enso .num { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 44px; font-variant-numeric: tabular-nums; }
+.enso.playing .num { opacity: .35; }
+.h-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; }
+.h-grade { font-family: var(--display); font-weight: 800; font-size: 23px; line-height: 1.15; margin: 2px 0 4px; text-wrap: balance; }
+.h-line { font-size: 13.5px; color: var(--ink-2); }
+.h-delta { display: inline-block; margin-top: 6px; font-family: var(--mono); font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--card-2); color: var(--ink-2); }
+.h-delta.up { color: var(--good); } .h-delta.down { color: var(--bad); }
+
+.sensei { padding: 14px 16px 15px; display: grid; gap: 4px; background: var(--moss-soft); border-color: transparent; }
+.sensei .h-label { color: var(--moss); }
+.sensei p { margin: 0; font-size: 14.5px; line-height: 1.5; }
+
+.meters { padding: 6px 16px 12px; }
+.m-group { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; margin: 12px 0 2px; }
+.meter { border-top: 1px solid var(--line); }
+.m-group + .meter { border-top: 0; }
+.m-row { width: 100%; background: none; border: 0; padding: 8px 0 6px; display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; text-align: left; cursor: pointer; }
+.m-label { font-weight: 500; font-size: 14px; }
+.m-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13.5px; text-align: right; }
+.m-val small { color: var(--ink-3); font-size: 11px; margin-left: 2px; }
+.m-track { grid-column: 1 / -1; position: relative; height: 6px; border-radius: 6px; background: var(--card-2); margin-top: 5px; }
+.m-band { position: absolute; top: 0; bottom: 0; border-radius: 6px; background: color-mix(in srgb, var(--good) 26%, transparent); }
+.m-dot { position: absolute; top: 50%; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%; background: var(--idle); box-shadow: 0 0 0 2px var(--card); transition: left .3s; }
+.m-status { grid-column: 1 / -1; font-size: 12px; color: var(--ink-3); display: flex; justify-content: space-between; margin-top: 3px; }
+.m-status .word { font-weight: 700; }
+.tone-good .m-dot { background: var(--good); } .tone-good .word { color: var(--good); }
+.tone-warn .m-dot { background: var(--warn); } .tone-warn .word { color: var(--warn); }
+.tone-bad .m-dot { background: var(--bad); } .tone-bad .word { color: var(--bad); }
+.tone-idle .word { color: var(--idle); }
+.m-explain { margin: 0 0 10px; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+
+/* lower band */
+.journal h2, .score-col h2 { font-family: var(--display); font-weight: 800; font-size: 21px; margin: 0; }
+.journal { padding: 16px 20px 8px; }
+.j-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+.j-head span { color: var(--ink-3); font-size: 13px; }
+.week { padding: 14px 0 12px; border-top: 1px solid var(--line); }
+.week:first-of-type { border-top: 0; }
+.week-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.week-h b { font-family: var(--display); font-weight: 800; font-size: 17px; }
+.week-h .h-delta { margin: 0; }
+.ev { display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 2px 12px; padding: 7px 0; }
+.ev .day { font-family: var(--mono); font-size: 12px; color: var(--ink-3); padding-top: 2px; }
+.ev h3 { margin: 0; font-size: 14.5px; font-weight: 700; line-height: 1.35; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.ev p { grid-column: 2; margin: 2px 0 0; font-size: 14px; color: var(--ink-2); max-width: 68ch; }
+.topic { font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; color: var(--tc); background: color-mix(in srgb, var(--tc) 13%, transparent); }
+.goal-won { margin-top: 6px; font-size: 13px; color: var(--sun); font-weight: 700; }
+.howto { padding: 12px 0 14px; color: var(--ink-2); font-size: 14.5px; }
+.howto ol { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 5px; }
+.howto b { color: var(--ink); }
+
+.chart-card { padding: 14px 16px 12px; }
+.tabs { display: flex; gap: 4px; background: var(--card-2); padding: 3px; border-radius: 10px; margin: 10px 0 8px; }
+.tabs button { flex: 1; border: 0; background: none; padding: 6px 4px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--ink-2); font-weight: 500; }
+.tabs button[aria-selected="true"] { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, .08); }
+#chart { display: block; width: 100%; height: 190px; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--ink-2); margin-top: 6px; }
+.legend i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+.chart-note { font-size: 12.5px; color: var(--ink-3); margin: 6px 0 0; }
+.goals { padding: 14px 16px 10px; }
+.goals ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 0; }
+.goals li { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: start; padding: 7px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
+.goals li:first-child { border-top: 0; }
+.goals li b { font-weight: 700; display: block; }
+.goals li span { color: var(--ink-3); font-size: 12.5px; }
+.goals li em { font-style: normal; font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); padding-top: 2px; }
+.gmark { width: 18px; height: 18px; border-radius: 50%; border: 1.5px dashed var(--ink-3); margin-top: 2px; opacity: .6; }
+.done .gmark { border: 0; opacity: 1; background: var(--sun); display: grid; place-items: center; }
+.done .gmark::after { content: ""; width: 7px; height: 4px; border: 2px solid var(--card); border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px, -1px); }
+.goals .count { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+
+.about { font-size: 13px; color: var(--ink-3); max-width: 80ch; line-height: 1.6; }
+.about b { color: var(--ink-2); }
+
+
+/* ---- v2: kanji, lens, predict, cycles, missions ---- */
+.kj { font-family: "Noto Serif TC", "Songti TC", "PMingLiU", "MingLiU", serif; font-weight: 700; color: var(--seal); margin-right: .38em; letter-spacing: .02em; cursor: pointer; }
+h2 .kj, h3 .kj { font-size: .9em; }
+.ctl-head { white-space: nowrap; min-width: 0; }
+.ctl-head .kj { margin: 0 0 0 auto; font-size: 14px; flex: none; }
+.toggle .kj { margin-right: 0; }
+.primary .kj { color: inherit; opacity: .8; margin-right: 0; }
+.m-label .kj { font-size: 13px; }
+
+.lensbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+.lens-toggle { display: inline-flex; align-items: center; gap: 2px; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 7px 14px; font-weight: 700; font-size: 13.5px; cursor: pointer; }
+.lens-toggle[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.lens-toggle[aria-pressed="true"] .kj { color: inherit; }
+.lens-modes { display: flex; flex-wrap: wrap; gap: 4px; }
+.lens-modes button { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 5px 11px; font-size: 12.5px; cursor: pointer; color: var(--ink-2); }
+.lens-modes button[aria-pressed="true"] { border-color: var(--moss); color: var(--moss); background: var(--moss-soft); font-weight: 700; }
+.lens-hint { font-size: 12.5px; color: var(--ink-3); }
+.lens-legend { position: absolute; right: 12px; bottom: 30px; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px 11px; max-width: 58%; padding: 6px 10px; border-radius: 10px; background: rgba(8, 14, 13, .64); color: #E6EFEA; font-size: 11.5px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); pointer-events: none; }
+.lens-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+.speed { display: flex; gap: 0; }
+.speed button[aria-pressed="true"] { color: #BFE7A8; font-weight: 700; }
+
+.predict { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--ink-2); }
+.predict .q { margin-right: 4px; }
+.predict .q b { color: var(--ink); }
+.predict button { border: 1px solid var(--line); background: var(--card-2); border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; color: var(--ink); }
+.predict button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.predict button:disabled { opacity: .45; cursor: default; }
+.predict .ps { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+.pred-line { margin: 2px 0 8px; font-size: 13.5px; padding: 8px 12px; border-radius: 10px; background: var(--card-2); color: var(--ink-2); }
+.pred-line .res { font-weight: 700; }
+.pred-line.right .res { color: var(--good); } .pred-line.wrong .res { color: var(--warn); }
+
+.cycles { padding: 16px 20px 18px; }
+.ctabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 14px; }
+.ctabs button { border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 7px 11px; cursor: pointer; font-size: 13.5px; font-weight: 500; color: var(--ink-2); display: inline-flex; align-items: baseline; gap: 6px; }
+.ctabs button .kj { margin: 0; font-size: 15px; }
+.ctabs button[aria-selected="true"] { border-color: var(--ink); color: var(--ink); background: var(--card-2); font-weight: 700; }
+.cyc-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.cyc-text { max-width: 72ch; }
+.cyc-fig { position: relative; background: var(--card-2); border-radius: 14px; padding: 4px; }
+.cyc-fig svg { display: block; width: 100%; height: auto; }
+.daynight { position: absolute; top: 10px; right: 10px; display: flex; gap: 2px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 2px; }
+.daynight button { border: 0; background: none; border-radius: 999px; padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--ink-2); }
+.daynight button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.demo-note { display: inline-block; margin: 2px 6px 6px; font-size: 11.5px; padding: 3px 9px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); color: var(--ink-3); }
+.cyc-text h3 { font-family: var(--display); font-weight: 800; font-size: 20px; line-height: 1.2; margin: 0 0 8px; text-wrap: balance; }
+.cyc-text p { margin: 0 0 10px; font-size: 14.5px; color: var(--ink-2); }
+.cyc-text h4 { margin: 14px 0 6px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.eq { font-family: var(--mono); font-size: 13px; padding: 9px 12px; border-radius: 10px; background: var(--card-2); margin: 4px 0 10px; line-height: 1.6; color: var(--ink); }
+.eq small { display: block; font-family: var(--body); color: var(--ink-3); font-size: 12px; }
+.facts { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; }
+.facts b { font-family: var(--mono); font-weight: 500; }
+.try { margin-top: 12px !important; padding: 10px 12px; border-left: 3px solid var(--moss); background: var(--moss-soft); border-radius: 0 10px 10px 0; color: var(--ink) !important; font-size: 14px !important; }
+.lens-go { margin-top: 12px; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); border-radius: 999px; padding: 8px 15px; font-weight: 700; font-size: 13.5px; cursor: pointer; }
+.lens-go .kj { color: inherit; }
+.sbar { margin: 12px 0 4px; }
+.sbar-h { font-size: 12.5px; font-weight: 700; margin-bottom: 5px; }
+.sbar-track { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--line); gap: 2px; }
+.sbar-track span { display: block; height: 100%; min-width: 2px; }
+.sbar-legend { display: flex; flex-wrap: wrap; gap: 3px 12px; font-size: 12px; color: var(--ink-2); margin-top: 5px; }
+.sbar-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; }
+.sbar-legend b { font-family: var(--mono); font-weight: 500; }
+.callout { font-size: 13.5px; font-weight: 700; color: var(--c-turtle) !important; margin: 6px 0 0 !important; }
+.dn-c { fill: var(--card); stroke-width: 2.5; }
+.dn-l { font: 700 14px var(--body); fill: var(--ink); }
+.dn-v { font: 12px var(--mono); fill: var(--ink-3); }
+.dn-chem { font: 700 16px var(--mono); }
+.df-p { fill: none; stroke-linecap: round; }
+.df-l { font: 700 12px var(--body); paint-order: stroke; stroke: var(--card-2); stroke-width: 4px; stroke-linejoin: round; }
+
+.missions { padding: 14px 16px 10px; }
+.missions ul { list-style: none; margin: 10px 0 0; padding: 0; }
+.missions li { display: grid; grid-template-columns: 34px 1fr auto; gap: 4px 10px; padding: 10px 0; border-top: 1px solid var(--line); align-items: start; }
+.missions li:first-child { border-top: 0; }
+.mk { font-family: "Noto Serif TC", "Songti TC", serif; font-weight: 700; font-size: 24px; color: var(--seal); line-height: 1.1; }
+.missions b { display: block; font-size: 14px; }
+.missions li > div > span { display: block; font-size: 12.5px; color: var(--ink-3); line-height: 1.4; }
+.missions button { border: 1px solid var(--line); background: var(--card-2); border-radius: 999px; padding: 5px 12px; font-size: 12.5px; cursor: pointer; white-space: nowrap; }
+.missions button:hover { border-color: var(--moss); }
+.missions .won { color: var(--good); font-weight: 700; }
+.mission-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 12px 16px; border-radius: 14px; background: var(--card); border: 1.5px solid var(--seal); }
+.mission-bar .mk { font-size: 32px; }
+.mission-bar .mtext { flex: 1 1 260px; min-width: 0; }
+.mission-bar .mtext b { display: block; font-size: 15px; }
+.mission-bar .mtext span { font-size: 13.5px; color: var(--ink-2); }
+.mstat { font-family: var(--mono); font-size: 12.5px; padding: 3px 10px; border-radius: 999px; background: var(--card-2); }
+.mstat.won { color: var(--good); } .mstat.lost { color: var(--bad); }
+
+/* ---- v3: Chinese, sound, field guide, lab, words ---- */
+[lang="zh-TW"] { font-family: "Noto Serif TC", "Songti TC", "PMingLiU", "MingLiU", serif; }
+.zh rt { display: none; font-family: var(--body); font-size: .55em; font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
+.show-pinyin .zh rt { display: revert; }
+.primary .zh rt, .lens-toggle[aria-pressed="true"] .zh rt, .lens-go .zh rt { color: inherit; opacity: .75; }
+.mast-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.ghost[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.music { padding: 14px 16px; }
+.snd-btns { display: flex; gap: 8px; margin: 10px 0 12px; flex-wrap: wrap; }
+.snd { flex: 1 1 120px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 1px solid var(--line); background: var(--card-2); border-radius: 10px; padding: 9px 12px; font-weight: 700; font-size: 14px; cursor: pointer; }
+.snd svg { width: 18px; height: 18px; }
+.snd[aria-pressed="true"] { background: var(--moss); color: var(--moss-ink); border-color: var(--moss); }
+.scale { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; }
+.note { border: 1px solid var(--line); border-radius: 10px; padding: 6px 2px 5px; text-align: center; display: grid; gap: 1px; transition: background .12s, transform .12s, border-color .12s; }
+.note .kj { margin: 0; font-size: 18px; }
+.note b { display: inline-block; font-family: var(--mono); font-size: 13px; font-weight: 500; transition: color .1s, transform .1s; }
+.note small { font-size: 10.5px; color: var(--ink-3); }
+.note.on { background: var(--moss-soft); border-color: var(--moss); transform: translateY(-2px); }
+.wrong-slot { border-style: dashed; }
+.wrong-slot .wlabel { font-size: 11px; font-weight: 700; color: var(--ink-3); line-height: 1.65; }
+#wrongNote.on { color: var(--bad); transform: scale(1.35); }
+.mus-read { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; margin: 12px 0 8px; font-size: 12.5px; color: var(--ink-2); }
+.mus-read b { display: block; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.mus-read .kj { font-size: 13px; margin-right: .2em; }
+.mus-explain { margin: 0; padding-left: 18px; font-size: 13px; color: var(--ink-2); display: grid; gap: 4px; }
+.mus-explain .kj { margin: 0 .1em; }
+.guide-pop { position: absolute; left: 12px; top: 48px; width: min(370px, calc(100% - 24px)); max-height: calc(100% - 92px); overflow: auto; background: var(--card); color: var(--ink); border-radius: 14px; padding: 14px 16px 12px; box-shadow: 0 18px 40px -16px rgba(0, 0, 0, .6); border: 1px solid var(--line); }
+@media (max-width: 700px) { .guide-pop { position: static; width: auto; max-height: none; margin: 8px; } }
+.gp-close { position: absolute; top: 6px; right: 8px; border: 0; background: none; font-size: 24px; line-height: 1; cursor: pointer; color: var(--ink-3); padding: 4px 6px; }
+.gp-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-right: 24px; }
+.gp-zh .kj { font-size: 28px; margin: 0; }
+.gp-say { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--card-2); border-radius: 999px; padding: 4px 10px 4px 8px; cursor: pointer; font-size: 13px; color: var(--ink-2); font-family: var(--mono); }
+.gp-say svg { width: 16px; height: 16px; }
+.gp-name b { display: block; font-size: 16px; margin-top: 4px; }
+.gp-name i { font-size: 13px; color: var(--ink-3); }
+.gp-live { margin: 8px 0; font-size: 13px; padding: 6px 10px; background: var(--moss-soft); border-radius: 8px; }
+.guide-pop dl { margin: 8px 0; display: grid; gap: 2px; font-size: 13.5px; }
+.guide-pop dt { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; margin-top: 4px; }
+.guide-pop dd { margin: 0; color: var(--ink-2); }
+.guide-pop ul { margin: 6px 0 0; padding-left: 18px; font-size: 13.5px; display: grid; gap: 4px; }
+.guide-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
+.gl-btn { display: grid; grid-template-columns: 22px 1fr; column-gap: 8px; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--card-2); border-radius: 10px; padding: 7px 9px; cursor: pointer; }
+.gl-btn svg { width: 20px; height: 20px; grid-row: span 2; color: var(--moss); }
+.gl-zh { font-size: 14px; font-weight: 700; color: var(--seal); }
+.gl-en { font-size: 12px; color: var(--ink-2); line-height: 1.25; }
+.gl-btn:hover, .wbtn:hover { border-color: var(--moss); }
+.lab { padding: 16px 20px 18px; }
+.lab-intro { margin: 8px 0 12px; font-size: 14.5px; color: var(--ink-2); max-width: 72ch; }
+.lab-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 14px; }
+.lab-form label { display: grid; gap: 4px; font-size: 12.5px; font-weight: 700; color: var(--ink-2); min-width: 0; }
+.lab-form select { font: inherit; font-size: 14px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--ink); max-width: 100%; }
+.seg { display: flex; gap: 2px; background: var(--card-2); padding: 3px; border-radius: 10px; }
+.seg button { border: 0; background: none; border-radius: 8px; padding: 6px 10px; font-size: 13px; cursor: pointer; color: var(--ink-2); }
+.seg button[aria-pressed="true"] { background: var(--card); color: var(--ink); font-weight: 700; box-shadow: 0 1px 2px rgba(0, 0, 0, .08); }
+.lab-form .primary { margin-left: 0; }
+.lab-tanks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+@media (max-width: 560px) { .lab-tanks { grid-template-columns: minmax(0, 1fr); } }
+.lab-tanks figure { margin: 0; min-width: 0; }
+.lab-tanks canvas { display: block; width: 100%; max-width: 100%; aspect-ratio: 1000 / 620; border-radius: 12px; background: #0c1211; }
+.lab-tanks figcaption { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 6px; }
+.lab-tanks figcaption b { display: block; font-size: 14px; }
+.lab-tanks figcaption small { font-size: 12px; color: var(--ink-3); }
+.lab-tanks figcaption em { font-style: normal; font-family: var(--display); font-weight: 800; font-size: 30px; font-variant-numeric: tabular-nums; }
+.lab-conc { font-size: 14.5px; margin: 12px 0; max-width: 72ch; }
+.lab-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 760px) { .lab-grid { grid-template-columns: minmax(0, 1fr); } }
+.table-wrap { overflow-x: auto; }
+.lab-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.lab-table th { text-align: left; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); padding: 4px 6px; border-bottom: 1px solid var(--line); }
+.lab-table td { padding: 5px 6px; border-bottom: 1px solid var(--line); }
+.lab-table td:nth-child(2), .lab-table td:nth-child(3) { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.lab-table .better { color: var(--good); font-weight: 700; }
+.lab-table .worse { color: var(--bad); font-weight: 700; }
+#labChart { display: block; width: 100%; height: 160px; }
+.words { padding: 14px 16px 12px; }
+.words-intro { font-size: 13px; color: var(--ink-2); margin: 6px 0 4px; }
+.wgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+.wbtn { display: grid; text-align: left; border: 1px solid var(--line); background: var(--card-2); border-radius: 9px; padding: 6px 9px; cursor: pointer; }
+.w-h { font-size: 17px; font-weight: 700; color: var(--seal); line-height: 1.3; }
+.w-p { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); }
+.w-e { font-size: 11.5px; color: var(--ink-3); line-height: 1.3; }
+
+@media (max-width: 560px) {
+  .page { padding-inline: 16px; }
+  .harmony { grid-template-columns: 96px 1fr; gap: 12px; }
+  .enso { width: 96px; height: 96px; }
+  .enso .num { font-size: 34px; }
+  .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .primary { width: 100%; justify-content: center; }
+  .ev { grid-template-columns: minmax(0, 1fr); }
+  .ev p { grid-column: 1; }
+  .hud { inset: 8px 8px auto 8px; }
+  .chip-dark { font-size: 11px; padding: 4px 9px; }
+  .toast { font-size: 12.5px; bottom: 26px; left: 8px; }
+  .lens-legend { font-size: 10.5px; max-width: 70%; bottom: 26px; right: 8px; }
+  .lens-hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast, .m-dot { transition: none; }
+}
+</style>
+
+</head>
+<body>
+<div class="page">
+  <a class="shelf-back" href="../">← All games</a>
+  <header class="mast">
+    <div class="brand">
+      <div class="seal" lang="zh-TW" title="shuǐ cǎo · water plants">水草</div>
+      <div>
+        <h1>James’s Nature Aquarium</h1>
+        <p>Build a living tank the way Takashi Amano did, and keep it in balance.</p>
+      </div>
+    </div>
+    <div class="mast-actions">
+      <button class="ghost" id="pinyinBtn" type="button" aria-pressed="false"><span lang="zh-TW">拼音</span> Show pinyin</button>
+      <button class="ghost" id="reset" type="button">Start over</button>
+    </div>
+  </header>
+
+  <div class="mission-bar" id="missionBar" hidden>
+    <span class="mk" id="mbKanji"></span>
+    <div class="mtext"><b id="mbName"></b><span id="mbGoal"></span></div>
+    <span class="mstat" id="mbStatus"></span>
+    <button class="ghost" id="mbRetry" type="button">Try again</button>
+    <button class="ghost" id="mbLeave" type="button">Back to my tank</button>
+  </div>
+
+  <main class="stage">
+    <section class="tank-col" aria-label="Aquarium">
+      <div class="tank-frame" id="tankFrame">
+        <canvas id="tank" role="img" aria-label="An aquarium drawn to show its current state"></canvas>
+        <div class="hud">
+          <span class="chip-dark" id="clockChip"><span id="clockIcon"></span><span id="clock">Week 0</span></span>
+          <span class="chip-dark"><span class="mood-dot" id="moodDot"></span><span id="moodText">Empty tank</span></span>
+        </div>
+        <div class="lens-legend" id="lensLegend" hidden></div>
+        <div class="guide-pop" id="guidePop" hidden role="dialog" aria-label="Field guide"></div>
+        <div class="toast fade" id="toast" aria-live="polite"></div>
+        <div class="progress" id="progress" hidden>
+          <div class="track"><div class="fill" id="progressFill"></div></div>
+          <div class="speed" role="group" aria-label="Time-lapse speed">
+            <button type="button" data-speed="1" aria-pressed="true">1×</button><button type="button" data-speed="2" aria-pressed="false">2×</button><button type="button" data-speed="4" aria-pressed="false">4×</button>
+          </div>
+          <button type="button" id="skip">Skip ▸▸</button>
+        </div>
+      </div>
+
+      <div class="lensbar">
+        <button type="button" class="lens-toggle" id="lensBtn" aria-pressed="false"><span data-zh="lens"></span> Science lens</button>
+        <div class="lens-modes" id="lensModes" role="group" aria-label="What the lens shows" hidden>
+          <button type="button" data-mode="all" aria-pressed="true">Everything</button>
+          <button type="button" data-mode="light" aria-pressed="false">Light</button>
+          <button type="button" data-mode="photo" aria-pressed="false">Photosynthesis</button>
+          <button type="button" data-mode="breath" aria-pressed="false">Breathing</button>
+          <button type="button" data-mode="nitrogen" aria-pressed="false">Waste &amp; bacteria</button>
+          <button type="button" data-mode="algae" aria-pressed="false">Algae race</button>
+        </div>
+        <span class="lens-hint" id="lensHint">Tap anything in the tank to learn about it, or use the lens to see the invisible.</span>
+      </div>
+
+      <div class="controls" id="controls"></div>
+
+      <div class="actions">
+        <label class="toggle"><input type="checkbox" id="wc"> <span data-zh="wc"></span> Water change <small>swap half</small></label>
+        <label class="toggle"><input type="checkbox" id="trim"> <span data-zh="trim"></span> Trim plants <small>cut back stems</small></label>
+        <div class="plan" id="plan"></div>
+        <button class="primary" id="run" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          Let a week pass <span data-zh="week"></span>
+        </button>
+        <div class="predict" id="predict"></div>
+      </div>
+    </section>
+
+    <aside class="score-col" aria-label="Tank health">
+      <div class="card harmony">
+        <div class="enso" id="enso">
+          <svg viewBox="0 0 124 124" aria-hidden="true">
+            <circle cx="62" cy="62" r="52" fill="none" style="stroke: var(--card-2)" stroke-width="10"/>
+            <circle id="ensoMain" cx="62" cy="62" r="52" fill="none" style="stroke: var(--ink)" stroke-width="10" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100"/>
+            <circle id="ensoEdge" cx="62" cy="62" r="47.5" fill="none" style="stroke: var(--ink)" stroke-opacity=".28" stroke-width="2.5" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100"/>
+          </svg>
+          <div class="num" id="hnum">–</div>
+        </div>
+        <div>
+          <div class="h-label"><span data-zh="harmony"></span>Harmony score</div>
+          <div class="h-grade" id="hgrade">–</div>
+          <div class="h-line" id="hline"></div>
+          <span class="h-delta" id="hdelta" hidden></span>
+        </div>
+      </div>
+      <div class="card music" id="musicCard">
+        <div class="j-head"><h2><span data-zh="music"></span>Music of the tank</h2></div>
+        <div class="snd-btns">
+          <button type="button" class="snd" id="musicBtn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>Music</button>
+          <button type="button" class="snd" id="waterBtn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="16" r="3"/><circle cx="15" cy="9" r="2"/><circle cx="17" cy="17" r="1.5"/><circle cx="9" cy="6" r="1.2"/></svg>Water sounds</button>
+        </div>
+        <div class="scale" id="scaleStrip" aria-label="The five notes of the Chinese pentatonic scale"></div>
+        <div class="mus-read" id="musRead"></div>
+        <ul class="mus-explain" id="musExplain"></ul>
+      </div>
+      <div class="card sensei">
+        <div class="h-label"><span data-zh="teacher"></span>Teacher’s advice</div>
+        <p id="sensei"></p>
+      </div>
+      <div class="card meters" id="meters"></div>
+      <div class="card chart-card">
+        <h2><span data-zh="water"></span>Inside the water</h2>
+        <div class="tabs" role="tablist">
+          <button type="button" role="tab" data-tab="breath" aria-selected="true"><span data-zh="breath"></span>Breathing</button>
+          <button type="button" role="tab" data-tab="nitrogen" aria-selected="false"><span data-zh="nitrogenShort"></span>Nitrogen</button>
+          <button type="button" role="tab" data-tab="harmony" aria-selected="false"><span data-zh="harmony"></span>Harmony</button>
+        </div>
+        <canvas id="chart"></canvas>
+        <div class="legend" id="legend"></div>
+        <p class="chart-note" id="chartNote"></p>
+      </div>
+      <div class="card goals guide-card">
+        <div class="j-head"><h2><span data-zh="guide"></span>Field guide</h2><span class="count">tap to open</span></div>
+        <div class="guide-list" id="guideList"></div>
+      </div>
+      <div class="card goals">
+        <div class="j-head"><h2><span data-zh="goals"></span>Goals</h2><span class="count" id="goalCount"></span></div>
+        <ul id="goals"></ul>
+      </div>
+      <div class="card missions">
+        <div class="j-head"><h2><span data-zh="missions"></span>Rescue missions</h2><span class="count" id="missionCount"></span></div>
+        <ul id="missions"></ul>
+      </div>
+      <div class="card words">
+        <div class="j-head"><h2><span data-zh="words"></span>Chinese words</h2><span class="count" id="wordCount"></span></div>
+        <p class="words-intro">Tap a word to hear it in Mandarin. Press <b>拼音 Show pinyin</b> at the top to see how every word on the page is said.</p>
+        <div id="words"></div>
+      </div>
+    </aside>
+    <section class="card cycles" id="cycles" aria-label="How your tank works">
+      <div class="j-head"><h2><span data-zh="cycles"></span>How your tank works</h2><span id="cycSub">Live from your tank this week</span></div>
+      <div class="ctabs" id="ctabs" role="tablist"></div>
+      <div class="cyc-body">
+        <div class="cyc-fig">
+          <svg id="cycSvg" viewBox="0 0 600 360" role="img"></svg>
+          <div class="daynight" id="daynight" hidden>
+            <button type="button" data-dn="day" aria-pressed="true">☀ Day</button><button type="button" data-dn="night" aria-pressed="false">☾ Night</button>
+          </div>
+          <span class="demo-note" id="demoNote" hidden>Example tank — let a week pass to see yours</span>
+        </div>
+        <div class="cyc-text" id="cycText"></div>
+      </div>
+    </section>
+    <section class="card lab" id="lab" aria-label="Experiment lab">
+      <div class="j-head"><h2><span data-zh="lab"></span>Experiment lab</h2><span>Test one change at a time</span></div>
+      <p class="lab-intro">Real scientists change <b>one thing</b> and keep everything else the same. The lab copies your tank twice: <b>tank A</b> stays as it is (the “control”) and <b>tank B</b> gets one change. Then both live the same weeks. Your real tank isn’t touched.</p>
+      <div class="lab-form">
+        <label for="labChange">Change in tank B <select id="labChange"></select></label>
+        <div class="seg" id="labWeeks" role="group" aria-label="How many weeks">
+          <button type="button" data-w="1" aria-pressed="false">1 week</button><button type="button" data-w="2" aria-pressed="true">2 weeks</button><button type="button" data-w="4" aria-pressed="false">4 weeks</button>
+        </div>
+        <button type="button" class="primary" id="labRun">Run the experiment</button>
+      </div>
+      <div id="labOut"></div>
+    </section>
+    <section class="card journal" aria-label="Tank journal">
+      <div class="j-head"><h2><span data-zh="journal"></span>Tank journal</h2><span>What happened, and why</span></div>
+      <div id="journal"></div>
+    </section>
+  </main>
+
+
+  <p class="about"><b>About Takashi Amano (1954–2015).</b> A Japanese photographer and aquarist who invented the “Nature Aquarium”: underwater gardens that look like real landscapes and work like tiny ecosystems. The Amano shrimp is named after him — he made it famous as an algae eater. In this game the chemistry is simplified so a week fits in a few seconds, but the cause-and-effect is real.</p>
+</div>
+
+<script src="sim.js"></script>
+<script>
+(function () {
+'use strict';
+const $ = s => document.querySelector(s);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const mix = (c1, c2, t) => [lerp(c1[0], c2[0], t), lerp(c1[1], c2[1], t), lerp(c1[2], c2[2], t)];
+const rgb = (c, a = 1) => a === 1 ? `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})` : `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+const hash = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MOTION = reduced ? 0.3 : 1;
+const KEYS = { free: 'nature-aquarium-james-v1', mission: 'nature-aquarium-james-mission' };
+const META_KEY = 'nature-aquarium-james-meta', SLOT_KEY = 'nature-aquarium-james-slot';
+
+/* ================= state ================= */
+let S = null, E = null;
+let pending = {};
+let playing = null;
+let openMeter = null;
+let chartTab = 'breath';
+let restCache = null;
+let slot = 'free';
+let META = { right: 0, total: 0, missionsWon: {} };
+let prediction = null;
+let speed = 1;
+
+function load(which) {
+  try { const raw = localStorage.getItem(KEYS[which]); if (!raw) return null; const s = JSON.parse(raw); return s && (s.v === 1 || s.v === 2) ? s : null; } catch (e) { return null; }
+}
+function save() {
+  try {
+    localStorage.setItem(KEYS[slot], JSON.stringify(S));
+    localStorage.setItem(SLOT_KEY, slot);
+    localStorage.setItem(META_KEY, JSON.stringify(META));
+  } catch (e) { /* storage unavailable */ }
+}
+function loadMeta() {
+  try {
+    const m = JSON.parse(localStorage.getItem(META_KEY) || 'null');
+    if (m) META = Object.assign(META, m);
+    slot = localStorage.getItem(SLOT_KEY) === 'mission' ? 'mission' : 'free';
+  } catch (e) { /* storage unavailable */ }
+}
+function resetPending() { pending = { plants: 0, rocks: 0, wood: 0, shrimp: 0, fish: 0, light: 0, turtle: 0 }; }
+
+/* ================= Chinese (Traditional characters, with pinyin) ================= */
+const ZH = {
+  plants: ['水草', 'shuǐ cǎo', 'water plants'], rocks: ['石頭', 'shí tou', 'stones'], wood: ['沉木', 'chén mù', 'driftwood (“sinking wood”)'],
+  shrimp: ['蝦', 'xiā', 'shrimp'], fish: ['魚', 'yú', 'fish'], light: ['光', 'guāng', 'light'], turtle: ['龜', 'guī', 'turtle'],
+  wc: ['換水', 'huàn shuǐ', 'change the water'], trim: ['修剪', 'xiū jiǎn', 'trim'], week: ['一週', 'yì zhōu', 'one week'],
+  harmony: ['和諧', 'hé xié', 'harmony'], teacher: ['老師', 'lǎo shī', 'teacher'], journal: ['日記', 'rì jì', 'diary'],
+  water: ['水中', 'shuǐ zhōng', 'in the water'], goals: ['目標', 'mù biāo', 'goal'], missions: ['挑戰', 'tiǎo zhàn', 'challenge'],
+  cycles: ['循環', 'xún huán', 'cycle'], lens: ['觀察', 'guān chá', 'observe'], predict: ['預測', 'yù cè', 'predict'],
+  guide: ['圖鑑', 'tú jiàn', 'field guide'], lab: ['實驗', 'shí yàn', 'experiment'], music: ['音樂', 'yīn yuè', 'music'],
+  sound: ['水聲', 'shuǐ shēng', 'water sounds'], words: ['詞語', 'cí yǔ', 'words'], pinyin: ['拼音', 'pīn yīn', 'pinyin'],
+  o2: ['氧氣', 'yǎng qì', 'oxygen'], co2: ['二氧化碳', 'èr yǎng huà tàn', 'carbon dioxide'], ph: ['酸鹼度', 'suān jiǎn dù', 'acidity (pH)'],
+  tox: ['毒', 'dú', 'poison'], no3: ['硝酸鹽', 'xiāo suān yán', 'nitrate'], algae: ['藻', 'zǎo', 'algae'], clar: ['清澈', 'qīng chè', 'clear'],
+  plantsH: ['植物', 'zhí wù', 'plants'], animals: ['動物', 'dòng wù', 'animals'], bact: ['細菌', 'xì jūn', 'bacteria'], crowd: ['擁擠', 'yōng jǐ', 'crowded'],
+  gWater: ['水質', 'shuǐ zhì', 'water quality'], gLight: ['光照', 'guāng zhào', 'lighting'], gLife: ['生命', 'shēng mìng', 'life'],
+  energy: ['能量', 'néng liàng', 'energy'], photo: ['光合作用', 'guāng hé zuò yòng', 'photosynthesis'], breath: ['呼吸', 'hū xī', 'breathing'],
+  nitrogen: ['氮循環', 'dàn xún huán', 'nitrogen cycle'], nitrogenShort: ['氮', 'dàn', 'nitrogen'], lifecycle: ['生命週期', 'shēng mìng zhōu qī', 'life cycle'],
+  growth: ['生長', 'shēng zhǎng', 'growth'], micro: ['微生物', 'wēi shēng wù', 'microbes'], repro: ['繁殖', 'fán zhí', 'reproduction'],
+  pred: ['捕食', 'bǔ shí', 'predation (hunting)'], bio: ['生物', 'shēng wù', 'biology'], sys: ['系統', 'xì tǒng', 'system'],
+  design: ['設計', 'shè jì', 'design'], done: ['達成', 'dá chéng', 'achieved'], dark: ['暗', 'àn', 'dark'], crowdM: ['擠', 'jǐ', 'crowded'],
+  poison: ['毒', 'dú', 'poison'],
+  gNature: ['自然水族', 'zì rán shuǐ zú', 'nature aquarium'], gThriving: ['繁榮', 'fán róng', 'thriving'], gSettling: ['穩定中', 'wěn dìng zhōng', 'settling'],
+  gOff: ['失衡', 'shī héng', 'out of balance'], gStruggle: ['掙扎', 'zhēng zhá', 'struggling'],
+  tetra: ['寶蓮燈魚', 'bǎo lián dēng yú', 'cardinal tetra'], cherry: ['櫻桃蝦', 'yīng táo xiā', 'cherry shrimp'],
+  slider: ['巴西龜', 'bā xī guī', 'red-eared slider (“Brazil turtle”)'], carpet: ['前景草', 'qián jǐng cǎo', 'carpet (foreground) plant'],
+  stem: ['有莖草', 'yǒu jīng cǎo', 'stem plant'], hairgrass: ['牛毛氈', 'niú máo zhān', 'dwarf hairgrass'], moss: ['苔蘚', 'tái xiǎn', 'moss'],
+  seiryu: ['青龍石', 'qīng lóng shí', 'seiryu (“blue dragon”) stone'], soil: ['水草泥', 'shuǐ cǎo ní', 'aquarium soil'],
+  nitrifiers: ['硝化細菌', 'xiāo huà xì jūn', 'nitrifying bacteria'], algaeSp: ['藻類', 'zǎo lèi', 'algae'], waterW: ['水', 'shuǐ', 'water'],
+  pentatonic: ['五聲音階', 'wǔ shēng yīn jiē', 'five-note scale'], gong: ['宮', 'gōng', 'note 1 (C, do)'], shang: ['商', 'shāng', 'note 2 (D, re)'],
+  jue: ['角', 'jué', 'note 3 (E, mi)'], zhi: ['徵', 'zhǐ', 'note 5 (G, sol)'], yu: ['羽', 'yǔ', 'note 6 (A, la)'],
+  gongdiao: ['宮調', 'gōng diào', 'gōng mode (bright)'], yudiao: ['羽調', 'yǔ diào', 'yǔ mode (sad)'], dissonant: ['不和諧', 'bù hé xié', 'clashing, out of harmony'],
+};
+const K = { plants: 'plants', rocks: 'rocks', wood: 'wood', shrimp: 'shrimp', fish: 'fish', light: 'light', turtle: 'turtle' };
+const MK = {
+  o2: 'o2', co2: 'co2', ph: 'ph', tox: 'tox', no3: 'no3', light: 'light', algae: 'algae', clar: 'clar',
+  plants: 'plantsH', animals: 'animals', bact: 'bact', crowd: 'crowd', Water: 'gWater', Light: 'gLight', Life: 'gLife',
+};
+const TOPIC_ZH = {
+  'Photosynthesis': 'photo', 'Plant growth': 'growth', 'Microbiology': 'micro', 'Reproduction': 'repro', 'Predation': 'pred',
+  'Lifecycle': 'lifecycle', 'Biology': 'bio', 'Systems': 'sys', 'Design': 'design', 'Mission': 'missions', 'Goal reached': 'done', 'Prediction': 'predict',
+};
+const TOPIC_KJ = Object.fromEntries(Object.entries(TOPIC_ZH).map(([t, k]) => [t, ZH[k][0]]));
+const GRADE_ZH = { 'Nature Aquarium': 'gNature', 'Thriving': 'gThriving', 'Settling in': 'gSettling', 'Out of balance': 'gOff', 'Struggling': 'gStruggle' };
+function zhRuby(z) {
+  const ch = [...z[0]], sy = z[1].split(' ');
+  return ch.length === sy.length ? ch.map((c, i) => `<ruby>${c}<rt>${sy[i]}</rt></ruby>`).join('') : `<ruby>${z[0]}<rt>${z[1]}</rt></ruby>`;
+}
+const kj = key => {
+  const z = ZH[key];
+  return z ? `<span class="kj zh" lang="zh-TW" data-say="${z[0]}" title="${z[1]} · ${z[2]}">${zhRuby(z)}</span>` : '';
+};
+function hydrateZh(root = document) { root.querySelectorAll('[data-zh]').forEach(el => { el.outerHTML = kj(el.dataset.zh); }); }
+function speak(text) {
+  try {
+    const sp = window.speechSynthesis;
+    if (!sp) return;
+    sp.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'zh-TW'; u.rate = 0.72;
+    const voices = sp.getVoices();
+    const v = voices.find(x => /zh[-_](TW|Hant)/i.test(x.lang)) || voices.find(x => /zh[-_]CN/i.test(x.lang)) || voices.find(x => /^zh/i.test(x.lang) && !/HK|yue/i.test(x.lang));
+    if (v) u.voice = v;
+    sp.speak(u);
+  } catch (e) { /* speech unavailable */ }
+}
+document.addEventListener('click', e => {
+  const w = e.target.closest('[data-say]');
+  if (!w || (w.closest('button, label, [role="tab"]') && !w.matches('button'))) return;
+  speak(w.dataset.say);
+});
+function setPinyin(on) {
+  document.documentElement.classList.toggle('show-pinyin', on);
+  $('#pinyinBtn').setAttribute('aria-pressed', on);
+  META.pinyin = on;
+}
+$('#pinyinBtn').addEventListener('click', () => { setPinyin(!META.pinyin); save(); });
+const WORD_GROUPS = [
+  ['In the tank', ['plants', 'rocks', 'wood', 'shrimp', 'fish', 'turtle', 'light', 'wc', 'trim']],
+  ['Water & life', ['gWater', 'o2', 'co2', 'ph', 'tox', 'no3', 'clar', 'algae', 'plantsH', 'animals', 'bact', 'crowd']],
+  ['Science', ['energy', 'photo', 'breath', 'nitrogen', 'lifecycle', 'growth', 'micro', 'repro', 'pred', 'lens', 'predict', 'lab']],
+  ['Music', ['music', 'harmony', 'dissonant', 'pentatonic', 'gong', 'shang', 'jue', 'zhi', 'yu', 'gongdiao', 'yudiao']],
+  ['Field guide', ['tetra', 'cherry', 'slider', 'carpet', 'stem', 'hairgrass', 'moss', 'seiryu', 'soil', 'nitrifiers']],
+];
+function renderWords() {
+  let n = 0;
+  $('#words').innerHTML = WORD_GROUPS.map(([title, keys]) => `<div class="wgroup"><div class="m-group">${title}</div><div class="wgrid">${keys.map(k => {
+    const z = ZH[k]; n++;
+    return `<button type="button" class="wbtn" data-say="${z[0]}" aria-label="Say ${z[0]}, ${z[1]}, ${z[2]}"><span class="w-h" lang="zh-TW">${z[0]}</span><span class="w-p">${z[1]}</span><span class="w-e">${z[2]}</span></button>`;
+  }).join('')}</div></div>`).join('');
+  $('#wordCount').textContent = `${n} words`;
+}
+
+/* ================= controls ================= */
+const ICONS = {
+  plants: '<path d="M12 21v-9"/><path d="M12 12c0-4 3-7 7-7 0 4-3 7-7 7Z"/><path d="M12 15c0-3-2.5-5.5-6-5.5 0 3 2.5 5.5 6 5.5Z"/>',
+  rocks: '<path d="M3 19l3.5-7 3 2 3.5-6 3 4 2-1 3 8Z"/>',
+  wood: '<path d="M4 20c3-4 5-8 6-13"/><path d="M8.5 12c3 0 5-2 7-5"/><path d="M9.5 8c-2-1-3-3-3.5-5"/><path d="M15.5 7l3-2"/>',
+  shrimp: '<path d="M18 9c-1-3-5-4-8-2s-5 6-3 9c1 1.5 3 2 4 1"/><path d="M11 17l-2 3M8 15l-3 2"/><path d="M18 9c1.5-1 3-1 4-3M17 8c0-2 1-4 3-5"/><circle cx="15.5" cy="9.5" r=".6" fill="currentColor"/>',
+  fish: '<path d="M3 12c3-4 8-5 12-3l4-3v12l-4-3c-4 2-9 1-12-3Z"/><circle cx="7.5" cy="11" r=".7" fill="currentColor"/>',
+  light: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  turtle: '<ellipse cx="11" cy="13" rx="7" ry="4.5"/><path d="M18 12.5c1.5-.5 3-.2 3.5 1"/><path d="M6 17l-1.5 2M15 17l1.5 2M6.5 9.5 5 8M14.5 9.5 16 8"/><path d="M8 11l3 2 3-2"/>',
+};
+const CONTROLS = [
+  { key: 'plants', name: 'Plants', step: 1, sub: 'Carpet, stems, hairgrass, moss', cur: () => S.plants.length, max: () => Sim.LIMITS.plants },
+  { key: 'rocks', name: 'Rocks', step: 1, sub: 'Seiryu stones', cur: () => S.rocks, max: () => Sim.LIMITS.rocks },
+  { key: 'wood', name: 'Wood', step: 1, sub: 'Driftwood branches', cur: () => S.wood, max: () => Sim.LIMITS.wood },
+  { key: 'shrimp', name: 'Shrimp', step: 5, sub: 'Cherry shrimp, 5 at a time', cur: () => S.shrimp.length, max: () => Math.max(Sim.LIMITS.shrimp, S.shrimp.length) },
+  { key: 'fish', name: 'Fish', step: 3, sub: 'Cardinal tetras, 3 at a time', cur: () => S.fish.length, max: () => Math.max(Sim.LIMITS.fish, S.fish.length) },
+  { key: 'light', name: 'Light', step: 1, sub: 'Hours the lamp is on each day', cur: () => S.light, max: () => Sim.LIMITS.light, fmt: i => Sim.LIGHT_HOURS[i] + 'h' },
+  { key: 'turtle', name: 'Turtle', step: 1, sub: 'Red-eared slider', cur: () => S.turtles.length, max: () => Sim.LIMITS.turtle },
+];
+
+function buildControls() {
+  $('#controls').innerHTML = CONTROLS.map(c => `
+    <div class="ctl" data-key="${c.key}">
+      <div class="ctl-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[c.key]}</svg>${c.name}${kj(K[c.key])}</div>
+      <div class="ctl-val"></div>
+      <div class="ctl-sub">${c.sub}</div>
+      <div class="ctl-btns">
+        <button type="button" class="minus" id="minus-${c.key}" aria-label="Less ${c.name.toLowerCase()}">−</button>
+        <button type="button" class="plus" id="plus-${c.key}" aria-label="More ${c.name.toLowerCase()}">+</button>
+      </div>
+    </div>`).join('');
+  for (const c of CONTROLS) {
+    $(`#plus-${c.key}`).addEventListener('click', () => adjust(c, 1));
+    $(`#minus-${c.key}`).addEventListener('click', () => adjust(c, -1));
+  }
+}
+function adjust(c, dir) {
+  if (playing) return;
+  const cur = c.cur(), next = pending[c.key] + dir * c.step;
+  if (dir > 0 && cur + next > c.max()) return;
+  pending[c.key] = cur + next < 0 ? -cur : next;
+  renderControls();
+}
+function renderControls() {
+  const lock = !!playing;
+  for (const c of CONTROLS) {
+    const el = document.querySelector(`.ctl[data-key="${c.key}"]`);
+    const cur = c.cur(), p = pending[c.key], f = c.fmt || (v => v);
+    el.classList.toggle('changed', p !== 0);
+    el.querySelector('.ctl-val').innerHTML = p ? `<b>${f(cur)}</b> → <span class="to">${f(cur + p)}</span>` : `<b>${f(cur)}</b>`;
+    $(`#plus-${c.key}`).disabled = lock || cur + p + c.step > c.max();
+    $(`#minus-${c.key}`).disabled = lock || cur + p <= 0;
+  }
+  $('#run').disabled = lock;
+  $('#wc').disabled = lock; $('#trim').disabled = lock;
+  const bits = [];
+  const names = { plants: ['plant', 'plants'], rocks: ['rock', 'rocks'], wood: ['piece of wood', 'pieces of wood'], shrimp: ['shrimp', 'shrimp'], fish: ['fish', 'fish'], turtle: ['turtle', 'turtles'] };
+  for (const c of CONTROLS) {
+    const p = pending[c.key];
+    if (!p) continue;
+    if (c.key === 'light') bits.push(`light ${Sim.LIGHT_HOURS[S.light]}h → ${Sim.LIGHT_HOURS[S.light + p]}h`);
+    else bits.push(`${p > 0 ? '+' : '−'}${Math.abs(p)} ${names[c.key][Math.abs(p) === 1 ? 0 : 1]}`);
+  }
+  if ($('#wc').checked) bits.push('water change');
+  if ($('#trim').checked) bits.push('trim');
+  $('#plan').textContent = lock ? 'Time is passing… watch the tank.' : bits.length ? 'This week: ' + bits.join(', ') + '.' : 'No changes — just watch what happens.';
+  renderPredict();
+}
+
+/* ================= running a week ================= */
+function runWeek() {
+  if (playing) return;
+  const prevH = E.harmony;
+  const pred = prediction && prediction.choice ? { metric: prediction.metric, choice: prediction.choice, before: meterVal(prediction.metric) } : null;
+  const pre = Sim.applyChanges(S, pending);
+  const res = Sim.simulateWeek(S, { waterChange: $('#wc').checked, trim: $('#trim').checked });
+  resetPending();
+  $('#wc').checked = false; $('#trim').checked = false;
+  playing = { frames: res.frames, events: pre.concat(res.events), res, prevH, pred, t: 0, dur: 7 * 1150, i: -1, shownDays: new Set() };
+  prediction = null;
+  restCache = null;
+  syncAnimals(res.frames[0], 'add');
+  $('#progress').hidden = false;
+  $('#enso').classList.add('playing');
+  $('#hgrade').textContent = 'Time-lapse…';
+  $('#hline').textContent = 'Watch the tank. The score updates when the week ends.';
+  $('#hdelta').hidden = true;
+  const ev0 = playing.events.filter(e => e.day === 0 || e.day === 1);
+  if (ev0.length) showToast(ev0[0]);
+  renderControls();
+}
+function onHour(i) {
+  const fr = playing.frames[i];
+  const day = Math.floor(i / 24) + 1;
+  setClock(S.week, day, fr.hod, fr.on);
+  syncAnimals(fr, 'live');
+  if (i % 3 === 0) {
+    const R = { o2: fr.o2, o2min: fr.o2, o2max: fr.o2, co2: fr.co2, tox: fr.nh3 + fr.no2, no3: fr.no3, algae: fr.algae, clar: fr.clar, ph: fr.ph };
+    const live = Sim.evaluate(S, null, R);
+    LIVE.h = live.harmony;
+    renderMeters(live, true);
+  }
+  if (!playing.shownDays.has(day) && fr.hod >= 12) {
+    playing.shownDays.add(day);
+    const ev = playing.events.filter(e => e.day === day && e.day > 1).sort((a, b) => b.pri - a.pri)[0];
+    if (ev) showToast(ev);
+  }
+}
+function finishWeek() {
+  const p = playing;
+  playing = null;
+  LIVE.h = null;
+  E = Sim.evaluate(S, S.frames);
+  let predRes = null;
+  if (p.pred && p.pred.before != null) {
+    const after = meterVal(p.pred.metric);
+    if (after != null) {
+      const d = after - p.pred.before, tol = PRED[p.pred.metric].tol;
+      const actual = d > tol ? 'up' : d < -tol ? 'down' : 'same';
+      predRes = Object.assign({}, p.pred, { after, actual, right: actual === p.pred.choice });
+      META.total++; if (predRes.right) META.right++;
+    }
+  }
+  const mEvent = checkMission();
+  if (mEvent) p.events.push(mEvent);
+  const got = Sim.checkGoals(S, E, p.res.T, p.prevH, META);
+  S.history.push({ week: S.week, harmony: E.harmony });
+  S.journal.unshift({ week: S.week, harmony: E.harmony, prev: p.prevH, events: p.events, goals: got, predict: predRes });
+  if (S.journal.length > 60) S.journal.length = 60;
+  save();
+  $('#progress').hidden = true;
+  $('#enso').classList.remove('playing');
+  syncAnimals(restFrame(), 'live');
+  renderAll(p.prevH);
+  const later = [];
+  if (predRes) later.push({ topic: 'Prediction', title: predRes.right ? `Your prediction was right: ${PRED[predRes.metric].label} ${PAST[predRes.actual]}.` : `Surprise! ${cap(PRED[predRes.metric].label)} ${PAST[predRes.actual]}.` });
+  if (mEvent) later.push(mEvent);
+  if (got.length) later.push({ topic: 'Goal reached', title: Sim.GOALS.find(x => x.id === got[0]).name });
+  later.forEach((e, i) => setTimeout(() => showToast(e, 3000), i * 3200));
+}
+
+/* ================= score & meters ================= */
+function renderHarmony(prev) {
+  const h = E.harmony;
+  const g = Sim.grade(h);
+  const arc = Math.max(1.5, h * 0.94);
+  $('#ensoMain').setAttribute('stroke-dasharray', `${arc} 100`);
+  $('#ensoEdge').setAttribute('stroke-dasharray', `${Math.max(1, arc - 6)} 100`);
+  const col = h >= 75 ? 'var(--moss)' : h >= 45 ? 'var(--warn)' : 'var(--bad)';
+  $('#ensoMain').style.stroke = col;
+  $('#ensoEdge').style.stroke = col;
+  $('#hnum').textContent = h;
+  $('#hgrade').innerHTML = `${kj(GRADE_ZH[g.name])}${esc(g.name)}`;
+  $('#hline').textContent = S.week === 0 ? 'An empty stage, waiting for life.' : g.line;
+  const d = $('#hdelta');
+  if (prev != null && S.week > 0) {
+    const diff = h - prev;
+    d.hidden = false;
+    d.className = 'h-delta ' + (diff > 0 ? 'up' : diff < 0 ? 'down' : '');
+    d.textContent = `${diff > 0 ? '+' : diff < 0 ? '−' : '±'}${Math.abs(diff)} since last week`;
+  } else d.hidden = true;
+  $('#sensei').textContent = Sim.sensei(S, E);
+  const moodCol = h >= 75 ? '#8fd18a' : h >= 45 ? '#e8c35a' : '#ef7b66';
+  $('#moodDot').style.background = moodCol;
+  $('#moodText').textContent = S.week === 0 && h < 40 ? 'Empty tank' : g.name;
+}
+
+function renderMeters(ev, live) {
+  const box = $('#meters');
+  if (!box.dataset.built) {
+    let html = '', grp = '';
+    const titles = { Water: 'Water chemistry', Light: 'Light & clarity', Life: 'Life' };
+    for (const m of ev.list) {
+      if (m.group !== grp) { grp = m.group; html += `<div class="m-group">${kj(MK[grp])}${titles[grp]}</div>`; }
+      html += `<div class="meter" data-key="${m.key}">
+        <button class="m-row" type="button" aria-expanded="false" id="mbtn-${m.key}">
+          <span class="m-label">${kj(MK[m.key])}${m.label}</span><span class="m-val"></span>
+          <span class="m-track"><span class="m-band"></span><span class="m-dot"></span></span>
+          <span class="m-status"><span class="word"></span><span class="ideal"></span></span>
+        </button>
+        <p class="m-explain" hidden></p>
+      </div>`;
+    }
+    box.innerHTML = html;
+    box.dataset.built = '1';
+    box.querySelectorAll('.m-row').forEach(b => b.addEventListener('click', () => {
+      const k = b.closest('.meter').dataset.key;
+      openMeter = openMeter === k ? null : k;
+      box.querySelectorAll('.meter').forEach(el => {
+        const open = el.dataset.key === openMeter;
+        el.querySelector('.m-explain').hidden = !open;
+        el.querySelector('.m-row').setAttribute('aria-expanded', open);
+      });
+    }));
+  }
+  for (const m of ev.list) {
+    if (live && !['o2', 'co2', 'ph', 'tox', 'no3', 'algae', 'clar'].includes(m.key)) continue;
+    const el = box.querySelector(`.meter[data-key="${m.key}"]`);
+    if (!el) continue;
+    el.className = 'meter tone-' + m.st.tone;
+    el.querySelector('.m-val').innerHTML = `${m.text}${m.unit ? `<small>${m.unit}</small>` : ''}`;
+    el.querySelector('.word').textContent = m.st.word;
+    const band = el.querySelector('.m-band'), dot = el.querySelector('.m-dot');
+    if (m.score != null) {
+      const pos = v => clamp((v - m.min) / (m.max - m.min), 0, 1) * 100;
+      band.style.left = pos(m.lo) + '%';
+      band.style.width = (pos(Math.min(m.hi, m.max)) - pos(m.lo)) + '%';
+      dot.style.left = pos(m.v) + '%';
+      dot.hidden = false; band.hidden = false;
+      el.querySelector('.ideal').textContent = m.key === 'bact' ? 'ideal ≥ 110%' : `ideal ${fmtIdeal(m)}`;
+    } else {
+      dot.hidden = true; band.hidden = true;
+      el.querySelector('.ideal').textContent = '';
+    }
+    const ex = el.querySelector('.m-explain');
+    ex.textContent = m.explain || '';
+    ex.hidden = openMeter !== m.key;
+  }
+}
+function fmtIdeal(m) {
+  if (m.key === 'tox') return 'under 0.25';
+  if (m.key === 'algae') return 'under 15%';
+  if (m.key === 'clar') return 'over 85%';
+  if (m.key === 'crowd') return 'under 80%';
+  if (m.key === 'plants' || m.key === 'animals') return `over ${m.lo}%`;
+  return `${m.lo}–${m.hi}${m.unit ? ' ' + m.unit : ''}`;
+}
+
+/* ================= journal & goals ================= */
+const TOPIC_VAR = {
+  'Mission': '--t-mission', 'Prediction': '--t-sys',
+  'Photosynthesis': '--t-photo', 'Plant growth': '--t-plant', 'Microbiology': '--t-micro', 'Reproduction': '--t-repro',
+  'Predation': '--t-pred', 'Lifecycle': '--t-life', 'Biology': '--t-bio', 'Systems': '--t-sys', 'Design': '--t-design',
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function renderJournal() {
+  const box = $('#journal');
+  if (!S.journal.length && slot === 'mission' && S.mission) {
+    const m = MISSIONS.find(x => x.id === S.mission.id);
+    box.innerHTML = `<div class="howto"><b>${esc(m.name)}.</b> ${esc(m.brief)}
+      <ol><li><b>Goal:</b> ${esc(m.goal)}</li><li>You have <b>${m.weeks} weeks</b>. Read the meters to find what’s wrong, and turn on the science lens to see why.</li><li>Stuck? <i>${esc(m.hint)}</i></li></ol></div>`;
+    return;
+  }
+  if (!S.journal.length) {
+    box.innerHTML = `<div class="howto">
+      <b>How to play.</b> Your tank starts empty: just soil, water and a lamp.
+      <ol>
+        <li>Use <b>+</b> and <b>−</b> to plan changes: plants, rocks, wood, shrimp, fish, light or a turtle.</li>
+        <li>Press <b>Let a week pass</b>. The tank lives a whole week in a few seconds — watch day and night go by.</li>
+        <li>Read what happened here. Every event says <i>why</i> it happened.</li>
+        <li>Keep adjusting until the Harmony score reaches 90. Things must be in balance for life to flourish.</li>
+      </ol>
+    </div>`;
+    return;
+  }
+  box.innerHTML = S.journal.map(j => {
+    const diff = j.harmony - j.prev;
+    const evs = j.events.length ? j.events.map(e => `
+      <div class="ev">
+        <div class="day">${e.day === 0 ? 'Start' : 'Day ' + e.day}</div>
+        <h3>${esc(e.title)} <span class="topic" style="--tc: var(${TOPIC_VAR[e.topic] || '--t-sys'})"><span lang="zh-TW">${TOPIC_KJ[e.topic] || ''}</span> ${esc(e.topic)}</span></h3>
+        <p>${esc(e.text)}</p>
+      </div>`).join('') : '<div class="ev"><div class="day">—</div><h3>A calm week</h3><p>Nothing dramatic happened. In a balanced tank, that is a good sign.</p></div>';
+    const goals = j.goals && j.goals.length ? `<div class="goal-won">Goal reached: ${j.goals.map(id => esc(Sim.GOALS.find(g => g.id === id).name)).join(', ')}</div>` : '';
+    return `<article class="week">
+      <div class="week-h"><b>Week ${j.week}</b>
+        <span class="h-delta ${diff > 0 ? 'up' : diff < 0 ? 'down' : ''}">Harmony ${j.prev} → ${j.harmony}</span></div>
+      ${predLine(j.predict)}${evs}${goals}
+    </article>`;
+  }).join('');
+}
+function renderGoals() {
+  const n = Object.keys(S.achievements).length;
+  $('#goalCount').textContent = `${n} of ${Sim.GOALS.length}`;
+  $('#goals').innerHTML = Sim.GOALS.map(g => {
+    const w = S.achievements[g.id];
+    return `<li class="${w != null ? 'done' : ''}"><span class="gmark" aria-hidden="true"></span>
+      <div><b>${g.name}</b><span>${g.text}</span></div><em>${w != null ? 'week ' + w : ''}</em></li>`;
+  }).join('');
+}
+
+/* ================= clock & toast ================= */
+const SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="#F4D27A" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></svg>';
+const MOON = '<svg viewBox="0 0 24 24" fill="#C9D6F2"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>';
+function setClock(week, day, hod, on) {
+  $('#clock').textContent = `Week ${week} · Day ${day} · ${String(hod).padStart(2, '0')}:00`;
+  $('#clockIcon').innerHTML = on ? SUN : MOON;
+}
+let toastTimer = null;
+function showToast(e, ms = 2600) {
+  const t = $('#toast');
+  t.innerHTML = `<span class="t-topic">${TOPIC_KJ[e.topic] ? TOPIC_KJ[e.topic] + ' · ' : ''}${esc(e.topic)}</span>${esc(e.title)}`;
+  t.classList.remove('fade');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.add('fade'), ms);
+}
+
+/* ================= charts ================= */
+const cssVar = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+function drawChart() {
+  const cv = $('#chart');
+  const w = cv.clientWidth, h = cv.clientHeight;
+  if (!w) return;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = w * dpr; cv.height = h * dpr;
+  const c = cv.getContext('2d');
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  c.clearRect(0, 0, w, h);
+  const ink2 = cssVar('--ink-3'), line = cssVar('--line');
+  c.font = '11px ' + cssVar('--mono');
+  const pad = { l: 34, r: 36, t: 8, b: 20 };
+  const pw = w - pad.l - pad.r, ph = h - pad.t - pad.b;
+  const legend = $('#legend'), note = $('#chartNote');
+  const yAxis = (max, step, side, fmt) => {
+    c.fillStyle = ink2; c.textAlign = side === 'l' ? 'right' : 'left'; c.textBaseline = 'middle';
+    for (let v = 0; v <= max + 1e-9; v += step) {
+      const y = pad.t + ph - v / max * ph;
+      if (side === 'l') { c.strokeStyle = line; c.lineWidth = 1; c.beginPath(); c.moveTo(pad.l, y + .5); c.lineTo(pad.l + pw, y + .5); c.stroke(); }
+      c.fillText(fmt ? fmt(v) : v, side === 'l' ? pad.l - 6 : pad.l + pw + 6, y);
+    }
+  };
+  const niceStep = max => { const raw = max / 4, p = Math.pow(10, Math.floor(Math.log10(raw))); const n = raw / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p; };
+  const niceMax = max => { const s = niceStep(max); return { max: Math.ceil(max / s) * s, step: s }; };
+
+  if (chartTab === 'harmony') {
+    const H = S.history;
+    legend.innerHTML = `<span><i style="background:var(--c-h)"></i>Harmony each week</span>`;
+    note.textContent = 'The dashed lines mark Thriving (75) and Nature Aquarium (90).';
+    yAxis(100, 25, 'l');
+    c.setLineDash([3, 4]); c.strokeStyle = cssVar('--c-h'); c.globalAlpha = .45;
+    for (const v of [75, 90]) { const y = pad.t + ph - v / 100 * ph; c.beginPath(); c.moveTo(pad.l, y); c.lineTo(pad.l + pw, y); c.stroke(); }
+    c.setLineDash([]); c.globalAlpha = 1;
+    if (H.length < 2) { c.fillStyle = ink2; c.textAlign = 'center'; c.fillText('Let a few weeks pass to see a trend.', pad.l + pw / 2, pad.t + ph / 2 - 18); }
+    const n = Math.max(H.length - 1, 1);
+    const X = i => pad.l + (H.length === 1 ? pw / 2 : i / n * pw), Y = v => pad.t + ph - v / 100 * ph;
+    const col = cssVar('--c-h');
+    if (H.length > 1) {
+      c.beginPath(); H.forEach((p, i) => i ? c.lineTo(X(i), Y(p.harmony)) : c.moveTo(X(i), Y(p.harmony)));
+      c.lineTo(X(H.length - 1), pad.t + ph); c.lineTo(X(0), pad.t + ph); c.closePath();
+      c.fillStyle = col; c.globalAlpha = .12; c.fill(); c.globalAlpha = 1;
+      c.beginPath(); H.forEach((p, i) => i ? c.lineTo(X(i), Y(p.harmony)) : c.moveTo(X(i), Y(p.harmony)));
+      c.strokeStyle = col; c.lineWidth = 2; c.stroke();
+    }
+    H.forEach((p, i) => { c.beginPath(); c.arc(X(i), Y(p.harmony), i === H.length - 1 ? 4 : 2.2, 0, 7); c.fillStyle = col; c.fill(); });
+    c.fillStyle = ink2; c.textAlign = 'center'; c.textBaseline = 'top';
+    const every = Math.ceil(H.length / 8);
+    H.forEach((p, i) => { if (i % every === 0 || i === H.length - 1) c.fillText('W' + p.week, X(i), pad.t + ph + 6); });
+    return;
+  }
+  const F = S.frames;
+  if (!F) {
+    legend.innerHTML = '';
+    note.textContent = '';
+    c.fillStyle = ink2; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText('Let a week pass to see inside the water.', w / 2, h / 2);
+    return;
+  }
+  const X = i => pad.l + i / (F.length - 1) * pw;
+  c.fillStyle = cssVar('--night');
+  F.forEach((f, i) => { if (!f.on) c.fillRect(X(i) - pw / 336, pad.t, pw / 168 + .6, ph); });
+  const series = (key, max, color, dash, width = 1.8) => {
+    c.beginPath(); F.forEach((f, i) => { const v = typeof key === 'function' ? key(f) : f[key]; const y = pad.t + ph - Math.min(v, max) / max * ph; i ? c.lineTo(X(i), y) : c.moveTo(X(i), y); });
+    c.strokeStyle = color; c.lineWidth = width; c.setLineDash(dash || []); c.stroke(); c.setLineDash([]);
+  };
+  if (chartTab === 'breath') {
+    const top = niceMax(Math.max(12, ...F.map(f => Math.max(f.o2, f.co2))) * 1.05);
+    yAxis(top.max, top.step, 'l');
+    series('o2', top.max, cssVar('--c-o2'));
+    series('co2', top.max, cssVar('--c-co2'));
+    legend.innerHTML = `<span><i style="background:var(--c-o2)"></i>Oxygen (mg/L)</span><span><i style="background:var(--c-co2)"></i>CO₂ (mg/L)</span><span><i style="background:var(--night);height:10px;width:10px;border-radius:2px"></i>Night</span>`;
+    note.textContent = S.plants.length ? 'In daylight plants breathe in CO₂ and breathe out oxygen. At night they breathe like animals, so the lines cross back.' : 'No plants yet, so oxygen and CO₂ barely change between day and night.';
+  } else {
+    const top = niceMax(Math.max(0.5, ...F.map(f => Math.max(f.nh3, f.no2))) * 1.1);
+    const topR = niceMax(Math.max(5, ...F.map(f => f.no3)) * 1.1);
+    yAxis(top.max, top.step, 'l', v => +v.toFixed(2));
+    yAxis(topR.max, topR.step, 'r', v => +v.toFixed(1));
+    series('nh3', top.max, cssVar('--c-nh3'));
+    series('no2', top.max, cssVar('--c-no2'));
+    series('no3', topR.max, cssVar('--c-no3'), [4, 3]);
+    legend.innerHTML = `<span><i style="background:var(--c-nh3)"></i>Ammonia (left, ppm)</span><span><i style="background:var(--c-no2)"></i>Nitrite (left)</span><span><i style="background:var(--c-no3)"></i>Nitrate (right, dashed)</span>`;
+    note.textContent = 'Bacteria turn ammonia → nitrite → nitrate. When the first two stay flat near zero, the cycle is working.';
+  }
+  c.fillStyle = ink2; c.textAlign = 'center'; c.textBaseline = 'top';
+  for (let d = 0; d < 7; d++) c.fillText('D' + (d + 1), X(d * 24 + 12), pad.t + ph + 6);
+}
+document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => {
+  chartTab = b.dataset.tab;
+  document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+  drawChart();
+}));
+
+function renderAll(prev) {
+  const last = S.history.length > 1 ? S.history[S.history.length - 2].harmony : null;
+  renderHarmony(prev != null ? prev : last);
+  renderMeters(E, false);
+  renderControls();
+  renderJournal();
+  renderGoals();
+  renderMissions();
+  renderMissionBar();
+  renderCycles();
+  drawChart();
+  restClock();
+}
+function restClock() {
+  $('#clock').textContent = S.week ? `End of week ${S.week}` : 'Week 0 · a fresh tank';
+  $('#clockIcon').innerHTML = restFrame().on ? SUN : MOON;
+}
+
+/* ================= tank rendering ================= */
+const cv = $('#tank');
+let ctx = cv.getContext('2d');
+const W = 1000, Hh = 620, TX = 30, TW = 940, TY = 70, TB = 560, SURF = 94;
+const soilY = x => 522 - 52 * Math.exp(-(((x - 610) / 290) ** 2)) - 16 * (1 - (x - TX) / TW);
+let scale = 1;
+function resize() {
+  const w = cv.clientWidth;
+  if (!w) return;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.round(w * dpr);
+  cv.height = Math.round(w * Hh / W * dpr);
+  scale = cv.width / W;
+}
+new ResizeObserver(() => { resize(); drawChart(); }).observe($('#tankFrame'));
+
+const ROCKS = [
+  { x: 612, w: 170, h: 150, lean: -0.12 }, { x: 468, w: 112, h: 92, lean: 0.14 }, { x: 752, w: 100, h: 74, lean: -0.18 },
+  { x: 380, w: 66, h: 44, lean: 0.22 }, { x: 862, w: 74, h: 50, lean: -0.1 }, { x: 540, w: 52, h: 34, lean: 0.05 }, { x: 690, w: 48, h: 30, lean: 0.12 },
+];
+const WOODS = [{ x: 300, dir: -1, len: 250, seed: 11 }, { x: 832, dir: 1, len: 210, seed: 23 }, { x: 168, dir: 1, len: 170, seed: 37 }];
+const geo = { rocks: [], woods: [] };
+function rockGeo(i) {
+  const d = ROCKS[i], base = soilY(d.x) + 14, pts = [], n = 10, peak = 0.5 + d.lean;
+  for (let k = 0; k <= n; k++) {
+    const t = k / n, xx = d.x - d.w / 2 + t * d.w;
+    const dd = Math.abs(t - peak) / (t < peak ? peak : 1 - peak);
+    const hh = d.h * (1 - Math.pow(dd, 1.6)) * (0.86 + hash(i * 31 + k) * 0.22);
+    pts.push([xx + (hash(i * 17 + k * 3) - 0.5) * 7, base - Math.max(8, hh)]);
+  }
+  const veins = [];
+  for (let v = 0; v < 3; v++) {
+    const y0 = base - d.h * (0.25 + 0.2 * v) * (0.8 + hash(i + v * 7) * 0.3);
+    veins.push([d.x - d.w * (0.28 - 0.08 * v), y0, d.x + d.w * (0.05 + hash(i * 5 + v) * 0.2), y0 - 10 - hash(i * 9 + v) * 16]);
+  }
+  return { d, base, pts, veins, peakPt: pts.reduce((a, p) => p[1] < a[1] ? p : a, pts[0]) };
+}
+function woodGeo(i) {
+  const d = WOODS[i], segs = [], tips = [];
+  let s = d.seed;
+  const r = () => hash(s++);
+  function branch(x, y, ang, len, w, depth) {
+    const x2 = x + Math.cos(ang) * len, y2 = Math.max(SURF + 40, y + Math.sin(ang) * len);
+    const bend = (r() - 0.5) * len * 0.45;
+    const cx = (x + x2) / 2 + Math.cos(ang + Math.PI / 2) * bend, cy = (y + y2) / 2 + Math.sin(ang + Math.PI / 2) * bend;
+    segs.push({ x, y, cx, cy, x2, y2, w });
+    if (depth <= 0 || len < 18) { tips.push([x2, y2]); return; }
+    const n = depth > 2 ? 2 : (r() < 0.6 ? 2 : 1);
+    for (let k = 0; k < n; k++) branch(x2, y2, ang + (k === 0 ? -1 : 1) * (0.3 + r() * 0.45) + (r() - 0.5) * 0.2, len * (0.6 + r() * 0.2), w * 0.62, depth - 1);
+  }
+  const bx = d.x, by = soilY(d.x) + 16;
+  branch(bx, by, -Math.PI / 2 + d.dir * 0.55, d.len * 0.45, 18, 4);
+  branch(bx + d.dir * 6, by + 4, d.dir > 0 ? -0.12 : Math.PI + 0.12, d.len * 0.38, 13, 1);
+  return { segs, tips };
+}
+function ensureGeo() {
+  while (geo.rocks.length < S.rocks) geo.rocks.push(rockGeo(geo.rocks.length));
+  while (geo.woods.length < S.wood) geo.woods.push(woodGeo(geo.woods.length));
+}
+
+const GRAINS = Array.from({ length: 520 }, (_, i) => ({ x: TX + hash(i * 3.1) * TW, t: hash(i * 7.7), r: 0.8 + hash(i * 1.9) * 1.8, c: Math.floor(hash(i * 5.3) * 3) }));
+const SPOTS = Array.from({ length: 80 }, (_, i) => {
+  const edge = hash(i * 2.3);
+  const x = edge < 0.35 ? TX + 8 + hash(i * 4.1) * 70 : edge < 0.7 ? TX + TW - 8 - hash(i * 4.1) * 70 : TX + hash(i * 6.1) * TW;
+  return { x, y: SURF + 20 + hash(i * 8.3) * (TB - SURF - 70), r: 2 + hash(i * 9.7) * 6 };
+});
+
+/* ---------- visual creatures ---------- */
+const V = { fish: [], shrimp: [], turtles: [], bubbles: [], dust: [], night: 0, t: 0, school: { x: 500, y: 260 } };
+for (let i = 0; i < 170; i++) V.dust.push({ x: TX + hash(i * 1.3) * TW, y: SURF + hash(i * 2.9) * (TB - SURF - 40), r: 0.7 + hash(i * 4.4) * 1.6, p: hash(i * 5.5) * 6.28 });
+
+function spawnFish(mode) {
+  const y = mode === 'add' ? SURF + 6 : mode === 'birth' ? 400 + Math.random() * 40 : 180 + Math.random() * 180;
+  const x = mode === 'birth' ? 200 + Math.random() * 600 : 120 + Math.random() * 760;
+  return { x, y, vx: (Math.random() - 0.5) * 30, vy: mode === 'add' ? 40 : 0, dir: Math.random() < 0.5 ? -1 : 1, ox: (Math.random() - 0.5) * 240, oy: (Math.random() - 0.5) * 90, ph: Math.random() * 6, size: mode === 'birth' ? 0.45 : 1, alpha: 1 };
+}
+function spawnShrimp(mode) {
+  const x = 120 + Math.random() * 760;
+  const y = mode === 'add' ? SURF + 10 : soilY(x) - 2;
+  return { x, y, tx: x, ty: soilY(x) - 2, state: mode === 'add' ? 'sink' : 'graze', timer: Math.random() * 3, dir: Math.random() < 0.5 ? -1 : 1, size: mode === 'birth' ? 0.45 : 1, alpha: 1, ph: Math.random() * 6 };
+}
+function spawnTurtle(mode) {
+  return { x: 200 + Math.random() * 600, y: mode === 'add' ? SURF + 20 : 250, vx: 0, vy: 0, dir: 1, tx: 500, ty: 300, breath: 8 + Math.random() * 6, state: 'swim', ph: 0, alpha: 1 };
+}
+function syncGroup(arr, total, juv, spawn, mode) {
+  const alive = arr.filter(a => !a.dying);
+  if (alive.length < total) {
+    const born = mode === 'live';
+    for (let i = alive.length; i < total; i++) arr.push(spawn(born ? 'birth' : mode));
+  } else if (alive.length > total) {
+    const pool = alive.slice().sort(() => Math.random() - 0.5).slice(0, alive.length - total);
+    for (const a of pool) { a.dying = mode === 'add' ? 'leave' : 'die'; a.dt = 0; }
+  }
+  const live = arr.filter(a => !a.dying);
+  live.forEach((a, i) => { a.juv = i >= live.length - juv; });
+}
+function syncAnimals(fr, mode) {
+  syncGroup(V.fish, fr.fishA + fr.fishJ, fr.fishJ, spawnFish, mode);
+  syncGroup(V.shrimp, fr.shrA + fr.shrJ, fr.shrJ, spawnShrimp, mode);
+  syncGroup(V.turtles, fr.turt, 0, spawnTurtle, mode);
+}
+function restFrame() {
+  if (restCache) return restCache;
+  const c = Sim.counts(S);
+  restCache = {
+    on: Sim.LIGHT_HOURS[S.light] > 0, hod: 12, o2: S.o2, co2: S.co2, nh3: S.nh3, no2: S.no2, no3: S.no3, algae: S.algae,
+    clar: 1 - Sim.cloudiness(S), tan: S.tannin, ph: Sim.pH(S), fishA: c.fishA, fishJ: c.fishJ, shrA: c.shrA, shrJ: c.shrJ, turt: c.turt,
+    fishH: S.fishH, shrimpH: S.shrimpH, plants: S.plants.map(p => [p.id, p.slot, p.bio, p.health]), f: null,
+  };
+  if (S.frames) {
+    const want = restCache.on;
+    for (let i = S.frames.length - 1; i >= 0; i--) if (S.frames[i].on === want && S.frames[i].f) { restCache.f = S.frames[i].f; break; }
+  }
+  if (!restCache.f) restCache.f = { lc: 0.012 * S.soil, lp: 0, la: 0, lb: 0, b1: S.B1, b2: S.B2 };
+  return restCache;
+}
+
+function envFrom(fr) {
+  const tox = fr.nh3 + fr.no2;
+  const plantsAvg = fr.plants.length ? fr.plants.reduce((a, p) => a + p[3], 0) / fr.plants.length : 1;
+  let mood = clamp(1 - 0.45 * Math.min(1, tox / 1.5) - 0.9 * (1 - fr.clar) - 0.7 * Math.max(0, fr.algae - 0.2) - (fr.o2 < 4 ? 0.25 : 0), 0, 1);
+  if (fr.plants.length) mood = mood * 0.7 + plantsAvg * 0.3;
+  const breathers = fr.fishA + fr.fishJ + fr.shrA + fr.shrJ;
+  return {
+    on: fr.on, lightH: Sim.LIGHT_HOURS[S.light], clar: fr.clar, algae: fr.algae, tan: fr.tan, o2: fr.o2, co2: fr.co2, tox, mood,
+    gasp: breathers && (fr.o2 < 4.3 || fr.co2 > 32) ? 1 : 0,
+    pearl: fr.on && fr.o2 > 9.5 ? clamp((fr.o2 - 9.5) / 3, 0, 1) : 0,
+    fishH: fr.fishH, shrimpH: fr.shrimpH, plants: fr.plants,
+  };
+}
+
+/* ---------- update ---------- */
+function update(dt, env) {
+  V.t += dt;
+  V.night = lerp(V.night, env.on ? 0 : 1, clamp(dt * (playing ? 6 : 2), 0, 1));
+  const sc = V.school;
+  sc.x = 500 + 320 * Math.sin(V.t * 0.09);
+  sc.y = env.gasp ? SURF + 26 : 250 + 70 * Math.sin(V.t * 0.13 + 1);
+  const fishSpeed = 70 * (0.45 + 0.55 * env.fishH);
+  for (const f of V.fish) {
+    f.ph += dt * (7 + Math.hypot(f.vx, f.vy) * 0.08);
+    if (f.dying) {
+      f.dt += dt;
+      if (f.dying === 'leave') { f.y -= 110 * dt; f.alpha = clamp(1 - f.dt / 1.2, 0, 1); }
+      else { f.y = Math.min(f.y + 22 * dt, soilY(f.x) - 5); f.alpha = clamp(1 - Math.max(0, f.dt - 1.6) / 1.8, 0, 1); }
+      continue;
+    }
+    f.size = lerp(f.size, f.juv ? 0.5 : 1, dt * 0.5);
+    let tx, ty;
+    if (f.juv) { tx = clamp(sc.x * 0.4 + 300 + f.ox * 0.8, 80, 920); ty = soilY(tx) - 30 - Math.abs(f.oy) * 0.4; }
+    else { tx = sc.x + f.ox + 22 * Math.sin(V.t * 0.7 + f.ph * 0.1); ty = sc.y + (env.gasp ? f.oy * 0.12 : f.oy) + 10 * Math.sin(V.t * 0.9 + f.ox); }
+    tx = clamp(tx, TX + 40, TX + TW - 40);
+    ty = clamp(ty, SURF + 12, soilY(tx) - 22);
+    const dx = tx - f.x, dy = ty - f.y, dist = Math.hypot(dx, dy) || 1;
+    const sp = (f.juv ? 0.6 : 1) * fishSpeed * Math.min(1, dist / 50 + 0.25);
+    let dvx = dx / dist * sp, dvy = dy / dist * sp;
+    for (const g of V.fish) {
+      if (g === f || g.dying) continue;
+      const ex = f.x - g.x, ey = f.y - g.y, d2 = ex * ex + ey * ey;
+      if (d2 < 256 && d2 > 0.01) { const k = (256 - d2) / 256 * 40; dvx += ex / Math.sqrt(d2) * k; dvy += ey / Math.sqrt(d2) * k; }
+    }
+    if (env.fishH < 0.5) { dvx += Math.sin(V.t * 3 + f.ox) * 12; dvy += Math.cos(V.t * 2.3 + f.oy) * 10; }
+    const k = clamp(dt * 1.6, 0, 1);
+    f.vx = lerp(f.vx, dvx, k); f.vy = lerp(f.vy, dvy, k);
+    f.x += f.vx * dt * MOTION; f.y += f.vy * dt * MOTION;
+    f.y = clamp(f.y, SURF + 6, soilY(f.x) - 8);
+    f.x = clamp(f.x, TX + 14, TX + TW - 14);
+    if (Math.abs(f.vx) > 4) f.dir = f.vx > 0 ? 1 : -1;
+  }
+  V.fish = V.fish.filter(f => !f.dying || f.alpha > 0);
+
+  const perches = [];
+  for (const r of geo.rocks.slice(0, S.rocks)) perches.push([r.peakPt[0], r.peakPt[1] - 1]);
+  for (const w of geo.woods.slice(0, S.wood)) for (const t of w.tips) perches.push([t[0], t[1] - 2]);
+  for (const s of V.shrimp) {
+    s.ph += dt;
+    if (s.dying) {
+      s.dt += dt;
+      if (s.dying === 'leave') { s.y -= 90 * dt; s.alpha = clamp(1 - s.dt / 1.2, 0, 1); }
+      else s.alpha = clamp(1 - s.dt / 2.2, 0, 1);
+      continue;
+    }
+    s.size = lerp(s.size, s.juv ? 0.5 : 1, dt * 0.5);
+    s.timer -= dt;
+    if (s.state === 'sink') {
+      s.y += 40 * dt;
+      if (s.y >= soilY(s.x) - 2) { s.y = soilY(s.x) - 2; s.state = 'graze'; s.timer = 1 + Math.random() * 2; }
+      continue;
+    }
+    if (s.state === 'graze' && s.timer <= 0) {
+      if (perches.length && Math.random() < 0.3) { const p = perches[Math.floor(Math.random() * perches.length)]; s.tx = p[0]; s.ty = p[1]; }
+      else { s.tx = clamp(s.x + (Math.random() - 0.5) * 260, TX + 20, TX + TW - 20); s.ty = soilY(s.tx) - 2; }
+      s.state = 'walk';
+    }
+    if (s.state === 'walk') {
+      const dx = s.tx - s.x, dy = s.ty - s.y, d = Math.hypot(dx, dy);
+      const sp = (s.juv ? 10 : 16) * (0.4 + 0.6 * env.shrimpH) * MOTION;
+      if (d < 2) { s.state = 'graze'; s.timer = 2 + Math.random() * 5; }
+      else { s.x += dx / d * sp * dt; s.y += dy / d * sp * dt; if (Math.abs(dx) > 1) s.dir = dx > 0 ? 1 : -1; }
+    }
+  }
+  V.shrimp = V.shrimp.filter(s => !s.dying || s.alpha > 0);
+
+  for (const tu of V.turtles) {
+    tu.ph += dt * 3;
+    if (tu.dying) { tu.dt += dt; tu.y += (tu.dying === 'leave' ? -80 : 15) * dt; tu.alpha = clamp(1 - tu.dt / 1.6, 0, 1); continue; }
+    tu.breath -= dt;
+    if (tu.state === 'swim' && tu.breath <= 0) { tu.state = 'breathe'; tu.tx = tu.x + (Math.random() - 0.5) * 100; tu.ty = SURF + 12; }
+    if (tu.state === 'breathe' && Math.abs(tu.y - tu.ty) < 6) {
+      tu.state = 'rest'; tu.breath = 2.2;
+      for (let i = 0; i < 4; i++) V.bubbles.push({ x: tu.x + tu.dir * 36, y: tu.y, r: 1.5 + Math.random() * 2, vy: 30 + Math.random() * 20, w: Math.random() * 6 });
+      splash();
+    }
+    if (tu.state === 'rest' && tu.breath <= 0) { tu.state = 'swim'; tu.breath = 12 + Math.random() * 8; tu.tx = 150 + Math.random() * 700; tu.ty = 250 + Math.random() * 150; }
+    if (tu.state === 'swim' && Math.hypot(tu.tx - tu.x, tu.ty - tu.y) < 20) { tu.tx = 150 + Math.random() * 700; tu.ty = 180 + Math.random() * 220; }
+    const dx = tu.tx - tu.x, dy = tu.ty - tu.y, d = Math.hypot(dx, dy) || 1;
+    const sp = tu.state === 'rest' ? 0 : 38 * MOTION;
+    tu.vx = lerp(tu.vx, dx / d * sp, clamp(dt, 0, 1)); tu.vy = lerp(tu.vy, dy / d * sp, clamp(dt, 0, 1));
+    tu.x += tu.vx * dt; tu.y += tu.vy * dt;
+    tu.y = clamp(tu.y, SURF + 10, soilY(tu.x) - 24);
+    if (Math.abs(tu.vx) > 4) tu.dir = tu.vx > 0 ? 1 : -1;
+  }
+  V.turtles = V.turtles.filter(t => !t.dying || t.alpha > 0);
+
+  // pearling oxygen bubbles
+  if (env.pearl > 0 && V.bubbles.length < 160) {
+    for (const p of env.plants) {
+      if (Math.random() < env.pearl * p[2] * 0.12 * MOTION) {
+        const sl = Sim.SLOTS[p[1]];
+        const x = sl.x + (Math.random() - 0.5) * (40 + p[2] * 50);
+        const top = sl.sp === 'stem' ? 40 + 170 * p[2] : sl.sp === 'grass' ? 20 + 60 * p[2] : 10;
+        V.bubbles.push({ x, y: soilY(x) - Math.random() * top, r: 0.9 + Math.random() * 1.6, vy: 22 + Math.random() * 26, w: Math.random() * 6 });
+      }
+    }
+  }
+  for (const b of V.bubbles) { b.y -= b.vy * dt; b.x += Math.sin(V.t * 3 + b.w) * 0.25; }
+  V.bubbles = V.bubbles.filter(b => b.y > SURF + 2);
+  for (const d of V.dust) { d.x += Math.sin(V.t * 0.3 + d.p) * 3 * dt; d.y += Math.cos(V.t * 0.25 + d.p) * 2.5 * dt; }
+}
+
+/* ---------- draw ---------- */
+const WATER = {
+  good: [[228, 244, 239], [66, 136, 128]], murk: [[186, 182, 146], [66, 60, 36]],
+  green: [[184, 212, 136], [48, 92, 38]], amber: [[236, 212, 158], [116, 74, 28]],
+};
+const LEAF_G = [104, 182, 74], LEAF_Y = [190, 178, 86], LEAF_B = [122, 92, 58];
+function leafRGB(h) { return h > 0.5 ? mix(LEAF_Y, LEAF_G, (h - 0.5) / 0.5) : mix(LEAF_B, LEAF_Y, clamp((h - 0.1) / 0.4, 0, 1)); }
+function shades(c) { return [rgb(mix(c, [20, 40, 20], 0.28)), rgb(c), rgb(mix(c, [240, 255, 210], 0.22))]; }
+function addEll(path, x, y, rx, ry, rot) {
+  path.moveTo(x + rx * Math.cos(rot), y + rx * Math.sin(rot));
+  path.ellipse(x, y, rx, ry, rot, 0, Math.PI * 2);
+}
+
+function draw(env) {
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  // room
+  const room = ctx.createLinearGradient(0, 0, 0, Hh);
+  room.addColorStop(0, '#141d1b'); room.addColorStop(1, '#0a0f0e');
+  ctx.fillStyle = room; ctx.fillRect(0, 0, W, Hh);
+  const lampOn = env.lightH > 0 && (1 - V.night) > 0.02;
+  const lampK = env.lightH > 0 ? 1 - V.night : 0;
+  // lamp
+  ctx.strokeStyle = '#2b3331'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(262, 0); ctx.lineTo(262, 26); ctx.moveTo(738, 0); ctx.lineTo(738, 26); ctx.stroke();
+  ctx.fillStyle = '#1d2524'; roundRect(232, 24, 536, 13, 5); ctx.fill();
+  ctx.fillStyle = '#2d3836'; ctx.fillRect(238, 25, 524, 2);
+  if (lampOn) {
+    ctx.fillStyle = `rgba(255,246,222,${0.9 * lampK})`; ctx.fillRect(240, 36, 520, 2.5);
+    const cone = ctx.createLinearGradient(0, 38, 0, TY + 30);
+    cone.addColorStop(0, `rgba(255,244,214,${0.16 * lampK})`); cone.addColorStop(1, 'rgba(255,244,214,0)');
+    ctx.fillStyle = cone;
+    ctx.beginPath(); ctx.moveTo(240, 38); ctx.lineTo(760, 38); ctx.lineTo(TX + TW, TY + 30); ctx.lineTo(TX, TY + 30); ctx.closePath(); ctx.fill();
+  }
+  // stand
+  ctx.fillStyle = '#2a211a'; ctx.fillRect(12, TB, W - 24, 10);
+  ctx.fillStyle = '#3b2e24'; ctx.fillRect(12, TB, W - 24, 2);
+  ctx.fillStyle = '#17120e'; ctx.fillRect(22, TB + 10, W - 44, Hh - TB - 10);
+
+  // water body
+  ctx.save();
+  ctx.beginPath(); ctx.rect(TX, TY, TW, TB - TY); ctx.clip();
+  ctx.fillStyle = 'rgba(190,220,215,0.05)'; ctx.fillRect(TX, TY, TW, SURF - TY);
+  let top = WATER.good[0], bot = WATER.good[1];
+  const murk = clamp((1 - env.clar) * 1.7 + (1 - env.mood) * 0.35, 0, 1);
+  top = mix(top, WATER.murk[0], murk); bot = mix(bot, WATER.murk[1], murk);
+  const gw = clamp((env.algae - 0.15) * 1.4, 0, 0.75);
+  top = mix(top, WATER.green[0], gw); bot = mix(bot, WATER.green[1], gw);
+  const am = clamp(env.tan * 1.8, 0, 0.5);
+  top = mix(top, WATER.amber[0], am); bot = mix(bot, WATER.amber[1], am);
+  const dark = env.lightH > 0 ? V.night * 0.82 : 0.86;
+  const NIGHT = [10, 22, 36];
+  const wg = ctx.createLinearGradient(0, SURF, 0, TB);
+  wg.addColorStop(0, rgb(mix(top, NIGHT, dark))); wg.addColorStop(1, rgb(mix(bot, NIGHT, dark)));
+  ctx.fillStyle = wg; ctx.fillRect(TX, SURF, TW, TB - SURF);
+  // backlight glow
+  const glowK = (1 - dark) * (0.3 + 0.4 * env.mood);
+  const glow = ctx.createRadialGradient(560, 250, 20, 560, 250, 520);
+  glow.addColorStop(0, `rgba(255,255,250,${0.32 * glowK})`); glow.addColorStop(1, 'rgba(255,255,250,0)');
+  ctx.fillStyle = glow; ctx.fillRect(TX, SURF, TW, TB - SURF);
+  // light rays
+  if (lampK > 0.02) {
+    for (let i = 0; i < 6; i++) {
+      const x0 = 110 + i * 158 + Math.sin(V.t * 0.18 * MOTION + i * 1.7) * 26;
+      const g = ctx.createLinearGradient(0, SURF, 0, 470);
+      g.addColorStop(0, `rgba(255,255,240,${0.11 * lampK * (0.5 + 0.5 * env.clar)})`); g.addColorStop(1, 'rgba(255,255,240,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.moveTo(x0 - 16, SURF); ctx.lineTo(x0 + 22, SURF); ctx.lineTo(x0 + 96, 470); ctx.lineTo(x0 + 18, 470); ctx.closePath(); ctx.fill();
+    }
+  }
+  ensureGeo();
+  const plants = env.plants.map(p => ({ id: p[0], slot: p[1], bio: p[2], health: p[3], sl: Sim.SLOTS[p[1]] }));
+  for (const p of plants) if (p.sl.sp === 'stem') drawStems(p, env);
+  for (let i = 0; i < S.wood; i++) drawWood(geo.woods[i], env);
+  for (let i = 0; i < S.rocks; i++) drawRock(geo.rocks[i], env);
+  drawSoil(env);
+  for (const p of plants) if (p.sl.sp === 'grass') drawGrass(p);
+  for (const p of plants) if (p.sl.sp === 'moss') drawMoss(p);
+  for (const p of plants) if (p.sl.sp === 'carpet') drawCarpet(p);
+  for (const s of V.shrimp) drawShrimp(s, env);
+  for (const tu of V.turtles) drawTurtle(tu);
+  for (const f of V.fish) drawFish(f, env);
+  if (V.sel && !V.sel.dying) {
+    const r = V.turtles.includes(V.sel) ? 44 : 15;
+    ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 1.6; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.arc(V.sel.x, V.sel.y - (V.shrimp.includes(V.sel) ? 4 : 0), r, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+  }
+  // bubbles
+  ctx.lineWidth = 0.8;
+  for (const b of V.bubbles) {
+    ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 7);
+    ctx.fillStyle = 'rgba(255,255,255,0.28)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.75)'; ctx.stroke();
+  }
+  // suspended particles
+  const nDust = Math.floor(18 + 150 * clamp(1 - env.clar, 0, 1) * 1.6);
+  ctx.fillStyle = env.algae > 0.3 ? 'rgba(120,150,60,0.5)' : 'rgba(120,100,70,0.45)';
+  for (let i = 0; i < Math.min(nDust, V.dust.length); i++) { const d = V.dust[i]; ctx.fillRect(d.x, d.y, d.r, d.r); }
+  // algae on the glass
+  const spots = Math.floor(SPOTS.length * clamp((env.algae - 0.06) / 0.55, 0, 1));
+  if (spots) {
+    ctx.fillStyle = `rgba(92,128,44,${0.3 + 0.25 * env.algae})`;
+    for (let i = 0; i < spots; i++) { const s = SPOTS[i]; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 7); ctx.fill(); }
+    const a = clamp(env.algae * 0.45, 0, 0.35);
+    for (const [x0, x1] of [[TX, TX + 90], [TX + TW, TX + TW - 90]]) {
+      const g = ctx.createLinearGradient(x0, 0, x1, 0);
+      g.addColorStop(0, `rgba(80,120,40,${a})`); g.addColorStop(1, 'rgba(80,120,40,0)');
+      ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), SURF, 90, TB - SURF);
+    }
+  }
+  // gloom when unhealthy
+  const gloom = clamp((0.72 - env.mood) / 0.72, 0, 1);
+  if (gloom > 0) { ctx.fillStyle = `rgba(40,34,18,${0.28 * gloom})`; ctx.fillRect(TX, SURF, TW, TB - SURF); }
+  // night veil
+  if (dark > 0.01) { ctx.fillStyle = `rgba(6,14,30,${0.42 * dark})`; ctx.fillRect(TX, SURF, TW, TB - SURF); }
+  if (LENS.on) drawLens(env);
+  // surface
+  ctx.beginPath();
+  for (let x = TX; x <= TX + TW; x += 10) { const y = SURF + Math.sin(x * 0.03 + V.t * 1.3 * MOTION) * 1.2; x === TX ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+  ctx.strokeStyle = `rgba(255,255,255,${0.35 + 0.35 * (1 - dark)})`; ctx.lineWidth = 1.4; ctx.stroke();
+  const sg = ctx.createLinearGradient(0, SURF, 0, SURF + 16);
+  sg.addColorStop(0, `rgba(255,255,255,${0.16 * (1 - dark)})`); sg.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = sg; ctx.fillRect(TX, SURF, TW, 16);
+  ctx.restore();
+  // glass edges
+  ctx.strokeStyle = 'rgba(210,235,230,0.22)'; ctx.lineWidth = 2;
+  ctx.strokeRect(TX, TY, TW, TB - TY);
+  const sheen = ctx.createLinearGradient(TX, 0, TX + 140, 0);
+  sheen.addColorStop(0, 'rgba(255,255,255,0.07)'); sheen.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = sheen; ctx.fillRect(TX, TY, 140, TB - TY);
+}
+function roundRect(x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+
+function drawSoil(env) {
+  ctx.beginPath(); ctx.moveTo(TX, TB);
+  for (let x = TX; x <= TX + TW; x += 10) ctx.lineTo(x, soilY(x));
+  ctx.lineTo(TX + TW, TB); ctx.closePath();
+  const g = ctx.createLinearGradient(0, 455, 0, TB);
+  g.addColorStop(0, '#3e2d20'); g.addColorStop(1, '#1b130d');
+  ctx.fillStyle = g; ctx.fill();
+  const cols = ['#2a1d14', '#54402e', '#6d553c'];
+  for (const gr of GRAINS) { const y0 = soilY(gr.x) + 3; const y = y0 + gr.t * (TB - y0 - 2); ctx.fillStyle = cols[gr.c]; ctx.fillRect(gr.x, y, gr.r, gr.r); }
+  ctx.beginPath();
+  for (let x = TX; x <= TX + TW; x += 10) x === TX ? ctx.moveTo(x, soilY(x)) : ctx.lineTo(x, soilY(x));
+  ctx.strokeStyle = 'rgba(120,92,62,0.8)'; ctx.lineWidth = 2; ctx.stroke();
+  if (env.on && env.lightH > 0) {
+    for (let i = 0; i < 14; i++) {
+      const x = TX + 40 + i * 66 + Math.sin(V.t * 0.5 * MOTION + i) * 10;
+      ctx.fillStyle = `rgba(255,250,220,${(0.05 + 0.05 * Math.sin(V.t * 1.3 * MOTION + i * 2)) * (1 - V.night)})`;
+      ctx.beginPath(); ctx.ellipse(x, soilY(x) - 1, 16, 2.4, 0, 0, 7); ctx.fill();
+    }
+  }
+}
+function drawRock(r, env) {
+  const d = r.d;
+  const path = new Path2D();
+  path.moveTo(d.x - d.w / 2, r.base + 8);
+  for (const p of r.pts) path.lineTo(p[0], p[1]);
+  path.lineTo(d.x + d.w / 2, r.base + 8); path.closePath();
+  const g = ctx.createLinearGradient(d.x - d.w / 2, r.base - d.h, d.x + d.w / 2, r.base);
+  g.addColorStop(0, '#a9b2b6'); g.addColorStop(0.55, '#737d82'); g.addColorStop(1, '#3d4549');
+  ctx.fillStyle = g; ctx.fill(path);
+  ctx.save(); ctx.clip(path);
+  ctx.fillStyle = 'rgba(18,26,30,0.3)';
+  ctx.beginPath(); ctx.moveTo(r.peakPt[0], r.peakPt[1]); ctx.lineTo(r.peakPt[0] + d.w * 0.08, r.base + 10); ctx.lineTo(d.x + d.w, r.base + 10); ctx.lineTo(d.x + d.w, r.peakPt[1]); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(236,242,242,0.32)'; ctx.lineWidth = 1.3;
+  for (const v of r.veins) { ctx.beginPath(); ctx.moveTo(v[0], v[1]); ctx.quadraticCurveTo((v[0] + v[2]) / 2, v[1] - 8, v[2], v[3]); ctx.stroke(); }
+  if (env.algae > 0.3) { ctx.fillStyle = `rgba(90,130,40,${clamp((env.algae - 0.3) * 1.2, 0, 0.55)})`; ctx.fillRect(d.x - d.w, r.base - d.h - 10, d.w * 2, d.h * 0.45); }
+  ctx.restore();
+  if (env.algae > 0.35) {
+    ctx.strokeStyle = `rgba(110,150,50,${clamp(env.algae, 0, 0.8)})`; ctx.lineWidth = 1;
+    for (let i = 0; i < 12; i++) {
+      const p = r.pts[1 + (i % (r.pts.length - 2))];
+      const len = 8 + 22 * env.algae * hash(i + d.x);
+      ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.quadraticCurveTo(p[0] + Math.sin(V.t + i) * 4, p[1] - len / 2, p[0] + Math.sin(V.t * 0.8 + i) * 6, p[1] - len); ctx.stroke();
+    }
+  }
+}
+function drawWood(wd, env) {
+  ctx.lineCap = 'round';
+  for (const s of wd.segs) {
+    ctx.strokeStyle = '#4a3322'; ctx.lineWidth = s.w;
+    ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.quadraticCurveTo(s.cx, s.cy, s.x2, s.y2); ctx.stroke();
+  }
+  for (const s of wd.segs) {
+    ctx.strokeStyle = 'rgba(160,124,88,0.55)'; ctx.lineWidth = Math.max(1, s.w * 0.3);
+    ctx.beginPath(); ctx.moveTo(s.x - s.w * 0.18, s.y - s.w * 0.12); ctx.quadraticCurveTo(s.cx - s.w * 0.18, s.cy - s.w * 0.12, s.x2 - s.w * 0.18, s.y2 - s.w * 0.12); ctx.stroke();
+  }
+  if (env.algae > 0.3) {
+    ctx.strokeStyle = `rgba(90,130,40,${clamp((env.algae - 0.3), 0, 0.45)})`;
+    for (const s of wd.segs) { ctx.lineWidth = s.w * 0.9; ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.quadraticCurveTo(s.cx, s.cy, s.x2, s.y2); ctx.stroke(); }
+  }
+  ctx.lineCap = 'butt';
+}
+function drawStems(p, env) {
+  const sl = p.sl, seed = p.id * 97.3;
+  const n = 5 + Math.floor(Math.min(p.bio, 2.2) * 3);
+  const spread = 16 + p.bio * 22;
+  const base3 = leafRGB(p.health);
+  const cols = shades(base3);
+  const paths = [new Path2D(), new Path2D(), new Path2D()];
+  const tip = new Path2D();
+  const stem = new Path2D();
+  const red = sl.red && p.health > 0.55 && env.lightH >= 8;
+  for (let i = 0; i < n; i++) {
+    const bx = sl.x + (hash(seed + i * 3.7) - 0.5) * spread * 2;
+    const base = soilY(bx) + 6;
+    let h = (46 + 180 * p.bio) * (0.72 + hash(seed + i * 5.1) * 0.5);
+    const maxH = base - SURF - 8;
+    const over = Math.max(0, h - maxH); h = Math.min(h, maxH);
+    const lean = (hash(seed + i * 7.3) - 0.5) * 26;
+    const sway = Math.sin(V.t * 0.8 * MOTION + i * 1.7 + sl.x * 0.01) * (1.5 + h * 0.02) * MOTION;
+    const x2 = bx + lean + sway, y2 = base - h, cx = bx + lean * 0.3 + sway * 0.4, cy = base - h * 0.55;
+    stem.moveTo(bx, base); stem.quadraticCurveTo(cx, cy, x2, y2);
+    const count = Math.max(3, Math.floor(h / 9));
+    for (let k = 1; k <= count; k++) {
+      const s = k / count, q = 1 - s;
+      const px = q * q * bx + 2 * q * s * cx + s * s * x2, py = q * q * base + 2 * q * s * cy + s * s * y2;
+      const L = (4.9 - s * 1.3) * (0.75 + 0.25 * p.health);
+      const target = red && s > 0.55 ? tip : paths[Math.floor(hash(seed + i * 11 + k * 1.3) * 3)];
+      addEll(target, px - 3.3, py, L, L * 0.42, -0.5);
+      addEll(target, px + 3.3, py, L, L * 0.42, 0.5);
+    }
+    if (over > 0) {
+      const dir = hash(seed + i) < 0.5 ? -1 : 1, run = Math.min(over * 0.8, 90);
+      stem.moveTo(x2, y2); stem.quadraticCurveTo(x2 + dir * run * 0.4, SURF + 4, x2 + dir * run, SURF + 5);
+      for (let k = 0; k < run / 9; k++) {
+        const px = x2 + dir * k * 9, py = SURF + 5 + (y2 - SURF - 5) * Math.max(0, 1 - k * 9 / (run * 0.5));
+        addEll(red ? tip : paths[k % 3], px, py - 2.6, 4, 1.8, 0.3 * dir);
+        addEll(red ? tip : paths[(k + 1) % 3], px, py + 2.6, 4, 1.8, -0.3 * dir);
+      }
+    }
+  }
+  ctx.strokeStyle = rgb(mix(base3, [40, 50, 30], 0.35)); ctx.lineWidth = 1.4; ctx.stroke(stem);
+  for (let k = 0; k < 3; k++) { ctx.fillStyle = cols[k]; ctx.fill(paths[k]); }
+  if (red) { ctx.fillStyle = 'rgb(206,92,66)'; ctx.fill(tip); }
+}
+function drawGrass(p) {
+  const sl = p.sl, seed = p.id * 57.1;
+  const n = 10 + Math.floor(Math.min(p.bio, 2.2) * 26);
+  const spread = 18 + p.bio * 40;
+  const cols = shades(leafRGB(p.health));
+  const paths = [new Path2D(), new Path2D(), new Path2D()];
+  for (let i = 0; i < n; i++) {
+    const bx = sl.x + (hash(seed + i * 3.1) - 0.5) * spread * 2;
+    const base = soilY(bx) + 3;
+    const h = (18 + 72 * Math.min(p.bio, 2)) * (0.5 + hash(seed + i * 5.7) * 0.7) * (0.6 + 0.4 * p.health);
+    const lean = (hash(seed + i * 9.3) - 0.5) * 18 + (1 - p.health) * 14;
+    const sway = Math.sin(V.t * 1.1 * MOTION + i * 0.7) * (1 + h * 0.05) * MOTION;
+    const path = paths[i % 3];
+    path.moveTo(bx, base); path.quadraticCurveTo(bx + lean * 0.3, base - h * 0.6, bx + lean + sway, base - h);
+  }
+  ctx.lineWidth = 1.5;
+  for (let k = 0; k < 3; k++) { ctx.strokeStyle = cols[k]; ctx.stroke(paths[k]); }
+}
+function drawCarpet(p) {
+  const sl = p.sl, seed = p.id * 31.7;
+  const width = 40 + 150 * Math.min(p.bio, 2.2);
+  const n = Math.floor(width * 0.95 * (0.45 + 0.55 * p.health));
+  const cols = shades(leafRGB(p.health));
+  const paths = [new Path2D(), new Path2D(), new Path2D()];
+  for (let i = 0; i < n; i++) {
+    const u = hash(seed + i * 1.37) - 0.5;
+    const lx = clamp(sl.x + u * width * (0.55 + 0.45 * hash(seed + i * 2.1)), TX + 4, TX + TW - 4);
+    const mound = (1 - Math.abs(u) * 1.6);
+    const ly = soilY(lx) + 2 - hash(seed + i * 3.3) * (3 + 8 * Math.min(p.bio, 1.6)) * Math.max(0.3, mound);
+    const r = 2.3 + hash(seed + i * 4.9) * 1.6;
+    addEll(paths[Math.floor(hash(seed + i * 6.1) * 3)], lx, ly, r, r * 0.78, 0);
+  }
+  for (let k = 0; k < 3; k++) { ctx.fillStyle = cols[k]; ctx.fill(paths[k]); }
+}
+function mossAnchors() {
+  if (S.wood > 0) return geo.woods[0].tips.slice(0, 4).concat(geo.woods[0].segs.slice(0, 1).map(s => [s.cx, s.cy]));
+  if (S.rocks > 0) return geo.rocks.slice(0, Math.min(3, S.rocks)).map(r => r.peakPt);
+  return [[610, soilY(610) - 2], [560, soilY(560) - 2]];
+}
+function drawMoss(p) {
+  const anchors = mossAnchors();
+  const c = mix(leafRGB(p.health), [40, 70, 30], 0.35);
+  const cols = shades(c);
+  const paths = [new Path2D(), new Path2D(), new Path2D()];
+  const per = Math.floor(16 + 34 * Math.min(p.bio, 2.2));
+  anchors.forEach((a, j) => {
+    const rad = 7 + 11 * Math.min(p.bio, 2);
+    for (let i = 0; i < per; i++) {
+      const ang = hash(p.id + j * 13 + i * 1.7) * Math.PI * 2, dd = Math.sqrt(hash(p.id + j * 7 + i * 2.3)) * rad;
+      const r = 1.6 + hash(j + i * 3.1) * 2.4;
+      addEll(paths[i % 3], a[0] + Math.cos(ang) * dd * 1.3, a[1] + Math.sin(ang) * dd * 0.7, r, r, 0);
+    }
+  });
+  for (let k = 0; k < 3; k++) { ctx.fillStyle = cols[k]; ctx.fill(paths[k]); }
+}
+
+function drawFish(f, env) {
+  const s = f.size, L = 19 * s, H = 5.4 * s;
+  ctx.save();
+  ctx.translate(f.x, f.y); ctx.scale(f.dir, 1);
+  ctx.globalAlpha = f.alpha;
+  if (f.dying === 'die') ctx.rotate(Math.min(Math.PI, f.dt * 2.2));
+  else ctx.rotate(clamp(Math.atan2(f.vy, Math.abs(f.vx) + 20), -0.5, 0.5));
+  const wig = Math.sin(f.ph) * 0.35;
+  ctx.fillStyle = 'rgba(214,226,232,0.55)';
+  ctx.beginPath(); ctx.moveTo(-L * 0.42, 0); ctx.lineTo(-L * 0.74, -H * 0.95 + wig * H); ctx.lineTo(-L * 0.64, wig * H * 0.3); ctx.lineTo(-L * 0.74, H * 0.95 + wig * H); ctx.closePath(); ctx.fill();
+  const body = new Path2D();
+  body.moveTo(L * 0.5, 0); body.bezierCurveTo(L * 0.36, -H, -L * 0.24, -H * 0.95, -L * 0.46, -H * 0.22);
+  body.lineTo(-L * 0.46, H * 0.22); body.bezierCurveTo(-L * 0.24, H * 0.95, L * 0.36, H, L * 0.5, 0);
+  const hl = f.dying ? 0.2 : env.fishH;
+  ctx.fillStyle = '#dde5e7'; ctx.fill(body);
+  ctx.save(); ctx.clip(body);
+  ctx.fillStyle = rgb(mix([150, 120, 120], [216, 44, 58], hl)); ctx.fillRect(-L * 0.5, H * 0.04, L * 0.96, H);
+  ctx.fillStyle = rgb(mix([120, 150, 160], [38, 196, 255], hl)); ctx.fillRect(-L * 0.46, -H * 0.52, L * 0.86, H * 0.54);
+  ctx.fillStyle = `rgba(200,248,255,${0.4 + 0.4 * hl})`; ctx.fillRect(-L * 0.38, -H * 0.42, L * 0.68, H * 0.13);
+  ctx.restore();
+  ctx.fillStyle = '#0e1719'; ctx.beginPath(); ctx.arc(L * 0.32, -H * 0.12, 1.3 * Math.max(0.7, s), 0, 7); ctx.fill();
+  ctx.restore();
+}
+function drawShrimp(sh, env) {
+  const k = sh.size * 1.15;
+  ctx.save();
+  ctx.translate(sh.x, sh.y - 4 * k); ctx.scale(sh.dir * k, k);
+  ctx.globalAlpha = sh.alpha * (sh.juv ? 0.8 : 1);
+  const col = mix([200, 150, 140], [214, 58, 42], sh.dying ? 0.3 : env.shrimpH);
+  const walking = sh.state === 'walk' ? 1 : 0.25;
+  ctx.strokeStyle = rgb(mix(col, [90, 30, 20], 0.3), 0.8); ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  for (let i = 0; i < 4; i++) { const x = -2 + i * 2.2; ctx.moveTo(x, 1.4); ctx.lineTo(x - 0.6 + Math.sin(V.t * 12 + i) * 0.8 * walking, 4.4); }
+  ctx.moveTo(5.8, -1.8); ctx.quadraticCurveTo(10, -6, 14 + Math.sin(V.t * 2 + sh.ph) * 1.5, -5);
+  ctx.moveTo(5.8, -1.2); ctx.quadraticCurveTo(10, -3, 13, -1.5 + Math.sin(V.t * 1.7 + sh.ph));
+  ctx.stroke();
+  const body = new Path2D();
+  addEll(body, 2.6, -1, 4.3, 2.7, -0.08); addEll(body, -1.6, -0.5, 3.4, 2.3, 0.22); addEll(body, -4.8, 0.7, 2.4, 1.7, 0.55);
+  body.moveTo(-6, 1.2); body.lineTo(-9, -0.4); body.lineTo(-8.6, 3.4); body.closePath();
+  ctx.fillStyle = rgb(col); ctx.fill(body);
+  ctx.fillStyle = 'rgba(255,220,210,0.35)'; ctx.beginPath(); ctx.ellipse(2, -2.4, 2.4, 0.7, -0.1, 0, 7); ctx.fill();
+  ctx.fillStyle = '#1a0f0c'; ctx.beginPath(); ctx.arc(5.4, -1.8, 0.8, 0, 7); ctx.fill();
+  ctx.restore();
+}
+function drawTurtle(tu) {
+  ctx.save();
+  ctx.translate(tu.x, tu.y); ctx.scale(tu.dir, 1);
+  ctx.globalAlpha = tu.alpha;
+  const pad = Math.sin(tu.ph) * 0.5;
+  ctx.fillStyle = '#4c5a2c';
+  ctx.beginPath(); ctx.ellipse(18, 8, 13, 4.2, 0.7 + pad, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(-20, 8, 8, 3.6, -0.6 - pad, 0, 7); ctx.fill();
+  ctx.fillStyle = '#65743a';
+  ctx.beginPath(); ctx.ellipse(28, 1, 8, 5.6, 0, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(38, -1, 9, 6.6, 0.05, 0, 7); ctx.fill();
+  ctx.strokeStyle = '#d9c55a'; ctx.lineWidth = 0.9;
+  ctx.beginPath(); ctx.moveTo(30, -2); ctx.lineTo(45, -3); ctx.moveTo(29, 2); ctx.lineTo(44, 2); ctx.stroke();
+  ctx.fillStyle = '#c63a2a'; ctx.beginPath(); ctx.ellipse(36, -2.4, 3.2, 1.6, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = '#10150a'; ctx.beginPath(); ctx.arc(42, -3.2, 1.3, 0, 7); ctx.fill();
+  ctx.fillStyle = '#cbb96c'; ctx.beginPath(); ctx.ellipse(0, 7, 27, 5.5, 0, 0, 7); ctx.fill();
+  const sg = ctx.createLinearGradient(0, -20, 0, 10);
+  sg.addColorStop(0, '#6c7d3a'); sg.addColorStop(1, '#3a4820');
+  ctx.fillStyle = sg; ctx.beginPath(); ctx.ellipse(0, -2, 31, 16, 0, Math.PI, 0); ctx.lineTo(31, 3); ctx.quadraticCurveTo(0, 8, -31, 3); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(214,196,90,0.55)'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(-10, -16); ctx.lineTo(-12, 4); ctx.moveTo(10, -16); ctx.lineTo(12, 4);
+  ctx.moveTo(-22, -9); ctx.lineTo(22, -9); ctx.moveTo(-29, -2); ctx.lineTo(29, -2);
+  ctx.stroke();
+  ctx.fillStyle = '#4c5a2c';
+  ctx.beginPath(); ctx.ellipse(16, 10, 12, 4, 0.5 - pad, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-30, 3); ctx.lineTo(-38, 6); ctx.lineTo(-30, 7); ctx.fill();
+  ctx.restore();
+}
+
+/* ================= predict first ================= */
+const PRED = {
+  o2: { label: 'oxygen', tol: 0.25 }, co2: { label: 'CO₂', tol: 0.4 }, tox: { label: 'ammonia + nitrite', tol: 0.04 },
+  no3: { label: 'nitrate', tol: 1 }, algae: { label: 'algae', tol: 1.5 }, clar: { label: 'water clarity', tol: 1.5 },
+  ph: { label: 'pH', tol: 0.04 }, plants: { label: 'plant health', tol: 2 },
+};
+const WILL = { up: 'go up', same: 'stay about the same', down: 'go down' };
+const PAST = { up: 'went up', same: 'stayed about the same', down: 'went down' };
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const meterVal = k => { const m = E && E.list.find(x => x.key === k); return m && m.score != null ? m.v : null; };
+function predictMetric() {
+  const p = pending, wc = $('#wc').checked;
+  let m;
+  if (p.turtle > 0) m = 'clar';
+  else if (p.light > 0) m = 'algae';
+  else if (p.fish > 0 || p.shrimp > 0) m = S.flags.cycle ? 'o2' : 'tox';
+  else if (p.fish < 0 || p.shrimp < 0 || p.turtle < 0) m = 'o2';
+  else if (wc) m = 'no3';
+  else if (p.plants > 0) m = 'co2';
+  else if (p.light < 0) m = S.plants.length ? 'plants' : 'algae';
+  else if (p.wood > 0 || p.rocks !== 0) m = 'ph';
+  else if (p.plants < 0) m = 'o2';
+  else m = ['algae', 'no3', 'plants', 'o2'][S.week % 4];
+  return meterVal(m) == null ? 'o2' : m;
+}
+function renderPredict() {
+  const box = $('#predict');
+  if (!box || !E) return;
+  const tag = kj('predict');
+  if (playing) {
+    box.innerHTML = playing.pred
+      ? `<span class="q">${tag}You predicted <b>${PRED[playing.pred.metric].label}</b> will ${WILL[playing.pred.choice]}. Let’s see…</span>`
+      : `<span class="q">${tag}Watching what happens…</span>`;
+    return;
+  }
+  const m = predictMetric();
+  if (!prediction || prediction.metric !== m) prediction = { metric: m, choice: null };
+  const ch = prediction.choice;
+  const b = (v, t) => `<button type="button" data-pred="${v}" aria-pressed="${ch === v}">${t}</button>`;
+  box.innerHTML = `<span class="q">${tag}Predict first: this week, <b>${PRED[m].label}</b> will…</span>
+    ${b('up', '↑ go up')}${b('same', '= stay the same')}${b('down', '↓ go down')}
+    <span class="ps">${META.total ? `${META.right} of ${META.total} right` : 'optional'}</span>`;
+  box.querySelectorAll('[data-pred]').forEach(el => el.addEventListener('click', () => {
+    prediction.choice = prediction.choice === el.dataset.pred ? null : el.dataset.pred;
+    renderPredict();
+  }));
+}
+function predLine(pr) {
+  if (!pr) return '';
+  const f = v => pr.metric === 'tox' || pr.metric === 'ph' ? v.toFixed(2) : v.toFixed(1);
+  return `<div class="pred-line ${pr.right ? 'right' : 'wrong'}">${kj('predict')}You predicted ${PRED[pr.metric].label} would ${WILL[pr.choice]}. It ${PAST[pr.actual]} (${f(pr.before)} → ${f(pr.after)}). <span class="res">${pr.right ? 'Correct!' : 'Not this time — scientists learn the most from surprises.'}</span></div>`;
+}
+
+/* ================= rescue missions ================= */
+const MISSIONS = [
+  { id: 'newtank', k: 'poison', name: 'New tank syndrome', weeks: 3,
+    brief: '18 tetras were put into a brand-new tank on day one. No helpful bacteria live here yet, so ammonia will build up fast.',
+    goal: 'Finish the nitrogen cycle with at least 8 fish still in the tank.',
+    plan: [], extra: { fish: 18 }, check: S => !!S.flags.cycle && S.fish.length >= 8,
+    hint: 'Plants drink ammonia, water changes dilute it — and fewer fish make less waste.' },
+  { id: 'green', k: 'algae', name: 'Green water', weeks: 4,
+    brief: 'Someone left the lamp on 14 hours a day. Algae has taken over the glass, the stones and the water.',
+    goal: 'Get algae under 15% and Harmony to 70 or more.',
+    plan: [{ rocks: 3, plants: 3, light: 4 }, {}, {}, { fish: 6 }], check: (S, E) => E.R.algae < 0.15 && E.harmony >= 70,
+    hint: 'Algae races your plants for light and food. Who can you help win?' },
+  { id: 'dark', k: 'dark', name: 'Lights out', weeks: 3,
+    brief: 'The lamp was switched off for a whole week. The plants are pale and starting to melt.',
+    goal: 'Keep at least 5 plants alive with plant health over 80%.',
+    plan: [{ rocks: 3, wood: 1, plants: 6, light: 1 }, {}, { shrimp: 10 }, { light: -3 }],
+    check: S => S.plants.length >= 5 && S.plants.reduce((a, p) => a + p.health, 0) / S.plants.length >= 0.8,
+    hint: 'What do plants use to make their own food?' },
+  { id: 'turtle', k: 'turtle', name: 'Turtle trouble', weeks: 3,
+    brief: 'A beautiful planted tank got a pet turtle. The water is cloudy and the shrimp keep disappearing.',
+    goal: 'Bring Harmony back to 85 or more.',
+    plan: [{ rocks: 3, wood: 1, plants: 6, light: 1 }, {}, { plants: 3 }, { shrimp: 15 }, { fish: 9 }, { turtle: 1 }, {}],
+    check: (S, E) => E.harmony >= 85, hint: 'Turn on the science lens and watch where the waste comes from.' },
+  { id: 'crowd', k: 'crowdM', name: 'Too many fish', weeks: 3,
+    brief: 'Someone kept buying fish: 36 tetras and 40 shrimp are crammed into 60 litres.',
+    goal: 'Reach Harmony 75 or more.',
+    plan: [{ rocks: 3, wood: 1, plants: 6, light: 1 }, {}, { plants: 2 }, { fish: 36, shrimp: 40 }],
+    check: (S, E) => E.harmony >= 75, hint: 'Every animal breathes oxygen and makes waste. How many can this tank really hold?' },
+];
+function buildMission(m) {
+  const T = Sim.newState();
+  for (const p of m.plan) { Sim.applyChanges(T, p); Sim.simulateWeek(T, {}); }
+  if (m.extra) Sim.applyChanges(T, m.extra);
+  T.journal = []; T.achievements = {}; T.streak90 = 0;
+  const e = Sim.evaluate(T, T.frames);
+  T.history = [{ week: T.week, harmony: e.harmony }];
+  T.mission = { id: m.id, start: T.week, weeks: m.weeks, status: 'active' };
+  return T;
+}
+function startMission(id) {
+  if (playing) return;
+  if (slot === 'free') save();
+  slot = 'mission';
+  S = buildMission(MISSIONS.find(m => m.id === id));
+  boot();
+  $('#missionBar').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+}
+function leaveMission() {
+  if (playing) return;
+  save();
+  slot = 'free';
+  S = load('free') || Sim.newState();
+  boot();
+}
+function checkMission() {
+  if (slot !== 'mission' || !S.mission || S.mission.status !== 'active') return null;
+  const m = MISSIONS.find(x => x.id === S.mission.id);
+  const used = S.week - S.mission.start;
+  if (m.check(S, E)) {
+    S.mission.status = 'won';
+    META.missionsWon[m.id] = S.week;
+    return { day: 7, topic: 'Mission', title: 'Mission complete — tank rescued!', text: `You did it in ${used} week${used === 1 ? '' : 's'}. ${m.goal}`, pri: 5 };
+  }
+  if (used >= m.weeks) {
+    S.mission.status = 'lost';
+    return { day: 7, topic: 'Mission', title: 'Out of time', text: `The goal wasn’t reached in ${m.weeks} weeks. Hint: ${m.hint} Press “Try again” to restart, or keep going to see if you can still fix it.`, pri: 5 };
+  }
+  return null;
+}
+function renderMissionBar() {
+  const bar = $('#missionBar');
+  if (slot !== 'mission' || !S.mission) { bar.hidden = true; return; }
+  const m = MISSIONS.find(x => x.id === S.mission.id);
+  bar.hidden = false;
+  const k = $('#mbKanji'); k.textContent = ZH[m.k][0]; k.title = ZH[m.k][1] + ' · ' + ZH[m.k][2]; k.lang = 'zh-TW'; k.dataset.say = ZH[m.k][0];
+  $('#mbName').textContent = 'Rescue mission: ' + m.name;
+  $('#mbGoal').textContent = m.goal;
+  const st = S.mission.status, used = S.week - S.mission.start;
+  const el = $('#mbStatus');
+  el.className = 'mstat ' + (st === 'won' ? 'won' : st === 'lost' ? 'lost' : '');
+  el.textContent = st === 'won' ? 'Rescued ✓' : st === 'lost' ? 'Out of time' : `Week ${used} of ${m.weeks}`;
+}
+function renderMissions() {
+  const won = Object.keys(META.missionsWon).length;
+  $('#missionCount').textContent = `${won} of ${MISSIONS.length} rescued`;
+  $('#missions').innerHTML = MISSIONS.map(m => {
+    const active = slot === 'mission' && S.mission && S.mission.id === m.id;
+    const done = META.missionsWon[m.id] != null;
+    return `<li><span class="mk" lang="zh-TW" data-say="${ZH[m.k][0]}" title="${ZH[m.k][1]} · ${ZH[m.k][2]}">${ZH[m.k][0]}</span>
+      <div><b>${m.name}${done ? ' <span class="won">✓</span>' : ''}</b><span>${m.brief}</span><span>Goal: ${m.goal} You have ${m.weeks} weeks.</span></div>
+      ${active ? '<em class="count">playing</em>' : `<button type="button" data-mission="${m.id}">${done ? 'Play again' : 'Start'}</button>`}</li>`;
+  }).join('');
+  $('#missions').querySelectorAll('[data-mission]').forEach(b => b.addEventListener('click', () => startMission(b.dataset.mission)));
+}
+$('#mbRetry').addEventListener('click', () => { if (S.mission) startMission(S.mission.id); });
+$('#mbLeave').addEventListener('click', leaveMission);
+
+/* ================= science lens (inside the tank) ================= */
+const LENS = { on: false, mode: 'all', parts: [], flashes: [], acc: {}, sites: [], siteKey: '', nSites: 0 };
+const LC = { photon: '#FFE28A', o2: '#7FD6FF', co2: '#F6B55F', waste: '#A57C52', nh3: '#FF6F5E', no2: '#FFA64D', no3: '#C3AAFF', bact: '#D2A8FF' };
+const LLABEL = { o2: 'O₂', co2: 'CO₂', nh3: 'NH₃', no2: 'NO₂', no3: 'NO₃' };
+const LENS_TYPES = {
+  all: ['photon', 'o2', 'co2', 'waste', 'nh3', 'no2', 'no3', 'bact'],
+  light: ['photon'], photo: ['photon', 'o2', 'co2'], breath: ['o2', 'co2'],
+  nitrogen: ['waste', 'nh3', 'no2', 'no3', 'bact'], algae: ['photon', 'no3'],
+};
+const LENS_LEGEND = { photon: 'Light', o2: 'O₂ oxygen', co2: 'CO₂', waste: 'Waste', nh3: 'NH₃ ammonia', no2: 'NO₂ nitrite', no3: 'NO₃ nitrate', bact: 'Bacteria' };
+const LENS_HINT = {
+  all: 'Everything at once. Pick one process to see it clearly.',
+  light: 'Light rains from the lamp. Green flash: caught by a plant. Yellow: algae. Brown: blocked by murky water. Orange: wasted as heat.',
+  photo: 'In the light, plants catch energy, take in CO₂ (orange) and give out O₂ (blue). At night the lamp is off and it stops.',
+  breath: 'Oxygen drifts from plants to animals. CO₂ drifts from animals (and rot) back to plants.',
+  nitrogen: 'Waste sinks and becomes ammonia (red). Purple bacteria turn it into nitrite (orange), then nitrate (violet), which plants and algae eat.',
+  algae: 'Who catches the light and nutrients: plants (green flashes) or algae on the glass (yellow)?',
+};
+const lensAllowed = t => LENS_TYPES[LENS.mode].includes(t);
+function setLens(on, mode) {
+  LENS.on = on;
+  if (mode) LENS.mode = mode;
+  if (!on) { LENS.parts = []; LENS.flashes = []; }
+  LENS.parts = LENS.parts.filter(p => lensAllowed(p.type));
+  $('#lensBtn').setAttribute('aria-pressed', on);
+  $('#lensModes').hidden = !on;
+  document.querySelectorAll('#lensModes button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === LENS.mode));
+  $('#lensHint').textContent = on ? LENS_HINT[LENS.mode] : 'Tap anything in the tank to learn about it, or use the lens to see the invisible.';
+  const lg = $('#lensLegend');
+  lg.hidden = !on;
+  lg.innerHTML = LENS_TYPES[LENS.mode].map(t => `<span><i style="background:${LC[t]}"></i>${LENS_LEGEND[t]}</span>`).join('');
+}
+$('#lensBtn').addEventListener('click', () => setLens(!LENS.on));
+document.querySelectorAll('#lensModes button').forEach(b => b.addEventListener('click', () => setLens(true, b.dataset.mode)));
+
+function lensSites() {
+  const key = S.rocks + ':' + S.wood + ':' + geo.rocks.length + ':' + geo.woods.length;
+  if (LENS.siteKey === key) return LENS.sites;
+  const pts = [];
+  for (let x = TX + 30; x < TX + TW - 20; x += 34) pts.push([x + hash(x) * 10, soilY(x) + 2]);
+  for (const r of geo.rocks.slice(0, S.rocks)) for (let i = 1; i < r.pts.length - 1; i += 2) pts.push([r.pts[i][0], r.pts[i][1] + 4]);
+  for (const w of geo.woods.slice(0, S.wood)) for (const sg of w.segs) pts.push([sg.cx, sg.cy]);
+  pts.sort((a, b) => hash(a[0] * 1.3 + a[1]) - hash(b[0] * 1.3 + b[1]));
+  LENS.sites = pts; LENS.siteKey = key;
+  return pts;
+}
+function nearSite(x, y) {
+  const n = Math.max(1, LENS.nSites), sites = LENS.sites;
+  let best = null, bd = 1e9;
+  for (let i = 0; i < 6; i++) {
+    const s = sites[Math.floor(Math.random() * n)];
+    if (!s) continue;
+    const d = Math.hypot(s[0] - x, s[1] - y);
+    if (d < bd) { bd = d; best = s; }
+  }
+  return best || [x, soilY(x)];
+}
+function plantPoint(env) {
+  const pl = env.plants;
+  if (!pl.length) return null;
+  let tot = 0;
+  for (const p of pl) tot += p[2];
+  let r = Math.random() * tot, p = pl[0];
+  for (const q of pl) { r -= q[2]; if (r <= 0) { p = q; break; } }
+  const sl = Sim.SLOTS[p[1]], bio = p[2];
+  if (sl.sp === 'moss') {
+    const a = mossAnchors(), m = a[Math.floor(Math.random() * a.length)];
+    return [m[0] + (Math.random() - 0.5) * 20, m[1] + (Math.random() - 0.5) * 10];
+  }
+  const spread = sl.sp === 'stem' ? 16 + bio * 22 : sl.sp === 'grass' ? 18 + bio * 40 : (40 + 150 * Math.min(bio, 2.2)) / 2;
+  const x = clamp(sl.x + (Math.random() - 0.5) * spread * 1.6, TX + 10, TX + TW - 10);
+  const h = sl.sp === 'stem' ? (46 + 180 * bio) * 0.9 : sl.sp === 'grass' ? (18 + 72 * Math.min(bio, 2)) * 0.8 : 8;
+  return [x, Math.max(SURF + 14, soilY(x) - 4 - Math.random() * h)];
+}
+function algaeSpot(env) {
+  const n = Math.max(1, Math.floor(SPOTS.length * clamp((env.algae - 0.06) / 0.55, 0.06, 1)));
+  return SPOTS[Math.floor(Math.random() * n)];
+}
+function animalRef() {
+  const a = V.fish.concat(V.shrimp).filter(x => !x.dying);
+  return a.length ? a[Math.floor(Math.random() * a.length)] : null;
+}
+function lpart(type, x, y, o) {
+  if (LENS.parts.length > 300) return null;
+  const p = Object.assign({ type, x, y, t: 0, life: 14, label: Math.random() < 0.3, wob: Math.random() * 6, sp: 30 }, o);
+  LENS.parts.push(p);
+  return p;
+}
+function emit(key, rate, dt, fn) {
+  LENS.acc[key] = Math.min(4, (LENS.acc[key] || 0) + rate * dt);
+  while (LENS.acc[key] >= 1) { LENS.acc[key] -= 1; fn(); }
+}
+function lflash(x, y, c) { if (LENS.flashes.length < 90) LENS.flashes.push({ x, y, c, t: 0 }); }
+function spawnNH3(x, y, env) {
+  if (!lensAllowed('nh3')) return;
+  if (env.plants.length && Math.random() < 0.2) {
+    const q = plantPoint(env);
+    lpart('nh3', x, y, { tx: q[0], ty: q[1], sp: 26, dest: 'plant' });
+    return;
+  }
+  const s = nearSite(x, y);
+  lpart('nh3', x, y, { tx: s[0], ty: s[1], sp: 24, dest: 'site', tries: 0 });
+}
+function routeNO3(p, env, f) {
+  const up = f.up || 0, au = f.au || 0;
+  const r = Math.random() * (up + au + 0.01);
+  if (r < up && env.plants.length) { const q = plantPoint(env); p.tx = q[0]; p.ty = q[1]; p.dest = 'plant'; }
+  else if (r < up + au) { const sp = algaeSpot(env); p.tx = sp.x; p.ty = sp.y; p.dest = 'algae'; }
+  else { p.dest = 'drift'; p.tx = p.x + (Math.random() - 0.5) * 100; p.ty = Math.max(SURF + 20, p.y - 60); p.life = p.t + 7; }
+  p.sp = 26;
+}
+function arrive(p, env, f) {
+  if (p.type === 'o2' || p.type === 'co2') { p.dead = true; lflash(p.x, p.y, LC[p.type]); return; }
+  if (p.dest === 'plant' || p.dest === 'algae') { p.dead = true; lflash(p.x, p.y, p.dest === 'plant' ? '#9BE37A' : '#E3E35A'); return; }
+  if (p.dest === 'site') {
+    const b = p.type === 'nh3' ? (f.b1 || S.B1) : (f.b2 || S.B2);
+    if (Math.random() < b / (b + 0.35)) {
+      lflash(p.x, p.y, LC.bact);
+      p.type = p.type === 'nh3' ? 'no2' : 'no3';
+      p.t = 0; p.tries = 0;
+      if (p.type === 'no2') { const s = nearSite(p.x, p.y); p.tx = s[0]; p.ty = s[1]; }
+      else routeNO3(p, env, f);
+      if (!lensAllowed(p.type)) p.dead = true;
+    } else if (++p.tries > 3) {
+      p.dest = 'drift'; p.tx = p.x + (Math.random() - 0.5) * 120; p.ty = SURF + 30 + Math.random() * 200; p.life = p.t + 6;
+    } else { const s = nearSite(p.x + (Math.random() - 0.5) * 200, p.y); p.tx = s[0]; p.ty = s[1]; }
+    return;
+  }
+  if (p.dest === 'drift') { p.tx = p.x + (Math.random() - 0.5) * 100; p.ty = clamp(p.y + (Math.random() - 0.5) * 60, SURF + 20, 440); return; }
+  p.dead = true;
+}
+function updateLens(dt, env, fr) {
+  const f = fr.f || {};
+  const on = fr.on && env.lightH > 0;
+  const sites = lensSites();
+  LENS.nSites = clamp(Math.round(((f.b1 || S.B1) + (f.b2 || S.B2)) / 2 * 22), 3, sites.length);
+  const has = lensAllowed;
+  const plantsHere = env.plants.length > 0;
+
+  if (has('photon') && on) emit('ph', LENS.mode === 'all' ? 5 : 11, dt, () => {
+    const x = 240 + Math.random() * 520;
+    const r = Math.random(), lp = f.lp || 0, la = f.la || 0, lb = f.lb || 0;
+    let fate = 'heat', tx = x + (x - 500) * 0.2, ty;
+    if (r < lp && plantsHere) { const q = plantPoint(env); fate = 'plant'; tx = q[0]; ty = q[1]; }
+    else if (r < lp + la) { const sp = algaeSpot(env); fate = 'algae'; tx = sp.x; ty = sp.y; }
+    else if (r < lp + la + lb) { fate = 'murk'; ty = SURF + 40 + Math.random() * 280; }
+    tx = clamp(tx, TX + 5, TX + TW - 5);
+    if (ty == null) ty = soilY(tx);
+    lpart('photon', x, SURF + 2, { tx, ty, fate, label: false, sp: 240 });
+  });
+  if (has('o2') && plantsHere) emit('o2', clamp((f.om || 0) * 16, 0, 10), dt, () => {
+    const q = plantPoint(env), a = Math.random() < 0.75 ? animalRef() : null;
+    lpart('o2', q[0], q[1], { ref: a, tx: a ? a.x : q[0] + (Math.random() - 0.5) * 60, ty: a ? a.y : SURF + 2, sp: 36 });
+  });
+  if (has('co2')) {
+    const toPlant = (x, y) => {
+      const q = on && plantsHere ? plantPoint(env) : null;
+      lpart('co2', x, y, { tx: q ? q[0] : x + (Math.random() - 0.5) * 80, ty: q ? q[1] : SURF + 2, sp: 30 });
+    };
+    emit('co2a', clamp((f.ca || 0) * 7, 0, 8), dt, () => { const a = animalRef(); if (a) toPlant(a.x, a.y); });
+    emit('co2d', clamp((f.cd || 0) * 20, 0, 5), dt, () => { const x = TX + 20 + Math.random() * (TW - 40); toPlant(x, soilY(x) - 3); });
+    if (!on) emit('co2p', clamp((f.cp || 0) * 10, 0, 5), dt, () => {
+      const q = plantPoint(env);
+      if (q) lpart('co2', q[0], q[1], { tx: q[0] + (Math.random() - 0.5) * 80, ty: SURF + 2, sp: 22 });
+    });
+  }
+  if (has('waste')) {
+    const drop = (arr, rate, size, key) => emit(key, clamp(rate, 0, 14), dt, () => {
+      const a = arr.filter(x => !x.dying);
+      if (!a.length) return;
+      const c = a[Math.floor(Math.random() * a.length)];
+      lpart('waste', c.x - c.dir * (size > 3 ? 32 : 8), c.y + (size > 3 ? 6 : 2), { size, label: false, vy: 16 + size * 5 });
+    });
+    drop(V.fish, (f.wf || 0) * 160, 1.9, 'wf');
+    drop(V.shrimp, (f.ws || 0) * 160, 1.3, 'ws');
+    drop(V.turtles, (f.wt || 0) * 160, 3.8, 'wt');
+  }
+  if (has('nh3')) emit('lc', clamp((f.lc || 0) * 120, 0, 4), dt, () => { const x = TX + 20 + Math.random() * (TW - 40); spawnNH3(x, soilY(x) - 2, env); });
+  if (LENS.mode === 'algae') emit('no3', clamp(((f.up || 0) + (f.au || 0)) * 70, 0, 6), dt, () => {
+    const x = TX + 40 + Math.random() * (TW - 80);
+    const p = lpart('no3', x, 180 + Math.random() * 220, {});
+    if (p) routeNO3(p, env, f);
+  });
+
+  for (const p of LENS.parts) {
+    p.t += dt;
+    if (p.type === 'waste') {
+      if (!p.landed) {
+        p.y += p.vy * dt; p.x += Math.sin(p.t * 2 + p.wob) * 4 * dt;
+        if (p.y >= soilY(p.x) - 2) { p.y = soilY(p.x) - 2; p.landed = p.t; }
+      } else if (p.t - p.landed > 1.4) { p.dead = true; if (Math.random() < 0.7) spawnNH3(p.x, p.y - 2, env); }
+      continue;
+    }
+    if (p.ref) { if (p.ref.dying) p.ref = null; else { p.tx = p.ref.x; p.ty = p.ref.y; } }
+    const dx = p.tx - p.x, dy = p.ty - p.y, d = Math.hypot(dx, dy) || 0.001;
+    if (p.type === 'photon') {
+      if (d < 7) {
+        p.dead = true;
+        lflash(p.x, p.y, p.fate === 'plant' ? '#9BE37A' : p.fate === 'algae' ? '#E3E35A' : p.fate === 'murk' ? '#B08A5A' : '#FF9A4A');
+      } else { p.vx = dx / d * p.sp; p.vy = dy / d * p.sp; p.x += p.vx * dt; p.y += p.vy * dt; }
+      continue;
+    }
+    if (d < 5) { arrive(p, env, f); continue; }
+    const sp = p.sp * MOTION;
+    p.x += (dx / d * sp + Math.sin(p.t * 2.3 + p.wob) * 8) * dt;
+    p.y += (dy / d * sp + Math.cos(p.t * 1.9 + p.wob) * 6) * dt;
+    if (p.t > p.life) p.dead = true;
+  }
+  LENS.parts = LENS.parts.filter(p => !p.dead);
+  for (const fl of LENS.flashes) fl.t += dt;
+  LENS.flashes = LENS.flashes.filter(fl => fl.t < 0.6);
+}
+function drawLens() {
+  ctx.fillStyle = 'rgba(3,10,16,0.38)';
+  ctx.fillRect(TX, SURF, TW, TB - SURF);
+  if (lensAllowed('bact')) {
+    for (let i = 0; i < LENS.nSites; i++) {
+      const s = LENS.sites[i];
+      if (!s) break;
+      const pulse = 0.55 + 0.45 * Math.sin(V.t * 3 + i * 1.7);
+      ctx.fillStyle = `rgba(210,168,255,${0.2 * pulse})`;
+      ctx.beginPath(); ctx.arc(s[0], s[1], 8, 0, 7); ctx.fill();
+      ctx.save(); ctx.translate(s[0], s[1]); ctx.rotate(hash(i) * 3);
+      ctx.fillStyle = LC.bact; ctx.fillRect(-3.5, -1.2, 7, 2.4); ctx.rotate(1.1); ctx.fillRect(-2.5, 1.8, 5, 2.2);
+      ctx.restore();
+    }
+  }
+  ctx.font = '600 11px "IBM Plex Mono", ui-monospace, monospace';
+  ctx.textBaseline = 'middle';
+  for (const p of LENS.parts) {
+    const c = LC[p.type];
+    if (p.type === 'photon') {
+      ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.globalAlpha = 0.9;
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - (p.vx || 0) * 0.045, p.y - (p.vy || 0) * 0.045); ctx.stroke();
+      ctx.globalAlpha = 1;
+      continue;
+    }
+    if (p.type === 'waste') {
+      ctx.fillStyle = c; ctx.globalAlpha = p.landed ? clamp(1 - (p.t - p.landed) / 1.4, 0.2, 1) : 1;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, 7); ctx.fill();
+      ctx.globalAlpha = 1;
+      continue;
+    }
+    ctx.globalAlpha = p.dest === 'drift' ? clamp((p.life - p.t) / 2, 0, 1) : 1;
+    ctx.fillStyle = c; ctx.beginPath(); ctx.arc(p.x, p.y, 3.3, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.beginPath(); ctx.arc(p.x - 1, p.y - 1, 1.1, 0, 7); ctx.fill();
+    if (p.label) { ctx.fillStyle = c; ctx.fillText(LLABEL[p.type], p.x + 6, p.y - 6); }
+    ctx.globalAlpha = 1;
+  }
+  ctx.lineWidth = 1.5;
+  for (const fl of LENS.flashes) {
+    ctx.strokeStyle = fl.c; ctx.globalAlpha = 1 - fl.t / 0.6;
+    ctx.beginPath(); ctx.arc(fl.x, fl.y, 3 + fl.t * 16, 0, 7); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* ================= how the tank works: animated cycle diagrams ================= */
+const DI = {
+  sun: ICONS.light, plants: ICONS.plants, fish: ICONS.fish, shrimp: ICONS.shrimp, turtle: ICONS.turtle,
+  algae: '<circle cx="7" cy="9" r="2.6"/><circle cx="14.5" cy="7" r="2"/><circle cx="16" cy="14.5" r="3"/><circle cx="8.5" cy="16" r="2.2"/>',
+  bact: '<rect x="3" y="7" width="10" height="4.6" rx="2.3"/><rect x="10" y="13" width="10" height="4.6" rx="2.3"/><path d="M13 9.3h2M20 15.3h2"/>',
+  air: '<path d="M3 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>',
+  rot: '<path d="M3 19h18"/><path d="M6 19c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="8" cy="9" r="1"/><circle cx="13" cy="6.5" r="1"/><circle cx="17" cy="10" r="1"/>',
+  drop: '<path d="M12 3c3 4 6 7.5 6 11a6 6 0 0 1-12 0c0-3.5 3-7 6-11Z"/>',
+  sugar: '<path d="M12 3l7.5 4.5v9L12 21l-7.5-4.5v-9Z"/><path d="M12 8v8M8.5 10l7 4"/>',
+  heat: '<path d="M12 21c-4 0-6-3-6-6 0-4 4-6 4-10 3 2 3 5 2 7 1-1 2-2 2-4 2 2 4 4 4 7 0 3-2 6-6 6Z"/>',
+  bucket: '<path d="M5 8h14l-1.5 12h-11Z"/><path d="M7 8c0-3 2-5 5-5s5 2 5 5"/>',
+  egg: '<ellipse cx="12" cy="13" rx="6" ry="8"/><path d="M9 11c.5-2 1.5-3 3-3.5"/>',
+};
+let DEMO = null;
+function demoTank() {
+  if (DEMO) return DEMO;
+  const T = Sim.newState();
+  for (const p of [{ rocks: 3, wood: 1, plants: 6, light: 1 }, {}, { plants: 3 }, { shrimp: 15 }, { fish: 9 }, { turtle: 1 }]) { Sim.applyChanges(T, p); Sim.simulateWeek(T, {}); }
+  return (DEMO = T);
+}
+function dctx() {
+  const src = S.flux ? S : demoTank();
+  const c = Sim.counts(src);
+  return {
+    S: src, F: src.flux, c, H: Sim.LIGHT_HOURS[src.light], demo: src !== S, night: DIA.night,
+    R: src.frames ? src.frames[src.frames.length - 1] : null, nP: src.plants.length,
+    fish: c.fishA + c.fishJ, shrimp: c.shrA + c.shrJ, shrA: c.shrA, shrJ: c.shrJ, turt: c.turt, algaePct: Math.round(src.algae * 100),
+  };
+}
+const mass = v => { const mg = v * 60; return mg >= 1000 ? (mg / 1000).toFixed(1) + ' g' : Math.round(mg) + ' mg'; };
+const pc = (a, b) => b > 0 ? Math.round(a / b * 100) : 0;
+function shareBar(title, items) {
+  const tot = items.reduce((a, it) => a + Math.max(0, it[1]), 0);
+  if (tot <= 0) return `<div class="sbar"><div class="sbar-h">${title}</div><div class="sbar-track"></div><div class="sbar-legend">Nothing yet.</div></div>`;
+  const shown = items.filter(it => it[1] > 0);
+  return `<div class="sbar"><div class="sbar-h">${title}</div>
+    <div class="sbar-track">${shown.map(it => `<span style="width:${it[1] / tot * 100}%;background:var(${it[2]})" title="${it[0]}"></span>`).join('')}</div>
+    <div class="sbar-legend">${shown.map(it => `<span><i style="background:var(${it[2]})"></i>${it[0]} <b>${pc(it[1], tot)}%</b></span>`).join('')}</div></div>`;
+}
+const lensBtn = mode => `<button type="button" class="lens-go" data-lens="${mode}">${kj('lens')}Show it in the tank</button>`;
+const where = D => D.demo ? 'In the example tank (with a turtle)' : 'In your tank this week';
+
+const CYC = [
+  { id: 'energy', k: 'energy', tab: 'Light fuels life', lens: 'light',
+    nodes: D => [
+      { id: 'lamp', x: 300, y: 44, icon: 'sun', col: '--c-light', label: 'Lamp', val: `${D.H} h a day`, lp: 'right' },
+      { id: 'plants', x: 95, y: 165, icon: 'plants', col: '--c-plant', label: 'Plants', val: `${D.nP} clumps` },
+      { id: 'heat', x: 300, y: 165, icon: 'heat', col: '--c-waste', label: 'Lost as heat', val: `${pc(D.F.light.blocked + D.F.light.heat, D.F.light.in)}% of light` },
+      { id: 'algae', x: 505, y: 165, icon: 'algae', col: '--c-algae', label: 'Algae', val: `${D.algaePct}% cover` },
+      { id: 'turtle', x: 95, y: 290, icon: 'turtle', col: '--c-turtle', label: 'Turtle', val: String(D.turt) },
+      { id: 'fish', x: 300, y: 290, icon: 'fish', col: '--c-o2', label: 'Fish', val: String(D.fish) },
+      { id: 'shrimp', x: 505, y: 290, icon: 'shrimp', col: '--c-shrimp', label: 'Shrimp', val: String(D.shrimp) },
+    ],
+    flows: D => { const L = D.F.light, w = D.F.web; return [
+      { a: 'lamp', b: 'plants', v: L.plants, g: 'l', col: '--c-light', lab: 'light', bend: 18 },
+      { a: 'lamp', b: 'heat', v: L.blocked + L.heat, g: 'l', col: '--c-light' },
+      { a: 'lamp', b: 'algae', v: L.algae, g: 'l', col: '--c-light', bend: -18 },
+      { a: 'plants', b: 'turtle', q: w.turtlePlants > 0, col: '--c-plant', lab: 'eaten' },
+      { a: 'algae', b: 'shrimp', q: w.grazed > 0.02, col: '--c-algae', lab: 'grazed' },
+      { a: 'shrimp', b: 'fish', q: w.babiesEaten > 0, col: '--c-turtle', lab: 'babies eaten' },
+      { a: 'shrimp', b: 'turtle', q: w.turtleShrimp > 0, col: '--c-turtle', bend: 70, lab: 'hunted' },
+      { a: 'fish', b: 'turtle', q: w.turtleFish > 0, col: '--c-turtle' },
+    ]; },
+    text: D => { const L = D.F.light, w = D.F.web; return `
+      <h3>${kj('energy')}Light fuels life</h3>
+      <p>Every living thing in the tank runs on energy, and almost all of it starts as light. Plants and algae catch light and store its energy as sugar. Shrimp graze on algae, fish snap up baby shrimp, and turtles eat plants and animals. Energy moves <b>up the food chain</b> — but at every step most of it turns into heat, so there is always much less energy at the top.</p>
+      ${shareBar('Where the lamp’s light went', [['Plants', L.plants, '--c-plant'], ['Algae', L.algae, '--c-algae'], ['Blocked by murky water', L.blocked, '--c-waste'], ['Hit the soil as heat', L.heat, '--c-light']])}
+      <h4>${where(D)}</h4>
+      <ul class="facts">
+        <li>${L.in ? `The lamp was on for <b>${L.in}</b> hours.` : 'The lamp was off all week, so no new energy came in at all.'}</li>
+        ${w.grazed > 0.02 ? '<li>Shrimp grazed on algae all week, moving its energy one step up the food chain.</li>' : ''}
+        ${w.turtlePlants ? `<li>The turtle chewed plants <b>${w.turtlePlants}</b> times${w.turtleShrimp ? ` and ate <b>${w.turtleShrimp}</b> shrimp` : ''}. It sits at the top of this food chain.</li>` : ''}
+        ${D.fish ? '<li>Fish also eat the flakes you feed them — energy from sunlight on farms far away.</li>' : ''}
+      </ul>
+      <p class="try"><b>Try this:</b> ${D.turt ? 'Take the turtle out and see how much less light gets blocked by murky water.' : 'Add a turtle for one week and watch the brown “blocked” part of the bar grow. Dirty water steals light from plants.'}</p>
+      ${lensBtn('light')}`; } },
+
+  { id: 'photo', k: 'photo', tab: 'Photosynthesis', lens: 'photo', dn: true,
+    nodes: D => [
+      { id: 'lamp', x: 300, y: 44, icon: 'sun', col: '--c-light', label: D.night ? 'Dark' : 'Light', val: D.night ? 'lamp off' : `${D.H} h a day`, lp: 'right' },
+      { id: 'co2', x: 85, y: 80, chem: 'CO₂', col: '--c-co2', label: 'Carbon dioxide', val: D.R ? `${D.R.co2.toFixed(1)} mg/L` : '' },
+      { id: 'h2o', x: 85, y: 190, icon: 'drop', col: '--c-h2o', label: 'Water' },
+      { id: 'no3', x: 85, y: 300, chem: 'NO₃', col: '--c-no3', label: 'Nutrients', val: 'from waste', lp: 'right' },
+      { id: 'leaf', x: 300, y: 195, r: 44, icon: 'plants', col: '--c-plant', label: D.night ? 'Leaf at night' : 'Leaf in the light', val: `${D.nP} plant clumps` },
+      { id: 'o2', x: 515, y: 90, chem: 'O₂', col: '--c-o2', label: 'Oxygen', val: D.R ? `${D.R.o2.toFixed(1)} mg/L` : '' },
+      { id: 'sugar', x: 515, y: 290, icon: 'sugar', col: '--c-light', label: 'Sugar', val: 'food & growth', lp: 'left' },
+    ],
+    flows: D => { const F = D.F, has = D.nP > 0; return D.night ? [
+      { a: 'lamp', b: 'leaf', v: 0, g: 'g', col: '--c-light' },
+      { a: 'o2', b: 'leaf', v: has ? F.o2.plants : 0, g: 'g', col: '--c-o2', lab: 'O₂ in' },
+      { a: 'sugar', b: 'leaf', q: has, col: '--c-light', lab: 'burns sugar' },
+      { a: 'leaf', b: 'co2', v: has ? F.co2.plants : 0, g: 'g', col: '--c-co2', lab: 'CO₂ out' },
+      { a: 'leaf', b: 'h2o', q: has, col: '--c-h2o', bend: 20 },
+    ] : [
+      { a: 'lamp', b: 'leaf', v: has ? F.light.plants : 0, g: 'l', col: '--c-light', lab: 'light energy' },
+      { a: 'co2', b: 'leaf', v: has ? F.co2.photo : 0, g: 'g', col: '--c-co2', lab: 'CO₂ in' },
+      { a: 'h2o', b: 'leaf', q: has, col: '--c-h2o' },
+      { a: 'no3', b: 'leaf', q: has && F.n.plants + F.n.plantsA > 0, col: '--c-no3' },
+      { a: 'leaf', b: 'o2', v: has ? F.o2.made : 0, g: 'g', col: '--c-o2', lab: 'O₂ out' },
+      { a: 'leaf', b: 'sugar', q: has && F.light.plants > 0, col: '--c-light', lab: 'makes sugar' },
+    ]; },
+    text: D => { const F = D.F; return `
+      <h3>${kj('photo')}Photosynthesis</h3>
+      <p>In Chinese, photosynthesis is 光合作用 (guāng hé zuò yòng): 光 “light”, 合 “combine”, 作用 “action”. That is exactly what happens. Inside every leaf, tiny green parts called <b>chloroplasts</b> use light energy to combine carbon dioxide and water into sugar. The leftover is oxygen, which the plant lets out into the water.</p>
+      <div class="eq">6 CO₂ + 6 H₂O + light → C₆H₁₂O₆ + 6 O₂<small>carbon dioxide + water + light → sugar + oxygen</small></div>
+      <p>At night there is no light, so photosynthesis stops. Plants still need energy, so they burn some of their sugar using oxygen, just like animals do. That is <b>respiration</b> — press ☾ Night to see it.</p>
+      <div class="eq">C₆H₁₂O₆ + 6 O₂ → energy + 6 CO₂ + 6 H₂O<small>sugar + oxygen → energy + carbon dioxide + water</small></div>
+      <h4>${where(D)}</h4>
+      <ul class="facts">${D.nP ? `
+        <li>Plants made <b>${mass(F.o2.made)}</b> of oxygen.</li>
+        <li>They pulled <b>${mass(F.co2.photo)}</b> of CO₂ out of the water.</li>
+        <li>At night they used <b>${mass(F.o2.plants)}</b> of oxygen back.</li>
+        ${D.S.flags.pearl ? '<li>Sometimes they made oxygen so fast it formed silver bubbles on the leaves (“pearling”).</li>' : ''}` : '<li>No plants yet, so there is no photosynthesis. Add some plants!</li>'}
+      </ul>
+      <p class="try"><b>Try this:</b> Open the <b>Breathing</b> chart on the right. Oxygen climbs every day and drops every night: that’s photosynthesis and respiration taking turns.</p>
+      ${lensBtn('photo')}`; } },
+
+  { id: 'gas', k: 'breath', tab: 'Breathing partners', lens: 'breath',
+    nodes: D => [
+      { id: 'air', x: 300, y: 44, icon: 'air', col: '--c-h2o', label: 'Surface', val: 'air ↔ water', lp: 'right' },
+      { id: 'plants', x: 95, y: 175, icon: 'plants', col: '--c-plant', label: 'Plants', val: `${D.nP} clumps` },
+      { id: 'animals', x: 505, y: 175, icon: 'fish', col: '--c-o2', label: 'Fish & shrimp', val: String(D.fish + D.shrimp) },
+      { id: 'rot', x: 300, y: 300, icon: 'bact', col: '--c-no3', label: 'Bacteria & rot' },
+      { id: 'turtle', x: 505, y: 300, icon: 'turtle', col: '--c-turtle', label: `Turtle (${D.turt})` },
+    ],
+    flows: D => { const F = D.F; return [
+      { a: 'plants', b: 'animals', v: F.o2.made, g: 'g', col: '--c-o2', lab: 'O₂', bend: -48 },
+      { a: 'animals', b: 'plants', v: F.co2.animals, g: 'g', col: '--c-co2', lab: 'CO₂', bend: -48 },
+      { a: 'air', b: 'animals', v: F.o2.airIn, g: 'g', col: '--c-o2', lab: 'soaks in' },
+      { a: 'plants', b: 'air', v: F.o2.airOut, g: 'g', col: '--c-o2', lab: 'extra O₂ escapes' },
+      { a: 'plants', b: 'rot', v: F.o2.bact + F.o2.decay, g: 'g', col: '--c-o2', bend: -22 },
+      { a: 'rot', b: 'plants', v: F.co2.decay, g: 'g', col: '--c-co2', bend: -22 },
+      { a: 'animals', b: 'rot', v: F.n.fish + F.n.shrimp, g: 'w', col: '--c-waste' },
+      { a: 'turtle', b: 'rot', v: F.n.turtle, g: 'w', col: '--c-waste', lab: 'waste' },
+      { a: 'air', b: 'turtle', q: D.turt > 0, col: '--c-o2', lab: 'breathes air' },
+    ]; },
+    text: D => { const F = D.F; return `
+      <h3>${kj('breath')}Breathing partners</h3>
+      <p>Plants and animals are partners. Fish and shrimp breathe in <b>oxygen</b> and breathe out <b>carbon dioxide</b>. In the light, plants do the opposite: they take in CO₂ and give out oxygen. The bacteria that clean up waste use oxygen too. The water’s surface works like a window, letting gases in and out.</p>
+      <p>Turtles are different: they swim up and breathe air. They don’t use the water’s oxygen — but their waste feeds the bacteria, and the bacteria use lots of it.</p>
+      ${shareBar('Where the oxygen came from', [['Plants', F.o2.made, '--c-plant'], ['Air at the surface', F.o2.airIn, '--c-h2o']])}
+      ${shareBar('Who used the oxygen', [['Fish & shrimp', F.o2.animals, '--c-o2'], ['Bacteria & rot', F.o2.bact + F.o2.decay, '--c-no3'], ['Plants at night', F.o2.plants, '--c-plant']])}
+      <h4>${where(D)}</h4>
+      <ul class="facts">
+        <li>Animals breathed out <b>${mass(F.co2.animals + F.co2.turtle)}</b> of CO₂${F.co2.photo ? ` and plants pulled <b>${mass(F.co2.photo)}</b> back in` : ''}.</li>
+        <li>Rotting waste released <b>${mass(F.co2.decay)}</b> of CO₂ — plant food made from garbage.</li>
+      </ul>
+      <p class="try"><b>Try this:</b> ${D.nP ? 'Take all the plants out for one week and watch the Breathing chart: oxygen can then only come in through the surface.' : 'Add plants and watch the “where the oxygen came from” bar change.'}</p>
+      ${lensBtn('breath')}`; } },
+
+  { id: 'nitrogen', k: 'nitrogen', tab: 'Nitrogen cycle', lens: 'nitrogen',
+    nodes: D => { const n = D.F.n, R = D.R; return [
+      { id: 'fish', x: 105, y: 50, r: 24, icon: 'fish', col: '--c-o2', label: 'Fish', val: mass(n.fish), lp: 'left' },
+      { id: 'shrimp', x: 105, y: 130, r: 24, icon: 'shrimp', col: '--c-shrimp', label: 'Shrimp', val: mass(n.shrimp), lp: 'left' },
+      { id: 'turtle', x: 105, y: 210, r: 24, icon: 'turtle', col: '--c-turtle', label: 'Turtle', val: mass(n.turtle), lp: 'left' },
+      { id: 'soil', x: 105, y: 290, r: 24, icon: 'rot', col: '--c-waste', label: 'Soil & rot', val: mass(n.soil + n.rot), lp: 'left' },
+      { id: 'nh3', x: 255, y: 170, chem: 'NH₃', col: '--c-nh3', label: 'Ammonia', val: R ? `${R.nh3.toFixed(2)} ppm` : '' },
+      { id: 'no2', x: 410, y: 70, chem: 'NO₂', col: '--c-no2', label: 'Nitrite', val: R ? `${R.no2.toFixed(2)} ppm` : '', lp: 'above' },
+      { id: 'no3', x: 410, y: 265, chem: 'NO₃', col: '--c-no3', label: 'Nitrate', val: R ? `${R.no3.toFixed(1)} ppm` : '' },
+      { id: 'plants', x: 540, y: 120, icon: 'plants', col: '--c-plant', label: 'Plants' },
+      { id: 'algae', x: 540, y: 240, icon: 'algae', col: '--c-algae', label: 'Algae' },
+      { id: 'wc', x: 255, y: 305, r: 24, icon: 'bucket', col: '--c-h2o', label: 'Water change', lp: 'left' },
+    ]; },
+    flows: D => { const n = D.F.n; return [
+      { a: 'fish', b: 'nh3', v: n.fish, g: 'n', col: '--c-waste' },
+      { a: 'shrimp', b: 'nh3', v: n.shrimp, g: 'n', col: '--c-waste' },
+      { a: 'turtle', b: 'nh3', v: n.turtle, g: 'n', col: '--c-waste', lab: 'waste' },
+      { a: 'soil', b: 'nh3', v: n.soil + n.rot, g: 'n', col: '--c-waste' },
+      { a: 'nh3', b: 'no2', v: n.c1, g: 'n', col: '--c-no2', lab: 'bacteria team 1' },
+      { a: 'no2', b: 'no3', v: n.c2, g: 'n', col: '--c-no3', lab: 'bacteria team 2' },
+      { a: 'nh3', b: 'plants', v: n.plantsA, g: 'n', col: '--c-nh3', bend: 14 },
+      { a: 'no3', b: 'plants', v: n.plants, g: 'n', col: '--c-no3', lab: 'plant food' },
+      { a: 'no3', b: 'algae', v: n.algae, g: 'n', col: '--c-no3', lab: 'algae food' },
+      { a: 'no3', b: 'wc', v: n.wc, g: 'n', col: '--c-no3', lab: 'removed' },
+    ]; },
+    text: D => { const n = D.F.n, tot = n.fish + n.shrimp + n.turtle + n.soil + n.rot, ts = pc(n.turtle, tot); return `
+      <h3>${kj('nitrogen')}The nitrogen cycle</h3>
+      <p>Everything that eats makes waste. Poop, leftover food and rotting leaves break down into <b>ammonia</b> (NH₃), which is poison. <b>Team 1 bacteria</b> turn ammonia into <b>nitrite</b> (NO₂), also poison. <b>Team 2 bacteria</b> turn nitrite into <b>nitrate</b> (NO₃), which is mostly harmless — and it is fertilizer for plants and for algae. Plants can drink some ammonia directly. Water changes take the leftovers out.</p>
+      <div class="eq">waste → NH₃ → NO₂ → NO₃ → plants &amp; algae<small>ammonia → nitrite → nitrate</small></div>
+      ${shareBar('Who made the waste', [['Turtle', n.turtle, '--c-turtle'], ['Fish', n.fish, '--c-o2'], ['Shrimp', n.shrimp, '--c-shrimp'], ['New soil', n.soil, '--c-waste'], ['Rotting leaves & bodies', n.rot, '--c-rot']])}
+      ${D.turt && n.turtle > n.fish + n.shrimp ? `<p class="callout">One turtle made ${ts}% of all the waste — more than ${D.fish} fish and ${D.shrimp} shrimp put together.</p>` : D.turt ? `<p class="callout">The turtle made ${ts}% of all the waste.</p>` : ''}
+      <h4>${where(D)}</h4>
+      <ul class="facts">
+        <li>Bacteria turned <b>${mass(n.c1)}</b> of ammonia into nitrite, and <b>${mass(n.c2)}</b> of nitrite into nitrate.</li>
+        <li>Plants took up <b>${mass(n.plants + n.plantsA)}</b>; algae took <b>${mass(n.algae)}</b>.</li>
+        ${n.wc ? `<li>Your water change removed <b>${mass(n.wc)}</b>.</li>` : ''}
+      </ul>
+      <p class="try"><b>Try this:</b> ${D.turt ? 'Turn on the science lens, choose “Waste & bacteria”, and watch the big brown clouds behind the turtle.' : 'Add a turtle for one week, then come back and look at the “Who made the waste” bar.'}</p>
+      ${lensBtn('nitrogen')}`; } },
+
+  { id: 'algae', k: 'algae', tab: 'The algae race', lens: 'algae',
+    nodes: D => [
+      { id: 'lamp', x: 300, y: 44, icon: 'sun', col: '--c-light', label: 'Light', val: `${D.H} h a day`, lp: 'right' },
+      { id: 'plants', x: 100, y: 180, icon: 'plants', col: '--c-plant', label: 'Plants', val: `${D.nP} clumps` },
+      { id: 'algae', x: 500, y: 180, icon: 'algae', col: '--c-algae', label: 'Algae', val: `${D.algaePct}% cover` },
+      { id: 'nutri', x: 300, y: 300, chem: 'NO₃', col: '--c-no3', label: 'Nutrients', val: D.R ? `${D.R.no3.toFixed(1)} ppm` : '', lp: 'right' },
+      { id: 'shrimp', x: 500, y: 300, icon: 'shrimp', col: '--c-shrimp', label: 'Shrimp', val: String(D.shrimp), lp: 'right' },
+    ],
+    flows: D => { const F = D.F; return [
+      { a: 'lamp', b: 'plants', v: F.light.plants, g: 'l', col: '--c-light', lab: 'light' },
+      { a: 'lamp', b: 'algae', v: F.light.algae, g: 'l', col: '--c-light', lab: 'light' },
+      { a: 'nutri', b: 'plants', v: F.n.plants + F.n.plantsA, g: 'n', col: '--c-no3', lab: 'food' },
+      { a: 'nutri', b: 'algae', v: F.n.algae, g: 'n', col: '--c-no3', lab: 'food' },
+      { a: 'algae', b: 'shrimp', q: F.web.grazed > 0.02, col: '--c-algae', lab: 'eaten' },
+    ]; },
+    text: D => { const F = D.F, lp = pc(F.light.plants, F.light.plants + F.light.algae), np = pc(F.n.plants + F.n.plantsA, F.n.plants + F.n.plantsA + F.n.algae); return `
+      <h3>${kj('algae')}The algae race</h3>
+      <p>Algae are tiny, fast-growing plants. They want the same two things as your plants: <b>light</b> and <b>nutrients</b>. It’s a race. Big, healthy plants grab most of both and shade the algae out. But when there is more light or more waste than the plants can use, algae get the leftovers and explode. Shrimp help by eating algae.</p>
+      ${shareBar('Light caught', [['Plants', F.light.plants, '--c-plant'], ['Algae', F.light.algae, '--c-algae']])}
+      ${shareBar('Nutrients eaten', [['Plants', F.n.plants + F.n.plantsA, '--c-plant'], ['Algae', F.n.algae, '--c-algae']])}
+      <h4>${where(D)}</h4>
+      <ul class="facts"><li>${F.light.plants + F.light.algae === 0 ? 'Nobody caught any light this week.' : lp >= 70 && np >= 70 ? 'Plants are winning the race. Algae only get crumbs.' : lp < 50 || np < 50 ? 'Algae are winning the race! Plants can’t use all the light and food.' : 'It’s a close race. Too much more light or waste could tip it to the algae.'}</li>
+        ${F.web.grazed > 0.02 ? '<li>Your shrimp grazed algae all week — little lawnmowers.</li>' : ''}
+      </ul>
+      <p class="try"><b>Try this:</b> Turn the light up to 14 hours without adding plants. Then win the race back with more plants, less light and a few shrimp.</p>
+      ${lensBtn('algae')}`; } },
+
+  { id: 'life', k: 'lifecycle', tab: 'Life cycle & food web', lens: 'all',
+    nodes: D => [
+      { id: 'adults', x: 300, y: 44, icon: 'shrimp', col: '--c-shrimp', label: 'Adult shrimp', val: String(D.shrA), lp: 'right' },
+      { id: 'turtle', x: 120, y: 44, icon: 'turtle', col: '--c-turtle', label: 'Turtle', val: String(D.turt), lp: 'left' },
+      { id: 'eggs', x: 515, y: 140, icon: 'egg', col: '--c-shrimp', label: 'Mother + eggs', val: '~1 month' },
+      { id: 'babies', x: 470, y: 290, r: 22, icon: 'shrimp', col: '--c-shrimp', label: 'Babies', val: String(D.shrJ), lp: 'right' },
+      { id: 'fish', x: 300, y: 190, icon: 'fish', col: '--c-o2', label: 'Fish', val: String(D.fish) },
+      { id: 'rot', x: 130, y: 290, icon: 'rot', col: '--c-waste', label: 'Rot', val: 'nutrients', lp: 'left' },
+      { id: 'plants', x: 80, y: 165, icon: 'plants', col: '--c-plant', label: 'Algae & plants' },
+    ],
+    flows: D => { const w = D.F.web; return [
+      { a: 'adults', b: 'eggs', q: w.births > 0, col: '--c-shrimp', lab: 'eggs' },
+      { a: 'eggs', b: 'babies', q: w.births > 0, col: '--c-shrimp', lab: 'hatch' },
+      { a: 'babies', b: 'adults', q: D.shrJ > 0, col: '--c-shrimp', lab: 'grow up', bend: 40 },
+      { a: 'babies', b: 'fish', q: w.babiesEaten > 0, col: '--c-turtle', lab: 'eaten' },
+      { a: 'adults', b: 'turtle', q: w.turtleShrimp > 0, col: '--c-turtle', lab: 'eaten' },
+      { a: 'adults', b: 'rot', q: w.deathsShrimp > 0, col: '--c-waste', lab: 'die' },
+      { a: 'rot', b: 'plants', q: D.F.n.rot > 0, col: '--c-no3', lab: 'nutrients' },
+      { a: 'plants', b: 'adults', q: w.grazed > 0.02 || D.shrimp > 0, col: '--c-plant', lab: 'food' },
+    ]; },
+    text: D => { const w = D.F.web; return `
+      <h3>${kj('lifecycle')}Life cycle &amp; food web</h3>
+      <p>Your cherry shrimp live whole lives in the tank. A mother carries 10–30 eggs under her tail for about a month, fanning them with fresh water. The babies hatch as tiny shrimp, hide in moss and carpet while they grow, and become adults in a few weeks. Fish hunt babies; turtles hunt adults. When a shrimp dies, bacteria break its body into nutrients that feed plants and algae — which feed the next shrimp. In nature, nothing is wasted.</p>
+      <h4>${where(D)}</h4>
+      <ul class="facts">
+        <li><b>${w.births}</b> babies hatched${w.babiesEaten ? `, and fish ate <b>${w.babiesEaten}</b> of them` : ''}.</li>
+        ${w.turtleShrimp ? `<li>The turtle ate <b>${w.turtleShrimp}</b> adult shrimp.</li>` : ''}
+        ${w.deathsShrimp ? `<li><b>${w.deathsShrimp}</b> shrimp died${w.oldShrimp ? ` (${w.oldShrimp} of old age)` : ''}; their bodies became food for bacteria.</li>` : ''}
+        <li>Right now there are <b>${D.shrA}</b> adults and <b>${D.shrJ}</b> babies. Hiding cover: <b>${Math.round(Sim.cover(D.S) * 100)}%</b>.</li>
+      </ul>
+      <p class="try"><b>Try this:</b> Add plants (the carpet and moss are the best hiding places) and see how many more babies survive the fish.</p>
+      ${lensBtn('all')}`; } },
+];
+
+const DIA = { cur: 'energy', night: false, flows: [], visible: true, layer: null };
+function trimTo(N, cx, cy, r) { const dx = cx - N.x, dy = cy - N.y, l = Math.hypot(dx, dy) || 1; return [N.x + dx / l * r, N.y + dy / l * r]; }
+function nodeSVG(n) {
+  const r = n.r || 28;
+  let inner;
+  if (n.chem) inner = `<text class="dn-chem" text-anchor="middle" dominant-baseline="central" style="fill:var(${n.col})">${n.chem}</text>`;
+  else {
+    const s = r / 19;
+    inner = `<g transform="translate(${-12 * s},${-12 * s}) scale(${s})" fill="none" style="stroke:var(${n.col});color:var(${n.col})" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${DI[n.icon]}</g>`;
+  }
+  let lx = 0, ly = r + 17, vy = r + 31, anchor = 'middle';
+  if (n.lp === 'right') { lx = r + 9; ly = -3; vy = 13; anchor = 'start'; }
+  if (n.lp === 'left') { lx = -r - 9; ly = -3; vy = 13; anchor = 'end'; }
+  if (n.lp === 'above') { ly = -r - 24; vy = -r - 9; }
+  return `<g transform="translate(${n.x},${n.y})"><circle class="dn-c" r="${r}" style="stroke:var(${n.col})"/>${inner}
+    <text class="dn-l" x="${lx}" y="${ly}" text-anchor="${anchor}">${esc(n.label)}</text>${n.val ? `<text class="dn-v" x="${lx}" y="${vy}" text-anchor="${anchor}">${esc(n.val)}</text>` : ''}</g>`;
+}
+function buildDiagram(def, D) {
+  const svg = $('#cycSvg');
+  const nodes = def.nodes(D), map = Object.fromEntries(nodes.map(n => [n.id, n]));
+  const flows = def.flows(D);
+  const gmax = {};
+  for (const f of flows) if (f.g) gmax[f.g] = Math.max(gmax[f.g] || 0, f.v || 0);
+  for (const f of flows) f.rate = f.q !== undefined ? (f.q ? 0.55 : 0) : (f.v > 1e-6 && gmax[f.g] > 0 ? Math.max(0.12, f.v / gmax[f.g]) : 0);
+  let html = '<g>';
+  flows.forEach((f, i) => {
+    const A = map[f.a], B = map[f.b];
+    const dx = B.x - A.x, dy = B.y - A.y, len = Math.hypot(dx, dy);
+    const bend = f.bend || 0;
+    const cx = (A.x + B.x) / 2 - dy / len * bend, cy = (A.y + B.y) / 2 + dx / len * bend;
+    const s0 = trimTo(A, cx, cy, (A.r || 28) + 4), e0 = trimTo(B, cx, cy, (B.r || 28) + 9);
+    const w = f.rate ? 1.6 + 4.4 * f.rate : 1.2;
+    html += `<path class="df-p" id="dfp${i}" d="M${s0[0].toFixed(1)},${s0[1].toFixed(1)} Q${cx.toFixed(1)},${cy.toFixed(1)} ${e0[0].toFixed(1)},${e0[1].toFixed(1)}"
+      style="stroke:var(${f.col});stroke-width:${w.toFixed(1)};opacity:${f.rate ? (0.3 + 0.3 * f.rate).toFixed(2) : 0.22}" ${f.rate ? '' : 'stroke-dasharray="3 6"'}/>`;
+    html += `<path id="dfa${i}" style="fill:var(${f.col});opacity:${f.rate ? 0.85 : 0.25}"/>`;
+    if (f.lab && f.rate) html += `<text class="df-l" id="dfl${i}" text-anchor="middle" style="fill:var(${f.col})">${esc(f.lab)}</text>`;
+  });
+  html += '</g><g>' + nodes.map(nodeSVG).join('') + '</g><g id="dparts"></g>';
+  svg.innerHTML = html;
+  svg.setAttribute('aria-label', `${def.tab} diagram: animated dots show what moves between the parts of your tank.`);
+  DIA.flows = flows.map((f, i) => {
+    const path = svg.querySelector('#dfp' + i), L = path.getTotalLength();
+    const p1 = path.getPointAtLength(L), p0 = path.getPointAtLength(Math.max(0, L - 6));
+    const ang = Math.atan2(p1.y - p0.y, p1.x - p0.x), sz = 8 + (f.rate ? 4 * f.rate : 0);
+    const tip = [p1.x + Math.cos(ang) * 4, p1.y + Math.sin(ang) * 4];
+    const l = [tip[0] - Math.cos(ang - 0.45) * sz, tip[1] - Math.sin(ang - 0.45) * sz];
+    const r = [tip[0] - Math.cos(ang + 0.45) * sz, tip[1] - Math.sin(ang + 0.45) * sz];
+    svg.querySelector('#dfa' + i).setAttribute('d', `M${tip.map(v => v.toFixed(1))}L${l.map(v => v.toFixed(1))}L${r.map(v => v.toFixed(1))}Z`);
+    const lab = svg.querySelector('#dfl' + i);
+    if (lab) {
+      const m = path.getPointAtLength(L / 2), m2 = path.getPointAtLength(Math.min(L, L / 2 + 4));
+      if (Math.abs(m2.y - m.y) > Math.abs(m2.x - m.x)) { lab.setAttribute('x', (m.x + 9).toFixed(1)); lab.setAttribute('y', (m.y + 4).toFixed(1)); lab.setAttribute('text-anchor', 'start'); }
+      else { lab.setAttribute('x', m.x.toFixed(1)); lab.setAttribute('y', (m.y - 8).toFixed(1)); }
+    }
+    return { path, len: L, rate: f.rate, col: f.col, acc: Math.random(), parts: [] };
+  });
+  DIA.layer = svg.querySelector('#dparts');
+  if (reduced) {
+    for (const f of DIA.flows) if (f.rate) for (let k = 1; k <= 3; k++) {
+      const pt = f.path.getPointAtLength(f.len * k / 4);
+      const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      el.setAttribute('cx', pt.x); el.setAttribute('cy', pt.y); el.setAttribute('r', 3.5 + f.rate * 1.8); el.style.fill = `var(${f.col})`;
+      DIA.layer.appendChild(el);
+    }
+  }
+}
+function tickDiagram(dt) {
+  if (reduced || !DIA.visible || !DIA.layer) return;
+  for (const f of DIA.flows) {
+    if (f.rate > 0) {
+      f.acc += dt * (0.45 + 2.2 * f.rate);
+      if (f.acc >= 1 && f.parts.length < 14) {
+        f.acc -= 1;
+        const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        el.setAttribute('r', (3.2 + f.rate * 1.8).toFixed(1));
+        el.style.fill = `var(${f.col})`;
+        DIA.layer.appendChild(el);
+        f.parts.push({ t: 0, el });
+      }
+    }
+    for (const p of f.parts) {
+      p.t += dt * 75 / f.len;
+      const pt = f.path.getPointAtLength(Math.min(1, p.t) * f.len);
+      p.el.setAttribute('cx', pt.x.toFixed(1)); p.el.setAttribute('cy', pt.y.toFixed(1));
+      p.el.style.opacity = Math.min(1, p.t * 6, (1 - p.t) * 6).toFixed(2);
+    }
+    f.parts = f.parts.filter(p => { if (p.t >= 1) { p.el.remove(); return false; } return true; });
+  }
+}
+function buildCycleTabs() {
+  const box = $('#ctabs');
+  box.innerHTML = CYC.map(c => `<button type="button" role="tab" data-cyc="${c.id}" aria-selected="${c.id === DIA.cur}">${kj(c.k)}${c.tab}</button>`).join('');
+  box.querySelectorAll('[data-cyc]').forEach(b => b.addEventListener('click', () => {
+    DIA.cur = b.dataset.cyc;
+    box.querySelectorAll('[data-cyc]').forEach(x => x.setAttribute('aria-selected', x === b));
+    renderCycles();
+    if (LENS.on) setLens(true, CYC.find(c => c.id === DIA.cur).lens);
+  }));
+}
+function renderCycles() {
+  const def = CYC.find(c => c.id === DIA.cur);
+  const D = dctx();
+  $('#daynight').hidden = !def.dn;
+  document.querySelectorAll('#daynight button').forEach(b => b.setAttribute('aria-pressed', (b.dataset.dn === 'night') === DIA.night));
+  $('#demoNote').hidden = !D.demo;
+  $('#cycSub').textContent = D.demo ? 'Example numbers until you run a week' : `Live from your tank · week ${S.week}`;
+  buildDiagram(def, D);
+  $('#cycText').innerHTML = def.text(D);
+  $('#cycText').querySelectorAll('[data-lens]').forEach(b => b.addEventListener('click', () => {
+    setLens(true, b.dataset.lens);
+    $('#tankFrame').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+  }));
+}
+document.querySelectorAll('#daynight button').forEach(b => b.addEventListener('click', () => { DIA.night = b.dataset.dn === 'night'; renderCycles(); }));
+document.querySelectorAll('.speed button').forEach(b => b.addEventListener('click', () => {
+  speed = +b.dataset.speed;
+  document.querySelectorAll('.speed button').forEach(x => x.setAttribute('aria-pressed', x === b));
+}));
+new IntersectionObserver(es => { for (const e of es) DIA.visible = e.isIntersecting; }).observe($('#cycles'));
+
+/* ================= field guide (tap anything in the tank) ================= */
+const GUIDE = {
+  tetra: { en: 'Cardinal tetra', sci: 'Paracheirodon axelrodi', icon: 'fish',
+    from: 'Dark, tea-colored streams of the Rio Negro and Orinoco rivers in South America.',
+    role: 'Eats tiny insects, worms and the flakes you feed it. Breathes oxygen and makes waste and CO₂ that the plants use.',
+    facts: ['Its glowing blue stripe helps the school find each other in dark water.', 'Tetras feel safe in a group of 6 or more. Alone, they get stressed.', 'Adults grow to about 3 cm and can live around 5 years.'],
+    live: (fr, x) => `${fr.fishA + fr.fishJ} in your tank${fr.fishJ ? ` (${fr.fishJ} babies)` : ''} · health ${Math.round(fr.fishH * 100)}%${x && x.juv ? ' · this one is a baby (fry)' : ''}` },
+  cherry: { en: 'Cherry shrimp', sci: 'Neocaridina davidi', icon: 'shrimp',
+    from: 'Streams in China and Taiwan — this little shrimp comes from China!',
+    role: 'Grazes algae and biofilm and cleans up leftovers. It is food for fish and turtles.',
+    facts: ['A mother carries 20–30 eggs under her tail for about a month.', 'Shrimp grow by molting: they wriggle out of their old shell.', 'They are very sensitive to ammonia, so they warn you early when the water goes bad.'],
+    live: (fr, x) => `${fr.shrA} adults and ${fr.shrJ} babies · health ${Math.round(fr.shrimpH * 100)}%${x && x.juv ? ' · this one is a baby' : ''}` },
+  slider: { en: 'Red-eared slider', sci: 'Trachemys scripta elegans', icon: 'turtle',
+    from: 'Rivers of the southern USA and Mexico — even though its Chinese name, 巴西龜, means “Brazil turtle”.',
+    role: 'Omnivore at the top of this food chain: eats plants, shrimp and fish, and makes a lot of waste.',
+    facts: ['It grows as big as a dinner plate (about 30 cm) and can live over 30 years.', 'It needs a dry rock under a warm lamp to bask. This tank has none.', 'In Taiwan it is also called 紅耳龜 (hóng ěr guī), “red-eared turtle”.', 'Pet sliders released into the wild became an invasive species in China and many other countries, crowding out native turtles.'],
+    live: fr => `${fr.turt} in your tank · it breathes air, not water` },
+  carpet: { en: 'Monte Carlo (carpet plant)', sci: 'Micranthemum tweediei', icon: 'plants',
+    from: 'Riverbanks in Argentina.',
+    role: 'Makes oxygen, eats nitrate, and gives baby shrimp a place to hide.',
+    facts: ['It spreads sideways with runners, like a strawberry, until it covers the ground.', 'Aquarists trim it like a tiny lawn.', 'A thick carpet protects baby shrimp from hungry fish.'] },
+  stem: { en: 'Rotala (stem plant)', sci: 'Rotala rotundifolia', icon: 'plants',
+    from: 'Wet places in Southeast Asia and southern China.',
+    role: 'A fast grower, so it makes lots of oxygen and eats lots of nitrate. Great at beating algae.',
+    facts: ['Under strong light its tips turn pink-red.', 'When stems reach the surface you can trim them and replant the tops. Each cutting grows into a new plant.', 'Fast-growing plants are the best algae fighters.'] },
+  hairgrass: { en: 'Dwarf hairgrass', sci: 'Eleocharis acicularis', icon: 'plants',
+    from: 'Wet places across Asia, Europe and North America.',
+    role: 'Makes oxygen and holds the soil together with its roots.',
+    facts: ['It spreads through runners under the soil.', 'Its thin blades sway like a tiny meadow.', 'It is a favorite for grassy rock (iwagumi) layouts.'] },
+  moss: { en: 'Christmas moss', sci: 'Vesicularia montagnei', icon: 'plants',
+    from: 'Streams in Southeast Asia.',
+    role: 'The best hiding and grazing place for baby shrimp.',
+    facts: ['Moss has no real roots. It grips wood and stone with tiny threads called rhizoids.', 'Its branches look like little Christmas trees.', 'Chinese aquarium keepers often call moss 莫絲 (mò sī), which sounds like “moss”.'] },
+  seiryu: { en: 'Seiryu stone', sci: 'A kind of limestone', icon: 'rocks',
+    from: 'Mostly collected in China. The name means “blue dragon”.',
+    role: 'The bones of the layout. Its rough surface is home to helpful bacteria. It slowly makes the water harder and raises the pH a little.',
+    facts: ['Rock layouts usually use an odd number of stones, with one big main stone.', 'The white lines are mineral veins inside the rock.', 'Every stone adds more surface for bacteria to live on.'],
+    live: () => `${S.rocks} stones in your tank` },
+  wood: { en: 'Driftwood', sci: 'Old roots and branches', icon: 'wood',
+    from: 'Trees that soaked for years in rivers and swamps.',
+    role: 'Hiding places, a home for bacteria, and a surface where biofilm (shrimp food) grows. It leaks tannins that tint water tea-brown.',
+    facts: ['In Chinese it is called 沉木, “sinking wood”, because it sinks once it has soaked up water.', 'Tannins lower the pH a little, just like in wild blackwater rivers.', 'Moss loves to grow on it.'],
+    live: () => `${S.wood} piece${S.wood === 1 ? '' : 's'} in your tank` },
+  soil: { en: 'Aquarium soil & bacteria', sci: 'Aquasoil + nitrifying bacteria (Nitrosomonas, Nitrospira)', icon: 'bact', zh2: 'nitrifiers',
+    from: 'Baked, crumbly soil made for planted tanks.',
+    role: 'Feeds plant roots. Billions of nitrifying bacteria live on its grains and clean the water.',
+    facts: ['New soil releases ammonia for its first weeks, which starts the nitrogen cycle.', 'Team 1 bacteria turn ammonia into nitrite; team 2 turn nitrite into nitrate.', 'You can’t see them, but a single grain of soil can hold thousands of bacteria.'],
+    live: () => { const m = E && E.list.find(x => x.key === 'bact'); return m && m.score != null ? `Bacteria power: ${m.text}% of what’s needed` : 'Bacteria are resting — not much waste yet'; } },
+  water: { en: 'Water', sci: 'H₂O · about 60 litres', icon: 'drop', zh: 'waterW',
+    from: 'Tap water, with chlorine removed.',
+    role: 'Carries oxygen, CO₂, nutrients and waste to everything in the tank.',
+    facts: ['Warm water holds less oxygen than cold water.', 'Oxygen soaks in at the surface, like air through a window.', '60 litres of water weighs 60 kg — about as much as a grown-up!'],
+    live: fr => `Oxygen ${fr.o2.toFixed(1)} mg/L · CO₂ ${fr.co2.toFixed(1)} mg/L · clarity ${Math.round(fr.clar * 100)}%` },
+  algae: { en: 'Algae', sci: 'Many kinds of tiny plants', icon: 'algae', zh: 'algaeSp',
+    from: 'Everywhere! Their spores float in the air and water.',
+    role: 'Food for shrimp. It races your plants for light and nutrients.',
+    facts: ['Some algae are single cells, far too small to see.', 'Tiny algae in the oceans make about half of the oxygen on Earth.', 'Too much light plus too much waste means an algae bloom.'],
+    live: fr => `Algae cover: ${Math.round(fr.algae * 100)}%` },
+};
+const GUIDE_ZH = { tetra: 'tetra', cherry: 'cherry', slider: 'slider', carpet: 'carpet', stem: 'stem', hairgrass: 'hairgrass', moss: 'moss', seiryu: 'seiryu', wood: 'wood', soil: 'soil', water: 'waterW', algae: 'algaeSp' };
+const SPEAKER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4Z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+function currentFrame() { return playing && playing.i >= 0 ? playing.frames[playing.i] : restFrame(); }
+function openGuide(key, extra) {
+  const g = GUIDE[key], z = ZH[GUIDE_ZH[key]];
+  const fr = currentFrame();
+  V.sel = extra && extra.ref ? extra.ref : null;
+  let live = g.live ? g.live(fr, extra && extra.ref) : '';
+  if (extra && extra.plant) live = `This clump: health ${Math.round(extra.plant[3] * 100)}% · size ${extra.plant[2].toFixed(1)} (new plants start at 0.3)`;
+  const pop = $('#guidePop');
+  pop.innerHTML = `
+    <button type="button" class="gp-close" aria-label="Close field guide">×</button>
+    <div class="gp-head">
+      <div class="gp-zh">${kj(GUIDE_ZH[key])}</div>
+      <button type="button" class="gp-say" data-say="${z[0]}" aria-label="Hear ${z[0]} in Mandarin">${SPEAKER}<span>${z[1]}</span></button>
+    </div>
+    <div class="gp-name"><b>${g.en}</b><i>${g.sci}</i></div>
+    ${live ? `<p class="gp-live">${live}</p>` : ''}
+    <dl><dt>Home</dt><dd>${g.from}</dd><dt>Its job in the tank</dt><dd>${g.role}</dd></dl>
+    <ul>${g.facts.map(f => `<li>${f}</li>`).join('')}</ul>`;
+  pop.hidden = false;
+  pop.querySelector('.gp-close').addEventListener('click', closeGuide);
+}
+function closeGuide() { $('#guidePop').hidden = true; V.sel = null; }
+function renderGuideList() {
+  $('#guideList').innerHTML = Object.keys(GUIDE).map(k => {
+    const z = ZH[GUIDE_ZH[k]];
+    return `<button type="button" class="gl-btn" data-guide="${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${DI[GUIDE[k].icon] || ICONS[GUIDE[k].icon]}</svg><span class="gl-zh" lang="zh-TW">${z[0]}</span><span class="gl-en">${GUIDE[k].en}</span></button>`;
+  }).join('');
+  $('#guideList').querySelectorAll('[data-guide]').forEach(b => b.addEventListener('click', () => {
+    openGuide(b.dataset.guide);
+    $('#tankFrame').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+  }));
+}
+function hitTest(x, y) {
+  if (x < TX || x > TX + TW || y < SURF - 10 || y > TB) return null;
+  for (const t of V.turtles) if (!t.dying && Math.hypot(t.x - x, t.y - y) < 46) return { key: 'slider', ref: t };
+  let best = null, bd = 20;
+  for (const f of V.fish) if (!f.dying) { const d = Math.hypot(f.x - x, f.y - y); if (d < bd) { bd = d; best = f; } }
+  if (best) return { key: 'tetra', ref: best };
+  bd = 16;
+  for (const s of V.shrimp) if (!s.dying) { const d = Math.hypot(s.x - x, s.y - 4 - y); if (d < bd) { bd = d; best = s; } }
+  if (best) return { key: 'cherry', ref: best };
+  for (let i = S.rocks - 1; i >= 0; i--) {
+    const r = geo.rocks[i];
+    if (!r || x < r.d.x - r.d.w / 2 || x > r.d.x + r.d.w / 2 || y > r.base) continue;
+    const t = (x - (r.d.x - r.d.w / 2)) / r.d.w * (r.pts.length - 1), k = Math.min(r.pts.length - 2, Math.floor(t));
+    if (y >= lerp(r.pts[k][1], r.pts[k + 1][1], t - k)) return { key: 'seiryu' };
+  }
+  const pl = currentFrame().plants;
+  const inPlant = sp => pl.find(p => {
+    const sl = Sim.SLOTS[p[1]], bio = p[2];
+    if (sl.sp !== sp) return false;
+    if (sp === 'moss') return mossAnchors().some(a => Math.hypot(a[0] - x, a[1] - y) < 12 + 12 * Math.min(bio, 2));
+    const half = sp === 'carpet' ? (40 + 150 * Math.min(bio, 2.2)) / 2 : sp === 'grass' ? 22 + bio * 40 : 26 + bio * 22;
+    const h = sp === 'carpet' ? 16 : sp === 'grass' ? 22 + 72 * Math.min(bio, 2) : 46 + 180 * bio;
+    return Math.abs(x - sl.x) < half && y > soilY(x) - h && y < soilY(x) + 6;
+  });
+  for (const sp of ['moss', 'carpet', 'grass']) { const p = inPlant(sp); if (p) return { key: sp === 'grass' ? 'hairgrass' : sp, plant: p }; }
+  for (const w of geo.woods.slice(0, S.wood)) for (const sg of w.segs) for (let k = 0; k <= 4; k++) {
+    const t = k / 4, q = 1 - t;
+    const px = q * q * sg.x + 2 * q * t * sg.cx + t * t * sg.x2, py = q * q * sg.y + 2 * q * t * sg.cy + t * t * sg.y2;
+    if (Math.hypot(px - x, py - y) < sg.w / 2 + 6) return { key: 'wood' };
+  }
+  const st = inPlant('stem');
+  if (st) return { key: 'stem', plant: st };
+  if (y > soilY(x) - 2) return { key: 'soil' };
+  if (currentFrame().algae > 0.25 && (x < TX + 90 || x > TX + TW - 90)) return { key: 'algae' };
+  return { key: 'water' };
+}
+cv.style.cursor = 'pointer';
+cv.addEventListener('click', e => {
+  const r = cv.getBoundingClientRect();
+  const hit = hitTest((e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * Hh);
+  if (hit) openGuide(hit.key, hit);
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#guidePop').hidden) closeGuide(); });
+
+/* ================= sound: music of the tank + water ================= */
+const AUD = { ctx: null, music: false, water: false, next: 0, deg: 2, p: null, timer: null, bubT: null };
+const LIVE = { h: null };
+const PENTA = [0, 2, 4, 7, 9];
+const NOTE_NAMES = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
+function musicParams() {
+  const fr = currentFrame();
+  const h = playing && LIVE.h != null ? LIVE.h : (E ? E.harmony : 50);
+  const tox = fr.nh3 + fr.no2;
+  const life = Math.min(1, (fr.fishA + fr.fishJ + (fr.shrA + fr.shrJ) * 0.3 + fr.plants.length * 0.8) / 14);
+  const night = !fr.on || Sim.LIGHT_HOURS[S.light] === 0;
+  const dis = clamp((82 - h) / 62, 0, 1);
+  return {
+    h, dis, night, pWrong: dis * 0.55, detune: Math.round(dis * 30), mode: h >= 60 ? 'gong' : 'yu',
+    bpm: Math.round((66 + 26 * life) * (night ? 0.8 : 1)), density: 0.22 + 0.5 * life,
+    cutoff: 600 + 3400 * fr.clar * fr.clar, clar: fr.clar, tox: clamp((tox - 0.25) / 1.2, 0, 1), algae: clamp((fr.algae - 0.25) / 0.5, 0, 1),
+    jitter: dis * 0.12, pearl: fr.on && fr.o2 > 9.5 ? clamp((fr.o2 - 9.5) / 3, 0, 1) : 0, turt: fr.turt,
+  };
+}
+function audioCtx() {
+  if (!AUD.ctx) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    const c = new AC();
+    AUD.ctx = c;
+    AUD.master = c.createGain(); AUD.master.gain.value = 0.75; AUD.master.connect(c.destination);
+    const len = Math.floor(c.sampleRate * 2.6), buf = c.createBuffer(2, len, c.sampleRate);
+    for (let ch = 0; ch < 2; ch++) { const d = buf.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6); }
+    AUD.verb = c.createConvolver(); AUD.verb.buffer = buf;
+    const vg = c.createGain(); vg.gain.value = 0.32; AUD.verb.connect(vg); vg.connect(AUD.master);
+    AUD.tone = c.createBiquadFilter(); AUD.tone.type = 'lowpass'; AUD.tone.frequency.value = 3000;
+    AUD.mus = c.createGain(); AUD.mus.gain.value = 0;
+    AUD.mus.connect(AUD.tone); AUD.tone.connect(AUD.master); AUD.tone.connect(AUD.verb);
+    AUD.wat = c.createGain(); AUD.wat.gain.value = 0;
+    AUD.wat.connect(AUD.master);
+    const osc = (type, freq, gain, dest) => { const o = c.createOscillator(), g = c.createGain(); o.type = type; o.frequency.value = freq; g.gain.value = gain; o.connect(g); g.connect(dest); o.start(); return { o, g }; };
+    const pad = c.createGain(); pad.gain.value = 0.05; pad.connect(AUD.mus);
+    AUD.pad = { g: pad, r1: osc('sine', 130.81, 0.5, pad), r2: osc('sine', 130.81, 0.5, pad), f1: osc('triangle', 196, 0.16, pad), f2: osc('triangle', 196, 0.16, pad) };
+    const disF = c.createBiquadFilter(); disF.type = 'lowpass'; disF.frequency.value = 520; disF.connect(AUD.mus);
+    AUD.clash = osc('sawtooth', 138.59, 0, disF);
+    const buzzF = c.createBiquadFilter(); buzzF.type = 'bandpass'; buzzF.frequency.value = 320; buzzF.Q.value = 3; buzzF.connect(AUD.mus);
+    AUD.buzz = osc('sawtooth', 65.4, 0, buzzF);
+    const nb = c.createBuffer(1, c.sampleRate * 2, c.sampleRate), nd = nb.getChannelData(0);
+    for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+    const src = c.createBufferSource(); src.buffer = nb; src.loop = true;
+    AUD.wf = c.createBiquadFilter(); AUD.wf.type = 'bandpass'; AUD.wf.frequency.value = 520; AUD.wf.Q.value = 0.6;
+    const wl = c.createBiquadFilter(); wl.type = 'lowpass'; wl.frequency.value = 1400;
+    const wg = c.createGain(); wg.gain.value = 0.11;
+    src.connect(AUD.wf); AUD.wf.connect(wl); wl.connect(wg); wg.connect(AUD.wat); src.start();
+  }
+  if (AUD.ctx.state === 'suspended') AUD.ctx.resume();
+  return AUD.ctx;
+}
+function pluck(f, t, v, bend) {
+  const c = AUD.ctx, g = c.createGain(), g2 = c.createGain(), o = c.createOscillator(), o2 = c.createOscillator();
+  o.type = 'triangle'; o2.type = 'sine';
+  if (bend) {
+    o.frequency.setValueAtTime(f * 0.891, t); o.frequency.exponentialRampToValueAtTime(f, t + 0.18);
+    o2.frequency.setValueAtTime(f * 1.782, t); o2.frequency.exponentialRampToValueAtTime(f * 2, t + 0.18);
+  } else { o.frequency.setValueAtTime(f, t); o2.frequency.setValueAtTime(f * 2, t); }
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + 2.2);
+  g2.gain.value = 0.35;
+  o.connect(g); o2.connect(g2); g2.connect(g); g.connect(AUD.mus);
+  o.start(t); o2.start(t); o.stop(t + 2.3); o2.stop(t + 2.3);
+}
+function playNote(t, p) {
+  AUD.deg = clamp(AUD.deg + [-2, -1, -1, 1, 1, 2][Math.floor(Math.random() * 6)], 0, 9);
+  let semis = PENTA[AUD.deg % 5] + 12 * Math.floor(AUD.deg / 5);
+  let wrong = false;
+  if (Math.random() < p.pWrong) { semis += Math.random() < 0.5 ? 1 : -1; wrong = true; }
+  const base = p.night ? 130.81 : 261.63;
+  pluck(base * Math.pow(2, semis / 12), t, (wrong ? 0.2 : 0.15) * (p.night ? 0.6 : 1), !wrong && Math.random() < 0.2);
+  const pc = ((semis % 12) + 12) % 12;
+  setTimeout(() => flashNote(pc, wrong), Math.max(0, (t - AUD.ctx.currentTime) * 1000));
+}
+function schedule() {
+  const c = AUD.ctx, p = AUD.p;
+  if (!c || !p) return;
+  const step = 60 / p.bpm / 2;
+  if (AUD.next < c.currentTime) AUD.next = c.currentTime + 0.05;
+  while (AUD.next < c.currentTime + 0.25) {
+    if (Math.random() < p.density) playNote(Math.max(c.currentTime, AUD.next + (Math.random() - 0.5) * p.jitter), p);
+    if (p.h >= 90 && Math.random() < 0.012) for (let k = 0; k < 5; k++) pluck(261.63 * Math.pow(2, PENTA[k] / 12 + 1), AUD.next + k * step * 0.5, 0.08, false);
+    AUD.next += step * (Math.random() < p.jitter * 2.5 ? 1.5 : 1);
+  }
+}
+function applySound() {
+  if (!AUD.ctx) return;
+  const c = AUD.ctx, p = AUD.p = musicParams(), now = c.currentTime;
+  const root = p.mode === 'gong' ? 130.81 : 110, fifth = root * 1.5;
+  AUD.pad.r1.o.frequency.setTargetAtTime(root, now, 0.8); AUD.pad.r2.o.frequency.setTargetAtTime(root, now, 0.8);
+  AUD.pad.f1.o.frequency.setTargetAtTime(fifth, now, 0.8); AUD.pad.f2.o.frequency.setTargetAtTime(fifth, now, 0.8);
+  AUD.pad.r1.o.detune.setTargetAtTime(p.detune / 2, now, 0.5); AUD.pad.r2.o.detune.setTargetAtTime(-p.detune / 2, now, 0.5);
+  AUD.pad.f1.o.detune.setTargetAtTime(p.detune * 0.4, now, 0.5); AUD.pad.f2.o.detune.setTargetAtTime(-p.detune * 0.4, now, 0.5);
+  AUD.pad.g.gain.setTargetAtTime(p.night ? 0.03 : 0.05, now, 0.6);
+  AUD.clash.o.frequency.setTargetAtTime(root * Math.pow(2, 1 / 12), now, 0.5);
+  AUD.clash.g.gain.setTargetAtTime(0.05 * p.tox + 0.025 * Math.max(0, p.dis - 0.6), now, 0.6);
+  AUD.buzz.o.frequency.setTargetAtTime(root / 2, now, 0.5);
+  AUD.buzz.g.gain.setTargetAtTime(0.05 * p.algae, now, 0.6);
+  AUD.tone.frequency.setTargetAtTime(p.cutoff, now, 0.6);
+  AUD.mus.gain.setTargetAtTime(AUD.music ? 0.9 : 0, now, 0.4);
+  AUD.wf.frequency.setTargetAtTime(300 + 500 * p.clar, now, 0.6);
+  AUD.wat.gain.setTargetAtTime(AUD.water ? 0.5 : 0, now, 0.4);
+}
+function bubble(t, big) {
+  const c = AUD.ctx, o = c.createOscillator(), g = c.createGain();
+  const f0 = (big ? 180 : 320) + Math.random() * (big ? 200 : 500);
+  o.type = 'sine';
+  o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f0 * (2 + Math.random()), t + (big ? 0.12 : 0.06));
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(big ? 0.09 : 0.05, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + (big ? 0.18 : 0.09));
+  o.connect(g); g.connect(AUD.wat); o.start(t); o.stop(t + 0.2);
+}
+function splash() {
+  if (!AUD.water || !AUD.ctx) return;
+  const t = AUD.ctx.currentTime;
+  for (let i = 0; i < 4; i++) bubble(t + i * 0.07, true);
+}
+function soundTick() {
+  applySound();
+  if (AUD.music) schedule();
+  if (AUD.water && Math.random() < 0.06 + 0.4 * AUD.p.pearl) bubble(AUD.ctx.currentTime + Math.random() * 0.05, false);
+}
+function setSound(kind, on) {
+  const c = audioCtx();
+  if (!c) { $('#musExplain').textContent = 'Sound isn’t available in this browser.'; return; }
+  AUD[kind] = on;
+  $(kind === 'music' ? '#musicBtn' : '#waterBtn').setAttribute('aria-pressed', on);
+  if ((AUD.music || AUD.water) && !AUD.timer) { AUD.next = c.currentTime + 0.1; AUD.timer = setInterval(soundTick, 60); }
+  applySound();
+  if (!AUD.music && !AUD.water && AUD.timer) { clearInterval(AUD.timer); AUD.timer = null; }
+}
+$('#musicBtn').addEventListener('click', () => setSound('music', !AUD.music));
+$('#waterBtn').addEventListener('click', () => setSound('water', !AUD.water));
+document.addEventListener('visibilitychange', () => { if (AUD.ctx) (document.hidden ? AUD.ctx.suspend() : (AUD.music || AUD.water) && AUD.ctx.resume()); });
+function flashNote(pc, wrong) {
+  if (wrong) {
+    const w = $('#wrongNote');
+    w.textContent = NOTE_NAMES[pc];
+    w.classList.add('on');
+    clearTimeout(w._t); w._t = setTimeout(() => w.classList.remove('on'), 380);
+    return;
+  }
+  const el = document.querySelector(`.note[data-pc="${pc}"]`);
+  if (!el) return;
+  el.classList.add('on');
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 260);
+}
+function buildScale() {
+  const names = [['gong', 'C', 'do'], ['shang', 'D', 're'], ['jue', 'E', 'mi'], ['zhi', 'G', 'sol'], ['yu', 'A', 'la']];
+  $('#scaleStrip').innerHTML = names.map(([k, n, s], i) => `<div class="note" data-pc="${PENTA[i]}">${kj(k)}<b>${n}</b><small>${s}</small></div>`).join('')
+    + '<div class="note wrong-slot"><span class="wlabel">clash</span><b id="wrongNote">–</b><small>wrong note</small></div>';
+}
+let lastMusKey = '';
+function renderMusicReadout() {
+  const p = musicParams();
+  const key = [p.mode, p.detune, p.bpm, Math.round(p.pWrong * 10), p.night, Math.round(p.tox * 4), Math.round(p.algae * 4), Math.round(p.clar * 10)].join('|');
+  if (key === lastMusKey) return;
+  lastMusKey = key;
+  $('#musRead').innerHTML = `
+    <span><b>Mode</b> ${kj(p.mode === 'gong' ? 'gongdiao' : 'yudiao')} ${p.mode === 'gong' ? 'bright, home note C' : 'sad, home note A'}</span>
+    <span><b>Tuning</b> ${p.detune < 3 ? 'in tune' : `${p.detune} cents off — wobbly`}</span>
+    <span><b>Tempo</b> ${p.bpm} beats a minute</span>
+    <span><b>Wrong notes</b> ${p.pWrong < 0.04 ? 'none' : `about 1 in ${Math.max(2, Math.round(1 / p.pWrong))}`}</span>`;
+  const lines = [];
+  if (p.pWrong < 0.04) lines.push(`Your tank is in balance, so the music only uses the five notes of the Chinese pentatonic scale ${kj('pentatonic')}. These notes never clash with each other.`);
+  else lines.push(`Harmony is ${p.h}, so “wrong” notes outside the scale (like F♯ or B) sneak in. They clash — in Chinese that’s ${kj('dissonant')}.`);
+  if (p.detune >= 3) lines.push(`The low drone is ${p.detune} cents out of tune. Two notes that are <i>almost</i> the same make a wobbling sound called a <b>beat</b>.`);
+  if (p.mode === 'yu') lines.push(`The drone moved its home to ${kj('yu')} (A). It’s the same five notes, but starting from A sounds sadder — like minor keys in Western music.`);
+  if (p.tox > 0.05) lines.push('That low grinding note is poison in the water: two notes only a half-step apart (a minor second).');
+  if (p.algae > 0.05) lines.push('The buzzing is the algae bloom.');
+  if (p.clar < 0.85) lines.push('Cloudy water makes the music sound muffled, as if you were hearing it through murky water.');
+  if (p.night) lines.push('It’s night (or the lamp is off), so the music plays lower and softer.');
+  if (p.bpm >= 85 && !p.night) lines.push('Lots of life means a faster, busier tempo.');
+  $('#musExplain').innerHTML = lines.map(l => `<li>${l}</li>`).join('');
+}
+
+/* ================= experiment lab: two tanks, one change ================= */
+const LAB_CHANGES = [
+  { id: 'turtle', label: 'Add a turtle', d: () => ({ turtle: 1 }) },
+  { id: 'fish6', label: 'Add 6 fish', d: () => ({ fish: 6 }) },
+  { id: 'nofish', label: 'Take out all the fish', d: s => ({ fish: -s.fish.length }) },
+  { id: 'lightup', label: 'Light 4 hours longer', d: s => ({ light: Math.min(2, Sim.LIMITS.light - s.light) }) },
+  { id: 'lightdown', label: 'Light 4 hours shorter', d: s => ({ light: -Math.min(2, s.light) }) },
+  { id: 'plants', label: 'Add 3 plants', d: () => ({ plants: 3 }) },
+  { id: 'noplants', label: 'Take out all the plants', d: s => ({ plants: -s.plants.length }) },
+  { id: 'shrimp', label: 'Add 20 shrimp', d: () => ({ shrimp: 20 }) },
+  { id: 'hard', label: 'Add 2 stones and 1 driftwood', d: () => ({ rocks: 2, wood: 1 }) },
+  { id: 'wc', label: 'Change the water every week', wc: true },
+];
+let labWeeks = 2;
+function buildLab() {
+  $('#labChange').innerHTML = LAB_CHANGES.map(c => `<option value="${c.id}">${c.label}</option>`).join('');
+  document.querySelectorAll('#labWeeks button').forEach(b => b.addEventListener('click', () => {
+    labWeeks = +b.dataset.w;
+    document.querySelectorAll('#labWeeks button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  }));
+  $('#labRun').addEventListener('click', runLab);
+}
+function stateFrame(st) {
+  const c = Sim.counts(st);
+  return {
+    on: Sim.LIGHT_HOURS[st.light] > 0, hod: 12, o2: st.o2, co2: st.co2, nh3: st.nh3, no2: st.no2, no3: st.no3, algae: st.algae,
+    clar: 1 - Sim.cloudiness(st), tan: st.tannin, ph: Sim.pH(st), fishA: c.fishA, fishJ: c.fishJ, shrA: c.shrA, shrJ: c.shrJ, turt: c.turt,
+    fishH: st.fishH, shrimpH: st.shrimpH, plants: st.plants.map(p => [p.id, p.slot, p.bio, p.health]), f: null,
+  };
+}
+function renderSnapshot(st, canvas) {
+  const w = canvas.clientWidth || 300, dpr = Math.min(2, window.devicePixelRatio || 1);
+  canvas.width = Math.round(w * dpr); canvas.height = Math.round(w * Hh / W * dpr);
+  const saved = { ctx, scale, S, fish: V.fish, shrimp: V.shrimp, turtles: V.turtles, bubbles: V.bubbles, night: V.night, lens: LENS.on, sel: V.sel };
+  try {
+    ctx = canvas.getContext('2d'); scale = canvas.width / W; S = st;
+    V.fish = []; V.shrimp = []; V.turtles = []; V.bubbles = []; V.night = 0; LENS.on = false; V.sel = null;
+    const fr = stateFrame(st);
+    syncAnimals(fr, 'start');
+    for (const a of V.fish.concat(V.shrimp)) a.size = a.juv ? 0.5 : 1;
+    draw(envFrom(fr));
+  } finally {
+    ctx = saved.ctx; scale = saved.scale; S = saved.S;
+    V.fish = saved.fish; V.shrimp = saved.shrimp; V.turtles = saved.turtles; V.bubbles = saved.bubbles; V.night = saved.night; LENS.on = saved.lens; V.sel = saved.sel;
+  }
+}
+function runLab() {
+  if (playing) return;
+  const ch = LAB_CHANGES.find(c => c.id === $('#labChange').value);
+  const seed = Math.floor(Math.random() * 1e9);
+  const clone = () => { const t = JSON.parse(JSON.stringify(S)); t.journal = []; delete t.mission; return t; };
+  const run = change => {
+    const st = clone();
+    const hist = [Sim.evaluate(st, st.frames).harmony];
+    if (change && change.d) Sim.applyChanges(st, change.d(st));
+    for (let w = 0; w < labWeeks; w++) {
+      Sim.seed(seed + w);
+      Sim.simulateWeek(st, { waterChange: !!(change && change.wc) });
+      hist.push(Sim.evaluate(st, st.frames).harmony);
+    }
+    Sim.unseed();
+    return { st, hist, E: Sim.evaluate(st, st.frames), c: Sim.counts(st) };
+  };
+  const A = run(null), B = run(ch);
+  const rows = A.E.list.map((m, i) => ({ a: m, b: B.E.list[i] })).filter(r => r.a.score != null || r.b.score != null);
+  const diffs = rows.map(r => ({ ...r, d: (r.b.score ?? 0) - (r.a.score ?? 0) })).filter(r => Math.abs(r.d) >= 8).sort((x, y) => Math.abs(y.d) - Math.abs(x.d)).slice(0, 3);
+  const hd = B.E.harmony - A.E.harmony;
+  const verdict = Math.abs(hd) < 4 ? 'made almost no difference to the balance' : hd > 0 ? 'made the tank <b>more balanced</b>' : 'made the tank <b>less balanced</b>';
+  const fmtM = m => m.score == null ? '—' : `${m.text}${m.unit === '%' ? '%' : m.unit ? ' ' + m.unit : ''}`;
+  const cnt = c => `${c.fishA + c.fishJ} fish · ${c.shrA + c.shrJ} shrimp · ${c.turt ? c.turt + ' turtle · ' : ''}`;
+  $('#labOut').innerHTML = `
+    <div class="lab-tanks">
+      <figure><canvas id="labA"></canvas><figcaption><span><b>A · control</b><small>${cnt(A.c)}${A.st.plants.length} plants</small></span><em>${A.E.harmony}</em></figcaption></figure>
+      <figure><canvas id="labB"></canvas><figcaption><span><b>B · ${esc(ch.label.toLowerCase())}</b><small>${cnt(B.c)}${B.st.plants.length} plants</small></span><em>${B.E.harmony}</em></figcaption></figure>
+    </div>
+    <p class="lab-conc">After ${labWeeks} week${labWeeks > 1 ? 's' : ''}, “${esc(ch.label.toLowerCase())}” ${verdict}: Harmony ${A.E.harmony} in A vs ${B.E.harmony} in B.
+      ${diffs.length ? 'Biggest differences: ' + diffs.map(r => `${r.a.label.toLowerCase()} (${fmtM(r.a)} → ${fmtM(r.b)})`).join(', ') + '.' : 'None of the meters changed much.'}</p>
+    <div class="lab-grid">
+      <div class="table-wrap"><table class="lab-table"><thead><tr><th>Meter</th><th>A</th><th>B</th><th></th></tr></thead><tbody>
+        ${rows.map(r => { const d = (r.b.score ?? 0) - (r.a.score ?? 0); return `<tr><td>${esc(r.a.label)}</td><td>${fmtM(r.a)}</td><td>${fmtM(r.b)}</td><td class="${d >= 8 ? 'better' : d <= -8 ? 'worse' : ''}">${d >= 8 ? 'better' : d <= -8 ? 'worse' : '≈'}</td></tr>`; }).join('')}
+      </tbody></table></div>
+      <div><canvas id="labChart"></canvas><div class="legend"><span><i style="background:var(--ink-3)"></i>A · control</span><span><i style="background:var(--seal)"></i>B · changed</span></div></div>
+    </div>
+    <p class="chart-note">Both tanks used the same “luck” (random births and deaths), so the difference comes from your change. Your real tank wasn’t touched.</p>`;
+  requestAnimationFrame(() => {
+    renderSnapshot(A.st, $('#labA'));
+    renderSnapshot(B.st, $('#labB'));
+    drawLabChart(A.hist, B.hist);
+  });
+}
+function drawLabChart(a, b) {
+  const cvc = $('#labChart');
+  const w = cvc.clientWidth, h = cvc.clientHeight, dpr = window.devicePixelRatio || 1;
+  cvc.width = w * dpr; cvc.height = h * dpr;
+  const c = cvc.getContext('2d');
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const pad = { l: 30, r: 10, t: 8, b: 20 }, pw = w - pad.l - pad.r, ph = h - pad.t - pad.b;
+  c.font = '11px ' + cssVar('--mono'); c.fillStyle = cssVar('--ink-3'); c.strokeStyle = cssVar('--line');
+  c.textAlign = 'right'; c.textBaseline = 'middle';
+  for (const v of [0, 50, 100]) { const y = pad.t + ph - v / 100 * ph; c.beginPath(); c.moveTo(pad.l, y + .5); c.lineTo(pad.l + pw, y + .5); c.stroke(); c.fillText(v, pad.l - 6, y); }
+  const X = i => pad.l + i / (a.length - 1) * pw, Y = v => pad.t + ph - v / 100 * ph;
+  c.textAlign = 'center'; c.textBaseline = 'top';
+  a.forEach((_, i) => c.fillText(i === 0 ? 'now' : 'W+' + i, X(i), pad.t + ph + 6));
+  for (const [arr, col] of [[a, cssVar('--ink-3')], [b, cssVar('--seal')]]) {
+    c.beginPath(); arr.forEach((v, i) => i ? c.lineTo(X(i), Y(v)) : c.moveTo(X(i), Y(v)));
+    c.strokeStyle = col; c.lineWidth = 2; c.stroke();
+    arr.forEach((v, i) => { c.beginPath(); c.arc(X(i), Y(v), i === arr.length - 1 ? 4 : 2.5, 0, 7); c.fillStyle = col; c.fill(); });
+  }
+}
+
+/* ================= main loop ================= */
+let last = performance.now();
+function loop(ts) {
+  const dt = Math.min(0.05, (ts - last) / 1000); last = ts;
+  let fr;
+  if (playing) {
+    playing.t += dt * 1000 * speed;
+    const prog = Math.min(1, playing.t / playing.dur);
+    const idx = Math.min(167, Math.floor(prog * 168));
+    if (idx !== playing.i) { playing.i = idx; onHour(idx); }
+    fr = playing.frames[idx];
+    $('#progressFill').style.width = (prog * 100) + '%';
+    if (prog >= 1) { finishWeek(); fr = restFrame(); }
+  } else fr = restFrame();
+  const env = envFrom(fr);
+  update(dt, env);
+  if (LENS.on) updateLens(dt, env, fr);
+  if (scale) draw(env);
+  tickDiagram(dt);
+  requestAnimationFrame(loop);
+}
+
+/* ================= wiring ================= */
+$('#run').addEventListener('click', runWeek);
+$('#skip').addEventListener('click', () => { if (playing) playing.t = playing.dur; });
+$('#wc').addEventListener('change', renderControls);
+$('#trim').addEventListener('change', renderControls);
+let armed = null;
+$('#reset').addEventListener('click', () => {
+  const b = $('#reset');
+  if (!armed) {
+    b.classList.add('armed'); b.textContent = 'Tap again to empty the tank';
+    armed = setTimeout(() => { armed = null; b.classList.remove('armed'); b.textContent = 'Start over'; }, 3500);
+    return;
+  }
+  clearTimeout(armed); armed = null; b.classList.remove('armed'); b.textContent = 'Start over';
+  playing = null; $('#progress').hidden = true; $('#enso').classList.remove('playing');
+  if (slot === 'mission' && S.mission) { startMission(S.mission.id); return; }
+  S = Sim.newState(); boot();
+});
+new MutationObserver(drawChart).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawChart);
+
+function boot() {
+  restCache = null;
+  geo.rocks = []; geo.woods = [];
+  V.fish = []; V.shrimp = []; V.turtles = []; V.bubbles = [];
+  LENS.parts = []; LENS.flashes = []; LENS.siteKey = '';
+  prediction = null;
+  resetPending();
+  E = Sim.evaluate(S, S.frames);
+  if (!S.history.length) S.history.push({ week: 0, harmony: E.harmony });
+  syncAnimals(restFrame(), 'start');
+  save();
+  renderAll(null);
+}
+function start(data) {
+  loadMeta();
+  if (data && data.slot) slot = data.slot;
+  S = (data && data.S) || load(slot);
+  if (!S || (slot === 'mission' && !S.mission)) { slot = 'free'; S = load('free') || Sim.newState(); }
+  hydrateZh();
+  buildControls();
+  buildCycleTabs();
+  buildScale();
+  buildLab();
+  renderGuideList();
+  renderWords();
+  setPinyin(!!META.pinyin);
+  setInterval(renderMusicReadout, 500);
+  boot();
+  resize();
+  requestAnimationFrame(loop);
+}
+try { window.claude?.hot?.snapshot?.(() => ({ S, slot })); } catch (e) { /* optional */ }
+if (window.claude?.hot?.ready) window.claude.hot.ready(start); else start(window.claude?.hot?.data ?? {});
+})();
+</script>
+
+</body>
+</html>

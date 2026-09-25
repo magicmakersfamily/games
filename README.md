@@ -1,0 +1,26 @@
+# The Game Shelf
+
+Learning games for curious kids, published with GitHub Pages:
+**https://magicmakersfamily.github.io/family-games/**
+
+Every game is a self-contained static web page (HTML, CSS and JavaScript). There is no
+server, no build step and no tracking. Progress is saved in each player's own browser
+(`localStorage`).
+
+## Layout
+
+```
+index.html          the shelf: one card per game
+aquarium/           James's Nature Aquarium
+  index.html        page, graphics, sound and interface
+  sim.js            the ecosystem model (hour-by-hour simulation)
+  cover.png         1200×744 card image, also used for link previews
+.nojekyll           serve files as-is
+```
+
+## Adding a game
+
+1. Put it in its own folder, with an `index.html` and a `cover.png` (1200×744).
+2. Add a link back to the shelf (`<a href="../">← All games</a>`).
+3. Add an `<article class="game">` card to the root `index.html`.
+4. Commit and push to `main`. GitHub Pages redeploys in about a minute.

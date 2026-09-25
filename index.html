@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Game Shelf</title>
+<meta name="description" content="Learning games for curious kids. They run in your browser, with nothing to install.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Game Shelf">
+<meta property="og:description" content="Learning games for curious kids. They run in your browser, with nothing to install.">
+<meta property="og:image" content="https://magicmakersfamily.github.io/family-games/aquarium/cover.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232C5E86'/%3E%3Cpath d='M16 46h32M20 46V22h8v24M30 46V16h8v30M40 46V26h6v20' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+:root {
+  --paper: #ECF0F2; --card: #FFFFFF; --ink: #14202A; --ink-2: #4E5E6B; --ink-3: #7A8894; --line: #D5DDE3;
+  --accent: #2C5E86; --accent-ink: #FFFFFF; --chip: #E1E9EF;
+  --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
+  color-scheme: light;
+  padding-block: env(safe-area-inset-top, 0px) env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root { --paper: #0E151B; --card: #151F27; --ink: #E4ECF1; --ink-2: #A3B2BD; --ink-3: #74838F; --line: #24323D; --accent: #7FB2DA; --accent-ink: #0E151B; --chip: #1D2A34; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { background: var(--paper); }
+body { margin: 0; color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; padding-block: 48px 64px; display: grid; gap: 36px; }
+header { display: grid; gap: 8px; }
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+h1 { margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(36px, 6vw, 60px); line-height: 1; letter-spacing: -.02em; }
+.lede { margin: 4px 0 0; color: var(--ink-2); font-size: 18px; max-width: 56ch; text-wrap: pretty; }
+.games { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.game { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+.game:only-child { grid-column: 1 / -1; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); grid-template-rows: auto; }
+@media (max-width: 760px) { .game:only-child { grid-template-columns: minmax(0, 1fr); } }
+.cover { display: block; background: #0c1211; }
+.cover img { display: block; width: 100%; height: 100%; aspect-ratio: 1000 / 620; object-fit: cover; }
+.info { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 12px; }
+.info h2 { margin: 0; font-family: var(--display); font-weight: 800; font-size: 28px; line-height: 1.1; letter-spacing: -.01em; text-wrap: balance; }
+.info h2 span { font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif; font-weight: 700; color: #B3432E; font-size: .8em; margin-left: 6px; }
+@media (prefers-color-scheme: dark) { .info h2 span { color: #EE8A72; } }
+.info p { margin: 0; color: var(--ink-2); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.tags li { font-size: 13px; padding: 3px 10px; border-radius: 999px; background: var(--chip); color: var(--ink-2); }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 14px; color: var(--ink-3); margin: 0; padding: 0; list-style: none; }
+.meta b { color: var(--ink-2); font-weight: 700; }
+.play { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: var(--accent-ink); text-decoration: none; font-weight: 700; font-size: 17px; padding: 12px 22px; border-radius: 12px; }
+.play:hover { filter: brightness(1.08); }
+.play svg { width: 18px; height: 18px; }
+footer { border-top: 1px solid var(--line); padding-top: 20px; color: var(--ink-3); font-size: 14px; display: grid; gap: 6px; max-width: 70ch; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Learning games</span>
+    <h1>The Game Shelf</h1>
+    <p class="lede">Games for curious kids about how the world works. Each one runs in your web browser, on a computer, tablet or phone, with nothing to install.</p>
+  </header>
+
+  <main class="games">
+    <article class="game">
+      <a class="cover" href="aquarium/" aria-label="Play James’s Nature Aquarium"><img src="aquarium/cover.png" alt="A planted aquarium with driftwood, grey stones, green and red plants, blue-and-red tetras and red shrimp" width="1200" height="744"></a>
+      <div class="info">
+        <h2>James’s Nature Aquarium<span lang="zh-TW">水草</span></h2>
+        <p>Start with an empty tank and build a living ecosystem in the style of Takashi Amano. Add plants, stones, shrimp, fish, light — even a turtle — then watch a week go by. Keep everything in balance to reach a Harmony score of 90.</p>
+        <ul class="tags">
+          <li>Photosynthesis</li><li>Nitrogen cycle</li><li>Food webs</li><li>Systems thinking</li><li>Chinese words</li><li>Music</li>
+        </ul>
+        <ul class="meta">
+          <li><b>Ages</b> 8 and up</li>
+          <li><b>Progress</b> saved on your device</li>
+          <li><b>Sound</b> optional</li>
+        </ul>
+        <a class="play" href="aquarium/">Play
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg>
+        </a>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <span>Made at home with Claude. More games are on the way.</span>
+    <span>These games don’t collect any information. Saved progress stays in your own browser.</span>
+  </footer>
+</div>
+</body>
+</html>
