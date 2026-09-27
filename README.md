@@ -19,6 +19,13 @@ mid-autumn/         Mid-Autumn Mayhem
   index.html        page, city scene, sound, Moon Tales and interface
   sim.js            the festival model (celebration score and trouble meters)
   cover.png         card image (render with index.html#cover)
+blow-up/            Blow Up (beta)
+  index.html        page, scenes, characters, storyteller, sound and interface
+  sim.js            the feelings model (pressure bucket, jars, phases after a blow-up)
+  content.js        all cards, days, science cards and spoken lines
+  voice/            recorded storyteller voices (see PLAYTEST.md to re-record)
+  sim.test.js       engine tests (node --test)
+  cover.png         card image (render with index.html#cover)
 .nojekyll           serve files as-is
 ```
 
@@ -28,6 +35,7 @@ mid-autumn/         Mid-Autumn Mayhem
 |---|---|---|---|
 | James’s Nature Aquarium | `aquarium/` | 3.4 | 2026-09-24 |
 | Mid-Autumn Mayhem | `mid-autumn/` | 1.7 | 2026-09-25 |
+| Blow Up (beta) | `blow-up/` | 1.2 | 2026-09-27 |
 
 ## Adding a game
 

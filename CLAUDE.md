@@ -12,6 +12,10 @@ so games include Traditional Chinese words with pinyin where it fits naturally
 (see "Chinese" below). Kid-facing text is plain, friendly and accurate — never babyish, never jargon
 without a one-line explanation.
 
+Younger players: James (5) can't read yet. Games for him need a spoken storyteller that sets each
+scene and explains what happened, with the game clock waiting while it talks, and no step that needs
+reading. `blow-up/` shows how (recorded voices in `blow-up/voice/`, re-recorded with `blow-up/tools/`).
+
 ## Layout
 
 ```
@@ -43,6 +47,9 @@ Audio API, started only from a button press.
    its title on the shelf card and at the bottom of the game page. New games start at 1.0 with
    today's date. The launch date never changes; bump the version on every release (minor for
    tweaks, major for big additions). Keep the README games table in sync.
+   **Beta:** a game still being tested with kids shows a purple "Beta" badge next to its version on
+   the shelf card and in the game's title, "(beta)" in the version line at the bottom of the page, and
+   "(beta)" in the README table. Drop the badge when the family says it's done.
 5. **Shelf card.** Add an `<article class="game">` to `index.html`, matching the existing card:
    cover link, title (with the game's Chinese name in a `lang="zh-TW"` span), version line,
    2–3 sentence description, topic tags, meta (ages, progress saved, sound), Play button.
