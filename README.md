@@ -35,7 +35,7 @@ blow-up/            Blow Up (beta)
 |---|---|---|---|
 | James’s Nature Aquarium | `aquarium/` | 3.4 | 2026-09-24 |
 | Mid-Autumn Mayhem | `mid-autumn/` | 1.7 | 2026-09-25 |
-| Blow Up (beta) | `blow-up/` | 1.2 | 2026-09-27 |
+| Blow Up (beta) | `blow-up/` | 1.3 | 2026-09-27 |
 
 ## Adding a game
 

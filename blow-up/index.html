@@ -463,9 +463,9 @@ rt { font-family: var(--body); font-size: .5em; font-weight: 400; letter-spacing
   </section>
 
   <section class="trays" aria-label="Cards: drag them onto Pip">
-    <div class="tray uhoh" id="trayUhoh"><h2>😬 Uh-oh <small>make it harder</small></h2><div class="cards" id="cardsUhoh"></div></div>
+    <div class="tray uhoh" id="trayUhoh"><h2>😬 Uh-oh <small>trouble cards</small></h2><div class="cards" id="cardsUhoh"></div></div>
     <div class="tray tools" id="trayTools" hidden><h2>🌈 After the storm <small id="toolsTip"></small></h2><div class="cards" id="cardsTools"></div></div>
-    <div class="tray helper" id="trayHelp"><h2>💙 Helpers <small>make it easier</small></h2><div class="cards" id="cardsHelp"></div></div>
+    <div class="tray helper" id="trayHelp"><h2>💙 Helpers <small>help Pip feel better</small></h2><div class="cards" id="cardsHelp"></div></div>
   </section>
 
   <section class="graph-strip" aria-label="Pressure through the day"><svg id="graph" viewBox="0 0 1000 90" preserveAspectRatio="none"></svg></section>
@@ -473,7 +473,7 @@ rt { font-family: var(--body); font-size: .5em; font-weight: 400; letter-spacing
   <section class="grown" id="grown" hidden aria-label="Grown-Up View"></section>
 
   <footer class="about">
-    <span>Version 1.2 (beta) · Launched <time datetime="2026-09-27">September 27, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="../feedback/?game=blow-up&amp;v=1.2">Share your thoughts</a> · <a href="../feedback/?game=blow-up&amp;v=1.2&amp;kind=bug">Report a bug</a> · <button class="linkish" id="tellBtn" type="button">Know someone who might like this? Tell a friend</button> <span id="tellStatus"></span></span>
+    <span>Version 1.3 (beta) · Launched <time datetime="2026-09-27">September 27, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="../feedback/?game=blow-up&amp;v=1.3">Share your thoughts</a> · <a href="../feedback/?game=blow-up&amp;v=1.3&amp;kind=bug">Report a bug</a> · <button class="linkish" id="tellBtn" type="button">Know someone who might like this? Tell a friend</button> <span id="tellStatus"></span></span>
     <span>Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></span>
     <span>These games don’t collect any information. Saved progress stays in your own browser.</span>
   </footer>
@@ -785,7 +785,7 @@ function icebergSVG(feelings) {
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const GAME_URL = 'https://magicmakersfamily.github.io/games/blow-up/';
-  const VERSION = '1.2';
+  const VERSION = '1.3';
 
   // --- Saving (every access wrapped: the game works without storage) ----------------------------
   const store = {
@@ -2091,7 +2091,7 @@ function icebergSVG(feelings) {
     const styles = Object.entries(CT.DAY_STYLES);
     openModal(`<div class="row">${hearBtn}<h2>Blow Up <span class="zh" lang="zh-TW">${rubyZh(CT.STR.titleZh, CT.STR.titlePy)}</span></h2></div>
       <p class="tagline">${CT.STR.tagline}</p>
-      <p>This is Pip. Pip has a bucket inside. Little things fill it up. When it overflows… <b>KABOOM!</b> Drag 😬 Uh-oh cards to make Pip’s day harder, and 💙 Helper cards to make it easier. After a blow-up, help Pip calm down, make up and learn.</p>
+      <p>This is Pip. Pip has a bucket inside. Little things fill it up. When it overflows… <b>KABOOM!</b> Drag 😬 Uh-oh cards to bring trouble to Pip’s day, and 💙 Helper cards to help Pip feel better. After a blow-up, help Pip calm down, make up and learn.</p>
       <h3>Pick a day</h3>
       <div class="start-grid">${styles.filter(([, s]) => s.scenes).map(([k, s]) => `<button class="daycard" type="button" data-style="${k}" aria-pressed="${prefs.style === k}"><span class="di">${s.icon}</span><b>${esc(s.name)}</b><small>${esc(s.blurb)}</small></button>`).join('')}</div>
       <div class="row"><button class="go" type="button" id="goBtn">Start the day ☀️</button></div>

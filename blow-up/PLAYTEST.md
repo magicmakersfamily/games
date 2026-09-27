@@ -12,7 +12,7 @@
 ## A day at a glance
 
 Pick a day (Rushed school day or Child-led adventure day) → Pip lives 7:00 to 20:00 → drag 😬 Uh-oh
-cards (make it harder) and 💙 Helper cards (make it easier) onto the scene. A tap works too. The
+cards (trouble) and 💙 Helper cards (help Pip feel better) onto the scene. A tap works too. The
 game pauses for "Say It Differently" moments. When the bucket overflows, Pip blows up. Then the
 "After the storm" tray appears: Storm → Cooling down → Coming back → "No wonder!" screen → Fix it →
 Grow. Bedtime ends the day with a lullaby and a Cost of the Day receipt. It takes about 7 minutes

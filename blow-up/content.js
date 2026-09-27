@@ -306,7 +306,7 @@
     coreg: { title: 'Calm is contagious', kid: 'When the grown-up is calm, you can borrow their calm.',
       adult: 'Young children learn to regulate first with a caregiver: a calm voice, a calm body and staying close help a child’s body settle. A stressed adult tends to pass stress on. Self-regulation grows out of many rounds of this co-regulation.',
       source: 'Developmental research on caregiver–child co-regulation' },
-    restraint: { title: 'Restraint collapse', kid: 'Holding it together all day is hard work. It can come out at home.',
+    restraint: { title: 'Restraint collapse', kid: 'Holding it together all day is hard work. It can spill out at home.',
       adult: 'Many children hold it together at school and then fall apart at pickup or home, where they feel safe. Parents often see the worst of the day. The term was popularised by counsellor Andrea Loewen Nair; it describes a common experience rather than a formal diagnosis.',
       source: 'Andrea Loewen Nair (term popularised)' },
     masking: { title: 'Calm outside, full inside', kid: 'At school your face looks calm, but your bucket can still be filling.',
@@ -324,7 +324,7 @@
     execfn: { title: 'Choices build thinking skills', kid: 'When grown-ups let you try, your brain gets stronger.',
       adult: 'In one longitudinal study, mothers’ autonomy support with toddlers (following the child’s lead, offering hints instead of taking over) predicted better executive function later. It is one study, but it fits a wider body of work.',
       source: 'Bernier, Carlson & Whipple (2010), Child Development' },
-    reactance: { title: 'Pushback', kid: 'When nobody lets you choose anything, you push back harder.',
+    reactance: { title: 'Pushback', kid: 'When nobody lets you choose anything, you push back even more.',
       adult: 'Psychological reactance: when people feel a freedom is being taken away, they are motivated to restore it, often by resisting. Offering real choices within limits tends to reduce the fight.',
       source: 'Brehm (1966), A Theory of Psychological Reactance' },
     freeplay: { title: 'Free play matters', kid: 'Playing your own way is good for you.',
@@ -461,12 +461,12 @@
     space: 'I need SPACE!', nope: 'Nope!', lala: 'LA LA LA, I can’t hear you!',
   };
   const NARR = {
-    welcome: 'Hi! This is Pip. Pip has a bucket inside. Little things fill it up, drop by drop. When it gets too full… KABOOM! You can make Pip’s day harder with the red cards, or easier with the blue cards. Pick a day, then tap the big orange button.',
+    welcome: 'Hi! This is Pip. Pip has a bucket inside. Little things fill it up, drop by drop. When it gets too full… KABOOM! The red cards bring trouble to Pip’s day. The blue cards help Pip feel better. Pick a day, then tap the big orange button.',
     splash: 'Tap the big button to start.',
     tour: [
       ['#sceneWrap', 'This is Pip, and Pip’s grown-up.'],
       ['.bucket-card', 'This is Pip’s bucket. Every little thing drops in. Green means calm. Yellow means wobbly. Red means almost boiling.'],
-      ['#trayUhoh', 'The red cards make Pip’s day harder. Drag one onto Pip, or just tap it.'],
+      ['#trayUhoh', 'The red cards bring trouble to Pip’s day. Drag one onto Pip, or just tap it.'],
       ['#trayHelp', 'The blue cards help Pip feel better.'],
       ['#jars', 'These jars fill with marbles when Pip gets to choose, does things by themself, and feels close to people. Full jars make the bucket bigger.'],
       ['#controlRoom', 'This is inside Pip’s head. A guard dog barks when Pip gets upset. A wise owl helps Pip think.'],
@@ -486,7 +486,7 @@
       tornado: 'Pip is spinning like a tornado! Too much!', volcano: 'Pip is erupting like a glitter volcano!', whistle: 'Steam is shooting out of Pip’s ears! You’re not the boss of me!',
     },
     cookie: 'And it was just a broken cookie! But the bucket was already full.',
-    collapse: 'Pip held it all in at school. Now, at home, it all comes out.',
+    collapse: 'Pip held it all in at school. Now, at home, it all spills out.',
     second: 'Oh no, a second storm! Talking came too soon.',
     phase: {
       eruption: 'Pip is in a storm. The wise owl fell off its chair, so Pip can’t think right now. Stay close. Keep Pip safe. Use very few words.',
