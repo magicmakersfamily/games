@@ -51,8 +51,20 @@ words with the macOS "Meijia" voice). Voices: narrator `af_heart`, Pip `af_bella
 `bf_emma`, Professor Pickle `bm_fable` ×1.1. Lines missing a clip fall back to browser speech.
 
 - Add or change lines in `content.js`, then run `node tools/voice-lines.js` and
-  `python tools/render-voice.py <model-dir>`. Setup and model location: see PLAN A3. Once it's done,
-  record the exact commands here.
+  `python tools/render-voice.py <model-dir>`. One-time setup (redone 2026-09-28 after the first
+  session's venv/model were lost; the render came back byte-for-byte identical to the committed
+  `voice/`, confirming this reproduces the existing recordings exactly):
+  ```
+  python3 -m venv ~/.local/share/blowup-voice/venv
+  source ~/.local/share/blowup-voice/venv/bin/activate
+  pip install kokoro-onnx soundfile
+  mkdir -p ~/.local/share/blowup-voice/model && cd ~/.local/share/blowup-voice/model
+  curl -sL -o kokoro-v1.0.onnx https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx
+  curl -sL -o voices-v1.0.bin https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
+  ```
+  (also needs `brew install espeak-ng` and ffmpeg, both already on this machine). Then, from
+  `blow-up/`: `node tools/voice-lines.js && python tools/render-voice.py ~/.local/share/blowup-voice/model`.
+  `tests/voice.test.js` checks the result has a clip for every line.
 - Quality rules the user approved: 64 kbps MP3 via a WAV intermediate; plain gain levelling (not
   one-pass loudnorm, which pumps on short clips); raise pitch by resampling only (asetrate+atempo
   warbles).

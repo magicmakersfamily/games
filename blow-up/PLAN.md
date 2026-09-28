@@ -41,7 +41,7 @@ stats and fails on any JS error in the console.
 - Done when: `node tests/smoke.mjs` passes on 1.3 twice in a row and the screenshots look right.
   Note in PLAYTEST.md how to run it.
 
-**☐ A3. Restore the voice pipeline.**
+**☑ A3. Restore the voice pipeline.**
 Set up kokoro-onnx in a venv at `~/.local/share/blowup-voice/venv`. Download the Kokoro-82M ONNX
 model and voices file into `~/.local/share/blowup-voice/model` (check `tools/render-voice.py` for the
 file names it expects), plus `brew install espeak-ng` and ffmpeg if they're missing. Render all
