@@ -22,13 +22,19 @@ Unconfirmed bugs must be reproduced before they are fixed.
   machine and event queue.
 
 ## B3. Some lines fall back to the browser voice ("Hug", "Calm corner")
-- **Status:** unconfirmed. The Hug and Calm corner card names, their first-use explanations and their
-  `say` lines ("Squeeeze", "Cosy and quiet", spoken by the grown-up) are all in `tools/lines.json`,
-  so the missing clip is some other line spoken around those cards. The fallback also triggers when a
-  voice bank is still loading after 12 s.
+- **Status:** partly ruled out. `tests/voice.test.js` (added in PLAN A3) regenerates
+  `tools/lines.json` from the current `content.js`/`sim.js`/`balance.js` and checks every line
+  against the committed `voice/manifest.json` — it passes clean on 1.3, so no line reachable from
+  Hug or Calm corner is missing a recording. That leaves two other explanations: the 12-second
+  "still loading" fallback (a slow connection, or many banks loading at once), or a data problem in
+  the audio bank itself (a corrupt/silent clip that `clipFor` finds but that fails to decode or
+  play, which would show as `robotTag(true)` too but wouldn't show up as "missing").
 - **Reproduce:** play with `#debug` in the URL, use Hug and Calm corner in different zones and
   phases, then read `BUDebug.voice().missing` (a list of `speaker: text` for every line with no
-  recording).
+  recording — expect it to stay empty) and `.fallback` (count of lines that used the backup voice
+  for any reason, including a decode failure). If `missing` is empty but `fallback` isn't zero,
+  it's the loading-timeout or a bad clip, not a missing recording — check the browser's network
+  panel for a failed/slow `voice/*.mp3` fetch, or try decoding each `adult-*.mp3` clip standalone.
 - **Fix (P0-C5):** add the missing lines to `tools/voice-lines.js`, add the voice audit, and hide the
   "🤖 backup voice" tag from the child view (grown-up settings only).
 
