@@ -7,7 +7,7 @@
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const GAME_URL = 'https://magicmakersfamily.github.io/games/blow-up/';
-  const VERSION = '1.3';
+  const VERSION = '1.4';
 
   // --- Saving (every access wrapped: the game works without storage) ----------------------------
   const store = {
