@@ -18,6 +18,27 @@ game pauses for "Say It Differently" moments. When the bucket overflows, Pip blo
 Grow. Bedtime ends the day with a lullaby and a Cost of the Day receipt. It takes about 7 minutes
 at 1× without pauses, and 10 to 15 minutes with play.
 
+## Playtest: ChatGPT, full Rushed school day on 1.3 (2026-09-28)
+
+An automated full playthrough, 7:00 to 20:00, with one blow-up and the whole recovery. What it
+found (checked against the code in KNOWN-BUGS.md):
+
+- The day ran on from about 10:20 to 17:05 while it wasn't watching (B1).
+- A card tap can be lost when a scheduled choice pops up (B2, confirmed in code).
+- The backup browser voice was heard around Hug and Calm corner (B3, not yet reproduced).
+- Flower and candle during recovery took 22 off the bucket, yet "Skills practised" was 0 (B4).
+- Pip fell asleep at 69/88, still labelled "Almost boiling" (B5).
+- The "Cost of the Day" receipt is text-heavy for pre-readers and feels like accounting (B6).
+- Predict mode was one of the strongest moments but is hidden in Settings (B7).
+- About 25–30 cards on screen at once is too many for a 4–7 year old. A full day is long for the
+  youngest players, so short chapters would fit better.
+- It kept: the bucket, Guard Dog and Wise Owl, "Blowing up isn't losing…", hidden pressure,
+  grown-up language comparisons, the grown-up saying sorry, "No wonder", looking under anger, the
+  five recovery stages, specific praise, repair together, local-only saving.
+
+What we decided to do about it is in DECISIONS.md (2026-09-28) and PLAN.md. The next real test is
+James playing one guided chapter (PLAN D8).
+
 ## Version 1.2: natural voices, more motion, calmer tapping
 
 - **Recorded voices.** Every line is pre-recorded with Kokoro, an open-source neural voice

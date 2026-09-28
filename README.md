@@ -25,7 +25,10 @@ blow-up/            Blow Up (beta)
   content.js        all cards, days, science cards and spoken lines
   voice/            recorded storyteller voices (see PLAYTEST.md to re-record)
   sim.test.js       engine tests (node --test)
+  PLAN.md           the 1.4 / 2.0 plan (with DECISIONS.md, KNOWN-BUGS.md, CLAUDE.md)
   cover.png         card image (render with index.html#cover)
+versions/           past releases, still playable (versions/<game>/<X.Y>/), see versions/index.html
+tools/              freeze-version.sh: freeze a tagged release into versions/
 .nojekyll           serve files as-is
 ```
 
@@ -36,6 +39,9 @@ blow-up/            Blow Up (beta)
 | James’s Nature Aquarium | `aquarium/` | 3.4 | 2026-09-24 |
 | Mid-Autumn Mayhem | `mid-autumn/` | 1.7 | 2026-09-25 |
 | Blow Up (beta) | `blow-up/` | 1.3 | 2026-09-27 |
+
+Past versions stay playable at https://magicmakersfamily.github.io/games/versions/ (for
+grown-ups; each keeps its own saved games). Every release is also a git tag (`blow-up-v1.3`, …).
 
 ## Adding a game
 

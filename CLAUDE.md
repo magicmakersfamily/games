@@ -57,6 +57,21 @@ Audio API, started only from a button press.
    poll `https://magicmakersfamily.github.io/games/<game>/` until it returns 200 and contains the
    new version string (usually 30–60 seconds after the push).
 
+## Versions: every release stays playable
+
+- Tag each release `<game>-vX.Y` (annotated, with a one-line summary), then freeze it:
+  `tools/freeze-version.sh <game> X.Y <game>-vX.Y`. This copies the tagged files to
+  `versions/<game>/X.Y/`, drops dev-only files, fixes `../` links, gives the copy its own saved games
+  (localStorage keys prefixed `<game>@X.Y:`), adds noindex, and adds a thin "old version" strip.
+  Then add a row to `versions/index.html`.
+- Frozen copies are never edited. To roll back, copy a frozen version (or `git checkout <tag> --
+  <game>/`) into the live folder and release it as a new version number. To fork an old version in a
+  new direction, start a new game folder from that tag.
+- `versions/` is linked from the README, not from the kids' shelf.
+- A game folder may have its own `CLAUDE.md`, `PLAN.md`, `DECISIONS.md` and `KNOWN-BUGS.md`
+  (Blow Up does). Read them before working on that game. They, not chat history or memory, are the
+  handoff between sessions.
+
 ## Follow and support links
 
 - The family's Ko-fi page is **https://ko-fi.com/magicmakers**. It is for grown-ups: plain links only (never the Ko-fi
