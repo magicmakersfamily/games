@@ -151,12 +151,24 @@ counts as neither.
     `usedTool.breathe` nor `skills.breathe.xp` moved. Fails on the pre-C3 code (crashes reading
     `usedTool`, which didn't exist yet), passes on this code.
 
-**☐ C4. Bedtime settles the bucket** (B5, D8).
+**☑ C4. Bedtime settles the bucket** (B5, D8).
 During bedtime, animate the meter down toward an overnight level over the lullaby and show
 "Sleeping 💤" instead of the zone label. Add one narration line for a day that ended high, e.g.
 "Sleep helps Pip's body rest. Some big feelings might still be there tomorrow, and that's okay. Pip
 will have help." Read it aloud for double meanings.
 - Done when: the smoke run's bedtime screenshot shows Sleeping 💤, and the line is recorded (A3).
+  - Done 2026-09-28. `js/meters.js`'s `drawBucket()` now checks the UI `phase` (not the engine's
+    `v.phase`) first: whenever it's `BEDTIME`, the pill always reads "💤 Sleeping", whatever zone or
+    storm stage the day ended on — it can't show "Almost boiling" next to a sleeping Pip anymore.
+  - `settleBucketForSleep()` (`js/ending.js`) drains the *displayed* bucket over ~2.8s (an
+    `requestAnimationFrame` loop feeding scaled-down `load`/`pressure` values into `drawBucket()`,
+    eased, never below ~15% of threshold and never above where the day actually ended). This is
+    display-only — `SIM.receipt`/the saved day log still hold the real numbers, so the day's record
+    can't go dishonest.
+  - `CT.NARR.bedtimeHigh` (content.js) plays only when `SIM.zone(S) !== 'green'`. Read it aloud
+    (mentally and via the sample) for double meanings per the repo's own rule; none found.
+  - `tests/smoke.mjs` step 6b waits for the pill to say "Sleeping" right after the day ends. Fails
+    on the pre-C4 code, passes on this code.
 
 **☐ C5. Narration audit** (B3).
 Reproduce B3 with `BUDebug.voice().missing` and add the missing lines to `tools/voice-lines.js`. The

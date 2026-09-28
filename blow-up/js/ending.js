@@ -10,10 +10,33 @@
     $('fx').appendChild(z);
     kidBubble('Goodnight…', 'self', -1);
     say(CT.NARR.bedtime, 'narr', { prio: 2, interrupt: true }); kidSay('Goodnight…', 2);
+    // A day that ended yellow or red doesn't just look that way next to a sleeping Pip without
+    // comment (KNOWN-BUGS B5): say so, gently, and settle the bucket toward it below.
+    if (SIM.zone(S) !== 'green') say(CT.NARR.bedtimeHigh, 'narr', { prio: 2 });
     const day = saveDay();
     skillsSaved = snapshotSkills(); store.set('skills', skillsSaved);
     setPhase('BEDTIME');
+    settleBucketForSleep();
     setTimeout(() => whenModalFree(() => showReceipt(day)), COVER ? 0 : 3200);
+  }
+  // Sleep begins recovery (DECISIONS D8): the bucket visibly drains toward an overnight level over
+  // the lullaby -- never all the way empty (sleep helps, it doesn't erase the day), and never
+  // higher than where the day actually ended. This is a display-only animation; SIM.receipt and the
+  // day log keep the real end-of-day numbers, so nothing here can make the day's record dishonest.
+  function settleBucketForSleep() {
+    const v0 = SIM.view(S);
+    const startP = v0.pressure, thr = v0.threshold;
+    const target = Math.min(startP, Math.max(thr * 0.15, startP * 0.45));
+    const dur = COVER ? 0 : 2800, t0 = performance.now();
+    (function step(now) {
+      const p = Math.min(1, (now - t0) / dur);
+      const eased = 1 - (1 - p) * (1 - p);
+      const cur = startP + (target - startP) * eased;
+      const scale = startP > 0 ? cur / startP : 1;
+      drawBucket(Object.assign({}, v0, { pressure: cur, ratio: cur / thr,
+        load: Object.fromEntries(Object.entries(v0.load).map(([k, h]) => [k, h * scale])) }));
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
   }
   function snapshotSkills() { return { breathe: { xp: S.skills.breathe.xp }, stomp: { xp: S.skills.stomp.xp } }; }
   function saveDay() {

@@ -517,6 +517,7 @@
     pick: 'Where should Pip go? The playground, or the field? Tap one.',
     predict: 'Will Pip get calmer, or madder? Tap the calm face or the mad face.',
     bedtime: 'The day is over. Pip snuggles into bed. Goodnight, Pip.',
+    bedtimeHigh: 'Sleep helps Pip’s body rest. Some big feelings might still be there tomorrow, and that’s okay. Pip will have help.',
     receipt: {
       start: 'Here is the cost of Pip’s day.',
       blowups: ['Pip had no blow-ups at all.', 'Pip had one big blow-up.', 'Pip had two big blow-ups.', 'Pip had three big blow-ups.', 'Pip had four big blow-ups.', 'Pip had five big blow-ups.', 'Pip had lots of big blow-ups.'],

@@ -52,9 +52,12 @@ Unconfirmed bugs must be reproduced before they are fixed.
   5d (skipping the breathing guide counts as neither, which fails on the pre-fix code).
 
 ## B5. Pip falls asleep while still "Almost boiling"
-- **Status:** confirmed. Bedtime (`startBedtime()`) doesn't touch the meter, so it keeps its zone
-  label (e.g. 69/88, red) next to a sleeping Pip.
-- **Fix (P0-C4):** see DECISIONS D8.
+- **Status:** FIXED in PLAN C4 (2026-09-28, for 1.4). The pill now always shows "💤 Sleeping" once
+  bedtime starts, whatever zone the day ended in, and the meter visibly drains toward (never below
+  ~15% of threshold, never above the real end-of-day level) over the lullaby — Option A from
+  DECISIONS D8 ("sleep begins recovery"). A day that ended yellow or red also gets one gentle
+  narration line explaining that big feelings might still be there tomorrow. Guarded by
+  `tests/smoke.mjs` step 6b, which fails on the pre-C4 code.
 
 ## B6. The ending is a text receipt called "Cost of the Day"
 - **Status:** confirmed. It's unreadable for pre-readers, and the framing is accounting ("what it

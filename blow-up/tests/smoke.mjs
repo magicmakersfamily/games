@@ -336,6 +336,12 @@ async function main() {
   }
   if (!atBedtime) throw new Error('step 6: day never finished (S.done stayed false)');
 
+  // --- Step 6b: the meter says "Sleeping", never a red zone label, once bedtime starts (PLAN C4) -
+  log('step 6b: the bucket at bedtime');
+  await waitFor(`document.getElementById('zonePill').innerHTML.includes('Sleeping')`,
+    { timeout: 3000, desc: 'the "Sleeping" bedtime label (KNOWN-BUGS B5)' });
+  await screenshot('bedtime-sleeping');
+
   // --- Step 7: the receipt is visible, and the day was saved -------------------------------------
   log('step 7: the receipt');
   await waitFor(`!!document.querySelector('.receipt')`, { timeout: 15000, desc: 'receipt' });

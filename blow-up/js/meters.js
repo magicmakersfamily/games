@@ -36,7 +36,12 @@
     $('bucketNum').textContent = Math.round(v.pressure) + ' / ' + Math.round(v.threshold);
     const zn = v.phase !== 'day' ? null : v.zone === 'blowup' ? 'red' : v.zone;
     const pill = $('zonePill');
-    if (zn) { const Z = CT.ZONES[zn]; pill.style.background = { green: '#BFE6C4', yellow: '#FBE7A1', red: '#F6B9B3' }[zn]; pill.innerHTML = `${{ green: '😊', yellow: '😐', red: '😠' }[zn]} ${Z.kid} <span lang="zh-TW" class="zh">${rubyZh(Z.zh, Z.py)}</span>`; }
+    // Bedtime (the UI `phase`, not the engine's `v.phase`) always shows "Sleeping", whatever zone
+    // or storm stage the day ended on -- never the red "Almost boiling" label next to a sleeping
+    // Pip (KNOWN-BUGS B5, DECISIONS D8). settleBucketForSleep() (ending.js) drains the meter toward
+    // it at the same time.
+    if (typeof phase !== 'undefined' && phase === 'BEDTIME') { pill.style.background = '#C9CEEA'; pill.innerHTML = '💤 Sleeping'; }
+    else if (zn) { const Z = CT.ZONES[zn]; pill.style.background = { green: '#BFE6C4', yellow: '#FBE7A1', red: '#F6B9B3' }[zn]; pill.innerHTML = `${{ green: '😊', yellow: '😐', red: '😠' }[zn]} ${Z.kid} <span lang="zh-TW" class="zh">${rubyZh(Z.zh, Z.py)}</span>`; }
     else { pill.style.background = '#E3D6F2'; pill.innerHTML = '🌧️ ' + CT.PHASES[v.phase].kid; }
   }
   function dropInto(type) {
