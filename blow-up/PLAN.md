@@ -20,7 +20,7 @@ Status: ☐ to do · ◐ in progress · ☑ done
 
 ## Phase A: safety net (no behaviour changes)
 
-**☐ A1. Golden-run snapshot of the engine.**
+**☑ A1. Golden-run snapshot of the engine.**
 Add `tests/golden.test.js`. It runs `SIM.runDay` for both playable day styles × every strategy in
 `balance.js` × seeds 1–5, reduces each run to a compact summary (end pressure, blow-up times and
 types, phase sequence, jar totals, receipt lines, skills xp), and compares it with a committed

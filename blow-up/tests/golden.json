@@ -1,0 +1,2961 @@
+{
+  "rushed/none/1": {
+    "end": 52.9,
+    "peak": 1,
+    "blowups": [
+      {
+        "t": 180,
+        "type": "tornado",
+        "second": false,
+        "collapse": true
+      },
+      {
+        "t": 750,
+        "type": "whistle",
+        "second": false,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 181,
+        "phase": "eruption"
+      },
+      {
+        "t": 187,
+        "phase": "cooling"
+      },
+      {
+        "t": 216,
+        "phase": "reconnect"
+      },
+      {
+        "t": 246,
+        "phase": "repair"
+      },
+      {
+        "t": 266,
+        "phase": "learn"
+      },
+      {
+        "t": 281,
+        "phase": "day"
+      },
+      {
+        "t": 751,
+        "phase": "eruption"
+      },
+      {
+        "t": 757,
+        "phase": "cooling"
+      }
+    ],
+    "jars": {
+      "choice": 1,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 52.9,
+      "end": 52.9,
+      "blowups": 2,
+      "marbles": 1,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Surprise fire drill!",
+          21.3
+        ],
+        [
+          "Lost a game",
+          12.3
+        ],
+        [
+          "“Because I said so”",
+          10.6
+        ],
+        [
+          "Stop playing NOW",
+          9.1
+        ],
+        [
+          "“Put your shoes on NOW.”",
+          8.8
+        ],
+        [
+          "Rushed breakfast",
+          8
+        ],
+        [
+          "Told how to play",
+          7.9
+        ],
+        [
+          "Settling down on its own",
+          -111
+        ],
+        [
+          "The storm passing",
+          -68.4
+        ],
+        [
+          "Getting hungry",
+          23.2
+        ],
+        [
+          "Lots of little things all day",
+          131.1
+        ]
+      ]
+    }
+  },
+  "rushed/none/2": {
+    "end": 53.7,
+    "peak": 1.1,
+    "blowups": [
+      {
+        "t": 480,
+        "type": "volcano",
+        "second": false,
+        "collapse": true
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 481,
+        "phase": "eruption"
+      },
+      {
+        "t": 487,
+        "phase": "cooling"
+      },
+      {
+        "t": 527,
+        "phase": "reconnect"
+      },
+      {
+        "t": 557,
+        "phase": "repair"
+      },
+      {
+        "t": 577,
+        "phase": "learn"
+      },
+      {
+        "t": 592,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 1,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 53.7,
+      "end": 53.7,
+      "blowups": 1,
+      "marbles": 2,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Surprise fire drill!",
+          13.7
+        ],
+        [
+          "Lost a game",
+          12.3
+        ],
+        [
+          "“Stop playing, we’re leaving.”",
+          11.9
+        ],
+        [
+          "“Because I said so”",
+          10.6
+        ],
+        [
+          "Stop playing NOW",
+          9.1
+        ],
+        [
+          "“Put your shoes on NOW.”",
+          8.8
+        ],
+        [
+          "Rushed breakfast",
+          8
+        ],
+        [
+          "Settling down on its own",
+          -120.2
+        ],
+        [
+          "The storm passing",
+          -45.7
+        ],
+        [
+          "Getting hungry",
+          23.2
+        ],
+        [
+          "Lots of little things all day",
+          122
+        ]
+      ]
+    }
+  },
+  "rushed/none/3": {
+    "end": 48.4,
+    "peak": 1.1,
+    "blowups": [
+      {
+        "t": 605,
+        "type": "whistle",
+        "second": false,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 606,
+        "phase": "eruption"
+      },
+      {
+        "t": 612,
+        "phase": "cooling"
+      },
+      {
+        "t": 652,
+        "phase": "reconnect"
+      },
+      {
+        "t": 682,
+        "phase": "repair"
+      },
+      {
+        "t": 702,
+        "phase": "learn"
+      },
+      {
+        "t": 717,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 2,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 48.4,
+      "end": 48.4,
+      "blowups": 1,
+      "marbles": 2,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Lost a game",
+          12.3
+        ],
+        [
+          "“Stop playing, we’re leaving.”",
+          11.9
+        ],
+        [
+          "“Because I said so”",
+          10.6
+        ],
+        [
+          "“Put your shoes on NOW.”",
+          8.8
+        ],
+        [
+          "Rushed breakfast",
+          8
+        ],
+        [
+          "Picked the recess game",
+          -8
+        ],
+        [
+          "The dog ate the drawing!",
+          7.9
+        ],
+        [
+          "Settling down on its own",
+          -130.3
+        ],
+        [
+          "The storm passing",
+          -43.9
+        ],
+        [
+          "Getting hungry",
+          23.2
+        ],
+        [
+          "Lots of little things all day",
+          147.9
+        ]
+      ]
+    }
+  },
+  "rushed/none/4": {
+    "end": 49.4,
+    "peak": 1.2,
+    "blowups": [
+      {
+        "t": 323,
+        "type": "whistle",
+        "second": false,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 324,
+        "phase": "eruption"
+      },
+      {
+        "t": 331,
+        "phase": "cooling"
+      },
+      {
+        "t": 371,
+        "phase": "reconnect"
+      },
+      {
+        "t": 401,
+        "phase": "repair"
+      },
+      {
+        "t": 421,
+        "phase": "learn"
+      },
+      {
+        "t": 436,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 1,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 49.4,
+      "end": 49.4,
+      "blowups": 1,
+      "marbles": 2,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Surprise fire drill!",
+          14.2
+        ],
+        [
+          "Lost a game",
+          12.3
+        ],
+        [
+          "“Stop playing, we’re leaving.”",
+          11.9
+        ],
+        [
+          "“Because I said so”",
+          10.6
+        ],
+        [
+          "Stop playing NOW",
+          9.1
+        ],
+        [
+          "“Put your shoes on NOW.”",
+          8.8
+        ],
+        [
+          "Rushed breakfast",
+          8
+        ],
+        [
+          "Settling down on its own",
+          -98
+        ],
+        [
+          "The storm passing",
+          -54.8
+        ],
+        [
+          "Getting hungry",
+          23.2
+        ],
+        [
+          "Lots of little things all day",
+          104.1
+        ]
+      ]
+    }
+  },
+  "rushed/none/5": {
+    "end": 64.4,
+    "peak": 1.3,
+    "blowups": [
+      {
+        "t": 358,
+        "type": "tornado",
+        "second": false,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 359,
+        "phase": "eruption"
+      },
+      {
+        "t": 366,
+        "phase": "cooling"
+      },
+      {
+        "t": 406,
+        "phase": "reconnect"
+      },
+      {
+        "t": 440,
+        "phase": "repair"
+      },
+      {
+        "t": 460,
+        "phase": "learn"
+      },
+      {
+        "t": 475,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 0,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 64.4,
+      "end": 64.4,
+      "blowups": 1,
+      "marbles": 1,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Surprise fire drill!",
+          14.2
+        ],
+        [
+          "Lost a game",
+          12.3
+        ],
+        [
+          "“Stop playing, we’re leaving.”",
+          11.9
+        ],
+        [
+          "Sneeze attack!",
+          10.9
+        ],
+        [
+          "A seagull stole the sandwich!",
+          10.9
+        ],
+        [
+          "“Because I said so”",
+          10.6
+        ],
+        [
+          "Stop playing NOW",
+          9.4
+        ],
+        [
+          "Settling down on its own",
+          -114.4
+        ],
+        [
+          "The storm passing",
+          -58.9
+        ],
+        [
+          "Getting hungry",
+          23.2
+        ],
+        [
+          "Lots of little things all day",
+          134.3
+        ]
+      ]
+    }
+  },
+  "rushed/goodSupport/1": {
+    "end": 1.4,
+    "peak": 0.4,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 10,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 9,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 1.4,
+      "end": 1.4,
+      "blowups": 0,
+      "marbles": 7,
+      "skills": 1,
+      "practice": 9,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Snack",
+          -28.7
+        ],
+        [
+          "Surprise fire drill!",
+          11.4
+        ],
+        [
+          "Picked the recess game",
+          -8
+        ],
+        [
+          "Stop playing NOW",
+          7
+        ],
+        [
+          "Rushed breakfast",
+          6.9
+        ],
+        [
+          "Alarm clock wake-up",
+          6.8
+        ],
+        [
+          "Lost a game",
+          6.3
+        ],
+        [
+          "Flower and candle",
+          -71.9
+        ],
+        [
+          "Settling down on its own",
+          -25.5
+        ],
+        [
+          "Long afternoon",
+          22.9
+        ],
+        [
+          "Lots of little things all day",
+          74.3
+        ]
+      ]
+    }
+  },
+  "rushed/goodSupport/2": {
+    "end": 0.1,
+    "peak": 0.3,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 10,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 9,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 0.1,
+      "end": 0.1,
+      "blowups": 0,
+      "marbles": 7,
+      "skills": 1,
+      "practice": 9,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Snack",
+          -28.7
+        ],
+        [
+          "Surprise fire drill!",
+          10.9
+        ],
+        [
+          "Picked the recess game",
+          -8
+        ],
+        [
+          "Stop playing NOW",
+          7
+        ],
+        [
+          "Rushed breakfast",
+          6.9
+        ],
+        [
+          "Alarm clock wake-up",
+          6.8
+        ],
+        [
+          "Lost a game",
+          6.3
+        ],
+        [
+          "Flower and candle",
+          -70.3
+        ],
+        [
+          "Settling down on its own",
+          -23.3
+        ],
+        [
+          "Long afternoon",
+          22.9
+        ],
+        [
+          "Lots of little things all day",
+          69.6
+        ]
+      ]
+    }
+  },
+  "rushed/goodSupport/3": {
+    "end": 0.1,
+    "peak": 0.3,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 10,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 9,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 0.1,
+      "end": 0.1,
+      "blowups": 0,
+      "marbles": 7,
+      "skills": 1,
+      "practice": 9,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Snack",
+          -26.1
+        ],
+        [
+          "Picked the recess game",
+          -8
+        ],
+        [
+          "Stop playing NOW",
+          7
+        ],
+        [
+          "Rushed breakfast",
+          6.9
+        ],
+        [
+          "Alarm clock wake-up",
+          6.8
+        ],
+        [
+          "The dog ate the drawing!",
+          6.6
+        ],
+        [
+          "Lost a game",
+          6.3
+        ],
+        [
+          "Flower and candle",
+          -70.2
+        ],
+        [
+          "Settling down on its own",
+          -24.3
+        ],
+        [
+          "Long afternoon",
+          22.9
+        ],
+        [
+          "Lots of little things all day",
+          72.3
+        ]
+      ]
+    }
+  },
+  "rushed/goodSupport/4": {
+    "end": 0.1,
+    "peak": 0.3,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 10,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 9,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 0.1,
+      "end": 0.1,
+      "blowups": 0,
+      "marbles": 7,
+      "skills": 1,
+      "practice": 9,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Snack",
+          -26.6
+        ],
+        [
+          "Surprise fire drill!",
+          10.9
+        ],
+        [
+          "Picked the recess game",
+          -8
+        ],
+        [
+          "Stop playing NOW",
+          7
+        ],
+        [
+          "Rushed breakfast",
+          6.9
+        ],
+        [
+          "Alarm clock wake-up",
+          6.8
+        ],
+        [
+          "Lost a game",
+          6.3
+        ],
+        [
+          "Flower and candle",
+          -67.2
+        ],
+        [
+          "Settling down on its own",
+          -24.7
+        ],
+        [
+          "Long afternoon",
+          22.9
+        ],
+        [
+          "Lots of little things all day",
+          65.8
+        ]
+      ]
+    }
+  },
+  "rushed/goodSupport/5": {
+    "end": 0.1,
+    "peak": 0.4,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 10,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 9,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 0.1,
+      "end": 0.1,
+      "blowups": 0,
+      "marbles": 7,
+      "skills": 1,
+      "practice": 9,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Snack",
+          -37.6
+        ],
+        [
+          "Surprise fire drill!",
+          10.9
+        ],
+        [
+          "Picked the recess game",
+          -8
+        ],
+        [
+          "Stop playing NOW",
+          7
+        ],
+        [
+          "Rushed breakfast",
+          6.9
+        ],
+        [
+          "Alarm clock wake-up",
+          6.8
+        ],
+        [
+          "Lost a game",
+          6.3
+        ],
+        [
+          "Flower and candle",
+          -65.1
+        ],
+        [
+          "Settling down on its own",
+          -26.4
+        ],
+        [
+          "Long afternoon",
+          22.9
+        ],
+        [
+          "Lots of little things all day",
+          76.4
+        ]
+      ]
+    }
+  },
+  "rushed/unhelpful/1": {
+    "end": 133.6,
+    "peak": 1.8,
+    "blowups": [
+      {
+        "t": 168,
+        "type": "whistle",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 181,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      },
+      {
+        "t": 580,
+        "type": "gavel",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 593,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 169,
+        "phase": "eruption"
+      },
+      {
+        "t": 179,
+        "phase": "cooling"
+      },
+      {
+        "t": 182,
+        "phase": "eruption"
+      },
+      {
+        "t": 191,
+        "phase": "cooling"
+      },
+      {
+        "t": 485,
+        "phase": "reconnect"
+      },
+      {
+        "t": 516,
+        "phase": "repair"
+      },
+      {
+        "t": 535,
+        "phase": "learn"
+      },
+      {
+        "t": 550,
+        "phase": "day"
+      },
+      {
+        "t": 581,
+        "phase": "eruption"
+      },
+      {
+        "t": 591,
+        "phase": "cooling"
+      },
+      {
+        "t": 594,
+        "phase": "eruption"
+      },
+      {
+        "t": 603,
+        "phase": "cooling"
+      }
+    ],
+    "jars": {
+      "choice": 3,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 133.6,
+      "end": 133.6,
+      "blowups": 4,
+      "marbles": 0,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Silly voice (backfired)",
+          36.1
+        ],
+        [
+          "Consequence (backfired)",
+          32.8
+        ],
+        [
+          "“Calm down!”",
+          24.1
+        ],
+        [
+          "Surprise fire drill!",
+          21.3
+        ],
+        [
+          "“Because I said so”",
+          10.6
+        ],
+        [
+          "“Put your shoes on NOW.”",
+          8.8
+        ],
+        [
+          "Silly voice",
+          -8
+        ],
+        [
+          "Talking too soon (words bounced off)",
+          1134
+        ],
+        [
+          "The storm passing",
+          -1106.2
+        ],
+        [
+          "Settling down on its own",
+          -220.1
+        ],
+        [
+          "Lots of little things all day",
+          200.2
+        ]
+      ]
+    }
+  },
+  "rushed/unhelpful/2": {
+    "end": 126.6,
+    "peak": 1.8,
+    "blowups": [
+      {
+        "t": 135,
+        "type": "whistle",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 148,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      },
+      {
+        "t": 500,
+        "type": "gavel",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 513,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 136,
+        "phase": "eruption"
+      },
+      {
+        "t": 146,
+        "phase": "cooling"
+      },
+      {
+        "t": 149,
+        "phase": "eruption"
+      },
+      {
+        "t": 158,
+        "phase": "cooling"
+      },
+      {
+        "t": 428,
+        "phase": "reconnect"
+      },
+      {
+        "t": 459,
+        "phase": "repair"
+      },
+      {
+        "t": 478,
+        "phase": "learn"
+      },
+      {
+        "t": 493,
+        "phase": "day"
+      },
+      {
+        "t": 501,
+        "phase": "eruption"
+      },
+      {
+        "t": 511,
+        "phase": "cooling"
+      },
+      {
+        "t": 514,
+        "phase": "eruption"
+      },
+      {
+        "t": 523,
+        "phase": "cooling"
+      }
+    ],
+    "jars": {
+      "choice": 3,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 126.6,
+      "end": 126.6,
+      "blowups": 4,
+      "marbles": 0,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Silly voice (backfired)",
+          35.7
+        ],
+        [
+          "“Calm down!”",
+          24.1
+        ],
+        [
+          "Consequence (backfired)",
+          21.8
+        ],
+        [
+          "“Because I said so”",
+          10.6
+        ],
+        [
+          "“Put your shoes on NOW.”",
+          8.8
+        ],
+        [
+          "Told how to play",
+          8.2
+        ],
+        [
+          "Silly voice",
+          -8
+        ],
+        [
+          "Talking too soon (words bounced off)",
+          1260
+        ],
+        [
+          "The storm passing",
+          -1210.5
+        ],
+        [
+          "Settling down on its own",
+          -223.6
+        ],
+        [
+          "Lots of little things all day",
+          199.6
+        ]
+      ]
+    }
+  },
+  "rushed/unhelpful/3": {
+    "end": 129.3,
+    "peak": 1.8,
+    "blowups": [
+      {
+        "t": 135,
+        "type": "whistle",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 148,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      },
+      {
+        "t": 513,
+        "type": "gavel",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 526,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 136,
+        "phase": "eruption"
+      },
+      {
+        "t": 146,
+        "phase": "cooling"
+      },
+      {
+        "t": 149,
+        "phase": "eruption"
+      },
+      {
+        "t": 158,
+        "phase": "cooling"
+      },
+      {
+        "t": 446,
+        "phase": "reconnect"
+      },
+      {
+        "t": 477,
+        "phase": "repair"
+      },
+      {
+        "t": 496,
+        "phase": "learn"
+      },
+      {
+        "t": 511,
+        "phase": "day"
+      },
+      {
+        "t": 514,
+        "phase": "eruption"
+      },
+      {
+        "t": 524,
+        "phase": "cooling"
+      },
+      {
+        "t": 527,
+        "phase": "eruption"
+      },
+      {
+        "t": 536,
+        "phase": "cooling"
+      }
+    ],
+    "jars": {
+      "choice": 3,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 129.3,
+      "end": 129.3,
+      "blowups": 4,
+      "marbles": 0,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Silly voice (backfired)",
+          31.3
+        ],
+        [
+          "“Calm down!”",
+          24.1
+        ],
+        [
+          "Consequence (backfired)",
+          21.8
+        ],
+        [
+          "“Because I said so”",
+          10.6
+        ],
+        [
+          "“Put your shoes on NOW.”",
+          8.8
+        ],
+        [
+          "Told how to play",
+          8.2
+        ],
+        [
+          "Rushed breakfast",
+          8
+        ],
+        [
+          "Talking too soon (words bounced off)",
+          1274
+        ],
+        [
+          "The storm passing",
+          -1218.2
+        ],
+        [
+          "Settling down on its own",
+          -229
+        ],
+        [
+          "Lots of little things all day",
+          189.6
+        ]
+      ]
+    }
+  },
+  "rushed/unhelpful/4": {
+    "end": 126.3,
+    "peak": 1.8,
+    "blowups": [
+      {
+        "t": 180,
+        "type": "whistle",
+        "second": false,
+        "collapse": true
+      },
+      {
+        "t": 193,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      },
+      {
+        "t": 577,
+        "type": "gavel",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 590,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 181,
+        "phase": "eruption"
+      },
+      {
+        "t": 191,
+        "phase": "cooling"
+      },
+      {
+        "t": 194,
+        "phase": "eruption"
+      },
+      {
+        "t": 203,
+        "phase": "cooling"
+      },
+      {
+        "t": 497,
+        "phase": "reconnect"
+      },
+      {
+        "t": 528,
+        "phase": "repair"
+      },
+      {
+        "t": 547,
+        "phase": "learn"
+      },
+      {
+        "t": 562,
+        "phase": "day"
+      },
+      {
+        "t": 578,
+        "phase": "eruption"
+      },
+      {
+        "t": 588,
+        "phase": "cooling"
+      },
+      {
+        "t": 591,
+        "phase": "eruption"
+      },
+      {
+        "t": 600,
+        "phase": "cooling"
+      }
+    ],
+    "jars": {
+      "choice": 3,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 126.3,
+      "end": 126.3,
+      "blowups": 4,
+      "marbles": 0,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Consequence (backfired)",
+          32.8
+        ],
+        [
+          "“Calm down!”",
+          24.1
+        ],
+        [
+          "Silly voice (backfired)",
+          22.5
+        ],
+        [
+          "“Because I said so”",
+          10.6
+        ],
+        [
+          "“Put your shoes on NOW.”",
+          8.8
+        ],
+        [
+          "Silly voice",
+          -8
+        ],
+        [
+          "Rushed breakfast",
+          8
+        ],
+        [
+          "Talking too soon (words bounced off)",
+          1134
+        ],
+        [
+          "The storm passing",
+          -1087.8
+        ],
+        [
+          "Settling down on its own",
+          -216.7
+        ],
+        [
+          "Lots of little things all day",
+          198.1
+        ]
+      ]
+    }
+  },
+  "rushed/unhelpful/5": {
+    "end": 132.9,
+    "peak": 1.8,
+    "blowups": [
+      {
+        "t": 161,
+        "type": "whistle",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 174,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      },
+      {
+        "t": 562,
+        "type": "gavel",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 575,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 162,
+        "phase": "eruption"
+      },
+      {
+        "t": 172,
+        "phase": "cooling"
+      },
+      {
+        "t": 175,
+        "phase": "eruption"
+      },
+      {
+        "t": 184,
+        "phase": "cooling"
+      },
+      {
+        "t": 472,
+        "phase": "reconnect"
+      },
+      {
+        "t": 503,
+        "phase": "repair"
+      },
+      {
+        "t": 522,
+        "phase": "learn"
+      },
+      {
+        "t": 537,
+        "phase": "day"
+      },
+      {
+        "t": 563,
+        "phase": "eruption"
+      },
+      {
+        "t": 573,
+        "phase": "cooling"
+      },
+      {
+        "t": 576,
+        "phase": "eruption"
+      },
+      {
+        "t": 585,
+        "phase": "cooling"
+      }
+    ],
+    "jars": {
+      "choice": 3,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 132.9,
+      "end": 132.9,
+      "blowups": 4,
+      "marbles": 0,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Silly voice (backfired)",
+          36.1
+        ],
+        [
+          "Consequence (backfired)",
+          29.1
+        ],
+        [
+          "“Calm down!”",
+          24.1
+        ],
+        [
+          "“Because I said so”",
+          10.6
+        ],
+        [
+          "“Put your shoes on NOW.”",
+          8.8
+        ],
+        [
+          "Silly voice",
+          -8
+        ],
+        [
+          "Rushed breakfast",
+          8
+        ],
+        [
+          "Talking too soon (words bounced off)",
+          1162
+        ],
+        [
+          "The storm passing",
+          -1110.9
+        ],
+        [
+          "Settling down on its own",
+          -216.5
+        ],
+        [
+          "Lots of little things all day",
+          189.6
+        ]
+      ]
+    }
+  },
+  "adventure/none/1": {
+    "end": 41,
+    "peak": 0.5,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 6,
+      "can": 7,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 41,
+      "end": 41,
+      "blowups": 0,
+      "marbles": 5,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Toy taken",
+          12.3
+        ],
+        [
+          "Ice cream fell off the cone!",
+          11.7
+        ],
+        [
+          "“Stop playing, we’re leaving.”",
+          11.1
+        ],
+        [
+          "Lost a game",
+          11.1
+        ],
+        [
+          "A bug on my arm",
+          9.6
+        ],
+        [
+          "Stop playing NOW",
+          8.2
+        ],
+        [
+          "Hungry",
+          7.4
+        ],
+        [
+          "Settling down on its own",
+          -42.7
+        ],
+        [
+          "Fresh air, trees and sky",
+          -34.9
+        ],
+        [
+          "Getting hungry",
+          20.2
+        ],
+        [
+          "Lots of little things all day",
+          27.1
+        ]
+      ]
+    }
+  },
+  "adventure/none/2": {
+    "end": 39.4,
+    "peak": 0.6,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 6,
+      "can": 7,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 39.4,
+      "end": 39.4,
+      "blowups": 0,
+      "marbles": 5,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Toy taken",
+          12.3
+        ],
+        [
+          "Lost a game",
+          11.1
+        ],
+        [
+          "“Stop playing, we’re leaving.”",
+          11.1
+        ],
+        [
+          "A bug on my arm",
+          9.6
+        ],
+        [
+          "Ice cream fell off the cone!",
+          8.6
+        ],
+        [
+          "Stop playing NOW",
+          8.2
+        ],
+        [
+          "Hungry",
+          7.4
+        ],
+        [
+          "Settling down on its own",
+          -43.7
+        ],
+        [
+          "Fresh air, trees and sky",
+          -31.7
+        ],
+        [
+          "Running around",
+          -19.6
+        ],
+        [
+          "Lots of little things all day",
+          66.2
+        ]
+      ]
+    }
+  },
+  "adventure/none/3": {
+    "end": 40.3,
+    "peak": 0.5,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 6,
+      "can": 7,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 40.3,
+      "end": 40.3,
+      "blowups": 0,
+      "marbles": 5,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Toy taken",
+          12.3
+        ],
+        [
+          "Lost a game",
+          11.1
+        ],
+        [
+          "“Stop playing, we’re leaving.”",
+          11.1
+        ],
+        [
+          "A bug on my arm",
+          9.6
+        ],
+        [
+          "Stop playing NOW",
+          8.2
+        ],
+        [
+          "The dog ate the drawing!",
+          7.7
+        ],
+        [
+          "Hungry",
+          7.4
+        ],
+        [
+          "Settling down on its own",
+          -41.5
+        ],
+        [
+          "Fresh air, trees and sky",
+          -34.6
+        ],
+        [
+          "Running around",
+          -19.6
+        ],
+        [
+          "Lots of little things all day",
+          68.7
+        ]
+      ]
+    }
+  },
+  "adventure/none/4": {
+    "end": 35.6,
+    "peak": 0.5,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 6,
+      "can": 7,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 35.6,
+      "end": 35.6,
+      "blowups": 0,
+      "marbles": 5,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Toy taken",
+          12.3
+        ],
+        [
+          "Lost a game",
+          11.1
+        ],
+        [
+          "“Stop playing, we’re leaving.”",
+          11.1
+        ],
+        [
+          "A bug on my arm",
+          9.6
+        ],
+        [
+          "Stop playing NOW",
+          8.2
+        ],
+        [
+          "The dog ate the drawing!",
+          7.4
+        ],
+        [
+          "Hungry",
+          7.4
+        ],
+        [
+          "Settling down on its own",
+          -42.3
+        ],
+        [
+          "Fresh air, trees and sky",
+          -29.1
+        ],
+        [
+          "Running around",
+          -19.6
+        ],
+        [
+          "Lots of little things all day",
+          59.5
+        ]
+      ]
+    }
+  },
+  "adventure/none/5": {
+    "end": 41.4,
+    "peak": 0.7,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 6,
+      "can": 7,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 41.4,
+      "end": 41.4,
+      "blowups": 0,
+      "marbles": 5,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Toy taken",
+          12.3
+        ],
+        [
+          "Lost a game",
+          11.1
+        ],
+        [
+          "“Stop playing, we’re leaving.”",
+          11.1
+        ],
+        [
+          "A seagull stole the sandwich!",
+          9.8
+        ],
+        [
+          "A bug on my arm",
+          9.6
+        ],
+        [
+          "Stop playing NOW",
+          8.2
+        ],
+        [
+          "The dog ate the drawing!",
+          7.4
+        ],
+        [
+          "Settling down on its own",
+          -49.7
+        ],
+        [
+          "Fresh air, trees and sky",
+          -29.1
+        ],
+        [
+          "Running around",
+          -19.6
+        ],
+        [
+          "Lots of little things all day",
+          70.3
+        ]
+      ]
+    }
+  },
+  "adventure/goodSupport/1": {
+    "end": 0,
+    "peak": 0.1,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 10,
+      "can": 7,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 9,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 0,
+      "end": 0,
+      "blowups": 0,
+      "marbles": 8,
+      "skills": 1,
+      "practice": 9,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Snack",
+          -23.4
+        ],
+        [
+          "Flower and candle",
+          -13.2
+        ],
+        [
+          "Ice cream fell off the cone!",
+          9.8
+        ],
+        [
+          "Toy taken",
+          7
+        ],
+        [
+          "Stop playing NOW",
+          7
+        ],
+        [
+          "Lost a game",
+          6.3
+        ],
+        [
+          "The blue cup",
+          5.7
+        ],
+        [
+          "Running around",
+          -16.9
+        ],
+        [
+          "Fresh air, trees and sky",
+          -15.6
+        ],
+        [
+          "5-minute warning",
+          -10.1
+        ],
+        [
+          "Lots of little things all day",
+          43.2
+        ]
+      ]
+    }
+  },
+  "adventure/goodSupport/2": {
+    "end": 0,
+    "peak": 0.1,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 10,
+      "can": 7,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 9,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 0,
+      "end": 0,
+      "blowups": 0,
+      "marbles": 8,
+      "skills": 1,
+      "practice": 9,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Toy taken",
+          7
+        ],
+        [
+          "Stop playing NOW",
+          7
+        ],
+        [
+          "Snack",
+          -7
+        ],
+        [
+          "Lost a game",
+          6.3
+        ],
+        [
+          "Sneeze attack!",
+          6.1
+        ],
+        [
+          "The blue cup",
+          5.7
+        ],
+        [
+          "Tower falls",
+          5.6
+        ],
+        [
+          "Fresh air, trees and sky",
+          -18.8
+        ],
+        [
+          "Running around",
+          -18.6
+        ],
+        [
+          "Flower and candle",
+          -18
+        ],
+        [
+          "Lots of little things all day",
+          24.7
+        ]
+      ]
+    }
+  },
+  "adventure/goodSupport/3": {
+    "end": 0,
+    "peak": 0.2,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 10,
+      "can": 7,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 9,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 0,
+      "end": 0,
+      "blowups": 0,
+      "marbles": 8,
+      "skills": 1,
+      "practice": 9,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Snack",
+          -9.3
+        ],
+        [
+          "The dog ate the drawing!",
+          7.4
+        ],
+        [
+          "Toy taken",
+          7
+        ],
+        [
+          "Stop playing NOW",
+          7
+        ],
+        [
+          "Lost a game",
+          6.3
+        ],
+        [
+          "The blue cup",
+          5.7
+        ],
+        [
+          "Tower falls",
+          5.6
+        ],
+        [
+          "Flower and candle",
+          -19.8
+        ],
+        [
+          "Fresh air, trees and sky",
+          -19.4
+        ],
+        [
+          "Running around",
+          -16.7
+        ],
+        [
+          "Lots of little things all day",
+          26.1
+        ]
+      ]
+    }
+  },
+  "adventure/goodSupport/4": {
+    "end": 0,
+    "peak": 0.1,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 10,
+      "can": 7,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 9,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 0,
+      "end": 0,
+      "blowups": 0,
+      "marbles": 8,
+      "skills": 1,
+      "practice": 9,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Toy taken",
+          7
+        ],
+        [
+          "Stop playing NOW",
+          7
+        ],
+        [
+          "Snack",
+          -7
+        ],
+        [
+          "The dog ate the drawing!",
+          6.3
+        ],
+        [
+          "Lost a game",
+          6.3
+        ],
+        [
+          "The blue cup",
+          5.7
+        ],
+        [
+          "Tower falls",
+          5.6
+        ],
+        [
+          "Flower and candle",
+          -19.6
+        ],
+        [
+          "Fresh air, trees and sky",
+          -17.3
+        ],
+        [
+          "Running around",
+          -16.5
+        ],
+        [
+          "Lots of little things all day",
+          22.4
+        ]
+      ]
+    }
+  },
+  "adventure/goodSupport/5": {
+    "end": 0,
+    "peak": 0.1,
+    "blowups": [],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      }
+    ],
+    "jars": {
+      "choice": 10,
+      "can": 7,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 9,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 0,
+      "end": 0,
+      "blowups": 0,
+      "marbles": 8,
+      "skills": 1,
+      "practice": 9,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Snack",
+          -15.3
+        ],
+        [
+          "Toy taken",
+          7
+        ],
+        [
+          "Stop playing NOW",
+          7
+        ],
+        [
+          "The dog ate the drawing!",
+          6.3
+        ],
+        [
+          "Lost a game",
+          6.3
+        ],
+        [
+          "The blue cup",
+          5.7
+        ],
+        [
+          "Tower falls",
+          5.6
+        ],
+        [
+          "Flower and candle",
+          -20.3
+        ],
+        [
+          "Fresh air, trees and sky",
+          -19
+        ],
+        [
+          "Running around",
+          -16.4
+        ],
+        [
+          "Lots of little things all day",
+          33.1
+        ]
+      ]
+    }
+  },
+  "adventure/unhelpful/1": {
+    "end": 116.4,
+    "peak": 1.6,
+    "blowups": [
+      {
+        "t": 517,
+        "type": "gavel",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 530,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 518,
+        "phase": "eruption"
+      },
+      {
+        "t": 528,
+        "phase": "cooling"
+      },
+      {
+        "t": 531,
+        "phase": "eruption"
+      },
+      {
+        "t": 540,
+        "phase": "cooling"
+      }
+    ],
+    "jars": {
+      "choice": 3,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 116.4,
+      "end": 116.4,
+      "blowups": 2,
+      "marbles": 1,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Long lecture",
+          52
+        ],
+        [
+          "“Calm down!”",
+          37.4
+        ],
+        [
+          "Toy taken",
+          13.7
+        ],
+        [
+          "Silly voice (backfired)",
+          13.7
+        ],
+        [
+          "A bug on my arm",
+          10.6
+        ],
+        [
+          "Hungry",
+          8.2
+        ],
+        [
+          "Tower falls",
+          7.3
+        ],
+        [
+          "Talking too soon (words bounced off)",
+          560
+        ],
+        [
+          "The storm passing",
+          -499
+        ],
+        [
+          "Settling down on its own",
+          -105.9
+        ],
+        [
+          "Lots of little things all day",
+          18.5
+        ]
+      ]
+    }
+  },
+  "adventure/unhelpful/2": {
+    "end": 116.4,
+    "peak": 1.6,
+    "blowups": [
+      {
+        "t": 517,
+        "type": "gavel",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 530,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 518,
+        "phase": "eruption"
+      },
+      {
+        "t": 528,
+        "phase": "cooling"
+      },
+      {
+        "t": 531,
+        "phase": "eruption"
+      },
+      {
+        "t": 540,
+        "phase": "cooling"
+      }
+    ],
+    "jars": {
+      "choice": 3,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 116.4,
+      "end": 116.4,
+      "blowups": 2,
+      "marbles": 1,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Long lecture",
+          52
+        ],
+        [
+          "“Calm down!”",
+          37.4
+        ],
+        [
+          "Toy taken",
+          13.7
+        ],
+        [
+          "Silly voice (backfired)",
+          13.7
+        ],
+        [
+          "A bug on my arm",
+          10.6
+        ],
+        [
+          "Ice cream fell off the cone!",
+          9.6
+        ],
+        [
+          "Hungry",
+          8.2
+        ],
+        [
+          "Talking too soon (words bounced off)",
+          560
+        ],
+        [
+          "The storm passing",
+          -500.4
+        ],
+        [
+          "Settling down on its own",
+          -101.2
+        ],
+        [
+          "Lots of little things all day",
+          12.8
+        ]
+      ]
+    }
+  },
+  "adventure/unhelpful/3": {
+    "end": 115.1,
+    "peak": 1.7,
+    "blowups": [
+      {
+        "t": 545,
+        "type": "gavel",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 558,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 546,
+        "phase": "eruption"
+      },
+      {
+        "t": 556,
+        "phase": "cooling"
+      },
+      {
+        "t": 559,
+        "phase": "eruption"
+      },
+      {
+        "t": 568,
+        "phase": "cooling"
+      }
+    ],
+    "jars": {
+      "choice": 2,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 115.1,
+      "end": 115.1,
+      "blowups": 2,
+      "marbles": 1,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "“Calm down!”",
+          19.1
+        ],
+        [
+          "Silly voice (backfired)",
+          14.1
+        ],
+        [
+          "Toy taken",
+          13.7
+        ],
+        [
+          "Lost a game",
+          12.3
+        ],
+        [
+          "“Stop playing, we’re leaving.”",
+          12.3
+        ],
+        [
+          "A bug on my arm",
+          10.6
+        ],
+        [
+          "Hungry",
+          8.2
+        ],
+        [
+          "Talking too soon (words bounced off)",
+          546
+        ],
+        [
+          "The storm passing",
+          -441.9
+        ],
+        [
+          "Settling down on its own",
+          -93.7
+        ],
+        [
+          "Lots of little things all day",
+          14.4
+        ]
+      ]
+    }
+  },
+  "adventure/unhelpful/4": {
+    "end": 116.4,
+    "peak": 1.6,
+    "blowups": [
+      {
+        "t": 517,
+        "type": "gavel",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 530,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 518,
+        "phase": "eruption"
+      },
+      {
+        "t": 528,
+        "phase": "cooling"
+      },
+      {
+        "t": 531,
+        "phase": "eruption"
+      },
+      {
+        "t": 540,
+        "phase": "cooling"
+      }
+    ],
+    "jars": {
+      "choice": 3,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 116.4,
+      "end": 116.4,
+      "blowups": 2,
+      "marbles": 1,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Long lecture",
+          52
+        ],
+        [
+          "“Calm down!”",
+          37.4
+        ],
+        [
+          "Toy taken",
+          13.7
+        ],
+        [
+          "Silly voice (backfired)",
+          13.7
+        ],
+        [
+          "A bug on my arm",
+          10.6
+        ],
+        [
+          "Hungry",
+          8.2
+        ],
+        [
+          "The dog ate the drawing!",
+          8.2
+        ],
+        [
+          "Talking too soon (words bounced off)",
+          560
+        ],
+        [
+          "The storm passing",
+          -497.1
+        ],
+        [
+          "Settling down on its own",
+          -101.9
+        ],
+        [
+          "Lots of little things all day",
+          11.6
+        ]
+      ]
+    }
+  },
+  "adventure/unhelpful/5": {
+    "end": 116.4,
+    "peak": 1.6,
+    "blowups": [
+      {
+        "t": 517,
+        "type": "gavel",
+        "second": false,
+        "collapse": false
+      },
+      {
+        "t": 530,
+        "type": "gavel",
+        "second": true,
+        "collapse": false
+      }
+    ],
+    "phases": [
+      {
+        "t": 0,
+        "phase": "day"
+      },
+      {
+        "t": 518,
+        "phase": "eruption"
+      },
+      {
+        "t": 528,
+        "phase": "cooling"
+      },
+      {
+        "t": 531,
+        "phase": "eruption"
+      },
+      {
+        "t": 540,
+        "phase": "cooling"
+      }
+    ],
+    "jars": {
+      "choice": 3,
+      "can": 5,
+      "together": 5
+    },
+    "skills": {
+      "breathe": 0,
+      "stomp": 0
+    },
+    "receipt": {
+      "total": 116.4,
+      "end": 116.4,
+      "blowups": 2,
+      "marbles": 1,
+      "skills": 0,
+      "practice": 0,
+      "cookie": false,
+      "sock": false,
+      "lines": [
+        [
+          "Long lecture",
+          52
+        ],
+        [
+          "“Calm down!”",
+          37.4
+        ],
+        [
+          "Toy taken",
+          13.7
+        ],
+        [
+          "Silly voice (backfired)",
+          13.7
+        ],
+        [
+          "A bug on my arm",
+          10.6
+        ],
+        [
+          "Hungry",
+          8.2
+        ],
+        [
+          "The dog ate the drawing!",
+          8.2
+        ],
+        [
+          "Talking too soon (words bounced off)",
+          560
+        ],
+        [
+          "The storm passing",
+          -499.2
+        ],
+        [
+          "Settling down on its own",
+          -103.7
+        ],
+        [
+          "Lots of little things all day",
+          15.5
+        ]
+      ]
+    }
+  }
+}
