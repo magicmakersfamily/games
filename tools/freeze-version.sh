@@ -27,7 +27,7 @@ tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 git -C "$root" archive "$ref" "$game" | tar -x -C "$tmp"
 cd "$tmp/$game"
-rm -rf tools ./*.test.js balance.js PLAN.md PLAYTEST.md CLAUDE.md DECISIONS.md KNOWN-BUGS.md tests
+rm -rf tools ./*.test.js balance.js PLAN.md ENGINE.md PLAYTEST.md CLAUDE.md DECISIONS.md KNOWN-BUGS.md tests
 
 inject_head="<meta name=\"robots\" content=\"noindex\">
 <script>/* Frozen copy: keep this version's saved games separate. */

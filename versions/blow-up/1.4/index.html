@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<script>/* Frozen copy: keep this version's saved games separate. */
+(function(){try{var P='blow-up@1.4:',S=Storage.prototype,g=S.getItem,s=S.setItem,r=S.removeItem;
+S.getItem=function(k){return g.call(this,P+k)};S.setItem=function(k,v){return s.call(this,P+k,v)};
+S.removeItem=function(k){return r.call(this,P+k)}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blow Up</title>
+<meta name="description" content="A silly, science-true game about big feelings. Live one day with Pip, watch the pressure build, see what happens when it overflows, then help Pip calm down, make up and learn.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blow Up">
+<meta property="og:description" content="Blowing up isn’t losing. Learning why is winning. A self-regulation game for kids 4 to 7 and their grown-ups.">
+<meta property="og:image" content="https://magicmakersfamily.github.io/games/blow-up/cover.png">
+<meta name="theme-color" content="#D2693F">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23D2693F'/%3E%3Cpath d='M14 54 L26 22 L38 22 L50 54Z' fill='%23FFF7EC'/%3E%3Ccircle cx='24' cy='14' r='5' fill='%23F2C641'/%3E%3Ccircle cx='38' cy='10' r='4' fill='%23EC6FA8'/%3E%3Ccircle cx='32' cy='18' r='3' fill='%233F93E0'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/game.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Baloo+2:wght@500;700;800&family=Courier+Prime:wght@400;700&family=Noto+Serif+TC:wght@700&display=swap">
+</head>
+<body>
+<div style="font:13px/1.4 system-ui,sans-serif;background:#2b2140;color:#f3eefc;padding:6px 12px;text-align:center">Old version 1.4, kept so we can compare. Saved games here are separate. <a style="color:#d9c8ff" href="../../../blow-up/">Play the current version</a> · <a style="color:#d9c8ff" href="../">All versions</a></div>
+<div class="app" id="app">
+  <header class="top">
+    <a class="shelf-back" href="../../../">← All games</a>
+    <h1>Blow Up <span class="beta" title="Beta: still being tested and improved">Beta</span> <span class="zh" lang="zh-TW"><ruby>大<rt>dà</rt>爆<rt>bào</rt>發<rt>fā</rt></ruby></span></h1>
+    <div class="clock" aria-live="off"><span class="sun" id="clockIcon" aria-hidden="true">☀️</span><span id="clock">7:00 am</span></div>
+    <div class="controls">
+      <button class="ctl big" id="pauseBtn" type="button" aria-label="Pause">⏸</button>
+      <div class="seg" role="group" aria-label="Speed">
+        <button class="ctl" type="button" data-speed="0.5" aria-pressed="false" aria-label="Slow">🐢</button>
+        <button class="ctl" type="button" data-speed="1" aria-pressed="true">1×</button>
+        <button class="ctl" type="button" data-speed="2" aria-pressed="false">2×</button>
+      </div>
+      <button class="ctl" id="narrBtn" type="button" aria-pressed="true" aria-label="Storyteller voice">📣 Voice</button>
+      <button class="ctl" id="tourBtn" type="button" aria-label="Show me how to play">❓</button>
+      <button class="ctl" id="soundBtn" type="button" aria-pressed="true" aria-label="Sound effects">🔊</button>
+      <button class="ctl" id="stickerBtn" type="button" aria-label="Sticker book">📒</button>
+      <button class="ctl" id="grownBtn" type="button" aria-pressed="false">Grown-Up View</button>
+      <button class="ctl" id="menuBtn" type="button" aria-label="Settings and saved days">⚙︎</button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <section class="scene-wrap" id="sceneWrap" aria-label="Pip’s day. Drag cards here.">
+      <svg id="scene" viewBox="0 0 800 450" role="img" aria-label="The scene"></svg>
+      <div class="phase-ribbon" id="phaseRibbon" hidden></div>
+      <div class="control-room" id="controlRoom">
+        <div class="cr-title">Inside Pip’s head</div>
+        <svg id="brain" viewBox="0 0 180 96" aria-label="The Guard Dog and the Wise Owl"></svg>
+        <div class="bodydash" id="bodydash" aria-label="Body signals">
+          <span id="bdHeart" title="Fast heart">❤️</span><span id="bdBreath" title="Fast breathing">💨</span><span id="bdFace" title="Hot face">🥵</span><span id="bdFist" title="Tight fists">✊</span>
+        </div>
+      </div>
+      <div class="bubble" id="bubble" hidden></div>
+      <div class="bubble adult" id="bubbleAdult" hidden></div>
+      <div class="pickle" id="pickle" hidden></div>
+      <div class="scene-label" id="sceneLabel"></div>
+      <div class="caption" id="caption" aria-live="polite"></div>
+      <div class="flash" id="flash"></div>
+    </section>
+    <aside class="side">
+      <div class="card bucket-card">
+        <h2>Pressure <small id="bucketNum"></small></h2>
+        <svg id="bucket" viewBox="0 0 170 250" role="img" aria-label="The pressure bucket"></svg>
+        <span class="zone-pill" id="zonePill"></span>
+      </div>
+      <div class="card jars" id="jars"></div>
+    </aside>
+  </main>
+
+  <section class="narrator" aria-label="Storyteller">
+    <div class="narr-avatar" id="narrAvatar" aria-hidden="true"></div>
+    <button class="narr-replay" id="narrReplay" type="button" aria-label="Say it again">🔁</button>
+    <p id="narrText" aria-live="polite">Tap the big button to start.</p>
+    <span class="robot" id="robotTag" hidden title="The recorded voice for this line didn’t load, so the browser’s own voice is reading it.">🤖 backup voice</span>
+    <button class="ctl" id="narrSkip" type="button" hidden>Skip ⏭</button>
+  </section>
+
+  <section class="trays" aria-label="Cards: drag them onto Pip">
+    <div class="tray uhoh" id="trayUhoh"><h2>😬 Uh-oh <small>trouble cards</small></h2><div class="cards" id="cardsUhoh"></div></div>
+    <div class="tray tools" id="trayTools" hidden><h2>🌈 After the storm <small id="toolsTip"></small></h2><div class="cards" id="cardsTools"></div></div>
+    <div class="tray helper" id="trayHelp"><h2>💙 Helpers <small>help Pip feel better</small></h2><div class="cards" id="cardsHelp"></div></div>
+  </section>
+
+  <section class="graph-strip" aria-label="Pressure through the day"><svg id="graph" viewBox="0 0 1000 90" preserveAspectRatio="none"></svg></section>
+
+  <section class="grown" id="grown" hidden aria-label="Grown-Up View"></section>
+
+  <footer class="about">
+    <span>Version 1.4 (beta) · Launched <time datetime="2026-09-27">September 27, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="../../../feedback/?game=blow-up&amp;v=1.4">Share your thoughts</a> · <a href="../../../feedback/?game=blow-up&amp;v=1.4&amp;kind=bug">Report a bug</a> · <button class="linkish" id="tellBtn" type="button">Know someone who might like this? Tell a friend</button> <span id="tellStatus"></span></span>
+    <span>Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></span>
+    <span>These games don’t collect any information. Saved progress stays in your own browser.</span>
+  </footer>
+</div>
+<div class="modal" id="modal" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="ghost" id="ghost" hidden></div>
+<script src="content.js"></script>
+<script src="sim.js"></script>
+<script src="js/art.js"></script>
+<script src="js/core.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/scene.js"></script>
+<script src="js/meters.js"></script>
+<script src="js/cards.js"></script>
+<script src="js/events.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/grownup.js"></script>
+<script src="js/ending.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
