@@ -54,7 +54,7 @@ plain gain, resample-only pitch).
 
 ## Phase B: split index.html (zero behaviour change)
 
-**☐ B1. Mechanical split.**
+**☑ B1. Mechanical split.**
 Move code out of `index.html` without changing it:
 ```
 blow-up/

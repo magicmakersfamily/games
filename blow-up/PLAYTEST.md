@@ -3,8 +3,11 @@
 ## How to run it
 
 - **Play:** open `index.html` in a browser (or https://magicmakersfamily.github.io/games/blow-up/ once
-  published). No install, no build. It needs `content.js` and `sim.js` next to it, so serve the
-  folder (`python3 -m http.server`) rather than double-clicking if your browser blocks local scripts.
+  published). No install, no build. It needs `content.js`, `sim.js`, `css/game.css` and `js/*.js`
+  next to it, so serve the folder (`python3 -m http.server`) rather than double-clicking if your
+  browser blocks local scripts. Since PLAN B1, the game's own code that used to be inline in
+  `index.html` (drawing, sound, cards, modals, the loop) lives in `js/*.js`, loaded as plain
+  `<script src>` tags in the order the game needs them — see the file list in PLAN.md.
 - **Engine tests:** `node --test` in this folder (Node 18 or newer, nothing to install). Includes
   `tests/golden.test.js`, a snapshot of both day styles × every `balance.js` strategy × 5 seeds
   (end pressure, blow-ups, phase sequence, jars, skills, receipt). If it fails after a deliberate
