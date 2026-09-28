@@ -515,11 +515,11 @@
     saySupport: '{done}! Pip got to choose, so a marble goes in the My Choice jar.',
     sayControl: '{done}. But Pip didn’t get to choose. A marble fell out of the My Choice jar.',
     pick: 'Where should Pip go? The playground, or the field? Tap one.',
-    predict: 'Will Pip get calmer, or madder? Tap the calm face or the mad face.',
+    predict: 'Will the bucket get fuller, or emptier? Tap the fuller bucket or the emptier bucket.',
     bedtime: 'The day is over. Pip snuggles into bed. Goodnight, Pip.',
     bedtimeHigh: 'Sleep helps Pip’s body rest. Some big feelings might still be there tomorrow, and that’s okay. Pip will have help.',
     receipt: {
-      start: 'Here is the cost of Pip’s day.',
+      start: 'Here is Pip’s day.',
       blowups: ['Pip had no blow-ups at all.', 'Pip had one big blow-up.', 'Pip had two big blow-ups.', 'Pip had three big blow-ups.', 'Pip had four big blow-ups.', 'Pip had five big blow-ups.', 'Pip had lots of big blow-ups.'],
       fillers: 'The biggest bucket fillers were:', helpers: 'The best helpers were:',
       marbles: 'Pip earned {m} marbles.', marble1: 'Pip earned one marble.',
@@ -537,7 +537,7 @@
     misc: {
       back: 'I’m back! I’ll tell you what’s happening.', tapStart: 'Tap the big orange button to start.',
       continueDay: 'Tap to continue Pip’s day.',
-      bossyWay: 'The bossy way:', choosingWay: 'Or the choosing way:', guessRight: 'You guessed it!', guessWrong: 'Surprise! Not what you guessed.',
+      bossyWay: 'The bossy way:', choosingWay: 'Or the choosing way:', guessRight: 'You guessed it!', guessWrong: 'Let’s see what Pip’s body does.',
       hungry: 'Pip is hungry.', tired: 'Pip is tired.', sock: 'Something is bugging Pip’s foot…', asleep: 'Pip is fast asleep. Shhh.',
       worse: 'Oops! That made Pip feel worse.', wait: 'One at a time! Watch what happens.',
     },

@@ -206,6 +206,25 @@ async function main() {
   await waitFor(`window.BUDebug.loop().narrator === false`, { desc: 'narration off' });
   await screenshot('day-start');
 
+  // --- Step 2b: predict mode is on by default -- two bucket pictures, not a right/wrong test -----
+  // (PLAN C6). Verified once here with its own tap, then turned off via the real Settings toggle so
+  // the rest of this script's direct card taps behave the way they did before predict mode existed.
+  log('step 2b: predict mode (on by default)');
+  const uhohIdForPredict = await evalJS(`document.querySelector('#cardsUhoh .cardbtn').dataset.id`);
+  await click(`#cardsUhoh [data-id="${uhohIdForPredict}"]`);
+  await waitFor(`!!document.querySelector('#sheet [data-g]')`, { desc: 'the predict pop-up' });
+  if (!(await exists('#sheet svg'))) throw new Error('step 2b: predict pop-up has no bucket picture');
+  await screenshot('predict-buckets');
+  await click('#sheet [data-g="madder"]');
+  await waitFor(`document.getElementById('modal').hidden`, { desc: 'predict pop-up closed' });
+  await sleep(1200);
+  await click('#menuBtn');
+  await waitFor(`!!document.querySelector('[data-pref="predict"]')`, { desc: 'Settings' });
+  await click('[data-pref="predict"]');
+  await click('#sheet [data-close]');
+  await waitFor(`document.getElementById('modal').hidden`, { desc: 'Settings closed' });
+  log('  predict pop-up showed bucket pictures; turned off for the rest of this run');
+
   // --- Step 3: the first Say It Differently choice, reached by natural progression -------------
   log('step 3: first Say It Differently choice');
   let handledSay = false;

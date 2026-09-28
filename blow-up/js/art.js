@@ -237,6 +237,16 @@ function brainSVG() {
 }
 
 // --- Bucket, jars and graph --------------------------------------------------------------------
+// A small bucket icon at a given fullness (0-1), for predict mode's "fuller or emptier?" choice
+// (PLAN C6) -- a simplified cousin of the big bucket below, not tied to BK/the live pressure.
+function miniBucketSVG(pct, color) {
+  const h = 40, fillH = Math.round(h * Math.max(0, Math.min(1, pct)));
+  return `<svg viewBox="0 0 44 58" width="52" height="68" aria-hidden="true">
+    <rect x="2" y="10" width="40" height="${h}" rx="5" fill="#F5EFE6" stroke="#9A8791" stroke-width="2.5"/>
+    <rect x="2" y="${10 + h - fillH}" width="40" height="${fillH}" rx="${fillH < 8 ? 1 : 5}" fill="${color}"/>
+    <path d="M2 10 H42" stroke="#6B5560" stroke-width="3" stroke-linecap="round"/>
+  </svg>`;
+}
 const BK = { top: 22, bottom: 232, left: 34, right: 150, scale: 105 };
 function bucketFrame() {
   return `<defs><clipPath id="bclip"><path d="M${BK.left + 2} ${BK.top} H${BK.right - 2} L${BK.right - 14} ${BK.bottom} H${BK.left + 12}Z"/></clipPath>

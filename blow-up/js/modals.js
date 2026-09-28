@@ -152,8 +152,10 @@
 
   function askPredict(id, count) {
     const c = cardById[id];
+    // Two bucket pictures, not faces (PLAN C6): "will the bucket get fuller or emptier?" is the
+    // actual prediction the mechanic is teaching, and it reads without needing to read.
     openModal(`<div class="row">${hearBtn}<h2>${c.icon} ${esc(c.name)}: what will happen?</h2></div>
-      <div class="say-opts"><div class="say-opt support"><button class="choose" type="button" data-g="calmer"><span class="face">😌</span><span class="words">Calmer</span></button></div><div class="say-opt control"><button class="choose" type="button" data-g="madder"><span class="face">😠</span><span class="words">Madder</span></button></div></div>`);
+      <div class="say-opts"><div class="say-opt control"><button class="choose" type="button" data-g="madder"><span class="face">${miniBucketSVG(0.82, '#E0493E')}</span><span class="words">Fuller</span></button></div><div class="say-opt support"><button class="choose" type="button" data-g="calmer"><span class="face">${miniBucketSVG(0.2, '#5FB86A')}</span><span class="words">Emptier</span></button></div></div>`);
     modalHear = () => { say(plain(c.name) + '.', 'narr', { prio: 2 }); say(CT.NARR.predict, 'narr', { prio: 2 }); };
     modalHear();
     $('sheet').querySelectorAll('[data-g]').forEach(b => b.addEventListener('click', () => {

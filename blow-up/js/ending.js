@@ -54,7 +54,7 @@
   const sign = n => (n > 0 ? '+' : n < 0 ? '−' : '') + Math.abs(n);
   function receiptHTML(day) {
     const lines = day.lines.filter(l => l[1] !== 0).map(([label, d]) => `<div class="rl"><span>${esc(label)}</span><b>${sign(d)}</b></div>` + (label === 'Broken cookie' ? '<div class="rn">(the cookie was not the problem)</div>' : '')).join('');
-    return `<div class="receipt"><div class="rh">~~~~~~ COST OF THE DAY ~~~~~~</div><div class="rh">${esc(day.icon + ' ' + day.styleName)}</div><div class="rh" style="font-weight:400">${esc(day.when)}</div><hr>
+    return `<div class="receipt"><div class="rh">~~~~~~ PIP'S DAY ~~~~~~</div><div class="rh">${esc(day.icon + ' ' + day.styleName)}</div><div class="rh" style="font-weight:400">${esc(day.when)}</div><hr>
       ${lines}<hr>
       <div class="rl"><span>TOTAL PRESSURE</span><b>${sign(day.total)}</b></div>
       <div class="rl"><span>LEFT IN THE BUCKET</span><b>${day.end}</b></div>
@@ -66,7 +66,7 @@
       <hr><div class="rh" style="font-weight:400">Blowing up isn’t losing.<br>Learning why is winning.</div></div>`;
   }
   function showReceipt(day) {
-    openModal(`<div class="row">${hearBtn}<h2>🌙 Goodnight, Pip</h2></div><p>The day is done. Here’s what it cost.</p>${receiptHTML(day)}
+    openModal(`<div class="row">${hearBtn}<h2>🌙 Goodnight, Pip</h2></div><p>The day is done. Here’s the day log.</p>${receiptHTML(day)}
       <div class="row"><button class="go quiet" type="button" id="rPng">Save picture</button><button class="go quiet" type="button" id="rCompare">Compare days</button><button class="go quiet" type="button" id="rTell">Tell a friend</button><span id="rStatus" class="note"></span></div>
       <div class="row"><button class="go quiet" type="button" id="rAgain">Play another day</button></div>
       <div class="more"><h3>More from the Game Shelf</h3><p><a href="../aquarium/">James’s Nature Aquarium</a> · <a href="../mid-autumn/">Mid-Autumn Mayhem</a> · <a href="../">All games</a></p>
@@ -101,7 +101,7 @@
     x.fillStyle = '#2A2226'; x.textBaseline = 'top';
     const mono = s => `${s}px "Courier Prime", "Courier New", monospace`;
     const center = (t, y, size, bold) => { x.font = (bold ? 'bold ' : '') + mono(size); x.textAlign = 'center'; x.fillText(t, W / 2, y); };
-    center('~~~~~~ COST OF THE DAY ~~~~~~', 40, 22, true);
+    center("~~~~~~ PIP'S DAY ~~~~~~", 40, 22, true);
     center(day.styleName, 72, 18); center(day.when, 96, 15);
     let y = 130;
     const row = (l, r, bold) => { x.font = (bold ? 'bold ' : '') + mono(18); x.textAlign = 'left'; const dots = ' ' + '.'.repeat(60); x.fillText((l + dots).slice(0, 40), 64, y); x.textAlign = 'right'; x.fillText(r, W - 64, y); y += 30; };
@@ -117,7 +117,7 @@
       const c = receiptCanvas(day);
       const blob = await new Promise(r => c.toBlob(r, 'image/png'));
       const file = new File([blob], 'blow-up-receipt.png', { type: 'image/png' });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Blow Up', text: 'Our Cost of the Day in Blow Up ' + GAME_URL }); status.textContent = 'Shared!'; return; }
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Blow Up', text: 'Pip’s Day in Blow Up ' + GAME_URL }); status.textContent = 'Shared!'; return; }
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'blow-up-receipt.png'; document.body.appendChild(a); a.click(); a.remove();
       status.textContent = 'Saved as blow-up-receipt.png';
     } catch (e) { if (!(e && e.name === 'AbortError')) status.textContent = 'Couldn’t save the picture here.'; }

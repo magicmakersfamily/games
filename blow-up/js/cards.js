@@ -233,9 +233,11 @@
       }
     }
     if (guess) {
+      // A wrong guess isn't a failure (PLAN C6, KNOWN-BUGS B7): no red X, no "wrong" burst, and the
+      // Grown-Up View shows how many predictions were tried, not a right/wrong score.
       const right = (guess === 'calmer' && res.mood === 'calmer') || (guess === 'madder' && res.mood === 'madder');
       predictScore.total++; if (right) predictScore.right++; store.set('predict', predictScore);
-      setTimeout(() => burst(KID_X + 150, 120, [right ? '✅' : '❓'], 1, 0.2, { size: 36, grav: 0 }), 300);
+      setTimeout(() => burst(KID_X + 150, 120, [right ? '✅' : '👀'], 1, 0.2, { size: 36, grav: 0 }), 300);
       say(right ? CT.NARR.misc.guessRight : CT.NARR.misc.guessWrong, 'narr', { prio: 1 });
     }
     handleEvents();

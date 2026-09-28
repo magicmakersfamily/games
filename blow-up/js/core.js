@@ -14,7 +14,9 @@
     get(k, d) { try { const v = localStorage.getItem('blowup.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem('blowup.' + k, JSON.stringify(v)); } catch (e) { /* storage off: fine */ } },
   };
-  const prefs = Object.assign({ sound: true, narrator: true, captions: false, reduced: false, predict: false, speed: 1, style: 'rushed', voiceDetails: false }, store.get('prefs', {}));
+  // Predict mode on by default (PLAN C6, KNOWN-BUGS B7): one of the strongest learning moments,
+  // so it shouldn't need finding in Settings first.
+  const prefs = Object.assign({ sound: true, narrator: true, captions: false, reduced: false, predict: true, speed: 1, style: 'rushed', voiceDetails: false }, store.get('prefs', {}));
   const savePrefs = () => store.set('prefs', prefs);
   let skillsSaved = store.get('skills', {});
   const stickers = new Set(store.get('stickers', []));

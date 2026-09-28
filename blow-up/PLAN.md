@@ -187,10 +187,27 @@ settings have "Show voice details" on. Re-render voices.
   directly: hidden with the setting off even when a fallback fires, visible only with it on and a
   fallback, hidden again with it on but no fallback.
 
-**☐ C6. Small 1.4 polish.**
+**☑ C6. Small 1.4 polish.**
 Predict mode on by default, with the 😌/😠 faces replaced by two big bucket pictures (fuller /
 emptier). A wrong guess says "Let's see what Pip's body does." with no score. The receipt is renamed
 "Day log", "COST OF THE DAY" becomes "PIP'S DAY", and the narration lines are updated to match.
+- Done 2026-09-28. `prefs.predict` defaults true (`js/core.js`). `askPredict()`'s two options
+  (`js/modals.js`) are now `miniBucketSVG()` icons (new helper in `js/art.js`, a simplified cousin
+  of the main bucket) labelled Fuller/Emptier, not faces — this is what the mechanic is actually
+  teaching. A wrong guess plays the new neutral line, and its burst icon changed from ❓ to 👀 (no
+  "you got it wrong" marker); the Grown-Up View's "Predictions right x/y" became "Predictions
+  tried" (a count, not a score). Every "cost"/"COST OF THE DAY" string is gone — the receipt title
+  is now `PIP'S DAY`, the modal intro says "Here's the day log", and the share-sheet text, the
+  receipt-PNG heading and the opening narration line all match.
+  - Three narration lines changed content and were re-rendered (reused the cache for everything
+    else): the predict question (now bucket-worded), the wrong-guess line, and the receipt's
+    opening line. Read for double meanings; none found. I can't listen myself — samples were sent.
+  - Predict mode being on by default changes every card tap (it now opens a choice pop-up first),
+    which broke most of `tests/smoke.mjs`'s later steps (they assumed a tap plays a card
+    immediately). Added step 2b: verifies the bucket-picture pop-up once, right after the day
+    starts, then turns predict mode off through the real Settings toggle so the rest of the script
+    — which is about other things — keeps working the way it did before this change existed.
+  - 25/25 tests, 3/3 clean smoke runs.
 
 **☐ C7. Release 1.4.**
 Run everything, follow the shelf's release steps (version line, README table, feedback links,

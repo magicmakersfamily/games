@@ -64,14 +64,16 @@ Unconfirmed bugs must be reproduced before they are fixed.
   `tests/smoke.mjs` step 6b, which fails on the pre-C4 code.
 
 ## B6. The ending is a text receipt called "Cost of the Day"
-- **Status:** confirmed. It's unreadable for pre-readers, and the framing is accounting ("what it
-  cost"), not growth.
-- **Fix (P1, 2.0):** see DECISIONS D9. In 1.4 the receipt only gets renamed to "Day log" and loses the
-  word "cost".
+- **Status:** partly done in PLAN C6 (2026-09-28). The receipt is renamed "Day log", "COST OF THE
+  DAY" is now "PIP'S DAY", and every "cost" wording is gone (the modal intro, the PNG heading, the
+  share-sheet text, the opening narration line). It's still the same text-heavy list — still
+  unreadable for pre-readers, still not the three-panel child ending.
+- **Fix (P1, 2.0):** see DECISIONS D9 for the real fix (three spoken picture panels).
 
 ## B7. Predict mode is hidden in Settings
-- **Status:** confirmed (`prefs.predict`, off by default, toggle in ⚙︎). It's one of the strongest
-  learning moments.
-- **Fix:** 1.4 turns it on by default and swaps the 😌/😠 faces for fuller/emptier bucket pictures;
-  2.0 makes it part of the guided loop. A wrong guess is never a failure ("Let's see what Pip's body
-  does"). The "Predictions right x / y" score in the Grown-Up View becomes a count of discoveries.
+- **Status:** FIXED in PLAN C6 (2026-09-28, for 1.4). `prefs.predict` now defaults to true, and the
+  two options are bucket pictures (fuller/emptier), not faces — closer to what the mechanic
+  actually teaches. A wrong guess plays a neutral line ("Let's see what Pip's body does.") instead
+  of "Surprise! Not what you guessed.", and its burst changed from ❓ to 👀. The Grown-Up View's
+  "Predictions right x/y" is now "Predictions tried" (a count, not a score). 2.0 still makes it
+  part of the default guided loop rather than a per-card opt-in.

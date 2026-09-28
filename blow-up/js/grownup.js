@@ -18,7 +18,7 @@
         <span>Adrenaline (fast)</span><b>${v.adrenaline.toFixed(0)}</b><span>Cortisol (slow)</span><b>${v.cortisol.toFixed(0)}${v.cortisol > SIM.CONFIG.CORT_TALK ? ' · too soon to talk' : ''}</b>
         <span>Recovery floor</span><b>${v.floor.toFixed(1)}</b><span>Grown-up’s stress</span><b>${v.adult.toFixed(0)} ${v.wave === 'blue' ? '(calm waves)' : v.wave === 'red' ? '(stress waves)' : ''}</b>
         <span>Puppet strings</span><b>${v.strings}</b><span>Skills (breath · stomp)</span><b>L${S.skills.breathe.level} · L${S.skills.stomp.level}</b>
-        <span>Predictions right</span><b>${predictScore.right} / ${predictScore.total}</b></div>
+        <span>Predictions tried</span><b>${predictScore.total}</b></div>
         ${disc.length ? `<p class="note">Discovered: ${disc.join('; ')}.</p>` : '<p class="note">Pip has hidden preferences. Try things to discover them.</p>'}</div>
       <div class="card"><h3>What’s in the bucket</h3><div class="bars">${bars}</div>
         <p class="note">Threshold = 60 + 2 × My Choice + I Can Do It + Together = ${v.threshold}</p></div>
