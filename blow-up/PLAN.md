@@ -28,7 +28,7 @@ types, phase sequence, jar totals, receipt lines, skills xp), and compares it wi
 - Files: `tests/golden.test.js`, `tests/golden.json`. Nothing else changes.
 - Done when: `node --test` passes, and changing any number in `sim.js` `CONFIG` makes it fail.
 
-**☐ A2. Scripted browser playthrough (smoke test).**
+**☑ A2. Scripted browser playthrough (smoke test).**
 Add `tests/smoke.mjs`: a Node script with no dependencies (Node 26 has a built-in `WebSocket`). It
 starts `python3 -m http.server` and headless Chrome with a throwaway `--user-data-dir` and
 `--remote-debugging-port`, then drives the real page over CDP with real clicks

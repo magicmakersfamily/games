@@ -5,7 +5,25 @@
 - **Play:** open `index.html` in a browser (or https://magicmakersfamily.github.io/games/blow-up/ once
   published). No install, no build. It needs `content.js` and `sim.js` next to it, so serve the
   folder (`python3 -m http.server`) rather than double-clicking if your browser blocks local scripts.
-- **Engine tests:** `node --test` in this folder (Node 18 or newer, nothing to install).
+- **Engine tests:** `node --test` in this folder (Node 18 or newer, nothing to install). Includes
+  `tests/golden.test.js`, a snapshot of both day styles × every `balance.js` strategy × 5 seeds
+  (end pressure, blow-ups, phase sequence, jars, skills, receipt). If it fails after a deliberate
+  engine change, regenerate it and say why: `UPDATE_GOLDEN=1 node --test tests/golden.test.js`.
+- **Browser smoke test:** `node tests/smoke.mjs` (Node 22+, needs Google Chrome and `python3`; no
+  npm install). Drives the real page in headless Chrome over CDP with real mouse clicks: start →
+  pick the Rushed school day → the first Say It Differently choice → taps Uh-oh cards to a
+  blow-up → all five recovery stages → bedtime → the receipt → a saved day in `localStorage`.
+  Screenshots land in `tests/out/` (gitignored) even on failure. Fails on any JS console
+  error/exception. Takes 15–30 s. Add `DEBUG=1` to see each step and keep the browser/server logs.
+  - It uses the `#debug` hook (`window.BUDebug`, only present with `#debug` in the URL) to read
+    state (`state()`, returns the raw sim state) and skip quiet stretches (`ff(n)`, steps the
+    engine directly without the UI); `voice()` returns the narration-fallback counters, and
+    `loop()` exposes the frame loop's internal flags (`running`, `paused`, `narrHolding()`, …) for
+    debugging why the clock isn't advancing. None of it is reachable without `#debug`.
+  - Gotcha: a background browser tab gets `requestAnimationFrame` throttled by Chrome, which the
+    game's clock depends on — the script calls `Page.bringToFront` after connecting. A modal (like
+    the day picker) sits above the header, so clicks on header buttons (voice, speed) only land
+    once it's closed.
 - **Balance run:** `node balance.js` prints each day style × strategy × 8 seeds.
 - **Cover image:** open `index.html#cover`.
 

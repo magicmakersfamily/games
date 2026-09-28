@@ -2298,7 +2298,12 @@ function icebergSVG(feelings) {
 
   $('brain').innerHTML = brainSVG();
   // Test hook (only with #debug): fast-forward whole minutes through the real UI path.
-  if (location.hash === '#debug') window.BUDebug = { voice: () => VB.stats, state: () => S, ff(n) { for (let i = 0; i < n && S && !S.done && !S.pending; i++) { SIM.step(S); handleEvents(); } tick(true); return SIM.view(S).clock; } };
+  if (location.hash === '#debug') window.BUDebug = {
+    voice: () => VB.stats, state: () => S,
+    ff(n) { for (let i = 0; i < n && S && !S.done && !S.pending; i++) { SIM.step(S); handleEvents(); } tick(true); return SIM.view(S).clock; },
+    // Read-only, for tests/smoke.mjs to see why the frame loop isn't advancing.
+    loop: () => ({ running, paused, freezeUntil, now: performance.now(), narrHolding: narrHolding(), isModal: isModal(), narrator: prefs.narrator, unlocked: N.unlocked, qLen: N.q.length, cur: N.cur && { hold: N.cur.hold, text: N.cur.text } }),
+  };
   requestAnimationFrame(frame);
   if (COVER) coverState();
   else { newDay(prefs.style, 5); running = false; splash(); }
