@@ -209,10 +209,18 @@ emptier). A wrong guess says "Let's see what Pip's body does." with no score. Th
     — which is about other things — keeps working the way it did before this change existed.
   - 25/25 tests, 3/3 clean smoke runs.
 
-**☐ C7. Release 1.4.**
+**☑ C7. Release 1.4.**
 Run everything, follow the shelf's release steps (version line, README table, feedback links,
 `VERSION`), tag `blow-up-v1.4`, run `tools/freeze-version.sh blow-up 1.4 blow-up-v1.4`, add the row
 to `versions/index.html`, push, and verify the live site.
+- Done 2026-09-28. Version line bumped in four places (the shelf card, the game's footer and
+  feedback links, `VERSION` in `js/core.js`) plus the README table; launch date unchanged, per the
+  shelf's convention. Tagged `blow-up-v1.4`, frozen at `versions/blow-up/1.4/`, added to
+  `versions/index.html`. All 25 tests and a clean smoke run before every commit in this phase.
+  Verified the frozen copy actually works end to end (the smoke harness pointed at it, all steps
+  pass) — a first screenshot attempt looked broken, which turned out to be `python3 -m
+  http.server`'s 5-connection backlog, not a real bug; see the freeze commit. Live site confirmed
+  serving 1.4.
 
 ## Phase D: P1, the guided redesign, shipped as 2.0
 
