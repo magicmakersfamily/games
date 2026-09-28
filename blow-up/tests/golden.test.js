@@ -52,6 +52,7 @@ function runAndSummarize(styleId, strategyName, seed) {
     receipt: {
       total: r1(r.total), end: r1(r.end), blowups: r.blowups, marbles: r.marbles,
       skills: r.skills, practice: r.practice, cookie: r.cookie, sock: r.sock,
+      used: r.used, usedCount: r.usedCount,
       lines: r.lines.map(l => [l.label, r1(l.delta)]),
     },
   };

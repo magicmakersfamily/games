@@ -128,11 +128,15 @@
   }
 
   function breathingGuide(done) {
+    // "done" only means the pop-up closed. Closing early (Skip, the X, Escape) is not the same as
+    // finishing the breathing animation -- only a finish should count as practice (KNOWN-BUGS B4,
+    // DECISIONS D7). `completed` flips true in the one place that means "the animation finished".
+    let completed = false;
     openModal(`<div class="breath"><h2>Flower and candle</h2>
       <svg viewBox="0 0 320 160" aria-hidden="true"><g id="bFlower" style="transform-origin:90px 90px;transition:transform 1s"><circle cx="90" cy="70" r="16" fill="#F2C641"/>${[0, 72, 144, 216, 288].map(a => `<ellipse cx="90" cy="46" rx="11" ry="20" fill="#EC6FA8" transform="rotate(${a} 90 70)"/>`).join('')}<circle cx="90" cy="70" r="12" fill="#F2C641"/><path d="M90 90 V150" stroke="#5E9E4F" stroke-width="6"/></g>
       <g><rect x="214" y="80" width="30" height="70" rx="6" fill="#FFFFFF" stroke="#D0C2C8" stroke-width="3"/><path d="M229 80 v-10" stroke="#3A2A33" stroke-width="3"/><path id="bFlame" d="M229 44 q12 16 0 26 q-12 -10 0 -26z" fill="#F2A93B" style="transform-origin:229px 70px;transition:transform 3.5s ease-out"/></g></svg>
       <div class="bstep" id="bStep">Get ready…</div><p class="note">Two sniffs in through your nose, then one long blow out. Breathe along!</p>
-      <button class="go quiet" type="button" data-close>Skip</button></div>`, () => { clearTimeouts(); done(); });
+      <button class="go quiet" type="button" data-close>Skip</button></div>`, () => { clearTimeouts(); done(completed); });
     const B = CT.NARR.breath;
     const steps = [[400, B[0], 1.25, 1], [1500, B[1], 1.4, 1], [2600, B[2], 1, 0.15], [7000, B[0], 1.25, 1], [8100, B[1], 1.4, 1], [9200, B[2], 1, 0.15], [13600, B[3], 1, 1]];
     steps.forEach(([ms, text, fs, fl]) => timeouts.push(setTimeout(() => {
@@ -141,7 +145,7 @@
       $('bFlower').style.transform = `scale(${fs})`; $('bFlame').style.transform = `scale(${fl})`;
       if (fl < 1) SND.whoosh();
     }, ms)));
-    timeouts.push(setTimeout(() => { if (isModal() && $('bStep')) closeModal(); }, 15200));
+    timeouts.push(setTimeout(() => { completed = true; if (isModal() && $('bStep')) closeModal(); }, 15200));
   }
   let timeouts = [];
   function clearTimeouts() { timeouts.forEach(clearTimeout); timeouts = []; }
@@ -154,7 +158,7 @@
     modalHear();
     $('sheet').querySelectorAll('[data-g]').forEach(b => b.addEventListener('click', () => {
       const g = b.dataset.g; stopSpeech(); closeModal();
-      if (id === 'breathe') breathingGuide(() => launch(id, count || 1, g)); else launch(id, count || 1, g);
+      if (id === 'breathe') breathingGuide(completed => { if (completed) launch(id, count || 1, g); }); else launch(id, count || 1, g);
     }));
   }
 

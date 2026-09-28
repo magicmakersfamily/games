@@ -43,11 +43,13 @@ Unconfirmed bugs must be reproduced before they are fixed.
   "🤖 backup voice" tag from the child view (grown-up settings only).
 
 ## B4. Flower and candle during recovery shows "Skills practised: 0"
-- **Status:** confirmed; it's a design gap, not a crash. `sim.js` gives skill XP only during the normal
-  day in green/yellow (`if (c.skill && s.phase === 'day' && …)`). The receipt's "Skills practised"
-  counts only that XP (`practice` in `SIM.receipt`), so a completed Flower and candle while cooling
-  down counts for nothing, and nothing explains why.
-- **Fix (P0-C3):** see DECISIONS D7: track *used* and *practised* separately, and show both.
+- **Status:** FIXED in PLAN C3 (2026-09-28, for 1.4). It was a design gap, not a crash: `sim.js` only
+  ever gave skill XP during the normal day in green/yellow, and the receipt's single "Skills
+  practised" number showed only that, so a completed Flower and candle during recovery counted for
+  nothing and nothing explained why. Now `sim.js` tracks *used* (any completed skill-tool use, any
+  phase) alongside *practice* (calm-only, unchanged), and the receipt shows both: "Tools that
+  helped" and "Practised while calm". Guarded by two `sim.test.js` tests and `tests/smoke.mjs` step
+  5d (skipping the breathing guide counts as neither, which fails on the pre-fix code).
 
 ## B5. Pip falls asleep while still "Almost boiling"
 - **Status:** confirmed. Bedtime (`startBedtime()`) doesn't touch the meter, so it keeps its zone

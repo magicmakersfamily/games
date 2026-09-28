@@ -111,7 +111,7 @@
   }
   function start(id, count, guess) {
     if (prefs.predict && !guess) return askPredict(id, count);
-    if (id === 'breathe' && !guess) return breathingGuide(() => launch(id, count));
+    if (id === 'breathe' && !guess) return breathingGuide(completed => { if (completed) launch(id, count); });
     launch(id, count, guess);
   }
   function launch(id, count, guess) {

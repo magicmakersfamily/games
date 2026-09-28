@@ -124,7 +124,7 @@ return, show one big ▶ with the spoken line "Tap to continue Pip's day". No ca
     this build) and dispatches the real event, so it's exercising the actual listener. Fails on the
     pre-C2 code, passes on this code, 3/3 clean runs.
 
-**☐ C3. Tools used vs practised** (B4, DECISIONS D7).
+**☑ C3. Tools used vs practised** (B4, DECISIONS D7).
 In `sim.js`, record each completed calming tool with its phase and zone. `SIM.receipt` returns
 `used: {toolId: n}` next to `practice`. The receipt shows "Tools that helped" and "Practised while
 calm". Flower and candle counts only after the breathing guide finishes. If it's closed early, it
@@ -132,6 +132,24 @@ counts as neither.
 - Tests in `sim.test.js`: a completed breathe while cooling → `used.breathe === 1`, `practice`
   unchanged; breathe in green → both go up. Update `tests/golden.json` deliberately in the same
   commit and say why.
+  - Done 2026-09-28. `s.usedTool` (`sim.js`) increments on any completed skill-tool helper use (any
+    phase/zone), right next to the existing `gainXp` practice gate — the two are now tracked side
+    by side instead of practice being the only signal. `SIM.receipt` returns `used` (per-tool
+    counts) and `usedCount` (their sum). `js/ending.js`'s receipt shows both rows: "Tools that
+    helped" (`usedCount`) and "Practised while calm" (the old `practice` count, relabelled — it was
+    shown as "SKILLS PRACTISED" before, which is what made 0 read as a bug rather than "you didn't
+    practise while calm today").
+  - Flower and candle's "closed early counts as neither": `breathingGuide()` (`js/modals.js`) now
+    tracks whether its 15.2 s animation actually finished; `start()` (`cards.js`) and `askPredict()`
+    (`modals.js`) only call `launch()` — meaning `SIM.use()` is never called at all — when it did.
+    Skip, the ✕, and Escape all count as not finishing.
+  - `tests/golden.json` regenerated (`UPDATE_GOLDEN=1 node --test tests/golden.test.js`) after
+    adding `used`/`usedCount` to the snapshot; diffed old vs new first to confirm every other field
+    (pressure, blow-ups, phases, jars, existing receipt fields) was unchanged — only the two new
+    fields appeared.
+  - `tests/smoke.mjs` step 5d taps breathe, waits for the guide, clicks Skip, and checks neither
+    `usedTool.breathe` nor `skills.breathe.xp` moved. Fails on the pre-C3 code (crashes reading
+    `usedTool`, which didn't exist yet), passes on this code.
 
 **☐ C4. Bedtime settles the bucket** (B5, D8).
 During bedtime, animate the meter down toward an overnight level over the lullaby and show

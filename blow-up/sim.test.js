@@ -155,6 +155,29 @@ test('a skill reaches level 3 after calm practice, then kicks in by itself on en
   assert.equal(next.skills.breathe.level, 3);
 });
 
+test('a skill tool used during recovery counts as used but not as practice (KNOWN-BUGS B4)', () => {
+  const s = fresh();
+  s.phase = 'cooling';
+  S.use(s, 'breathe');
+  assert.equal(s.usedTool.breathe, 1);
+  assert.equal(Object.keys(s.xpToday).length, 0);
+  assert.equal(s.skills.breathe.xp, 0);
+  const r = S.receipt(s);
+  assert.equal(r.used.breathe, 1);
+  assert.equal(r.practice, 0);
+});
+
+test('a skill tool used while calm counts as both used and practice', () => {
+  const s = fresh();
+  setPressure(s, 0.3);
+  S.use(s, 'breathe');
+  assert.equal(s.usedTool.breathe, 1);
+  assert.equal(s.skills.breathe.xp, 1);
+  const r = S.receipt(s);
+  assert.equal(r.used.breathe, 1);
+  assert.equal(r.practice, 1);
+});
+
 test('Say It Differently: same outcome, different jars and load', () => {
   const mk = () => { const s = fresh(); s.pending = { kind: 'say', id: 'shoes', def: 'control' }; return s; };
   const a = mk(), b = mk();

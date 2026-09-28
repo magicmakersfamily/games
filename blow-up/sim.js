@@ -88,7 +88,7 @@
       adult: style.adultStart || 35, wave: null,
       phase: 'day', phaseClock: 0, named: false, repaired: false, praised: false,
       blowups: [], bounced: 0, dogQuiet: 0,
-      skills, selfCooldown: 0, xpToday: {},
+      skills, selfCooldown: 0, xpToday: {}, usedTool: {},
       flatClock: 0, flat: false, zone: 'green', seenRed: false,
       chaosLast: -999, lastStraw: null, recent: {},
       tally: {},                     // label → { delta, src, type, n }
@@ -329,8 +329,13 @@
     if (c.practice && (s.phase === 'learn' || s.phase === 'repair')) { s.praised = true; const k = s.skills.breathe.xp <= s.skills.stomp.xp ? 'breathe' : 'stomp'; gainXp(s, k); }
     // Jar marbles only when the helper really helped.
     if (c.jar && (c.praise !== 'specific' || s.phase === 'learn')) jars(s, c.jar, c.marble);
-    // Practising a skill while calm builds it.
-    if (c.skill && s.phase === 'day' && (z0 === 'green' || z0 === 'yellow')) gainXp(s, c.skill);
+    // Practising a skill while calm builds it. Any completed use counts as "used", in any phase
+    // or zone -- a skill tool used to help during recovery still counts as helping (DECISIONS D7),
+    // it just doesn't build the skill the way using it while calm does.
+    if (c.skill) {
+      s.usedTool[c.skill] = (s.usedTool[c.skill] || 0) + 1;
+      if (s.phase === 'day' && (z0 === 'green' || z0 === 'yellow')) gainXp(s, c.skill);
+    }
     res.thought = c.say;
     logEvent(s, { kind: 'helper', id: c.id, label: c.name, d: r1(d) });
   }
@@ -602,6 +607,7 @@
       equation: { load: loadSum, recovery: neg('rest'), skills: neg('skill'), support: neg('support'), total },
       blowups: s.blowups.length, marbles: s.marblesEarned,
       skills: Object.keys(s.xpToday).length, practice: Object.values(s.xpToday).reduce((a, b) => a + b, 0),
+      used: Object.assign({}, s.usedTool), usedCount: Object.values(s.usedTool).reduce((a, b) => a + b, 0),
       peak: s.peak, cookie: s.blowups.some(b => b.lastStraw && b.lastStraw.id === 'cookie'),
       sock: s.log.some(e => e.kind === 'reveal' && e.id === 'sock'),
       style: s.styleId, seed: s.seed,

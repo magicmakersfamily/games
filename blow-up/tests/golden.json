@@ -72,6 +72,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Surprise fire drill!",
@@ -179,6 +181,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Surprise fire drill!",
@@ -286,6 +290,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Lost a game",
@@ -393,6 +399,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Surprise fire drill!",
@@ -500,6 +508,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Surprise fire drill!",
@@ -576,6 +586,10 @@
       "practice": 9,
       "cookie": false,
       "sock": false,
+      "used": {
+        "breathe": 9
+      },
+      "usedCount": 9,
       "lines": [
         [
           "Snack",
@@ -652,6 +666,10 @@
       "practice": 9,
       "cookie": false,
       "sock": false,
+      "used": {
+        "breathe": 9
+      },
+      "usedCount": 9,
       "lines": [
         [
           "Snack",
@@ -728,6 +746,10 @@
       "practice": 9,
       "cookie": false,
       "sock": false,
+      "used": {
+        "breathe": 9
+      },
+      "usedCount": 9,
       "lines": [
         [
           "Snack",
@@ -804,6 +826,10 @@
       "practice": 9,
       "cookie": false,
       "sock": false,
+      "used": {
+        "breathe": 9
+      },
+      "usedCount": 9,
       "lines": [
         [
           "Snack",
@@ -880,6 +906,10 @@
       "practice": 9,
       "cookie": false,
       "sock": false,
+      "used": {
+        "breathe": 9
+      },
+      "usedCount": 9,
       "lines": [
         [
           "Snack",
@@ -1029,6 +1059,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Silly voice (backfired)",
@@ -1178,6 +1210,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Silly voice (backfired)",
@@ -1327,6 +1361,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Silly voice (backfired)",
@@ -1476,6 +1512,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Consequence (backfired)",
@@ -1625,6 +1663,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Silly voice (backfired)",
@@ -1701,6 +1741,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Toy taken",
@@ -1777,6 +1819,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Toy taken",
@@ -1853,6 +1897,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Toy taken",
@@ -1929,6 +1975,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Toy taken",
@@ -2005,6 +2053,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Toy taken",
@@ -2081,6 +2131,10 @@
       "practice": 9,
       "cookie": false,
       "sock": false,
+      "used": {
+        "breathe": 9
+      },
+      "usedCount": 9,
       "lines": [
         [
           "Snack",
@@ -2157,6 +2211,10 @@
       "practice": 9,
       "cookie": false,
       "sock": false,
+      "used": {
+        "breathe": 9
+      },
+      "usedCount": 9,
       "lines": [
         [
           "Toy taken",
@@ -2233,6 +2291,10 @@
       "practice": 9,
       "cookie": false,
       "sock": false,
+      "used": {
+        "breathe": 9
+      },
+      "usedCount": 9,
       "lines": [
         [
           "Snack",
@@ -2309,6 +2371,10 @@
       "practice": 9,
       "cookie": false,
       "sock": false,
+      "used": {
+        "breathe": 9
+      },
+      "usedCount": 9,
       "lines": [
         [
           "Toy taken",
@@ -2385,6 +2451,10 @@
       "practice": 9,
       "cookie": false,
       "sock": false,
+      "used": {
+        "breathe": 9
+      },
+      "usedCount": 9,
       "lines": [
         [
           "Snack",
@@ -2490,6 +2560,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Long lecture",
@@ -2595,6 +2667,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Long lecture",
@@ -2700,6 +2774,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "“Calm down!”",
@@ -2805,6 +2881,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Long lecture",
@@ -2910,6 +2988,8 @@
       "practice": 0,
       "cookie": false,
       "sock": false,
+      "used": {},
+      "usedCount": 0,
       "lines": [
         [
           "Long lecture",

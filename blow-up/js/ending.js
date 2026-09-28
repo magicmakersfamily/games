@@ -23,7 +23,7 @@
       style: S.styleId, styleName: S.style.name, icon: S.style.icon,
       graph: S.graph.filter(g => g[0] % 5 === 0).map(g => [g[0], Math.round(g[1] / g[2] * 100) / 100]),
       lines: r.lines.map(l => [l.label, Math.round(l.delta)]), total: Math.round(r.total), end: Math.round(r.end),
-      blowups: r.blowups, marbles: r.marbles, skills: r.practice, cookie: r.cookie, sock: r.sock,
+      blowups: r.blowups, marbles: r.marbles, skills: r.practice, usedCount: r.usedCount, cookie: r.cookie, sock: r.sock,
     };
     const days = store.get('days', []); days.unshift(day); store.set('days', days.slice(0, 12));
     return day;
@@ -37,7 +37,8 @@
       <div class="rl"><span>LEFT IN THE BUCKET</span><b>${day.end}</b></div>
       <div class="rl"><span>BLOW-UPS</span><b>${day.blowups}</b></div>
       <div class="rl"><span>MARBLES EARNED</span><b>${day.marbles}</b></div>
-      <div class="rl"><span>SKILLS PRACTISED</span><b>${day.skills}</b></div>
+      <div class="rl"><span>TOOLS THAT HELPED</span><b>${day.usedCount}</b></div>
+      <div class="rl"><span>PRACTISED WHILE CALM</span><b>${day.skills}</b></div>
       ${day.cookie ? '<div class="rn">It wasn’t really about the cookie.</div>' : ''}${day.sock ? '<div class="rn">The itchy sock was found!</div>' : ''}
       <hr><div class="rh" style="font-weight:400">Blowing up isn’t losing.<br>Learning why is winning.</div></div>`;
   }
@@ -83,7 +84,7 @@
     const row = (l, r, bold) => { x.font = (bold ? 'bold ' : '') + mono(18); x.textAlign = 'left'; const dots = ' ' + '.'.repeat(60); x.fillText((l + dots).slice(0, 40), 64, y); x.textAlign = 'right'; x.fillText(r, W - 64, y); y += 30; };
     for (const [l, d] of lines) row(l, sign(d));
     y += 6; x.fillText('', 0, 0);
-    row('TOTAL PRESSURE', sign(day.total), true); row('BLOW-UPS', String(day.blowups), true); row('MARBLES EARNED', String(day.marbles), true); row('SKILLS PRACTISED', String(day.skills), true);
+    row('TOTAL PRESSURE', sign(day.total), true); row('BLOW-UPS', String(day.blowups), true); row('MARBLES EARNED', String(day.marbles), true); row('TOOLS THAT HELPED', String(day.usedCount), true); row('PRACTISED WHILE CALM', String(day.skills), true);
     if (day.cookie) { center('It wasn’t really about the cookie.', y, 15); y += 30; }
     center('Blow Up · The Game Shelf', H - 50, 14);
     return c;

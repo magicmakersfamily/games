@@ -309,6 +309,21 @@ async function main() {
   await waitFor(`document.getElementById('modal').hidden && window.BUDebug.loop().phase === 'PLAY'`, { desc: 'back to PLAY' });
   log('  clock stayed put while hidden; resumed only after the tap');
 
+  // --- Step 5d: skipping Flower and candle counts as neither used nor practised (PLAN C3) --------
+  log('step 5d: skipped breathing counts as neither');
+  const beforeUsed = await evalJS(`window.BUDebug.state().usedTool.breathe || 0`);
+  const beforeXp = await evalJS(`window.BUDebug.state().skills.breathe.xp`);
+  await click(`.cardbtn[data-id="breathe"]`);
+  await waitFor(`!!document.getElementById('bStep')`, { desc: 'the breathing guide' });
+  await click('.breath [data-close]');                        // the Skip button, not the auto X close
+  await waitFor(`document.getElementById('modal').hidden`, { desc: 'breathing guide closed' });
+  await sleep(300);
+  const afterUsed = await evalJS(`window.BUDebug.state().usedTool.breathe || 0`);
+  const afterXp = await evalJS(`window.BUDebug.state().skills.breathe.xp`);
+  if (afterUsed !== beforeUsed) throw new Error(`step 5d: skipping still counted as used (${beforeUsed} -> ${afterUsed})`);
+  if (afterXp !== beforeXp) throw new Error(`step 5d: skipping still counted as practice (${beforeXp} -> ${afterXp})`);
+  log('  skipped breathing changed neither used nor practice counts');
+
   // --- Step 6: cruise to bedtime -----------------------------------------------------------------
   log('step 6: cruising to bedtime');
   let atBedtime = false;
