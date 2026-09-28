@@ -163,6 +163,8 @@
     openModal(`<h2>⚙︎ Settings</h2>
       <div class="row">${tg('captions', 'CC Sound captions', prefs.captions)}${tg('reduced', '🐢 Less motion', prefs.reduced)}${tg('predict', '🔮 Predict mode', prefs.predict)}</div>
       <p class="note">Predict mode: before each card, guess “calmer” or “madder”.</p>
+      <div class="row">${tg('voiceDetails', '🤖 Show voice details', prefs.voiceDetails)}</div>
+      <p class="note">For grown-ups: shows "🤖 backup voice" on screen if a recorded line can't load and the browser reads it instead.</p>
       <div class="row"><button class="go quiet" type="button" id="mVoices">🔊 Test the voices</button><span class="note" id="mVoiceStatus">${esc(voiceStatusText())}</span></div>
       <div class="row"><button class="go quiet" type="button" id="mCompare">Compare saved days</button><button class="go quiet" type="button" id="mNew">Start a new day</button><button class="go quiet" type="button" id="mSkills">Reset skills</button></div>
       <p class="note">${CT.STR.disclaimer}</p>`);

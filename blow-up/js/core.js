@@ -14,7 +14,7 @@
     get(k, d) { try { const v = localStorage.getItem('blowup.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem('blowup.' + k, JSON.stringify(v)); } catch (e) { /* storage off: fine */ } },
   };
-  const prefs = Object.assign({ sound: true, narrator: true, captions: false, reduced: false, predict: false, speed: 1, style: 'rushed' }, store.get('prefs', {}));
+  const prefs = Object.assign({ sound: true, narrator: true, captions: false, reduced: false, predict: false, speed: 1, style: 'rushed', voiceDetails: false }, store.get('prefs', {}));
   const savePrefs = () => store.set('prefs', prefs);
   let skillsSaved = store.get('skills', {});
   const stickers = new Set(store.get('stickers', []));

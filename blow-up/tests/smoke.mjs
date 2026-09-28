@@ -352,6 +352,11 @@ async function main() {
 
   const voiceStats = await evalJS(`window.BUDebug.voice()`);
   log('  voice stats:', JSON.stringify(voiceStats));
+  if (voiceStats.missing && voiceStats.missing.length) {
+    log('LINES WITH NO RECORDED CLIP (KNOWN-BUGS B3/PLAN C5):');
+    for (const m of voiceStats.missing) log(' ', m);
+    throw new Error(voiceStats.missing.length + ' narration line(s) played during this run with no recorded clip');
+  }
 
   if (consoleErrors.length) {
     log('CONSOLE ERRORS SEEN DURING THE RUN:');

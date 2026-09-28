@@ -24,7 +24,8 @@
   continue" button is shown, then taps it (KNOWN-BUGS B1; it fails on pre-C2 code). Step 5d taps
   Flower and candle then clicks Skip, and checks neither the used nor the practised count moved
   (KNOWN-BUGS B4; it fails on pre-C3 code). Step 6b waits for the meter to say "Sleeping" right
-  after the day ends (KNOWN-BUGS B5; it fails on pre-C4 code).
+  after the day ends (KNOWN-BUGS B5; it fails on pre-C4 code). The run also fails if any line
+  played during it has no recorded clip (`BUDebug.voice().missing`; KNOWN-BUGS B3).
   - It uses the `#debug` hook (`window.BUDebug`, only present with `#debug` in the URL) to read
     state (`state()`, returns the raw sim state) and skip quiet stretches (`ff(n)`, steps the
     engine directly without the UI); `voice()` returns the narration-fallback counters, and

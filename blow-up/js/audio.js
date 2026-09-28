@@ -220,7 +220,10 @@
     } catch (e) { next(); }
   }
   // A small tag for grown-ups whenever the backup (browser) voice is used instead of a recording.
-  function robotTag(on) { const t = $('robotTag'); if (t) t.hidden = !on; }
+  // Shown only when a grown-up has turned on "Show voice details" (Settings) -- a child hearing the
+  // backup voice doesn't need "🤖 backup voice" on screen to know something sounds different
+  // (KNOWN-BUGS B3, DECISIONS: audit findings shouldn't be child-facing UI).
+  function robotTag(on) { const t = $('robotTag'); if (t) t.hidden = !(on && prefs.voiceDetails); }
   function voiceStatusText() {
     const st = VB.stats;
     if (!AU.ctx) return 'Voices start after the first tap.';

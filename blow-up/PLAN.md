@@ -170,10 +170,22 @@ will have help." Read it aloud for double meanings.
   - `tests/smoke.mjs` step 6b waits for the pill to say "Sleeping" right after the day ends. Fails
     on the pre-C4 code, passes on this code.
 
-**☐ C5. Narration audit** (B3).
+**☑ C5. Narration audit** (B3).
 Reproduce B3 with `BUDebug.voice().missing` and add the missing lines to `tools/voice-lines.js`. The
 smoke run fails if `missing` is not empty. The "🤖 backup voice" tag shows only when grown-up
 settings have "Show voice details" on. Re-render voices.
+- Done 2026-09-28. B3 turned out not to be reproducible as "missing recording": a scripted sweep of
+  every card × every phase × tap counts 1–3 (164 clips played, narrator unlocked, queue drained
+  between batches) came back `fallback: 0, missing: []`, matching `tests/voice.test.js`. Nothing was
+  added to `tools/voice-lines.js` since there was nothing missing to add — see KNOWN-BUGS B3 for
+  what's left if the fallback tag is ever seen again (the network, or a bad clip, not the
+  recordings).
+- `tests/smoke.mjs` now fails the run if a real playthrough's `BUDebug.voice().missing` is
+  non-empty (it was only logged before), so this stays checked going forward.
+- The "🤖 backup voice" tag (`robotTag()`, `js/audio.js`) now only shows when `prefs.voiceDetails`
+  is on — a new Settings toggle ("🤖 Show voice details", off by default; `js/ending.js`). Verified
+  directly: hidden with the setting off even when a fallback fires, visible only with it on and a
+  fallback, hidden again with it on but no fallback.
 
 **☐ C6. Small 1.4 polish.**
 Predict mode on by default, with the 😌/😠 faces replaced by two big bucket pictures (fuller /

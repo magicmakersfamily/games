@@ -26,19 +26,23 @@ Unconfirmed bugs must be reproduced before they are fixed.
   machine and event queue.
 
 ## B3. Some lines fall back to the browser voice ("Hug", "Calm corner")
-- **Status:** partly ruled out. `tests/voice.test.js` (added in PLAN A3) regenerates
-  `tools/lines.json` from the current `content.js`/`sim.js`/`balance.js` and checks every line
-  against the committed `voice/manifest.json` — it passes clean on 1.3, so no line reachable from
-  Hug or Calm corner is missing a recording. That leaves two other explanations: the 12-second
-  "still loading" fallback (a slow connection, or many banks loading at once), or a data problem in
-  the audio bank itself (a corrupt/silent clip that `clipFor` finds but that fails to decode or
-  play, which would show as `robotTag(true)` too but wouldn't show up as "missing").
-- **Reproduce:** play with `#debug` in the URL, use Hug and Calm corner in different zones and
-  phases, then read `BUDebug.voice().missing` (a list of `speaker: text` for every line with no
-  recording — expect it to stay empty) and `.fallback` (count of lines that used the backup voice
-  for any reason, including a decode failure). If `missing` is empty but `fallback` isn't zero,
-  it's the loading-timeout or a bad clip, not a missing recording — check the browser's network
-  panel for a failed/slow `voice/*.mp3` fetch, or try decoding each `adult-*.mp3` clip standalone.
+- **Status:** the "missing recording" hypothesis is ruled out, thoroughly, as of PLAN C5
+  (2026-09-28). Beyond `tests/voice.test.js` passing clean, a scripted sweep drove every UHOH,
+  HELPER and TOOL card (including Hug and Calm corner) through every phase (day, eruption, cooling,
+  reconnect, repair, learn) at tap counts 1–3, with the narrator unlocked and the voice queue
+  drained after each batch: 164 clips played, `fallback: 0`, `missing: []`. `tests/smoke.mjs` now
+  also fails the run if a real playthrough's `BUDebug.voice().missing` is non-empty, so this is
+  checked on every future change too, not just today's sweep.
+- **What's left, if it's ever seen again:** not a missing recording. Two explanations remain: the
+  12-second "still loading" fallback (a slow connection, or many banks loading at once — transient,
+  resolves once the fetch finishes), or a bad clip that `clipFor` finds but that fails to decode or
+  play. Reproduce with `#debug` in the URL and read `BUDebug.voice()`: `missing` lists lines with no
+  clip at all; `fallback` counts every backup-voice use, including a decode failure, so
+  `fallback > 0` with `missing` empty points at the network or a corrupt clip, not the recordings.
+- **Fixed regardless:** the "🤖 backup voice" tag was visible to the child on every fallback,
+  whatever the cause. It now only shows when a grown-up has turned on Settings → "Show voice
+  details" (`prefs.voiceDetails`, off by default) — a child hearing a slightly different voice
+  doesn't need that explained on screen mid-story.
 - **Fix (P0-C5):** add the missing lines to `tools/voice-lines.js`, add the voice audit, and hide the
   "🤖 backup voice" tag from the child view (grown-up settings only).
 
