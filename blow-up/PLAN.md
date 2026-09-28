@@ -84,7 +84,7 @@ then art, then one section at a time) and run A1 + A2 after each one.
 
 ## Phase C: P0 fixes, shipped as 1.4 (still the simulator)
 
-**☐ C1. One game phase at a time + event queue** (KNOWN-BUGS B2). *Hardest task: use Opus, or Sonnet
+**☑ C1. One game phase at a time + event queue** (KNOWN-BUGS B2). *Hardest task: use Opus, or Sonnet
 at high effort.*
 Add a single `phase` variable in `main.js`: `PLAY`, `MODAL`, `STORY` (the storyteller holding the
 clock), `BLOWUP`, `BEDTIME`, `AWAY`, `PAUSED`. Transitions go through one function. The clock
@@ -97,6 +97,14 @@ tap gets instant feedback (the existing pop/queued outline).
 - Done when: the smoke run passes, including the new step. The existing flags (`paused`,
   `isModal()`, `freezeUntil`, `narrHolding()`) are expressed through `phase` or documented as feeding
   into it.
+
+  - Done 2026-09-28. `phase` + `setPhase()` + `clockPhase(now)` live at the top of `js/main.js`
+    (with a comment mapping every old flag). `paused` is gone (it's the PAUSED phase); pop-ups set
+    MODAL through `openModal`/`closeModal` in `js/modals.js`, and self-opening ones wait via
+    `whenModalFree()`. BLOWUP (`freezeUntil`) and STORY (`narrHolding()`) are computed each frame,
+    not stored, because they end on their own. `running` still means "a day is loaded" (false on the
+    splash/day picker). The card fix is `cardsFree()`/`playWaitingCard()` in `js/cards.js`. C2 only
+    needs to `setPhase('AWAY')` on hide and back on the Continue tap.
 
 **☐ C2. Pause when away** (B1).
 On `visibilitychange` → hidden, or window `blur` for more than 2 s: enter `AWAY` and stop speech. On

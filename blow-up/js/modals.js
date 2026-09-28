@@ -2,14 +2,29 @@
   // ============================================================================================
   // MODALS
   // ============================================================================================
-  let modalOnClose = null;
+  // One pop-up on screen at a time. The first one puts the game in MODAL and remembers what it
+  // interrupted; closing the last one goes back to that. A pop-up opened from inside another (the
+  // receipt's "Compare days", the menu's "Start a new day") replaces it on purpose. The bedtime
+  // receipt opens on a timer, so it goes through whenModalFree() and waits its turn instead of
+  // replacing whatever the child is looking at. Engine choices (Say It Differently) open only when
+  // the phase is PLAY (main.js), so they never land on top of another pop-up.
+  let modalOnClose = null, modalSeq = 0, phaseBeforeModal = 'PLAY';
+  const modalWaiting = [];
   const isModal = () => !$('modal').hidden;
   function openModal(html, onClose, opts) {
+    if (!isModal()) { phaseBeforeModal = phase; setPhase('MODAL'); }
+    modalSeq++;
     $('sheet').innerHTML = (opts && opts.noClose ? '' : '<button class="x" type="button" data-close aria-label="Close">✕</button>') + html;
     $('modal').hidden = false; modalOnClose = onClose || null; modalHear = null;
     const f = $('sheet').querySelector('.go, button:not(.x)'); if (f) try { f.focus({ preventScroll: true }); } catch (e) { /* ignore */ }
   }
-  function closeModal() { $('modal').hidden = true; $('sheet').innerHTML = ''; const f = modalOnClose; modalOnClose = null; if (f) f(); }
+  function closeModal() {
+    $('modal').hidden = true; $('sheet').innerHTML = ''; const f = modalOnClose; modalOnClose = null;
+    setPhase(phaseBeforeModal);
+    if (f) f();                                            // may open the next pop-up itself (predict → breathing)
+    if (!isModal() && modalWaiting.length) modalWaiting.shift()();
+  }
+  function whenModalFree(open) { if (isModal()) modalWaiting.push(open); else open(); }
   $('modal').addEventListener('click', e => { if (e.target.closest('[data-close]')) closeModal(); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && isModal() && $('sheet').querySelector('[data-close]')) closeModal();
@@ -59,7 +74,8 @@
           <p style="font-size:20px">${good ? '✋ My Choice jar: <b>+1 marble</b> 🟠' : '✋ My Choice jar: <b>−1 marble</b>' + (strings ? ' · a puppet string appears 🪢' : '')}</p></div>`;
         modalHear = null;
         good ? SND.chime() : SND.marbleLost();
-        setTimeout(() => { if (isModal()) closeModal(); handleEvents(); tick(true); }, COVER ? 0 : 2200);
+        const mine = modalSeq;                             // close this pop-up only, never one that replaced it
+        setTimeout(() => { if (modalSeq === mine && isModal()) closeModal(); handleEvents(); tick(true); }, COVER ? 0 : 2200);
       });
     }
   }
@@ -112,12 +128,11 @@
   }
 
   function breathingGuide(done) {
-    const was = paused; paused = true;
     openModal(`<div class="breath"><h2>Flower and candle</h2>
       <svg viewBox="0 0 320 160" aria-hidden="true"><g id="bFlower" style="transform-origin:90px 90px;transition:transform 1s"><circle cx="90" cy="70" r="16" fill="#F2C641"/>${[0, 72, 144, 216, 288].map(a => `<ellipse cx="90" cy="46" rx="11" ry="20" fill="#EC6FA8" transform="rotate(${a} 90 70)"/>`).join('')}<circle cx="90" cy="70" r="12" fill="#F2C641"/><path d="M90 90 V150" stroke="#5E9E4F" stroke-width="6"/></g>
       <g><rect x="214" y="80" width="30" height="70" rx="6" fill="#FFFFFF" stroke="#D0C2C8" stroke-width="3"/><path d="M229 80 v-10" stroke="#3A2A33" stroke-width="3"/><path id="bFlame" d="M229 44 q12 16 0 26 q-12 -10 0 -26z" fill="#F2A93B" style="transform-origin:229px 70px;transition:transform 3.5s ease-out"/></g></svg>
       <div class="bstep" id="bStep">Get ready…</div><p class="note">Two sniffs in through your nose, then one long blow out. Breathe along!</p>
-      <button class="go quiet" type="button" data-close>Skip</button></div>`, () => { paused = was; clearTimeouts(); done(); });
+      <button class="go quiet" type="button" data-close>Skip</button></div>`, () => { clearTimeouts(); done(); });
     const B = CT.NARR.breath;
     const steps = [[400, B[0], 1.25, 1], [1500, B[1], 1.4, 1], [2600, B[2], 1, 0.15], [7000, B[0], 1.25, 1], [8100, B[1], 1.4, 1], [9200, B[2], 1, 0.15], [13600, B[3], 1, 1]];
     steps.forEach(([ms, text, fs, fl]) => timeouts.push(setTimeout(() => {
@@ -145,7 +160,6 @@
 
   function scienceCard(key) {
     const sc = CT.SCIENCE[key];
-    const was = paused; paused = true;
-    openModal(`<h2>🥒 ${esc(sc.title)}</h2><p style="font-size:19px;font-family:var(--display);font-weight:700">${esc(sc.kid)}</p><p>${esc(sc.adult)}</p><p class="note">Source: ${esc(sc.source)}</p><p class="note">${CT.STR.disclaimer}</p>`, () => { paused = was; });
+    openModal(`<h2>🥒 ${esc(sc.title)}</h2><p style="font-size:19px;font-family:var(--display);font-weight:700">${esc(sc.kid)}</p><p>${esc(sc.adult)}</p><p class="note">Source: ${esc(sc.source)}</p><p class="note">${CT.STR.disclaimer}</p>`);
   }
 

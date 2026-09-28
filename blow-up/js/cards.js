@@ -69,20 +69,33 @@
 
   // --- One card at a time -------------------------------------------------------------------------
   // A tapped card flies to Pip. More taps on the same card while it flies add up to one bigger
-  // (but diminishing) go: "×3". A different card waits its turn; beyond that, taps just wiggle.
+  // (but diminishing) go: "×3". A different card waits its turn (dashed outline), also when a
+  // choice is about to pop up or is open: it plays once that's done, never silently dropped
+  // (KNOWN-BUGS B2). Beyond one waiting card, taps just wiggle.
   const ACT = { cur: null, next: null };
   const cardEl = id => document.querySelector(`.cardbtn[data-id="${id}"]`);
   function tryUse(id) {
-    if (!S || S.done || S.pending || isModal()) return;
+    if (!S || S.done) return;
     audioInit(); voiceInit(); N.unlocked = true;
     if (ACT.cur && ACT.cur.id === id && !ACT.cur.landed) return bump(ACT.cur);
     if (ACT.next && ACT.next.id === id) return bump(ACT.next);
-    if (ACT.cur) {
+    if (ACT.cur || ACT.next || !cardsFree()) {
       if (!ACT.next) { ACT.next = { id, count: 1 }; const b = cardEl(id); if (b) b.classList.add('queued'); }
       else nope(id);
       return;
     }
     start(id, 1);
+  }
+  // Nothing in the way of a card playing right now (a card in the air is handled by ACT.cur).
+  const cardsFree = () => !!(S && running && !S.done && !S.pending && !isModal());
+  // The waiting card, if any, plays as soon as the air is clear. Called when a card finishes and
+  // on every frame, so a card that waited through a pop-up starts right after it closes.
+  function playWaitingCard() {
+    const n = ACT.next;
+    if (!n || ACT.cur || !cardsFree()) return;
+    ACT.next = null;
+    const nb = cardEl(n.id); if (nb) nb.classList.remove('queued');
+    start(n.id, n.count);
   }
   function bump(a) {
     if (a.count >= 5) return nope(a.id);
@@ -110,11 +123,7 @@
       a.landed = true;
       if (b) { b.classList.remove('flying'); showCombo(id, 1); }
       if (S && !S.done) doUse(a.id, a.guess, a.count);
-      setTimeout(() => {                                   // a short breath before the next card
-        ACT.cur = null;
-        const n = ACT.next; ACT.next = null;
-        if (n) { const nb = cardEl(n.id); if (nb) nb.classList.remove('queued'); if (S && !S.done && !S.pending && !isModal()) start(n.id, n.count); }
-      }, 700);
+      setTimeout(() => { ACT.cur = null; playWaitingCard(); }, 700);   // a short breath before the next card
     });
   }
   // Where things are on screen, for flying effects.

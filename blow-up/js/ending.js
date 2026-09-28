@@ -12,7 +12,8 @@
     say(CT.NARR.bedtime, 'narr', { prio: 2, interrupt: true }); kidSay('Goodnight…', 2);
     const day = saveDay();
     skillsSaved = snapshotSkills(); store.set('skills', skillsSaved);
-    setTimeout(() => showReceipt(day), COVER ? 0 : 3200);
+    setPhase('BEDTIME');
+    setTimeout(() => whenModalFree(() => showReceipt(day)), COVER ? 0 : 3200);
   }
   function snapshotSkills() { return { breathe: { xp: S.skills.breathe.xp }, stomp: { xp: S.skills.stomp.xp } }; }
   function saveDay() {
@@ -130,19 +131,17 @@
   function stickerModal() {
     const items = [...CT.UHOH, ...CT.HELPERS, ...CT.TOOLS];
     openModal(`<h2>📒 Sticker book</h2><p class="note">Every card you try earns a sticker. ${stickers.size} of ${items.length} found.</p>
-      <div class="stickers">${items.map(c => `<div class="sticker${stickers.has(c.id) ? '' : ' off'}"><span>${c.icon}</span>${stickers.has(c.id) ? esc(c.name) : '?'}</div>`).join('')}</div>`, () => { if (running) paused = stickerWasPaused; });
+      <div class="stickers">${items.map(c => `<div class="sticker${stickers.has(c.id) ? '' : ' off'}"><span>${c.icon}</span>${stickers.has(c.id) ? esc(c.name) : '?'}</div>`).join('')}</div>`);
   }
-  let stickerWasPaused = false;
 
   function menuModal() {
-    const was = paused; paused = true;
     const tg = (id, label, on) => `<button class="ctl" type="button" data-pref="${id}" aria-pressed="${on}">${on ? '✓ ' : ''}${label}</button>`;
     openModal(`<h2>⚙︎ Settings</h2>
       <div class="row">${tg('captions', 'CC Sound captions', prefs.captions)}${tg('reduced', '🐢 Less motion', prefs.reduced)}${tg('predict', '🔮 Predict mode', prefs.predict)}</div>
       <p class="note">Predict mode: before each card, guess “calmer” or “madder”.</p>
       <div class="row"><button class="go quiet" type="button" id="mVoices">🔊 Test the voices</button><span class="note" id="mVoiceStatus">${esc(voiceStatusText())}</span></div>
       <div class="row"><button class="go quiet" type="button" id="mCompare">Compare saved days</button><button class="go quiet" type="button" id="mNew">Start a new day</button><button class="go quiet" type="button" id="mSkills">Reset skills</button></div>
-      <p class="note">${CT.STR.disclaimer}</p>`, () => { paused = was; });
+      <p class="note">${CT.STR.disclaimer}</p>`);
     $('sheet').querySelectorAll('[data-pref]').forEach(b => b.addEventListener('click', () => {
       const k = b.dataset.pref; prefs[k] = !prefs[k]; savePrefs();
       b.setAttribute('aria-pressed', prefs[k]); b.textContent = (prefs[k] ? '✓ ' : '') + b.textContent.replace(/^✓ /, '');

@@ -1,6 +1,7 @@
 /* ============================================================================================
    CORE — shared helpers, saved prefs, game state. Loaded first: every other js/ file after
-   content.js and sim.js reads $, esc, store, prefs and the S/running/paused/... state from here.
+   content.js and sim.js reads $, esc, store, prefs and the S/running/... state from here. The game phase (may the
+   clock run?) lives in main.js.
    ============================================================================================ */
 'use strict';
   const $ = id => document.getElementById(id);
@@ -20,7 +21,7 @@
   const predictScore = store.get('predict', { right: 0, total: 0 });
 
   // --- Game state -------------------------------------------------------------------------------
-  let S = null, running = false, paused = false, acc = 0, last = performance.now();
+  let S = null, running = false, acc = 0, last = performance.now();
   let freezeUntil = 0, bedtimeShown = false, lastSceneKey = '', lastStrings = 0, pickleSeen = {}, pickleLastT = -999;
   let discovered = new Set(), dayUsed = new Set(), lastBlowType = null, graphDirty = true;
   const MS_PER_MIN = 500;

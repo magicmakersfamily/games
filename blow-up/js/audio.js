@@ -51,7 +51,7 @@
   };
   function updateKettle(v) {
     if (!AU.kettleGain) return;
-    const on = prefs.sound && running && !paused && !isModal() && v.phase === 'day' && v.ratio > 0.6;
+    const on = prefs.sound && running && phase === 'PLAY' && v.phase === 'day' && v.ratio > 0.6;
     const vol = on ? Math.min(0.09, (v.ratio - 0.6) * 0.22) : 0;
     AU.kettleGain.gain.setTargetAtTime(vol, AU.ctx.currentTime, 0.2);
     AU.kettleOsc.frequency.setTargetAtTime(1100 + v.ratio * 1500, AU.ctx.currentTime, 0.3);

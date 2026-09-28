@@ -8,11 +8,14 @@
    bedtime -> receipt visible -> a day saved in localStorage. Screenshots land in tests/out/
    (gitignored). Fails on any JS console error/exception, a timeout, or a missing expected screen.
 
-   Run: node tests/smoke.mjs   (needs python3 and a local Chrome; ~1-3 minutes)
+   Run: node tests/smoke.mjs   (needs a local Chrome; ~1 minute)
    Debug a failure: screenshots are left in tests/out/ even on failure; add DEBUG=1 for verbose logs. */
 'use strict';
 import { spawn } from 'node:child_process';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
+import { createServer } from 'node:net';
+import { createServer as createHttpServer } from 'node:http';
+import { extname, normalize } from 'node:path';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,8 +23,9 @@ import { fileURLToPath } from 'node:url';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GAME_DIR = join(HERE, '..');
 const OUT_DIR = join(HERE, 'out');
-const HTTP_PORT = 8793;
-const CDP_PORT = 9333;
+// Ports are picked fresh each run. With fixed ports, a Chrome or server left over from an earlier
+// run could answer instead of the one we just started, serving that run's cached files.
+let HTTP_PORT, CDP_PORT;
 const DEBUG = !!process.env.DEBUG;
 const log = (...a) => console.log('[smoke]', ...a);
 const dbg = (...a) => DEBUG && console.log('[smoke:debug]', ...a);
@@ -29,7 +33,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 let shot = 0;
 const consoleErrors = [];
-let httpProc, chromeProc, ws, chromeUserDataDir;
+const requestUrls = new Map();
+let httpServer, chromeProc, ws, chromeUserDataDir;
 const pending = new Map();
 let msgId = 0;
 
@@ -69,7 +74,10 @@ async function waitFor(exprOrFn, { timeout = 10000, interval = 200, desc = '' } 
   const start = Date.now();
   for (;;) {
     if (await evalJS(expr)) return true;
-    if (Date.now() - start > timeout) throw new Error('waitFor timed out: ' + (desc || expr));
+    if (Date.now() - start > timeout) {
+      const where = await evalJS(`JSON.stringify({ url: location.href, ready: document.readyState, modalOpen: !document.getElementById('modal')?.hidden, sheet: document.getElementById('sheet')?.innerHTML.slice(0, 120), loop: window.BUDebug && window.BUDebug.loop(), day: window.BUDebug && window.BUDebug.state() && window.BUDebug.state().t })`).catch(e => String(e));
+      throw new Error('waitFor timed out: ' + (desc || expr) + ' — page: ' + where);
+    }
     await sleep(interval);
   }
 }
@@ -120,17 +128,24 @@ async function main() {
   mkdirSync(OUT_DIR, { recursive: true });
   chromeUserDataDir = mkdtempSync(join(tmpdir(), 'blowup-smoke-'));
 
+  HTTP_PORT = await freePort();
   log('starting local server on', HTTP_PORT);
-  httpProc = spawn('python3', ['-m', 'http.server', String(HTTP_PORT)], { cwd: GAME_DIR, stdio: 'ignore' });
+  // Served by Node, not `python3 -m http.server`: Python's listen backlog is 5, and the page asks
+  // for 13 scripts and 10 voice files at once, so it reset connections and scripts silently
+  // failed to load (the game then never started, with no JS error to show for it).
+  httpServer = await serveStatic(GAME_DIR, HTTP_PORT);
   await waitForHttp(`http://127.0.0.1:${HTTP_PORT}/index.html`);
 
-  log('launching headless Chrome on CDP port', CDP_PORT);
+  log('launching headless Chrome');
   const chromeBin = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
   chromeProc = spawn(chromeBin, [
     '--headless=new', '--disable-gpu', '--hide-scrollbars', '--mute-audio',
     '--window-size=1280,900', '--force-device-scale-factor=1',
-    '--user-data-dir=' + chromeUserDataDir, '--remote-debugging-port=' + CDP_PORT, 'about:blank',
+    '--user-data-dir=' + chromeUserDataDir, '--remote-debugging-port=0', 'about:blank',
   ], { stdio: 'ignore' });
+  // With port 0 Chrome picks a free port and writes it to DevToolsActivePort in its own profile
+  // folder, so we know we're talking to the browser we just launched.
+  CDP_PORT = await readDevToolsPort(chromeUserDataDir);
   await waitForHttp(`http://127.0.0.1:${CDP_PORT}/json/version`);
 
   const tab = await (await fetch(`http://127.0.0.1:${CDP_PORT}/json/new?about:blank`, { method: 'PUT' })).json();
@@ -144,6 +159,10 @@ async function main() {
       const text = (msg.params.args || []).map(a => a.value ?? a.description ?? '').join(' ');
       consoleErrors.push('console.error: ' + text);
     }
+    if (msg.method === 'Network.requestWillBeSent') requestUrls.set(msg.params.requestId, msg.params.request.url);
+    if (msg.method === 'Network.loadingFailed' && !msg.params.canceled) {
+      consoleErrors.push('failed to load ' + (requestUrls.get(msg.params.requestId) || '?') + ': ' + msg.params.errorText);
+    }
     if (msg.method === 'Runtime.exceptionThrown') {
       const d = msg.params.exceptionDetails;
       consoleErrors.push('exception: ' + (d.exception && (d.exception.description || d.exception.value) || d.text));
@@ -151,6 +170,7 @@ async function main() {
   });
   await send('Runtime.enable');
   await send('Page.enable');
+  await send('Network.enable');                     // a failed <script src> fails silently otherwise
   await send('Page.bringToFront');   // a background tab gets its requestAnimationFrame loop throttled, which the game's clock relies on
 
   log('navigating to the game (#debug)');
@@ -240,6 +260,30 @@ async function main() {
   log('  recovery stages seen:', [...seenPhases].join(', '));
   await screenshot('recovered');
 
+  // --- Step 5b: a card that's waiting its turn survives a pop-up (PLAN C1, KNOWN-BUGS B2) ---------
+  // Tap card A (it flies), then card B (it waits, dashed outline), then fast-forward the engine to
+  // its next choice so the pop-up opens while A is still in the air. In 1.3 B was silently dropped
+  // here; now it must play once the choice is made.
+  log('step 5b: a waiting card survives a pop-up');
+  await sleep(1500);                                           // let the last recovery card finish
+  const [cardA, cardB] = ['water', 'snack'];
+  const t0 = await evalJS(`window.BUDebug.state().t`);
+  await click(`.cardbtn[data-id="${cardA}"]`);
+  await click(`.cardbtn[data-id="${cardB}"]`);
+  if (!await evalJS(`document.querySelector('.cardbtn[data-id="${cardB}"]').classList.contains('queued')`)) {
+    throw new Error('step 5b: the second card did not show as waiting (queued outline)');
+  }
+  await evalJS(`window.BUDebug.ff(900)`);                      // stops at the engine's next choice
+  if (!(await readState()).pendingKind) throw new Error('step 5b: no choice left in the day to test with');
+  await waitFor(`!document.getElementById('modal').hidden`, { desc: 'the choice pop-up' });
+  await screenshot('card-waiting-behind-choice');
+  // Make the choice, then wait out the 2.2 s "done ✔" screen that follows it (not a choice itself).
+  for (let i = 0; i < 25 && (await readState()).modalOpen; i++) { await handleModalIfOpen(); await sleep(400); }
+  if ((await readState()).modalOpen) throw new Error('step 5b: the pop-up never closed');
+  await waitFor(`window.BUDebug.state().log.some(e => e.id === '${cardB}' && e.t >= ${t0})`,
+    { timeout: 8000, desc: `the waiting card (${cardB}) played after the choice` });
+  log(`  ${cardB} waited through the pop-up and played`);
+
   // --- Step 6: cruise to bedtime -----------------------------------------------------------------
   log('step 6: cruising to bedtime');
   let atBedtime = false;
@@ -282,10 +326,42 @@ function waitForHttp(url, timeout = 15000) {
   })();
 }
 
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
+  '.json': 'application/json', '.mp3': 'audio/mpeg', '.png': 'image/png', '.svg': 'image/svg+xml' };
+function serveStatic(root, port) {
+  const server = createHttpServer((req, res) => {
+    const rel = normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname)).replace(/^([/\\.])+/, '');
+    const file = join(root, rel || 'index.html');
+    if (!file.startsWith(root)) { res.writeHead(403); return res.end(); }
+    try {
+      const body = readFileSync(file);
+      res.writeHead(200, { 'Content-Type': TYPES[extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
+      res.end(body);
+    } catch (e) { res.writeHead(404); res.end(); }
+  });
+  return new Promise((resolve, reject) => { server.on('error', reject); server.listen(port, '127.0.0.1', () => resolve(server)); });
+}
+
+function freePort() {
+  return new Promise((resolve, reject) => {
+    const srv = createServer(); srv.unref(); srv.on('error', reject);
+    srv.listen(0, '127.0.0.1', () => { const { port } = srv.address(); srv.close(() => resolve(port)); });
+  });
+}
+
+async function readDevToolsPort(dir, timeout = 15000) {
+  const start = Date.now();
+  for (;;) {
+    try { const port = parseInt(readFileSync(join(dir, 'DevToolsActivePort'), 'utf8').split('\n')[0], 10); if (port) return port; } catch (e) { /* not written yet */ }
+    if (Date.now() - start > timeout) throw new Error('Chrome never reported its debugging port');
+    await sleep(100);
+  }
+}
+
 function cleanup() {
   try { ws && ws.close(); } catch (e) { /* ignore */ }
-  try { chromeProc && chromeProc.kill(); } catch (e) { /* ignore */ }
-  try { httpProc && httpProc.kill(); } catch (e) { /* ignore */ }
+  try { chromeProc && chromeProc.kill('SIGKILL'); } catch (e) { /* ignore */ }
+  try { httpServer && httpServer.close(); } catch (e) { /* ignore */ }
   try { chromeUserDataDir && rmSync(chromeUserDataDir, { recursive: true, force: true }); } catch (e) { /* ignore */ }
 }
 
@@ -298,6 +374,7 @@ try {
 } catch (err) {
   clearTimeout(watchdog);
   console.error('[smoke] FAIL:', err.message);
+  for (const e of consoleErrors) console.error('[smoke]   page:', e);
   cleanup();
   process.exit(1);
 }

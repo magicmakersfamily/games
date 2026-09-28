@@ -12,17 +12,24 @@
   `tests/golden.test.js`, a snapshot of both day styles × every `balance.js` strategy × 5 seeds
   (end pressure, blow-ups, phase sequence, jars, skills, receipt). If it fails after a deliberate
   engine change, regenerate it and say why: `UPDATE_GOLDEN=1 node --test tests/golden.test.js`.
-- **Browser smoke test:** `node tests/smoke.mjs` (Node 22+, needs Google Chrome and `python3`; no
+- **Browser smoke test:** `node tests/smoke.mjs` (Node 22+, needs Google Chrome; no
   npm install). Drives the real page in headless Chrome over CDP with real mouse clicks: start →
   pick the Rushed school day → the first Say It Differently choice → taps Uh-oh cards to a
   blow-up → all five recovery stages → bedtime → the receipt → a saved day in `localStorage`.
   Screenshots land in `tests/out/` (gitignored) even on failure. Fails on any JS console
-  error/exception. Takes 15–30 s. Add `DEBUG=1` to see each step and keep the browser/server logs.
+  error/exception or a file that fails to load. Takes about a minute. Add `DEBUG=1` to see each step.
+  Step 5b taps a card while another is in the air, right before a Say It Differently pop-up, and
+  checks the waiting card still plays after the choice (KNOWN-BUGS B2; it fails on 1.3's code).
   - It uses the `#debug` hook (`window.BUDebug`, only present with `#debug` in the URL) to read
     state (`state()`, returns the raw sim state) and skip quiet stretches (`ff(n)`, steps the
     engine directly without the UI); `voice()` returns the narration-fallback counters, and
-    `loop()` exposes the frame loop's internal flags (`running`, `paused`, `narrHolding()`, …) for
+    `loop()` exposes the frame loop's internal flags (`running`, `phase`, `clockPhase`, `narrHolding()`, …) for
     debugging why the clock isn't advancing. None of it is reachable without `#debug`.
+  - Gotcha: the script serves the folder itself with Node. `python3 -m http.server` has a listen
+    backlog of 5 and resets connections when the page fetches its 13 scripts and 10 voice files at
+    once; a failed `<script src>` shows no JS error, the game just never starts. (Fine for playing
+    by hand, flaky for automated runs.) Ports are picked fresh each run so a leftover browser from
+    an earlier run can never answer instead.
   - Gotcha: a background browser tab gets `requestAnimationFrame` throttled by Chrome, which the
     game's clock depends on — the script calls `Page.bringToFront` after connecting. A modal (like
     the day picker) sits above the header, so clicks on header buttons (voice, speed) only land

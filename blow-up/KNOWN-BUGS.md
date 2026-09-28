@@ -14,7 +14,10 @@ Unconfirmed bugs must be reproduced before they are fixed.
   narrated "▶ Continue Pip's day" button. Never catch up missed time.
 
 ## B2. A tapped card can be silently dropped when a pop-up opens
-- **Status:** confirmed in code. When a card finishes, the one waiting card (`ACT.next`) starts only
+- **Status:** FIXED in PLAN C1 (2026-09-28, for 1.4). A waiting card now stays waiting (dashed
+  outline) through any pop-up and plays when it closes; taps while a choice is about to pop up wait
+  too. Guarded by step 5b of `tests/smoke.mjs`, which fails on the 1.3 code. Original report:
+- **Was:** confirmed in code. When a card finishes, the one waiting card (`ACT.next`) starts only
   `if (S && !S.done && !S.pending && !isModal())`. Otherwise it's discarded and its dashed "queued"
   outline removed (`index.html` ~line 1517, inside `launch()`). A scheduled Say It Differently moment
   (`S.pending`) or any modal opening during a card's flight eats the waiting tap.

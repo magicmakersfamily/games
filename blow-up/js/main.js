@@ -2,6 +2,29 @@
   // ============================================================================================
   // START, LOOP, CONTROLS
   // ============================================================================================
+  // --- Game phase: the one answer to "may the clock run?" ----------------------------------------
+  // Stored (changed only through setPhase):
+  //   PLAY     the day runs
+  //   PAUSED   the pause button (or space)
+  //   MODAL    a pop-up is open; closing the last one returns to what it interrupted (modals.js)
+  //   BEDTIME  the day is over
+  //   AWAY     the page is hidden (PLAN C2)
+  // Worked out each frame on top of PLAY, because they end by themselves:
+  //   BLOWUP   the 2.2 s freeze after an eruption (freezeUntil, set in events.js)
+  //   STORY    the storyteller is holding the clock (narrHolding(), audio.js)
+  // Before a day starts (splash, day picker) `running` is false and nothing ticks. S.pending (a
+  // choice the engine is waiting for) also stops the clock; the frame loop opens it as a pop-up
+  // as soon as the phase is PLAY. Cards can be tapped in any phase of a running day; a tap that
+  // can't play yet waits (cards.js, ACT.next) and plays when nothing is in the way.
+  let phase = 'PLAY';
+  function setPhase(p) { phase = p; if ($('pauseBtn')) setPauseBtn(); }
+  function clockPhase(now) {
+    if (phase !== 'PLAY') return phase;
+    if (now < freezeUntil) return 'BLOWUP';
+    if (narrHolding()) return 'STORY';
+    return 'PLAY';
+  }
+
   function startScreen() {
     running = false;
     const styles = Object.entries(CT.DAY_STYLES);
@@ -28,7 +51,7 @@
 
   function newDay(style, seed) {
     S = SIM.create({ style, seed: seed == null ? (Date.now() % 100000) : seed, kid: 'pip', skills: skillsSaved });
-    running = true; paused = false; acc = 0; bedtimeShown = false; lastSceneKey = ''; jarKey = ''; jarPrev = null; trayPhase = ''; owlState = 'chair'; ACT.cur = null; ACT.next = null;
+    running = true; setPhase('PLAY'); acc = 0; bedtimeShown = false; lastSceneKey = ''; jarKey = ''; jarPrev = null; trayPhase = ''; owlState = 'chair'; ACT.cur = null; ACT.next = null;
     pickleSeen = {}; pickleLastT = -999; lastBlowType = null; dayUsed = new Set(); parts.length = 0;
     zoneSaid = {}; bodySaid = { hungry: -999, tired: -999 }; prevBody = { hungry: false, tired: false }; saidOnce = new Set();
     $('pickle').hidden = true; $('bubble').hidden = true; $('bubbleAdult').hidden = true;
@@ -79,7 +102,8 @@
 
   function frame(now) {
     const dt = Math.min(120, now - last); last = now;
-    if (S && running && !paused && !isModal() && !S.done && !S.pending && now >= freezeUntil && !narrHolding()) {
+    const cp = S && running ? clockPhase(now) : null;
+    if (cp === 'PLAY' && !S.done && !S.pending) {
       acc += dt * prefs.speed;
       let n = 0;
       while (acc >= MS_PER_MIN && n++ < 4) {
@@ -88,15 +112,20 @@
         if (S.pending || S.done || now < freezeUntil) { acc = 0; break; }
       }
     }
-    if (S && running && S.pending && !isModal() && now >= freezeUntil && !narrHolding()) openPending();
+    if (cp === 'PLAY' && S.pending) openPending();
+    playWaitingCard();
     if (S && running && S.done && !bedtimeShown) startBedtime();
     stepParts();
     lipSync(now);
     requestAnimationFrame(frame);
   }
 
-  function setPauseBtn() { const b = $('pauseBtn'); b.textContent = paused ? '▶' : '⏸'; b.setAttribute('aria-label', paused ? 'Play' : 'Pause'); }
-  function togglePause() { if (!S) return; paused = !paused; setPauseBtn(); audioInit(); }
+  function setPauseBtn() { const p = phase === 'PAUSED'; const b = $('pauseBtn'); b.textContent = p ? '▶' : '⏸'; b.setAttribute('aria-label', p ? 'Play' : 'Pause'); }
+  function togglePause() {
+    if (!S) return;
+    if (phase === 'PLAY') setPhase('PAUSED'); else if (phase === 'PAUSED') setPhase('PLAY');
+    audioInit();
+  }
   $('pauseBtn').addEventListener('click', togglePause);
   document.querySelectorAll('[data-speed]').forEach(b => b.addEventListener('click', () => {
     prefs.speed = +b.dataset.speed; savePrefs();
@@ -108,7 +137,7 @@
     const on = $('grown').hidden; $('grown').hidden = !on; $('grownBtn').setAttribute('aria-pressed', on);
     if (on && S) { drawGrown(SIM.view(S)); $('grown').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
   });
-  $('stickerBtn').addEventListener('click', () => { stickerWasPaused = paused; paused = true; stickerModal(); });
+  $('stickerBtn').addEventListener('click', stickerModal);
   $('menuBtn').addEventListener('click', menuModal);
   addEventListener('resize', () => drawGraph());
   document.body.classList.toggle('reduced', prefs.reduced);
@@ -218,7 +247,7 @@
     voice: () => VB.stats, state: () => S,
     ff(n) { for (let i = 0; i < n && S && !S.done && !S.pending; i++) { SIM.step(S); handleEvents(); } tick(true); return SIM.view(S).clock; },
     // Read-only, for tests/smoke.mjs to see why the frame loop isn't advancing.
-    loop: () => ({ running, paused, freezeUntil, now: performance.now(), narrHolding: narrHolding(), isModal: isModal(), narrator: prefs.narrator, unlocked: N.unlocked, qLen: N.q.length, cur: N.cur && { hold: N.cur.hold, text: N.cur.text } }),
+    loop: () => ({ running, phase, clockPhase: clockPhase(performance.now()), freezeUntil, now: performance.now(), narrHolding: narrHolding(), isModal: isModal(), narrator: prefs.narrator, unlocked: N.unlocked, qLen: N.q.length, cur: N.cur && { hold: N.cur.hold, text: N.cur.text } }),
   };
   requestAnimationFrame(frame);
   if (COVER) coverState();
