@@ -20,6 +20,8 @@
   error/exception or a file that fails to load. Takes about a minute. Add `DEBUG=1` to see each step.
   Step 5b taps a card while another is in the air, right before a Say It Differently pop-up, and
   checks the waiting card still plays after the choice (KNOWN-BUGS B2; it fails on 1.3's code).
+  Step 5c fakes the tab going hidden for 3 s and checks the clock didn't move and the "Tap to
+  continue" button is shown, then taps it (KNOWN-BUGS B1; it fails on pre-C2 code).
   - It uses the `#debug` hook (`window.BUDebug`, only present with `#debug` in the URL) to read
     state (`state()`, returns the raw sim state) and skip quiet stretches (`ff(n)`, steps the
     engine directly without the UI); `voice()` returns the narration-fallback counters, and

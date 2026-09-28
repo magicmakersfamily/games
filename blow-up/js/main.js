@@ -25,6 +25,33 @@
     return 'PLAY';
   }
 
+  // --- Pause when nobody's there (PLAN C2) --------------------------------------------------------
+  // A hidden tab, or a window that's lost focus for more than 2 s, goes AWAY: the clock (already
+  // gated on phase, so this needs no other change) and narration stop. Coming back never resumes
+  // by itself — a `document.hidden` flip can happen for reasons that aren't "the child left" (a
+  // quick tab switch, a notification), so returning always shows one big button and waits for a
+  // deliberate tap, rather than guessing. `awayFrom` remembers what to return to (PLAY or PAUSED),
+  // so someone who had paused on purpose doesn't get un-paused by leaving and coming back.
+  let awayFrom = null, blurTimer = null;
+  function goAway() {
+    clearTimeout(blurTimer); blurTimer = null;
+    if (!S || !running || phase === 'AWAY') return;
+    awayFrom = phase; setPhase('AWAY'); stopSpeech();
+  }
+  function comeBack() {
+    clearTimeout(blurTimer); blurTimer = null;
+    if (phase !== 'AWAY') return;
+    openModal(`<div class="splash"><h2>Blow Up <span class="zh" lang="zh-TW">${rubyZh(CT.STR.titleZh, CT.STR.titlePy)}</span></h2>
+      <button class="bigplay" type="button" id="awayGo" aria-label="Continue">▶</button>
+      <p class="tagline">${esc(CT.NARR.misc.continueDay)}</p></div>`, null, { noClose: true });
+    modalHear = () => say(CT.NARR.misc.continueDay, 'narr', { prio: 2 });
+    modalHear();
+    $('awayGo').addEventListener('click', () => { stopSpeech(); closeModal(); setPhase(awayFrom || 'PLAY'); awayFrom = null; });
+  }
+  document.addEventListener('visibilitychange', () => { document.hidden ? goAway() : comeBack(); });
+  window.addEventListener('blur', () => { if (!document.hidden) blurTimer = setTimeout(goAway, 2000); });
+  window.addEventListener('focus', () => { clearTimeout(blurTimer); blurTimer = null; comeBack(); });
+
   function startScreen() {
     running = false;
     const styles = Object.entries(CT.DAY_STYLES);

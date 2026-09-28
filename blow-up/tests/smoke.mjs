@@ -154,7 +154,11 @@ async function main() {
   await new Promise((resolve, reject) => { ws.addEventListener('open', resolve, { once: true }); ws.addEventListener('error', reject, { once: true }); });
   ws.addEventListener('message', ev => {
     const msg = JSON.parse(ev.data);
-    if (msg.id != null) { const p = pending.get(msg.id); if (p) { pending.delete(msg.id); p.resolve(msg.result); } return; }
+    if (msg.id != null) {
+      const p = pending.get(msg.id);
+      if (p) { pending.delete(msg.id); msg.error ? p.reject(new Error('CDP: ' + msg.error.message)) : p.resolve(msg.result); }
+      return;
+    }
     if (msg.method === 'Runtime.consoleAPICalled' && msg.params.type === 'error') {
       const text = (msg.params.args || []).map(a => a.value ?? a.description ?? '').join(' ');
       consoleErrors.push('console.error: ' + text);
@@ -283,6 +287,27 @@ async function main() {
   await waitFor(`window.BUDebug.state().log.some(e => e.id === '${cardB}' && e.t >= ${t0})`,
     { timeout: 8000, desc: `the waiting card (${cardB}) played after the choice` });
   log(`  ${cardB} waited through the pop-up and played`);
+
+  // --- Step 5c: hiding the tab pauses the clock; returning needs an explicit tap (PLAN C2) --------
+  log('step 5c: pause when away');
+  const tAway = (await readState()).t;
+  // Headless Chrome has no real CDP hook for "the tab is hidden" (Emulation.setEmulatedVisibilityState
+  // isn't in this build), so this fakes it the way jsdom-style tests do: override the getters our
+  // visibilitychange listener actually reads, then dispatch the real event.
+  await evalJS(`(() => { Object.defineProperty(document, 'hidden', { configurable: true, get: () => true });
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' });
+    document.dispatchEvent(new Event('visibilitychange')); })()`);
+  await sleep(3000);
+  if ((await readState()).t !== tAway) throw new Error('step 5c: the clock moved while the tab was hidden');
+  if ((await evalJS(`window.BUDebug.loop().phase`)) !== 'AWAY') throw new Error('step 5c: phase never became AWAY');
+  await evalJS(`(() => { Object.defineProperty(document, 'hidden', { configurable: true, get: () => false });
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' });
+    document.dispatchEvent(new Event('visibilitychange')); })()`);
+  await waitFor(`!!document.getElementById('awayGo')`, { desc: 'the "continue Pip\'s day" button' });
+  await screenshot('away-continue');
+  await click('#awayGo');
+  await waitFor(`document.getElementById('modal').hidden && window.BUDebug.loop().phase === 'PLAY'`, { desc: 'back to PLAY' });
+  log('  clock stayed put while hidden; resumed only after the tap');
 
   // --- Step 6: cruise to bedtime -----------------------------------------------------------------
   log('step 6: cruising to bedtime');

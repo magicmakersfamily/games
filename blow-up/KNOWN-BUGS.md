@@ -6,12 +6,13 @@ Unconfirmed bugs must be reproduced before they are fixed.
 
 ## B1. The day keeps running when nobody is watching
 - **Seen:** ChatGPT's playthrough jumped from about 10:20 to 17:05 while it was away.
-- **Status:** cause understood; the exact trigger is unconfirmed. `frame()` (`index.html`, the START,
-  LOOP, CONTROLS section) caps each frame at 120 ms, and Chrome stops `requestAnimationFrame` in a
-  truly hidden tab, so a hidden tab shouldn't jump. What does happen is that a tab that's visible but
-  unattended (another window on top, or an automated browser) plays on at full speed.
-- **Fix (P0-C2):** pause on `visibilitychange` (hidden) and on window `blur`. On return show one big
-  narrated "▶ Continue Pip's day" button. Never catch up missed time.
+- **Status:** FIXED in PLAN C2 (2026-09-28, for 1.4). `js/main.js` now pauses on `visibilitychange`
+  (hidden) and on window `blur` for more than 2 s, and shows a narrated "▶ Tap to continue Pip's
+  day" button on return — it never resumes by itself, since a `document.hidden` flip isn't always
+  "the child left" (a quick tab switch, a notification). Never catches up missed time. Guarded by
+  `tests/smoke.mjs` step 5c, which fails on the pre-fix code. The original cause was as suspected:
+  a tab that's visible but unattended (another window on top, or an automated browser, which is
+  likely what ChatGPT's setup was) played on at full speed, since nothing was watching for that.
 
 ## B2. A tapped card can be silently dropped when a pop-up opens
 - **Status:** FIXED in PLAN C1 (2026-09-28, for 1.4). A waiting card now stays waiting (dashed

@@ -535,6 +535,7 @@
     hours: ['seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'],
     misc: {
       back: 'I’m back! I’ll tell you what’s happening.', tapStart: 'Tap the big orange button to start.',
+      continueDay: 'Tap to continue Pip’s day.',
       bossyWay: 'The bossy way:', choosingWay: 'Or the choosing way:', guessRight: 'You guessed it!', guessWrong: 'Surprise! Not what you guessed.',
       hungry: 'Pip is hungry.', tired: 'Pip is tired.', sock: 'Something is bugging Pip’s foot…', asleep: 'Pip is fast asleep. Shhh.',
       worse: 'Oops! That made Pip feel worse.', wait: 'One at a time! Watch what happens.',

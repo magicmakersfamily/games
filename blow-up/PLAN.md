@@ -106,11 +106,23 @@ tap gets instant feedback (the existing pop/queued outline).
     splash/day picker). The card fix is `cardsFree()`/`playWaitingCard()` in `js/cards.js`. C2 only
     needs to `setPhase('AWAY')` on hide and back on the Continue tap.
 
-**☐ C2. Pause when away** (B1).
+**☑ C2. Pause when away** (B1).
 On `visibilitychange` → hidden, or window `blur` for more than 2 s: enter `AWAY` and stop speech. On
 return, show one big ▶ with the spoken line "Tap to continue Pip's day". No catch-up.
 - Test: smoke step that dispatches a hidden `visibilitychange`, waits 3 s, and checks the clock
   didn't move and the continue button is shown.
+  - Done 2026-09-28. `goAway()`/`comeBack()` in `js/main.js`, wired to `visibilitychange` plus
+    `blur`/`focus` (the 2 s grace period is a `setTimeout` cleared on `focus`). `awayFrom` remembers
+    PLAY vs PAUSED so a deliberate pause survives a trip away. Returning always shows the continue
+    screen and waits for a tap — it never guesses that a visibility flip means "resume". No
+    catch-up needed as a separate fix: `frame()` already re-anchors `last` every call, so `dt` is
+    capped at 120 ms regardless of how long the phase wasn't PLAY.
+  - New narration line `CT.NARR.misc.continueDay` ("Tap to continue Pip's day."), rendered with the
+    existing pipeline (PLAN A3) — one line, reused the cache, no re-render of anything else.
+  - Test: `tests/smoke.mjs` step 5c fakes `document.hidden`/`visibilityState` (headless Chrome has
+    no working CDP hook for real tab visibility — `Emulation.setEmulatedVisibilityState` isn't in
+    this build) and dispatches the real event, so it's exercising the actual listener. Fails on the
+    pre-C2 code, passes on this code, 3/3 clean runs.
 
 **☐ C3. Tools used vs practised** (B4, DECISIONS D7).
 In `sim.js`, record each completed calming tool with its phase and zone. `SIM.receipt` returns
