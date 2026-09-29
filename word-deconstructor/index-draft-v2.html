@@ -1,3 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Say a word. See how it is spelled. Tap its syllables and sounds to hear them.">
+<meta property="og:title" content="Say It, Spell It!">
+<meta property="og:description" content="A speech-to-reading game for children learning to sound out words.">
+<meta property="og:image" content="https://magicmakersfamily.github.io/games/word-deconstructor/cover.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
 <title>Say It, Spell It!</title>
 <style>
   :root{
@@ -17,9 +27,13 @@
     --shadow: 0 10px 24px rgba(0,0,0,0.35); color-scheme: dark;
   }
   *{box-sizing:border-box}
+  [hidden]{display:none!important}
   body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Nunito", system-ui, sans-serif; min-height:100%; }
   .wrap{ max-width:640px; margin:0 auto; padding:22px 20px 40px; display:flex; flex-direction:column; align-items:center; gap:14px; }
   h1{ font-family:"Baloo 2", sans-serif; font-size:clamp(20px,5vw,26px); margin:0; color:var(--coral-deep); text-align:center; }
+  button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  .shelf-link{align-self:flex-start;color:var(--ink-soft);font-size:13px;text-decoration:none}
+  .shelf-link:hover{text-decoration:underline}
 
   /* ---------- start / listening screen ---------- */
   #startScreen{ display:flex; flex-direction:column; align-items:center; gap:16px; padding-block:24px; width:100%; }
@@ -46,6 +60,7 @@
   .fallback{ display:flex; gap:8px; width:100%; max-width:300px; margin-top:4px; }
   .fallback input{ flex:1; font-size:16px; padding:10px 14px; border-radius:12px; border:1px solid var(--line); background:var(--paper); color:var(--ink); font-family:inherit; }
   .fallback button{ border:none; border-radius:12px; background:var(--ink); color:var(--paper); padding:10px 16px; font-weight:700; cursor:pointer; }
+  .type-instead{border:none;background:none;color:var(--ink-soft);font-family:inherit;font-size:13px;font-weight:700;text-decoration:underline;cursor:pointer;padding:4px 8px}
 
   /* ---------- result screen ---------- */
   #resultScreen{ display:flex; flex-direction:column; align-items:center; gap:16px; width:100%; }
@@ -109,18 +124,19 @@
     list-style:none; user-select:none;
   }
   details.grownups summary::-webkit-details-marker{ display:none; }
-  details.grownups summary::before{ content:"For grown-ups "; }
-  details.grownups[open] summary::before{ content:"For grown-ups (hide) "; }
   .about{ font-size:12px; color:var(--ink-soft); text-align:center; line-height:1.6; margin:10px 0 0; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
 
 <div class="wrap">
+  <a class="shelf-link" href="../">← All games</a>
   <h1>Say It, Spell It!</h1>
 
   <div id="startScreen">
-    <button class="mic-big" id="micBig" aria-label="Tap and say a word">
+    <button class="mic-big" id="micBig" type="button" aria-label="Tap and say a word">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
         <path d="M19 10v1a7 7 0 0 1-14 0v-1"/>
@@ -129,17 +145,18 @@
       </svg>
     </button>
     <p class="big-hint" id="bigHint">Tap. Say a word.</p>
+    <button class="type-instead" id="typeInstead" type="button" aria-expanded="false" aria-controls="fallbackForm">Type a word instead</button>
     <form class="fallback" id="fallbackForm" hidden>
-      <input id="fallbackInput" type="text" placeholder="Type a word instead" autocomplete="off">
+      <input id="fallbackInput" type="text" placeholder="Type one word" aria-label="Type one word" autocomplete="off" autocapitalize="none" spellcheck="false">
       <button type="submit">Go</button>
     </form>
   </div>
 
   <div id="resultScreen" hidden>
-    <button class="word-btn" id="wordBtn"></button>
+    <button class="word-btn" id="wordBtn" type="button"></button>
     <p class="tap-hint">Tap the word to hear it</p>
 
-    <button class="picture-btn" id="pictureBtn">🔤</button>
+    <button class="picture-btn" id="pictureBtn" type="button">🔤</button>
 
     <div id="knownBlock">
       <div>
@@ -151,13 +168,13 @@
         <div class="sounds" id="sounds"></div>
       </div>
       <div class="replay-row">
-        <button class="pill-btn" id="playAll">▶ Play all sounds, then the word</button>
+        <button class="pill-btn" id="playAll" type="button">▶ Play all sounds, then the word</button>
       </div>
     </div>
 
     <p class="newword-note" id="newWordNote" hidden>New word! We don't have its sounds mapped out yet — but here's the picture, and you can still hear the whole word.</p>
 
-    <button class="mic-small" id="micSmall" aria-label="Say a new word">
+    <button class="mic-small" id="micSmall" type="button" aria-label="Say a new word">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
         <path d="M19 10v1a7 7 0 0 1-14 0v-1"/>
@@ -169,10 +186,10 @@
   </div>
 
   <details class="grownups">
-    <summary></summary>
-    <p class="about">Tap the microphone and say one word. It shows the word, its syllables and sounds (for the ~180 words we've hand-checked so far), a picture, and reads everything back — to help with sounding out words while learning to read.</p>
+    <summary>For grown-ups</summary>
+    <p class="about">Tap the microphone and say one word. It shows the word, its syllables and sounds when they are in our hand-checked word bank, a picture when available, and reads everything back — to help with sounding out words while learning to read.</p>
     <p class="about">Magic Makers doesn't store your audio or words. Speech recognition is handled by your browser and may use its own speech service to turn your voice into text.</p>
-    <p class="about">Version 2.0 · Made by Magic Makers.</p>
+    <p class="about">Version 2.0 draft · Launched September 29, 2026 · Made by Magic Makers · <a href="../feedback/?game=word-deconstructor&amp;v=2.0">Share your thoughts</a> · <a href="../feedback/?game=word-deconstructor&amp;v=2.0&amp;kind=bug">Report a bug</a></p>
   </details>
 </div>
 
@@ -401,14 +418,8 @@
   function lookup(word){
     var w = word.toLowerCase();
     if (W[w]) return { word:w, data:W[w] };
-    var stems = ["ing","es","ed","s"];
-    for (var i=0;i<stems.length;i++){
-      var suf = stems[i];
-      if (w.length > suf.length+2 && w.endsWith(suf)){
-        var stem = w.slice(0, w.length-suf.length);
-        if (W[stem]) return { word:w, data:W[stem], derivedFrom:stem };
-      }
-    }
+    // Correctness beats coverage: never reuse a base word's sounds for an ending
+    // we have not mapped. For example, "cats" must not silently teach only c-a-t.
     return { word:w, data:null };
   }
 
@@ -440,16 +451,25 @@
     window.speechSynthesis.onvoiceschanged = pickVoice;
   }
 
-  function speak(text, rate, cb){
+  var speechToken = 0;
+  function speak(text, rate, cb, sequenceToken){
+    var token = sequenceToken || ++speechToken;
     try{
-      if (!("speechSynthesis" in window)){ if (cb) cb(); return; }
+      if (!("speechSynthesis" in window)){ if (cb && token === speechToken) cb(); return; }
       var u = new SpeechSynthesisUtterance(text);
       u.rate = rate || 0.92;
       if (preferredVoice) u.voice = preferredVoice;
-      if (cb) u.onend = cb;
-      window.speechSynthesis.cancel();
+      var finished = false;
+      function finish(){
+        if (finished) return;
+        finished = true;
+        if (cb && token === speechToken) cb();
+      }
+      u.onend = finish;
+      u.onerror = finish;
+      if (!sequenceToken) window.speechSynthesis.cancel();
       window.speechSynthesis.speak(u);
-    }catch(e){ if (cb) cb(); }
+    }catch(e){ if (cb && token === speechToken) cb(); }
   }
 
   // ---------- screens ----------
@@ -458,6 +478,7 @@
   var micBig = document.getElementById("micBig");
   var micSmall = document.getElementById("micSmall");
   var bigHint = document.getElementById("bigHint");
+  var typeInstead = document.getElementById("typeInstead");
   var fallbackForm = document.getElementById("fallbackForm");
   var fallbackInput = document.getElementById("fallbackInput");
 
@@ -486,10 +507,12 @@
     var found = lookup(word);
     var displayWord = found.word;
     wordBtn.textContent = displayWord;
+    wordBtn.setAttribute("aria-label", "Hear the word " + displayWord);
 
     var pic = pictureFor(displayWord);
     pictureBtn.textContent = pic || displayWord[0].toUpperCase();
     pictureBtn.style.fontSize = pic ? "76px" : "56px";
+    pictureBtn.setAttribute("aria-label", pic ? "Hear the word " + displayWord : "Letter " + displayWord[0].toUpperCase() + ". Hear the word " + displayWord);
 
     if (found.data){
       knownBlock.hidden = false;
@@ -499,7 +522,9 @@
       found.data.syl.forEach(function(s){
         var b = document.createElement("button");
         b.className = "syl-btn";
+        b.type = "button";
         b.textContent = s;
+        b.setAttribute("aria-label", "Hear the syllable " + s);
         b.addEventListener("click", function(){ speak(s, 0.85); });
         syllablesEl.appendChild(b);
       });
@@ -510,7 +535,9 @@
         var display = pair[0], spoken = pair[1];
         var b = document.createElement("button");
         b.className = "snd-btn";
+        b.type = "button";
         b.textContent = display;
+        b.setAttribute("aria-label", "Hear the sound spelled " + display);
         b.style.background = isVowelDisplay(display) ? VOWEL_COLOR : CONSONANT_COLOR;
         b.addEventListener("click", function(){ speak(spoken, 0.75); });
         soundsEl.appendChild(b);
@@ -518,6 +545,9 @@
     } else {
       knownBlock.hidden = true;
       newWordNote.hidden = false;
+      newWordNote.textContent = pic
+        ? "New word! We don't have its sounds mapped out yet — but here's the picture, and you can still hear the whole word."
+        : "New word! We don't have its picture or sounds mapped out yet — but you can still see its spelling and hear the whole word.";
       currentSounds = [];
     }
 
@@ -528,10 +558,13 @@
   pictureBtn.addEventListener("click", function(){ speak(wordBtn.textContent, 0.85); });
 
   playAllBtn.addEventListener("click", function(){
+    var token = ++speechToken;
+    try{ window.speechSynthesis.cancel(); }catch(e){}
     var i = 0;
     function next(){
-      if (i >= currentSounds.length){ speak(wordBtn.textContent, 0.85); return; }
-      speak(currentSounds[i][1], 0.7, function(){ i++; setTimeout(next, 120); });
+      if (token !== speechToken) return;
+      if (i >= currentSounds.length){ speak(wordBtn.textContent, 0.85, null, token); return; }
+      speak(currentSounds[i][1], 0.7, function(){ i++; setTimeout(next, 120); }, token);
     }
     next();
   });
@@ -553,11 +586,22 @@
 
   function startListening(){
     if (recognizer){
-      try{ recognizer.start(); return; }catch(e){}
+      try{ recognizer.start(); return; }catch(e){
+        bigHint.textContent = "The microphone is busy — try again, or type below.";
+      }
     }
     fallbackForm.hidden = false;
+    typeInstead.setAttribute("aria-expanded", "true");
     bigHint.textContent = "Microphone isn't available here — type a word instead.";
   }
+
+  typeInstead.addEventListener("click", function(){
+    var willShow = fallbackForm.hidden;
+    fallbackForm.hidden = !willShow;
+    typeInstead.setAttribute("aria-expanded", String(willShow));
+    typeInstead.textContent = willShow ? "Hide typing" : "Type a word instead";
+    if (willShow) fallbackInput.focus();
+  });
 
   if (SR){
     recognizer = new SR();
@@ -582,6 +626,7 @@
       } else {
         bigHint.textContent = "Didn't catch that — try again, or type below.";
         fallbackForm.hidden = false;
+        typeInstead.setAttribute("aria-expanded", "true");
       }
     };
     recognizer.onend = function(){
@@ -602,13 +647,11 @@
   fallbackForm.addEventListener("submit", function(e){
     e.preventDefault();
     if (fallbackInput.value.trim()){
+      if (recognizer && recognizing){ try{ recognizer.abort(); }catch(err){} }
       showResult(fallbackInput.value);
       fallbackInput.value = "";
     }
   });
-
-  // In this private preview the microphone is blocked by the sandbox.
-  fallbackForm.hidden = false;
 
   try{
     if (window.claude && window.claude.hot){
@@ -620,3 +663,5 @@
   }catch(e){}
 })();
 </script>
+</body>
+</html>
