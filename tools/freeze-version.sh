@@ -34,7 +34,7 @@ inject_head="<meta name=\"robots\" content=\"noindex\">
 (function(){try{var P='$game@$ver:',S=Storage.prototype,g=S.getItem,s=S.setItem,r=S.removeItem;
 S.getItem=function(k){return g.call(this,P+k)};S.setItem=function(k,v){return s.call(this,P+k,v)};
 S.removeItem=function(k){return r.call(this,P+k)}}catch(e){}})();</script>"
-inject_body="<div style=\"font:13px/1.4 system-ui,sans-serif;background:#2b2140;color:#f3eefc;padding:6px 12px;text-align:center\">Old version $ver, kept so we can compare. Saved games here are separate. <a style=\"color:#d9c8ff\" href=\"../../../$game/\">Play the current version</a> · <a style=\"color:#d9c8ff\" href=\"../\">All versions</a></div>"
+inject_body="<div style=\"font:13px/1.4 system-ui,sans-serif;background:#2b2140;color:#f3eefc;padding:6px 12px;text-align:center\">Old version $ver, kept so we can compare. Saved games here are separate. <a style=\"color:#d9c8ff\" href=\"../../../$game/\">Play the current version</a> · <a style=\"color:#d9c8ff\" href=\"../../\">All versions</a></div>"
 
 for f in *.html; do
   HEAD_INJ="$inject_head" BODY_INJ="$inject_body" perl -0pi -e '

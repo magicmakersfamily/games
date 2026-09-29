@@ -5,6 +5,7 @@ const path = require('node:path');
 
 const file = path.join(__dirname, 'index-draft-v2.html');
 const html = fs.readFileSync(file, 'utf8');
+const liveHtml = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
 
 function wordBank() {
   const match = html.match(/var W = (\{[\s\S]*?\n  \});\n  delete W\.jump2/);
@@ -33,6 +34,7 @@ test('embedded JavaScript parses', () => {
 test('curated entries preserve the spelling in syllable and sound tiles', () => {
   const words = wordBank();
   assert.ok(Object.keys(words).length >= 150, 'expected the existing substantial curated bank');
+  assert.ok(!words.read, 'ambiguous read/read pronunciation must not get one asserted breakdown');
 
   for (const [word, data] of Object.entries(words)) {
     assert.equal(data.syl.join(''), word, `${word}: syllables should reproduce the spelling`);
@@ -42,6 +44,12 @@ test('curated entries preserve the spelling in syllable and sound tiles', () => 
       assert.ok(pair[0] && pair[1], `${word}: sound fields must not be empty`);
     }
   }
+});
+
+test('live v2 matches the reviewed draft except for its draft label', () => {
+  assert.equal(html.replace('Version 2.0 draft', 'Version 2.0'), liveHtml);
+  assert.match(liveHtml, /Version 2\.0 · Launched/);
+  assert.doesNotMatch(liveHtml, /Version 2\.0 draft/);
 });
 
 test('unknown endings are not taught using incomplete base-word sounds', () => {

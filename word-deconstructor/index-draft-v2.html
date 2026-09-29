@@ -125,6 +125,7 @@
   }
   details.grownups summary::-webkit-details-marker{ display:none; }
   .about{ font-size:12px; color:var(--ink-soft); text-align:center; line-height:1.6; margin:10px 0 0; }
+  .linkish{border:0;background:none;color:inherit;font:inherit;text-decoration:underline;cursor:pointer;padding:0}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
@@ -189,7 +190,9 @@
     <summary>For grown-ups</summary>
     <p class="about">Tap the microphone and say one word. It shows the word, its syllables and sounds when they are in our hand-checked word bank, a picture when available, and reads everything back — to help with sounding out words while learning to read.</p>
     <p class="about">Magic Makers doesn't store your audio or words. Speech recognition is handled by your browser and may use its own speech service to turn your voice into text.</p>
-    <p class="about">Version 2.0 draft · Launched September 29, 2026 · Made by Magic Makers · <a href="../feedback/?game=word-deconstructor&amp;v=2.0">Share your thoughts</a> · <a href="../feedback/?game=word-deconstructor&amp;v=2.0&amp;kind=bug">Report a bug</a></p>
+    <p class="about">Version 2.0 draft · Launched <time datetime="2026-09-29">September 29, 2026</time> · <a href="../feedback/?game=word-deconstructor&amp;v=2.0">Share your thoughts</a> · <a href="../feedback/?game=word-deconstructor&amp;v=2.0&amp;kind=bug">Report a bug</a></p>
+    <p class="about">Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a>.</p>
+    <p class="about">Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/word-deconstructor/" data-text="A free speech-to-reading game for kids: Say It, Spell It!">Tell a friend</button></p>
   </details>
 </div>
 
@@ -338,7 +341,6 @@
     feet:{syl:["feet"], snd:[["f","fff"],["ee","ee"],["t","tuh"]]},
     green:{syl:["green"], snd:[["g","guh"],["r","rrr"],["ee","ee"],["n","nnn"]], pic:"🟩"},
     seat:{syl:["seat"], snd:[["s","sss"],["ea","ee"],["t","tuh"]]},
-    read:{syl:["read"], snd:[["r","rrr"],["ea","ee"],["d","duh"]], pic:"📚"},
     leaf:{syl:["leaf"], snd:[["l","lll"],["ea","ee"],["f","fff"]]},
     pie:{syl:["pie"], snd:[["p","puh"],["ie","eye"]]},
     night:{syl:["night"], snd:[["n","nnn"],["igh","eye"],["t","tuh"]]},
@@ -372,12 +374,12 @@
     hurt:{syl:["hurt"], snd:[["h","huh"],["ur","er"],["t","tuh"]]},
 
     // --- two-syllable words ---
-    apple:{syl:["ap","ple"], snd:[["a","ah"],["p","puh"],["p","puh"],["l","lll"],["e","(silent e)"]], pic:"🍎"},
+    apple:{syl:["ap","ple"], snd:[["a","ah"],["pp","puh"],["le","uhl"]], pic:"🍎"},
     banana:{syl:["ba","na","na"], snd:[["b","buh"],["a","ah"],["n","nnn"],["a","ah"],["n","nnn"],["a","ah"]], pic:"🍌"},
     happy:{syl:["hap","py"], snd:[["h","huh"],["a","ah"],["pp","puh"],["y","ee"]], pic:"😀"},
     rabbit:{syl:["rab","bit"], snd:[["r","rrr"],["a","ah"],["bb","buh"],["i","ih"],["t","tuh"]], pic:"🐰"},
     tiger:{syl:["ti","ger"], snd:[["t","tuh"],["i","eye"],["g","guh"],["er","er"]], pic:"🐯"},
-    turtle:{syl:["tur","tle"], snd:[["t","tuh"],["ur","er"],["t","tuh"],["l","lll"],["e","(silent e)"]], pic:"🐢"},
+    turtle:{syl:["tur","tle"], snd:[["t","tuh"],["ur","er"],["t","tuh"],["le","uhl"]], pic:"🐢"},
     water:{syl:["wa","ter"], snd:[["w","wuh"],["a","aw"],["t","tuh"],["er","er"]], pic:"💧"},
     flower:{syl:["flow","er"], snd:[["f","fff"],["l","lll"],["ow","ow"],["er","er"]], pic:"🌸"},
     teacher:{syl:["teach","er"], snd:[["t","tuh"],["ea","ee"],["ch","ch"],["er","er"]]},
@@ -397,7 +399,7 @@
     have:{syl:["have"], snd:[["h","huh"],["a","ah"],["v","vvv"],["e","(silent e)"]]},
     love:{syl:["love"], snd:[["l","lll"],["o","uh"],["v","vvv"],["e","(silent e)"]], pic:"❤️"},
     friend:{syl:["friend"], snd:[["f","fff"],["r","rrr"],["ie","eh"],["n","nnn"],["d","duh"]], pic:"🧑‍🤝‍🧑"},
-    little:{syl:["lit","tle"], snd:[["l","lll"],["i","ih"],["tt","tuh"],["l","lll"],["e","(silent e)"]], pic:"🐭"},
+    little:{syl:["lit","tle"], snd:[["l","lll"],["i","ih"],["tt","tuh"],["le","uhl"]], pic:"🐭"},
 
     // --- feelings & actions from the original set ---
     jump2:null // placeholder removed below
@@ -406,13 +408,13 @@
 
   // small extra emoji-only words (no curated phonics yet, but a nice picture)
   var PICTURES_ONLY = {
-    bear:"🐻", duckling:"🐤", cake2:"🎂", star2:"⭐", sun2:"☀️",
+    bear:"🐻", duckling:"🐤", read:"📚",
     smile:"🙂", cry:"😢", laugh:"😂", dance:"💃", sleep:"😴",
-    king2:"🤴", queen:"👸", dragon:"🐲", castle:"🏰",
+    queen:"👸", dragon:"🐲", castle:"🏰",
     james:"🧒", school:"🏫", pencil:"✏️", chair:"🪑",
-    mom:"👩", baby:"👶", bread:"🍞", milk2:"🥛", egg2:"🥚",
+    mom:"👩", baby:"👶", bread:"🍞",
     fire:"🔥", snow:"❄️", cloud:"☁️", wind:"🌬️", river:"🏞️",
-    grass:"🌱", bus2:"🚌", plane:"✈️", door:"🚪", ball:"⚽"
+    grass:"🌱", plane:"✈️", door:"🚪", ball:"⚽"
   };
 
   function lookup(word){
@@ -661,6 +663,20 @@
       else boot(window.claude.hot.data || {});
     }
   }catch(e){}
+
+  document.querySelectorAll("[data-tell]").forEach(function(button){
+    button.addEventListener("click", async function(){
+      var url = button.dataset.tell;
+      var text = button.dataset.text;
+      try{
+        if (navigator.share){ await navigator.share({ title:document.title, text:text, url:url }); return; }
+        await navigator.clipboard.writeText(text + " " + url);
+        button.textContent = "Link copied! Paste it in a message.";
+      }catch(e){
+        if (!(e && e.name === "AbortError")) button.textContent = url;
+      }
+    });
+  });
 })();
 </script>
 </body>
