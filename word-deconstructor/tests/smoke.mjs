@@ -165,6 +165,28 @@ async function main() {
   await click('#pictureBtn');
   await screenshot('02-boat');
 
+  console.log('[smoke] homophones: two, to, too');
+  await navigate();
+  await typeWord('two');
+  const two = await evaluate(`({
+    word: document.getElementById('wordBtn').textContent,
+    choices: [...document.querySelectorAll('.homophone-btn')].map(x => ({
+      word: x.dataset.homophone,
+      pressed: x.getAttribute('aria-pressed'),
+      clue: x.querySelector('.homophone-clue').textContent
+    }))
+  })`);
+  assert(two.word === 'two', 'spoken spelling was not preserved');
+  assert(JSON.stringify(two.choices.map(x => x.word)) === '["two","to","too"]', 'two/to/too group is incomplete');
+  assert(two.choices[0].pressed === 'true' && two.choices.every(x => x.clue), 'homophone selection or clues are missing');
+  await click('[data-homophone="to"]');
+  const selectedTo = await evaluate(`({
+    word: document.getElementById('wordBtn').textContent,
+    selected: document.querySelector('[data-homophone="to"]').getAttribute('aria-pressed')
+  })`);
+  assert(selectedTo.word === 'to' && selectedTo.selected === 'true', 'choosing a homophone did not update the spelling');
+  await screenshot('03-two-to-too');
+
   console.log('[smoke] unknown ending: cats');
   await navigate();
   await typeWord('cats');
@@ -176,7 +198,7 @@ async function main() {
   })`);
   assert(cats.word === 'cats' && cats.knownHidden && !cats.noteHidden, 'unknown ending received an unsafe breakdown');
   assert(cats.note.includes("don't have its picture or sounds"), 'unknown word explanation is inaccurate');
-  await screenshot('03-unknown-cats');
+  await screenshot('04-unknown-cats');
 
   console.log('[smoke] picture-only word: queen');
   await navigate();
@@ -195,10 +217,17 @@ async function main() {
   await typeWord('teacher');
   const mobile = await evaluate('({ width: innerWidth, scrollWidth: document.documentElement.scrollWidth })');
   assert(mobile.scrollWidth <= mobile.width + 1, `horizontal overflow at 400px (${mobile.scrollWidth} > ${mobile.width})`);
-  await screenshot('04-mobile-teacher');
+  await screenshot('05-mobile-teacher');
+
+  await navigate();
+  await typeWord('two');
+  const mobileHomophones = await evaluate('({ width: innerWidth, scrollWidth: document.documentElement.scrollWidth, choices: document.querySelectorAll(".homophone-btn").length })');
+  assert(mobileHomophones.choices === 3, 'mobile homophone chooser is incomplete');
+  assert(mobileHomophones.scrollWidth <= mobileHomophones.width + 1, `homophone chooser overflows at 400px (${mobileHomophones.scrollWidth} > ${mobileHomophones.width})`);
+  await screenshot('06-mobile-two');
 
   assert(errors.length === 0, 'browser errors: ' + errors.join(' | '));
-  console.log('[smoke] PASS — start, curated, unknown, picture-only, and mobile flows');
+  console.log('[smoke] PASS — start, curated, homophone, unknown, picture-only, and mobile flows');
 }
 
 function serveStatic(root, port) {

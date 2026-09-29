@@ -42,7 +42,7 @@ tools/              freeze-version.sh: freeze a tagged release into versions/
 | James’s Nature Aquarium | `aquarium/` | 3.4 | 2026-09-24 |
 | Mid-Autumn Mayhem | `mid-autumn/` | 1.7 | 2026-09-25 |
 | Blow Up (beta) | `blow-up/` | 1.4 | 2026-09-27 |
-| Say It, Spell It! | `word-deconstructor/` | 2.0 | 2026-09-29 |
+| Say It, Spell It! | `word-deconstructor/` | 2.1 | 2026-09-29 |
 
 Past versions stay playable at https://magicmakersfamily.github.io/games/versions/ (for
 grown-ups; each keeps its own saved games). Every release is also a git tag (`blow-up-v1.3`, …).

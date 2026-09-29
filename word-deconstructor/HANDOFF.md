@@ -1,5 +1,25 @@
 # Handoff Note
 
+## Update — Version 2.1
+
+The original handoff below is preserved as project history, but its status section is superseded:
+
+- **Live:** Say It, Spell It! 2.1. The v2 two-screen redesign is published, and the live page uses
+  the curated accuracy-first word bank. Unknown words keep their spelling but receive no guessed
+  phonics breakdown.
+- **Homophones:** 30 reviewed groups (65 spellings) show a “Which spelling did you mean?” chooser
+  with a picture and short meaning clue. For example, saying any of `two`, `to`, or `too` shows all
+  three; the recognized spelling stays selected until the child chooses another.
+- **Preserved releases:** v1.0, v2.0, and v2.1 are tagged and playable under
+  `versions/word-deconstructor/`. Saved state is isolated per archived version.
+- **Tests:** `node --test word-deconstructor/draft-v2.test.js` validates the curated bank,
+  homophone groups, metadata, privacy copy, and live/draft parity. `node
+  word-deconstructor/tests/smoke.mjs` drives the real page in Chrome through curated, homophone,
+  unknown-word, picture-only, and 400 px mobile flows.
+- **Still future work:** grow the hand-checked bank toward 300–500 words, replace TTS phoneme
+  approximations with recorded human phonemes, and replace emoji-only pictures with reviewed
+  illustrations.
+
 ## Project
 The Game Shelf — family site of learning games at https://magicmakersfamily.github.io/games/
 (GitHub Pages, repo github.com/magicmakersfamily/games, local clone `/Users/egon/family-games`).

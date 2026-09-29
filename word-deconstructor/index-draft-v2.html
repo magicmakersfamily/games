@@ -87,6 +87,19 @@
     font-size:13px; color:var(--ink-soft); text-align:center; max-width:44ch;
   }
 
+  .homophone-block{
+    width:100%; max-width:520px; padding:12px; border:1px solid var(--line);
+    border-radius:18px; background:var(--card);
+  }
+  .homophone-choices{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
+  .homophone-btn{
+    min-width:100px; border:2px solid var(--line); border-radius:14px; background:var(--paper);
+    color:var(--ink); padding:8px 10px; cursor:pointer; display:grid; gap:1px; text-align:center;
+  }
+  .homophone-btn[aria-pressed="true"]{ border-color:var(--coral); box-shadow:0 0 0 2px rgba(255,107,74,.14); }
+  .homophone-word{ font-family:"Baloo 2",sans-serif; font-size:20px; line-height:1.05; }
+  .homophone-clue{ color:var(--ink-soft); font-size:11px; line-height:1.2; }
+
   .section-label{ font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); font-weight:800; margin:0 0 6px; text-align:center; }
   .syllables, .sounds{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
   .syl-btn{
@@ -159,6 +172,11 @@
 
     <button class="picture-btn" id="pictureBtn" type="button">🔤</button>
 
+    <section class="homophone-block" id="homophoneBlock" aria-labelledby="homophoneTitle" hidden>
+      <p class="section-label" id="homophoneTitle">These sound the same — which spelling do you mean?</p>
+      <div class="homophone-choices" id="homophoneChoices"></div>
+    </section>
+
     <div id="knownBlock">
       <div>
         <p class="section-label">Syllables — tap one</p>
@@ -190,7 +208,7 @@
     <summary>For grown-ups</summary>
     <p class="about">Tap the microphone and say one word. It shows the word, its syllables and sounds when they are in our hand-checked word bank, a picture when available, and reads everything back — to help with sounding out words while learning to read.</p>
     <p class="about">Magic Makers doesn't store your audio or words. Speech recognition is handled by your browser and may use its own speech service to turn your voice into text.</p>
-    <p class="about">Version 2.0 draft · Launched <time datetime="2026-09-29">September 29, 2026</time> · <a href="../feedback/?game=word-deconstructor&amp;v=2.0">Share your thoughts</a> · <a href="../feedback/?game=word-deconstructor&amp;v=2.0&amp;kind=bug">Report a bug</a></p>
+    <p class="about">Version 2.1 draft · Launched <time datetime="2026-09-29">September 29, 2026</time> · <a href="../feedback/?game=word-deconstructor&amp;v=2.1">Share your thoughts</a> · <a href="../feedback/?game=word-deconstructor&amp;v=2.1&amp;kind=bug">Report a bug</a></p>
     <p class="about">Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a>.</p>
     <p class="about">Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/word-deconstructor/" data-text="A free speech-to-reading game for kids: Say It, Spell It!">Tell a friend</button></p>
   </details>
@@ -417,6 +435,45 @@
     grass:"🌱", plane:"✈️", door:"🚪", ball:"⚽"
   };
 
+  // Speech recognition cannot know which spelling a child means when words sound alike.
+  // Each reviewed group shows every spelling in that group with a short meaning clue.
+  var HOMOPHONE_GROUPS = [
+    [{word:"two",pic:"2️⃣",clue:"the number 2"},{word:"to",pic:"➡️",clue:"toward somewhere"},{word:"too",pic:"➕",clue:"also, or extra"}],
+    [{word:"one",pic:"1️⃣",clue:"the number 1"},{word:"won",pic:"🏆",clue:"was the winner"}],
+    [{word:"four",pic:"4️⃣",clue:"the number 4"},{word:"for",pic:"🎁",clue:"meant for someone"},{word:"fore",pic:"⛳",clue:"warning: ahead!"}],
+    [{word:"eight",pic:"8️⃣",clue:"the number 8"},{word:"ate",pic:"🍽️",clue:"did eat"}],
+    [{word:"there",pic:"📍",clue:"in that place"},{word:"their",pic:"👥",clue:"belongs to them"},{word:"they're",pic:"🗣️",clue:"they are"}],
+    [{word:"here",pic:"📍",clue:"in this place"},{word:"hear",pic:"👂",clue:"listen with ears"}],
+    [{word:"no",pic:"🚫",clue:"not yes"},{word:"know",pic:"💡",clue:"understand"}],
+    [{word:"right",pic:"✅",clue:"correct, or this side"},{word:"write",pic:"✏️",clue:"make words"}],
+    [{word:"sea",pic:"🌊",clue:"the ocean"},{word:"see",pic:"👀",clue:"look with eyes"}],
+    [{word:"sun",pic:"☀️",clue:"the star in our sky"},{word:"son",pic:"👦",clue:"a boy in a family"}],
+    [{word:"blue",pic:"🟦",clue:"a color"},{word:"blew",pic:"💨",clue:"did blow"}],
+    [{word:"be",pic:"🌱",clue:"to exist"},{word:"bee",pic:"🐝",clue:"a buzzing insect"}],
+    [{word:"by",pic:"📍",clue:"beside"},{word:"buy",pic:"🛍️",clue:"pay for something"},{word:"bye",pic:"👋",clue:"goodbye"}],
+    [{word:"flower",pic:"🌸",clue:"a blooming plant"},{word:"flour",pic:"🥣",clue:"used for baking"}],
+    [{word:"night",pic:"🌙",clue:"when it is dark"},{word:"knight",pic:"🛡️",clue:"an armored hero"}],
+    [{word:"pair",pic:"2️⃣",clue:"two that go together"},{word:"pear",pic:"🍐",clue:"a fruit"}],
+    [{word:"plane",pic:"✈️",clue:"an airplane"},{word:"plain",pic:"🏞️",clue:"simple, or flat land"}],
+    [{word:"tail",pic:"🐕",clue:"an animal's tail"},{word:"tale",pic:"📖",clue:"a story"}],
+    [{word:"meet",pic:"🤝",clue:"come together"},{word:"meat",pic:"🍖",clue:"food from an animal"}],
+    [{word:"road",pic:"🛣️",clue:"a street"},{word:"rode",pic:"🚲",clue:"did ride"}],
+    [{word:"week",pic:"📅",clue:"seven days"},{word:"weak",pic:"🪶",clue:"not strong"}],
+    [{word:"hole",pic:"🕳️",clue:"an empty opening"},{word:"whole",pic:"⭕",clue:"all of it"}],
+    [{word:"new",pic:"✨",clue:"not old"},{word:"knew",pic:"💡",clue:"did know"}],
+    [{word:"peace",pic:"🕊️",clue:"calm, without fighting"},{word:"piece",pic:"🧩",clue:"one part"}],
+    [{word:"break",pic:"💥",clue:"split or stop"},{word:"brake",pic:"🛑",clue:"makes a vehicle stop"}],
+    [{word:"which",pic:"❓",clue:"asking what one"},{word:"witch",pic:"🧙",clue:"a magic character"}],
+    [{word:"your",pic:"🫵",clue:"belongs to you"},{word:"you're",pic:"💬",clue:"you are"}],
+    [{word:"its",pic:"🐾",clue:"belongs to it"},{word:"it's",pic:"💬",clue:"it is"}],
+    [{word:"i",label:"I",pic:"🙋",clue:"the person speaking"},{word:"eye",pic:"👁️",clue:"the body part that sees"}],
+    [{word:"you",pic:"🫵",clue:"the person spoken to"},{word:"ewe",pic:"🐑",clue:"a female sheep"},{word:"yew",pic:"🌲",clue:"a kind of tree"}]
+  ];
+  var HOMOPHONE_INDEX = {};
+  HOMOPHONE_GROUPS.forEach(function(group){
+    group.forEach(function(choice){ HOMOPHONE_INDEX[choice.word] = { group:group, choice:choice }; });
+  });
+
   function lookup(word){
     var w = word.toLowerCase();
     if (W[w]) return { word:w, data:W[w] };
@@ -429,7 +486,13 @@
     var w = word.toLowerCase();
     if (W[w] && W[w].pic) return W[w].pic;
     if (PICTURES_ONLY[w]) return PICTURES_ONLY[w];
+    if (HOMOPHONE_INDEX[w]) return HOMOPHONE_INDEX[w].choice.pic;
     return null;
+  }
+
+  function spellingFor(word){
+    var entry = HOMOPHONE_INDEX[word.toLowerCase()];
+    return entry && entry.choice.label ? entry.choice.label : word;
   }
 
   // ---------- speech ----------
@@ -486,6 +549,8 @@
 
   var wordBtn = document.getElementById("wordBtn");
   var pictureBtn = document.getElementById("pictureBtn");
+  var homophoneBlock = document.getElementById("homophoneBlock");
+  var homophoneChoices = document.getElementById("homophoneChoices");
   var knownBlock = document.getElementById("knownBlock");
   var newWordNote = document.getElementById("newWordNote");
   var syllablesEl = document.getElementById("syllables");
@@ -499,6 +564,31 @@
   var VOWEL_COLOR = "#2FA79B";
   var CONSONANT_COLOR = "#FF6B4A";
 
+  function showHomophones(word){
+    var entry = HOMOPHONE_INDEX[word];
+    homophoneChoices.innerHTML = "";
+    homophoneBlock.hidden = !entry;
+    if (!entry) return;
+    entry.group.forEach(function(choice){
+      var button = document.createElement("button");
+      button.className = "homophone-btn";
+      button.type = "button";
+      button.dataset.homophone = choice.word;
+      button.setAttribute("aria-pressed", String(choice.word === word));
+      button.setAttribute("aria-label", (choice.label || choice.word) + ": " + choice.clue);
+      var spelling = document.createElement("span");
+      spelling.className = "homophone-word";
+      spelling.textContent = choice.label || choice.word;
+      var clue = document.createElement("span");
+      clue.className = "homophone-clue";
+      clue.textContent = choice.pic + " " + choice.clue;
+      button.appendChild(spelling);
+      button.appendChild(clue);
+      button.addEventListener("click", function(){ showResult(choice.word); });
+      homophoneChoices.appendChild(button);
+    });
+  }
+
   function showResult(rawWord){
     var word = rawWord.trim().replace(/[^a-zA-Z']/g, "");
     if (!word) return;
@@ -508,8 +598,11 @@
 
     var found = lookup(word);
     var displayWord = found.word;
-    wordBtn.textContent = displayWord;
-    wordBtn.setAttribute("aria-label", "Hear the word " + displayWord);
+    var visibleSpelling = spellingFor(displayWord);
+    wordBtn.textContent = visibleSpelling;
+    wordBtn.dataset.word = displayWord;
+    wordBtn.setAttribute("aria-label", "Hear the word " + visibleSpelling);
+    showHomophones(displayWord);
 
     var pic = pictureFor(displayWord);
     pictureBtn.textContent = pic || displayWord[0].toUpperCase();
@@ -547,17 +640,19 @@
     } else {
       knownBlock.hidden = true;
       newWordNote.hidden = false;
-      newWordNote.textContent = pic
-        ? "New word! We don't have its sounds mapped out yet — but here's the picture, and you can still hear the whole word."
-        : "New word! We don't have its picture or sounds mapped out yet — but you can still see its spelling and hear the whole word.";
+      newWordNote.textContent = HOMOPHONE_INDEX[displayWord]
+        ? "Pick the spelling you mean. We haven't mapped its sounds yet, but you can tap the word or picture to hear it."
+        : pic
+          ? "New word! We don't have its sounds mapped out yet — but here's the picture, and you can still hear the whole word."
+          : "New word! We don't have its picture or sounds mapped out yet — but you can still see its spelling and hear the whole word.";
       currentSounds = [];
     }
 
     speak(displayWord, 0.85);
   }
 
-  wordBtn.addEventListener("click", function(){ speak(wordBtn.textContent, 0.85); });
-  pictureBtn.addEventListener("click", function(){ speak(wordBtn.textContent, 0.85); });
+  wordBtn.addEventListener("click", function(){ speak(wordBtn.dataset.word || wordBtn.textContent, 0.85); });
+  pictureBtn.addEventListener("click", function(){ speak(wordBtn.dataset.word || wordBtn.textContent, 0.85); });
 
   playAllBtn.addEventListener("click", function(){
     var token = ++speechToken;
@@ -565,7 +660,7 @@
     var i = 0;
     function next(){
       if (token !== speechToken) return;
-      if (i >= currentSounds.length){ speak(wordBtn.textContent, 0.85, null, token); return; }
+      if (i >= currentSounds.length){ speak(wordBtn.dataset.word || wordBtn.textContent, 0.85, null, token); return; }
       speak(currentSounds[i][1], 0.7, function(){ i++; setTimeout(next, 120); }, token);
     }
     next();

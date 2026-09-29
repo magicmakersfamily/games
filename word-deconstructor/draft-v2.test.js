@@ -15,6 +15,12 @@ function wordBank() {
   return words;
 }
 
+function homophoneGroups() {
+  const match = html.match(/var HOMOPHONE_GROUPS = (\[[\s\S]*?\n  \]);\n  var HOMOPHONE_INDEX/);
+  assert.ok(match, 'homophone groups should be present');
+  return Function(`"use strict"; return (${match[1]});`)();
+}
+
 test('draft is a standalone page with the required public-page metadata', () => {
   assert.match(html, /^<!doctype html>/i);
   assert.match(html, /<html lang="en">/);
@@ -46,10 +52,27 @@ test('curated entries preserve the spelling in syllable and sound tiles', () => 
   }
 });
 
-test('live v2 matches the reviewed draft except for its draft label', () => {
-  assert.equal(html.replace('Version 2.0 draft', 'Version 2.0'), liveHtml);
-  assert.match(liveHtml, /Version 2\.0 · Launched/);
-  assert.doesNotMatch(liveHtml, /Version 2\.0 draft/);
+test('homophone groups are complete, unique, and include two/to/too', () => {
+  const groups = homophoneGroups();
+  assert.ok(groups.length >= 25, 'expected a useful reviewed set of common homophones');
+  const seen = new Set();
+  for (const group of groups) {
+    assert.ok(group.length >= 2, 'each homophone group needs at least two spellings');
+    for (const choice of group) {
+      assert.match(choice.word, /^[a-z]+(?:'[a-z]+)?$/, `invalid spelling: ${choice.word}`);
+      assert.ok(choice.pic && choice.clue, `${choice.word}: needs a picture and meaning clue`);
+      assert.ok(!seen.has(choice.word), `${choice.word}: appears in more than one group`);
+      seen.add(choice.word);
+    }
+  }
+  const twoGroup = groups.find(group => group.some(choice => choice.word === 'two'));
+  assert.deepEqual(twoGroup.map(choice => choice.word), ['two', 'to', 'too']);
+});
+
+test('live v2.1 matches the reviewed draft except for its draft label', () => {
+  assert.equal(html.replace('Version 2.1 draft', 'Version 2.1'), liveHtml);
+  assert.match(liveHtml, /Version 2\.1 · Launched/);
+  assert.doesNotMatch(liveHtml, /Version 2\.1 draft/);
 });
 
 test('unknown endings are not taught using incomplete base-word sounds', () => {
