@@ -1,8 +1,9 @@
 # Spellicious — Handoff Note
 
-## Update — Version 3.0
+## Update — Version 3.1
 
-- **Live:** Spellicious 3.0 is the current game at /spellicious/.
+- **Live:** Spellicious 3.1 is the current game at /spellicious/.
+- **Wordmark:** “Spell” is bold in the standard orange; “icious” is thinner and lighter for a distinct visual pun.
 - **Brand:** Official name is Spellicious; the logo hints at the pun with “Spell” + “icious”.
 - **Title:** Spellicious: Say & Spell
 - **Subtitle:** Free voice spelling, no ads
@@ -24,9 +25,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 3.0
+- Current version: 3.1
 - Launch date: 2026-09-30
-- Release tag: spellicious-v3.0
-- Frozen archive: versions/spellicious/3.0/
+- Release tag: spellicious-v3.1
+- Frozen archive: versions/spellicious/3.1/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.
