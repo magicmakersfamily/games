@@ -183,7 +183,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.13 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.13">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.14 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.14">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -199,6 +199,7 @@
         let availableVoices = [];
         let recognition = null;
         let speechRunId = 0;
+        let wordHighlightTimers = [];
 
         const voiceStyles = {
             default: { rate: 1.0, pitch: 1.05, volume: 1.0 },
@@ -412,6 +413,7 @@
 
             window.speechSynthesis.cancel();
             const runId = ++speechRunId;
+            clearWordHighlightTimers();
             setWordHighlight(false);
 
             let textToSpeak = getFormattedText();
@@ -437,7 +439,10 @@
             // A second space creates a small, human-like pause without splitting
             // the phrase into separate utterances (which causes large engine gaps).
             const speechText = getNumberSafeSpeechText(text).replace(/\s+/g, '  ');
-            const speechWords = [...speechText.matchAll(/\S+/g)].map(match => ({ index: match.index }));
+            const speechWords = [...speechText.matchAll(/\S+/g)].map(match => ({
+                index: match.index,
+                length: match[0].length
+            }));
             const utterance = new SpeechSynthesisUtterance(speechText);
             utterance.lang = currentLang;
             if (selectedVoice) utterance.voice = selectedVoice;
@@ -446,6 +451,16 @@
                 if (runId !== speechRunId) return;
                 setWordHighlight(true, displayWords[0]?.index ?? null);
                 updateStatus(`Speaking: "${text}"`);
+                clearWordHighlightTimers();
+                let elapsed = 0;
+                speechWords.forEach((word, index) => {
+                    if (index > 0 && displayWords[index]) {
+                        elapsed += Math.round((speechWords[index - 1].length * 62 + 115) / speechSpeed);
+                        wordHighlightTimers.push(window.setTimeout(() => {
+                            if (runId === speechRunId) setWordHighlight(true, displayWords[index].index);
+                        }, elapsed));
+                    }
+                });
             };
             utterance.onboundary = (event) => {
                 if (runId !== speechRunId || typeof event.charIndex !== 'number') return;
@@ -459,10 +474,16 @@
             };
             utterance.onend = () => {
                 if (runId !== speechRunId) return;
+                clearWordHighlightTimers();
                 clearWordHighlights();
                 updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
             };
             queueUtterance(utterance, runId);
+        }
+
+        function clearWordHighlightTimers() {
+            wordHighlightTimers.forEach(timer => window.clearTimeout(timer));
+            wordHighlightTimers = [];
         }
 
         function speakSpellingSequence(text, runId = speechRunId) {
@@ -530,6 +551,7 @@
             if (!('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
             const runId = ++speechRunId;
+            clearWordHighlightTimers();
             clearLetterHighlights();
             speakSingleString(word, `Speaking: "${word}"`, true, runId);
         }

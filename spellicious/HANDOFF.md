@@ -1,8 +1,9 @@
 # Spellicious — Handoff Note
 
-## Update — Version 4.13
+## Update — Version 4.14
 
-- **Live:** Spellicious 4.13 is the current game at /spellicious/.
+- **Live:** Spellicious 4.14 is the current game at /spellicious/.
+- **Reliable word highlighting:** Adds a timing fallback for speech engines that fire only the first boundary event, so later words still turn orange in sequence.
 - **Word timing:** Regular phrases use a small double-space pause for clearer word separation while staying in one continuous utterance.
 - **Highlight mapping:** Orange word highlighting now follows the spoken-text character positions, including number-safe speech conversions.
 - **Click-to-speak:** Each displayed word is clickable and keyboard-activatable; activating a word stops the current playback and speaks only that word.
@@ -44,9 +45,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 4.13
+- Current version: 4.14
 - Launch date: 2026-09-30
-- Release tag: spellicious-v4.13
+- Release tag: spellicious-v4.14
 - Frozen archive: versions/spellicious/4.10/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.
