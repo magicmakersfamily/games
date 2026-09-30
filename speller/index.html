@@ -158,12 +158,12 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 2.7 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=speller&amp;v=2.7">Share your thoughts</a></p>
+        <p class="mt-2">Version 2.8 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=speller&amp;v=2.8">Share your thoughts</a></p>
     </footer>
 
     <script>
         /* State Variables */
-        let currentWord = "speller";
+        let currentWord = "hello";
         let currentLang = "en-US";
         let isCaseUpper = false;
         let isSpellMode = false;
@@ -174,7 +174,7 @@
 
         /* Language-specific default words */
         const langDefaults = {
-            "en-US": { defaultWord: "speller", samples: ["speller", "hello", "magic", "rainbow", "butterfly", "dinosaur", "happy", "sun"] },
+            "en-US": { defaultWord: "hello", samples: ["hello", "speller", "magic", "rainbow", "butterfly", "dinosaur", "happy", "sun"] },
             "es-ES": { defaultWord: "hola", samples: ["hola", "amigo", "sol", "mariposa", "mágica", "dragón", "feliz", "familia"] },
             "fr-FR": { defaultWord: "bonjour", samples: ["bonjour", "soleil", "papillon", "magie", "fleur", "monde", "heureux", "château"] },
             "de-DE": { defaultWord: "hallo", samples: ["hallo", "sonne", "zauber", "blume", "schmetterling", "glücklich", "drache", "welt"] },
@@ -193,6 +193,7 @@
             initSpeechRecognition();
             renderSampleWords();
             updateDisplay();
+            setTimeout(() => speakCurrentText(), 300);
         });
 
         function initVoiceSynthesis() {
