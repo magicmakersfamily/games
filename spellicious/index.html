@@ -191,7 +191,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.5 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.5">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.6 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.6">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -206,6 +206,7 @@
         let selectedVoice = null;
         let availableVoices = [];
         let recognition = null;
+        let speechRunId = 0;
 
         const voiceStyles = {
             default: { rate: 0.88, pitch: 1.05, volume: 1.0 },
@@ -257,6 +258,7 @@
                     (window.speechSynthesis.speaking || window.speechSynthesis.pending);
                 if (speechIsActive) {
                     window.speechSynthesis.cancel();
+                    speechRunId += 1;
                     setWordHighlight(false);
                     clearLetterHighlights();
                 }
@@ -417,24 +419,25 @@
             if (!('speechSynthesis' in window)) return;
 
             window.speechSynthesis.cancel();
+            const runId = ++speechRunId;
             setWordHighlight(false);
 
             let textToSpeak = getFormattedText();
 
             if (isSpellMode) {
-                speakSpellingSequence(textToSpeak);
+                speakSpellingSequence(textToSpeak, runId);
                 return;
             }
 
             clearLetterHighlights();
             if (/\s/.test(textToSpeak.trim())) {
-                speakWordSequence(textToSpeak);
+                speakWordSequence(textToSpeak, runId);
                 return;
             }
-            speakSingleString(textToSpeak, `Speaking: "${textToSpeak}"`, true);
+            speakSingleString(textToSpeak, `Speaking: "${textToSpeak}"`, true, runId);
         }
 
-        function speakWordSequence(text) {
+        function speakWordSequence(text, runId = speechRunId) {
             const words = [...text.matchAll(/\S+/g)].map(match => ({
                 word: match[0],
                 index: match.index
@@ -442,6 +445,7 @@
             let currentIndex = 0;
 
             function speakNextWord() {
+                if (runId !== speechRunId) return;
                 if (currentIndex >= words.length) {
                     clearWordHighlights();
                     updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
@@ -458,16 +462,18 @@
                     updateStatus(`Speaking: "${word}"`);
                 };
                 utterance.onend = () => {
+                    if (runId !== speechRunId) return;
                     currentIndex += 1;
                     window.setTimeout(speakNextWord, getSpeechGapMs());
                 };
+                window.speechSynthesis.resume();
                 window.speechSynthesis.speak(utterance);
             }
 
             speakNextWord();
         }
 
-        function speakSpellingSequence(text) {
+        function speakSpellingSequence(text, runId = speechRunId) {
             const letters = [...text]
                 .map((char, index) => ({ char, index }))
                 .filter(({ char }) => char.trim() !== '');
@@ -476,6 +482,7 @@
             clearLetterHighlights();
 
             function speakNextLetter() {
+                if (runId !== speechRunId) return;
                 if (currentIndex >= letters.length) {
                     if (/[0-9]/.test(text) || /\s/.test(text)) {
                         clearLetterHighlights();
@@ -490,10 +497,12 @@
                         clearLetterHighlights();
                         updateStatus(`Spelling complete. Saying: "${text}"`);
                     };
-                    wordUtterance.onend = () => {
+                wordUtterance.onend = () => {
+                        if (runId !== speechRunId) return;
                         clearLetterHighlights();
                         updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
                     };
+                    window.speechSynthesis.resume();
                     window.speechSynthesis.speak(wordUtterance);
                     return;
                 }
@@ -508,9 +517,11 @@
                     updateStatus(`Spelling: ${char}`);
                 };
                 letterUtterance.onend = () => {
+                    if (runId !== speechRunId) return;
                     currentIndex += 1;
                     window.setTimeout(speakNextLetter, getSpeechGapMs());
                 };
+                window.speechSynthesis.resume();
                 window.speechSynthesis.speak(letterUtterance);
             }
 
@@ -520,11 +531,12 @@
         function speakLetter(char) {
             if (!('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
+            const runId = ++speechRunId;
             setWordHighlight(false);
-            speakSingleString(char, `Letter: "${char}"`);
+            speakSingleString(char, `Letter: "${char}"`, false, runId);
         }
 
-        function speakSingleString(text, statusMsg, highlightWord = false) {
+        function speakSingleString(text, statusMsg, highlightWord = false, runId = speechRunId) {
             const utterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
             utterance.lang = currentLang;
             
@@ -535,21 +547,26 @@
             applyVoiceStyle(utterance);
 
             utterance.onstart = () => {
+                if (runId !== speechRunId) return;
                 if (highlightWord) setWordHighlight(true);
                 updateStatus(statusMsg);
             };
 
             utterance.onend = () => {
+                if (runId !== speechRunId) return;
                 if (highlightWord) setWordHighlight(false);
                 updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
             };
 
+            window.speechSynthesis.resume();
             window.speechSynthesis.speak(utterance);
         }
 
         function applyVoiceStyle(utterance) {
             const style = voiceStyles[currentVoiceStyle] || voiceStyles.default;
-            utterance.rate = Math.max(0.1, Math.min(10, style.rate * speechSpeed));
+            // Native speech engines often become silent above ~2x; use sequencing gaps
+            // for higher multipliers while keeping the actual utterance in a safe range.
+            utterance.rate = Math.max(0.1, Math.min(2, style.rate * speechSpeed));
             utterance.pitch = style.pitch;
             utterance.volume = style.volume;
         }
