@@ -175,7 +175,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.2 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.2">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.3 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.3">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -232,21 +232,18 @@
             document.addEventListener('keydown', (event) => {
                 if (event.code !== 'Space' || event.repeat) return;
 
-                const target = event.target;
-                const tagName = target && target.tagName ? target.tagName.toLowerCase() : '';
-                if (['button', 'input', 'select', 'textarea'].includes(tagName) || target?.isContentEditable) return;
+                if (event.target?.isContentEditable) return;
 
                 event.preventDefault();
+                event.stopPropagation();
                 const speechIsActive = 'speechSynthesis' in window &&
                     (window.speechSynthesis.speaking || window.speechSynthesis.pending);
                 if (speechIsActive) {
                     window.speechSynthesis.cancel();
                     setWordHighlight(false);
                     clearLetterHighlights();
-                    if (!isListening) toggleListening();
-                } else {
-                    toggleListening();
                 }
+                if (!isListening) toggleListening();
             });
         }
 

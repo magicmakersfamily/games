@@ -1,8 +1,9 @@
 # Spellicious — Handoff Note
 
-## Update — Version 4.2
+## Update — Version 4.3
 
-- **Live:** Spellicious 4.2 is the current game at /spellicious/.
+- **Live:** Spellicious 4.3 is the current game at /spellicious/.
+- **Spacebar:** Space overrides selector/button focus, cancels speech and highlights, and opens the microphone regardless of settings.
 - **Highlighting:** Spell mode highlights each letter/number in both the large display and lower tiles; regular multi-word phrases highlight one large word at a time.
 - **Numbers:** Short numbers speak naturally (10 becomes “ten”); longer digit strings remain isolated.
 - **Voice styles:** The Voice dropdown offers Default, Robot, Chipmunk, Storyteller, and Slow Motion pitch/rate profiles.
@@ -34,9 +35,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 4.2
+- Current version: 4.3
 - Launch date: 2026-09-30
-- Release tag: spellicious-v4.2
-- Frozen archive: versions/spellicious/4.2/
+- Release tag: spellicious-v4.3
+- Frozen archive: versions/spellicious/4.3/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.
