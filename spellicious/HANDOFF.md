@@ -1,8 +1,9 @@
 # Spellicious — Handoff Note
 
-## Update — Version 4.11
+## Update — Version 4.12
 
-- **Live:** Spellicious 4.11 is the current game at /spellicious/.
+- **Live:** Spellicious 4.12 is the current game at /spellicious/.
+- **Click-to-speak:** Each displayed word is clickable and keyboard-activatable; activating a word stops the current playback and speaks only that word.
 - **Natural 1x speech:** Default voice now uses a normal human speaking rate, and regular multi-word phrases play as one continuous utterance instead of separate word utterances with browser-inserted pauses. Word-boundary events still drive the orange highlight.
 - **Speed:** 2x is now the maximum; the artificial inter-word/inter-letter gap is tiny at 1x (about 15ms) and reaches zero at 2x.
 - **Speech recovery:** All utterances go through a guarded queue that resumes the browser engine and reports playback failures.
@@ -41,9 +42,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 4.11
+- Current version: 4.12
 - Launch date: 2026-09-30
-- Release tag: spellicious-v4.11
+- Release tag: spellicious-v4.12
 - Frozen archive: versions/spellicious/4.10/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.

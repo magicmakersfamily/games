@@ -183,7 +183,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.11 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.11">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.12 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.12">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -520,6 +520,14 @@
             speakSingleString(char, `Letter: "${char}"`, false, runId);
         }
 
+        function speakClickedWord(word) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const runId = ++speechRunId;
+            clearLetterHighlights();
+            speakSingleString(word, `Speaking: "${word}"`, true, runId);
+        }
+
         function speakSingleString(text, statusMsg, highlightWord = false, runId = speechRunId) {
             const utterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
             utterance.lang = currentLang;
@@ -641,7 +649,17 @@
                 const startIndex = wordDisplay.textContent.length;
                 const word = document.createElement('span');
                 word.dataset.wordIndex = String(startIndex);
-                word.className = 'text-stone-800 transition-colors';
+                word.className = 'text-stone-800 transition-colors cursor-pointer';
+                word.setAttribute('role', 'button');
+                word.setAttribute('tabindex', '0');
+                word.setAttribute('aria-label', `Speak ${part}`);
+                word.addEventListener('click', () => speakClickedWord(part));
+                word.addEventListener('keydown', event => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        speakClickedWord(part);
+                    }
+                });
                 [...part].forEach((char, offset) => {
                     const letter = document.createElement('span');
                     letter.dataset.displayIndex = String(startIndex + offset);
