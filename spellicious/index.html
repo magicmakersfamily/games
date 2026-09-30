@@ -187,7 +187,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.7 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.7">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.8 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.8">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -462,8 +462,7 @@
                     currentIndex += 1;
                     window.setTimeout(speakNextWord, getSpeechGapMs());
                 };
-                window.speechSynthesis.resume();
-                window.speechSynthesis.speak(utterance);
+                queueUtterance(utterance, runId);
             }
 
             speakNextWord();
@@ -498,8 +497,7 @@
                         clearLetterHighlights();
                         updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
                     };
-                    window.speechSynthesis.resume();
-                    window.speechSynthesis.speak(wordUtterance);
+                    queueUtterance(wordUtterance, runId);
                     return;
                 }
 
@@ -517,8 +515,7 @@
                     currentIndex += 1;
                     window.setTimeout(speakNextLetter, getSpeechGapMs());
                 };
-                window.speechSynthesis.resume();
-                window.speechSynthesis.speak(letterUtterance);
+                queueUtterance(letterUtterance, runId);
             }
 
             speakNextLetter();
@@ -554,8 +551,7 @@
                 updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
             };
 
-            window.speechSynthesis.resume();
-            window.speechSynthesis.speak(utterance);
+            queueUtterance(utterance, runId);
         }
 
         function applyVoiceStyle(utterance) {
@@ -565,6 +561,25 @@
             utterance.rate = Math.max(0.1, Math.min(2, style.rate * speechSpeed));
             utterance.pitch = style.pitch;
             utterance.volume = style.volume;
+        }
+
+        function queueUtterance(utterance, runId = speechRunId) {
+            if (runId !== speechRunId) return;
+            utterance.onerror = (event) => {
+                if (event.error !== 'canceled' && runId === speechRunId) {
+                    updateStatus("Voice playback could not start. Tap the word or mic and try again.");
+                }
+            };
+            window.setTimeout(() => {
+                if (runId !== speechRunId) return;
+                try {
+                    window.speechSynthesis.resume();
+                    window.speechSynthesis.speak(utterance);
+                } catch (error) {
+                    console.error("Speech playback failed:", error);
+                    updateStatus("Voice playback could not start. Tap the word or mic and try again.");
+                }
+            }, 25);
         }
 
         function getNumberSafeSpeechText(text) {
