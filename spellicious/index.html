@@ -175,7 +175,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.0 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.0">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.1 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.1">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -413,7 +413,44 @@
             }
 
             clearLetterHighlights();
+            if (/\s/.test(textToSpeak.trim())) {
+                speakWordSequence(textToSpeak);
+                return;
+            }
             speakSingleString(textToSpeak, `Speaking: "${textToSpeak}"`, true);
+        }
+
+        function speakWordSequence(text) {
+            const words = [...text.matchAll(/\S+/g)].map(match => ({
+                word: match[0],
+                index: match.index
+            }));
+            let currentIndex = 0;
+
+            function speakNextWord() {
+                if (currentIndex >= words.length) {
+                    clearWordHighlights();
+                    updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
+                    return;
+                }
+
+                const { word, index } = words[currentIndex];
+                const utterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(word));
+                utterance.lang = currentLang;
+                if (selectedVoice) utterance.voice = selectedVoice;
+                applyVoiceStyle(utterance);
+                utterance.onstart = () => {
+                    setWordHighlight(true, index);
+                    updateStatus(`Speaking: "${word}"`);
+                };
+                utterance.onend = () => {
+                    currentIndex += 1;
+                    speakNextWord();
+                };
+                window.speechSynthesis.speak(utterance);
+            }
+
+            speakNextWord();
         }
 
         function speakSpellingSequence(text) {
@@ -516,11 +553,26 @@
             speakCurrentText();
         }
 
-        function setWordHighlight(active) {
+        function setWordHighlight(active, index = null) {
             const wordDisplay = document.getElementById('wordDisplay');
             if (!wordDisplay) return;
-            wordDisplay.classList.toggle('text-orange-600', active);
-            wordDisplay.classList.toggle('text-stone-800', !active);
+            clearWordHighlights();
+            if (!active) return;
+
+            const selector = index === null
+                ? '[data-word-index]'
+                : `[data-word-index="${index}"]`;
+            wordDisplay.querySelectorAll(selector).forEach(word => {
+                word.classList.add('text-orange-600');
+                word.classList.remove('text-stone-800');
+            });
+        }
+
+        function clearWordHighlights() {
+            document.querySelectorAll('[data-word-index]').forEach(word => {
+                word.classList.remove('text-orange-600');
+                word.classList.add('text-stone-800');
+            });
         }
 
         function getFormattedText() {
@@ -530,9 +582,27 @@
         function updateDisplay() {
             const wordDisplay = document.getElementById('wordDisplay');
             const formattedText = getFormattedText();
-            wordDisplay.textContent = formattedText;
+            renderWordDisplay(formattedText);
 
             renderInteractiveLetters(formattedText);
+        }
+
+        function renderWordDisplay(text) {
+            const wordDisplay = document.getElementById('wordDisplay');
+            wordDisplay.innerHTML = '';
+            let wordIndex = 0;
+            text.split(/(\s+)/).forEach(part => {
+                if (/\s+/.test(part)) {
+                    wordDisplay.appendChild(document.createTextNode(part));
+                    return;
+                }
+                const word = document.createElement('span');
+                word.dataset.wordIndex = String(part ? text.indexOf(part, wordDisplay.textContent.length) : wordIndex);
+                word.className = 'text-stone-800 transition-colors';
+                word.textContent = part;
+                wordDisplay.appendChild(word);
+                wordIndex += 1;
+            });
         }
 
         function renderInteractiveLetters(text) {
