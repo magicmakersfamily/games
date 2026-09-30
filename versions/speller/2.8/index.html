@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<script>/* Frozen copy: keep this version's saved games separate. */
+(function(){try{var P='speller@2.8:',S=Storage.prototype,g=S.getItem,s=S.setItem,r=S.removeItem;
+S.getItem=function(k){return g.call(this,P+k)};S.setItem=function(k,v){return s.call(this,P+k,v)};
+S.removeItem=function(k){return r.call(this,P+k)}}catch(e){}})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Speller helps children say words, see them in giant letters, and hear their letters spoken aloud.">
+    <meta property="og:title" content="Speller">
+    <meta property="og:description" content="Say a word. See it in giant letters. Tap letters to hear them.">
+    <meta property="og:image" content="https://magicmakersfamily.github.io/games/speller/cover.png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔤</text></svg>">
+    <title>Speller</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FAF6F0;
+            color: #2D3748;
+        }
+        .title-font {
+            font-family: 'Fredoka', cursive;
+        }
+        .mic-pulse {
+            animation: pulse-ring 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 22px rgba(239, 68, 68, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+        .sound-wave-bar {
+            animation: soundWave 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes soundWave {
+            0% { height: 6px; }
+            100% { height: 28px; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col p-4 sm:p-6 selection:bg-orange-200">
+<div style="font:13px/1.4 system-ui,sans-serif;background:#2b2140;color:#f3eefc;padding:6px 12px;text-align:center">Old version 2.8, kept so we can compare. Saved games here are separate. <a style="color:#d9c8ff" href="../../../speller/">Play the current version</a> · <a style="color:#d9c8ff" href="../../">All versions</a></div>
+
+    <header class="w-full max-w-5xl mx-auto pt-2 pb-4">
+        <div class="relative flex flex-col items-center">
+            
+            <!-- Far Top Left: Link to All Games -->
+            <div class="w-full flex justify-between items-center mb-2 sm:mb-0 sm:absolute sm:left-0 sm:top-1">
+                    <a href="../../../" class="inline-flex items-center text-xs font-semibold text-stone-500 hover:text-amber-800 transition-colors py-1 px-2.5 rounded-lg hover:bg-stone-200/50 group">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5 mr-1 group-hover:-translate-x-0.5 transition-transform"></i>
+                    All Games
+                </a>
+            </div>
+
+            <!-- Top Center Title Header -->
+            <h1 class="title-font text-4xl sm:text-5xl md:text-6xl font-bold text-orange-600 tracking-tight leading-tight text-center">
+                Speller
+            </h1>
+
+            <!-- Controls row sitting directly underneath title -->
+            <div class="flex flex-wrap items-center justify-center gap-2 mt-2">
+                <button id="caseToggleBtn" onclick="toggleCase()" class="inline-flex items-center gap-1.5 bg-white px-3.5 py-1 rounded-full border border-stone-200 shadow-sm hover:border-amber-400 text-xs sm:text-sm font-semibold text-stone-700 transition-all active:scale-95">
+                    <i data-lucide="type" class="w-3.5 h-3.5 text-amber-600"></i>
+                    Case: <span id="caseState" class="text-amber-700 font-bold">lower</span>
+                </button>
+
+                <button id="spellToggleBtn" onclick="toggleSpellMode()" class="inline-flex items-center gap-1.5 bg-white px-3.5 py-1 rounded-full border border-stone-200 shadow-sm hover:border-amber-400 text-xs sm:text-sm font-semibold text-stone-700 transition-all active:scale-95">
+                    <i data-lucide="spell-check" class="w-3.5 h-3.5 text-amber-600"></i>
+                    Spell mode: <span id="spellState" class="text-stone-500 font-bold">Off</span>
+                </button>
+
+                <!-- Language Selector Dropdown -->
+                <div class="relative inline-block">
+                    <select id="langSelect" onchange="onLanguageChange()" class="appearance-none bg-white px-3.5 py-1 pr-7 rounded-full border border-stone-200 shadow-sm text-xs sm:text-sm font-semibold text-stone-700 hover:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer">
+                        <option value="en-US">Language: English</option>
+                        <option value="es-ES">Language: Spanish</option>
+                        <option value="fr-FR">Language: French</option>
+                        <option value="de-DE">Language: German</option>
+                        <option value="it-IT">Language: Italian</option>
+                        <option value="zh-CN">Language: Mandarin</option>
+                        <option value="zh-HK">Language: Cantonese</option>
+                        <option value="ja-JP">Language: Japanese</option>
+                        <option value="ko-KR">Language: Korean</option>
+                        <option value="pt-BR">Language: Portuguese</option>
+                        <option value="hi-IN">Language: Hindi</option>
+                    </select>
+                    <i data-lucide="globe" class="w-3.5 h-3.5 text-amber-600 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto mt-4 mb-6">
+        
+        <!-- Main Card Section -->
+        <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-amber-100 shadow-xl shadow-amber-900/5 mb-6">
+            <div class="flex flex-col md:flex-row items-center md:items-center gap-8">
+                
+                <!-- Left Side: Big Microphone Button -->
+                <div class="flex flex-col items-center shrink-0">
+                    <button id="micBtn" onclick="toggleListening()" class="relative group w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-tr from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white shadow-xl shadow-orange-500/30 flex items-center justify-center transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-orange-300">
+                        <i data-lucide="mic" id="micIcon" class="w-12 h-12 sm:w-14 sm:h-14 text-white"></i>
+                        <div id="listeningWave" class="hidden absolute inset-0 flex items-center justify-center gap-1.5">
+                            <span class="sound-wave-bar w-1.5 bg-white rounded-full" style="animation-delay: 0.1s"></span>
+                            <span class="sound-wave-bar w-1.5 bg-white rounded-full" style="animation-delay: 0.3s"></span>
+                            <span class="sound-wave-bar w-1.5 bg-white rounded-full" style="animation-delay: 0.2s"></span>
+                            <span class="sound-wave-bar w-1.5 bg-white rounded-full" style="animation-delay: 0.4s"></span>
+                        </div>
+                    </button>
+                    <span id="micLabel" class="text-xs font-bold text-stone-500 uppercase tracking-wider text-center mt-2">Tap Mic to Speak</span>
+                </div>
+
+                <!-- Right Side: Spoken Word Display & Interactive Letters -->
+                <div class="flex-1 w-full text-center md:text-left flex flex-col justify-center gap-3">
+                    
+                    <!-- Word / Sentence Display -->
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                        <div id="wordDisplay" onclick="speakCurrentText()" title="Click to hear full word" class="title-font text-7xl sm:text-8xl md:text-9xl font-extrabold text-stone-800 tracking-tight cursor-pointer hover:text-orange-600 transition-colors select-none break-all">
+                            james
+                        </div>
+                        <button onclick="speakCurrentText()" class="p-2 rounded-full hover:bg-orange-100 text-stone-400 hover:text-orange-600 transition-colors shrink-0" title="Listen">
+                            <i data-lucide="volume-2" class="w-7 h-7"></i>
+                        </button>
+                    </div>
+
+                    <!-- Row below main word: Interactive LETTERS -->
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 pt-1">
+                        <span class="text-xs font-bold text-stone-400 uppercase tracking-wider mr-1">Letters:</span>
+                        <div id="lettersContainer" class="flex flex-wrap items-center gap-1">
+                            <!-- Clickable letter tiles rendered via JavaScript -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <p class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-2">Or try saying one of these words:</p>
+            <div class="flex flex-wrap justify-center gap-2" id="sampleWordsContainer">
+                <!-- JavaScript populated sample chips -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Status -->
+    <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
+        <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
+        <p class="mt-2">Version 2.8 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../../../feedback/?game=speller&amp;v=2.8">Share your thoughts</a></p>
+    </footer>
+
+    <script>
+        /* State Variables */
+        let currentWord = "hello";
+        let currentLang = "en-US";
+        let isCaseUpper = false;
+        let isSpellMode = false;
+        let isListening = false;
+        let selectedVoice = null;
+        let availableVoices = [];
+        let recognition = null;
+
+        /* Language-specific default words */
+        const langDefaults = {
+            "en-US": { defaultWord: "hello", samples: ["hello", "speller", "magic", "rainbow", "butterfly", "dinosaur", "happy", "sun"] },
+            "es-ES": { defaultWord: "hola", samples: ["hola", "amigo", "sol", "mariposa", "mágica", "dragón", "feliz", "familia"] },
+            "fr-FR": { defaultWord: "bonjour", samples: ["bonjour", "soleil", "papillon", "magie", "fleur", "monde", "heureux", "château"] },
+            "de-DE": { defaultWord: "hallo", samples: ["hallo", "sonne", "zauber", "blume", "schmetterling", "glücklich", "drache", "welt"] },
+            "it-IT": { defaultWord: "ciao", samples: ["ciao", "sole", "magia", "farfalla", "fiore", "drago", "felice", "mondo"] },
+            "zh-CN": { defaultWord: "你好", samples: ["你好", "太阳", "彩虹", "魔法", "蝴蝶", "快乐", "恐龙", "朋友"] },
+            "zh-HK": { defaultWord: "你好", samples: ["你好", "多謝", "早晨", "朋友", "食飯", "月亮", "蝴蝶", "開心"] },
+            "ja-JP": { defaultWord: "こんにちは", samples: ["こんにちは", "たいよう", "にじ", "まほう", "ちょうちょう", "たのしい", "きょうりゅう", "ともだち"] },
+            "ko-KR": { defaultWord: "안녕하세요", samples: ["안녕하세요", "태양", "무지개", "마법", "나비", "행복", "공룡", "친구"] },
+            "pt-BR": { defaultWord: "olá", samples: ["olá", "sol", "mágica", "borboleta", "flor", "dragão", "feliz", "amigo"] },
+            "hi-IN": { defaultWord: "नमस्ते", samples: ["नमस्ते", "सूरज", "जादू", "तितली", "फूल", "खुश", "मित्र", "दुनिया"] }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initVoiceSynthesis();
+            initSpeechRecognition();
+            renderSampleWords();
+            updateDisplay();
+            setTimeout(() => speakCurrentText(), 300);
+        });
+
+        function initVoiceSynthesis() {
+            if (!('speechSynthesis' in window)) {
+                updateStatus("Speech synthesis not supported on this browser.");
+                return;
+            }
+
+            function loadVoices() {
+                availableVoices = window.speechSynthesis.getVoices();
+                selectBestVoiceForLang(currentLang);
+            }
+
+            loadVoices();
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = loadVoices;
+            }
+        }
+
+        function selectBestVoiceForLang(langCode) {
+            if (!availableVoices || availableVoices.length === 0) return;
+
+            const normalizedLang = langCode.toLowerCase();
+            const matchedVoices = normalizedLang === 'zh-hk'
+                ? availableVoices.filter(v => {
+                    const voiceLang = (v.lang || '').toLowerCase().replace('_', '-');
+                    const voiceName = (v.name || '').toLowerCase();
+                    return voiceLang === 'zh-hk' || voiceLang.startsWith('yue') ||
+                        voiceName.includes('cantonese') || voiceName.includes('yue');
+                })
+                : availableVoices.filter(v => (v.lang || '').toLowerCase().replace('_', '-') === normalizedLang);
+
+            if (matchedVoices.length > 0) {
+                selectedVoice = matchedVoices.find(v =>
+                    /google|natural|premium|enhanced/i.test(v.name || '')
+                ) || matchedVoices[0];
+            } else {
+                // Never silently select a Mandarin or unrelated voice for Cantonese.
+                // Leaving voice unset lets the browser honor utterance.lang instead.
+                selectedVoice = null;
+            }
+        }
+
+        function onLanguageChange() {
+            const select = document.getElementById('langSelect');
+            currentLang = select.value;
+
+            if (recognition) {
+                recognition.lang = currentLang;
+            }
+
+            selectBestVoiceForLang(currentLang);
+
+            if (langDefaults[currentLang]) {
+                currentWord = langDefaults[currentLang].defaultWord;
+                renderSampleWords();
+            }
+
+            updateDisplay();
+            if (currentLang === 'zh-HK' && !selectedVoice) {
+                updateStatus("Cantonese selected. This browser has no dedicated Cantonese voice, so it will use the zh-HK language setting.");
+            }
+            speakCurrentText();
+        }
+
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                updateStatus("Speech recognition not supported in this browser. Try Chrome/Safari.");
+                return;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = currentLang;
+
+            recognition.onstart = () => {
+                isListening = true;
+                updateMicUI();
+                updateStatus(`Listening in ${getLangName(currentLang)}... Speak now!`);
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript.trim();
+                if (transcript) {
+                    currentWord = transcript;
+                    updateDisplay();
+                    speakCurrentText();
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error:", event.error);
+                updateStatus("Could not hear clearly. Try again!");
+                stopListeningUI();
+            };
+
+            recognition.onend = () => {
+                stopListeningUI();
+            };
+        }
+
+        function toggleListening() {
+            if (!recognition) {
+                alert("Speech recognition is not supported on this browser.");
+                return;
+            }
+            if (isListening) {
+                recognition.stop();
+            } else {
+                try {
+                    recognition.lang = currentLang;
+                    recognition.start();
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
+
+        function updateMicUI() {
+            const btn = document.getElementById('micBtn');
+            const icon = document.getElementById('micIcon');
+            const wave = document.getElementById('listeningWave');
+            const label = document.getElementById('micLabel');
+
+            if (isListening) {
+                btn.classList.add('mic-pulse', 'ring-4', 'ring-red-400');
+                icon.classList.add('hidden');
+                wave.classList.remove('hidden');
+                label.textContent = "Listening...";
+                label.classList.add('text-red-500', 'font-bold');
+            } else {
+                stopListeningUI();
+            }
+        }
+
+        function stopListeningUI() {
+            isListening = false;
+            const btn = document.getElementById('micBtn');
+            const icon = document.getElementById('micIcon');
+            const wave = document.getElementById('listeningWave');
+            const label = document.getElementById('micLabel');
+
+            btn.classList.remove('mic-pulse', 'ring-4', 'ring-red-400');
+            icon.classList.remove('hidden');
+            wave.classList.add('hidden');
+            label.textContent = "Tap Mic to Speak";
+            label.classList.remove('text-red-500');
+        }
+
+        function speakCurrentText() {
+            if (!('speechSynthesis' in window)) return;
+
+            window.speechSynthesis.cancel();
+
+            let textToSpeak = getFormattedText();
+
+            if (isSpellMode) {
+                const letters = textToSpeak.split('').join(', ');
+                textToSpeak = `${letters}. ${textToSpeak}`;
+            }
+
+            speakSingleString(textToSpeak, `Speaking: "${textToSpeak}"`);
+        }
+
+        function speakLetter(char) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            speakSingleString(char, `Letter: "${char}"`);
+        }
+
+        function speakSingleString(text, statusMsg) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = currentLang;
+            
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+
+            utterance.rate = 0.88;
+            utterance.pitch = 1.05;
+            utterance.volume = 1.0;
+
+            utterance.onstart = () => {
+                updateStatus(statusMsg);
+            };
+
+            utterance.onend = () => {
+                updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function getFormattedText() {
+            return isCaseUpper ? currentWord.toUpperCase() : currentWord.toLowerCase();
+        }
+
+        function updateDisplay() {
+            const wordDisplay = document.getElementById('wordDisplay');
+            const formattedText = getFormattedText();
+            wordDisplay.textContent = formattedText;
+
+            renderInteractiveLetters(formattedText);
+        }
+
+        function renderInteractiveLetters(text) {
+            const container = document.getElementById('lettersContainer');
+            container.innerHTML = '';
+
+            const characters = text.split('');
+
+            characters.forEach((char) => {
+                if (char === ' ') {
+                    const spaceDiv = document.createElement('span');
+                    spaceDiv.className = 'w-2';
+                    container.appendChild(spaceDiv);
+                    return;
+                }
+
+                const letterBtn = document.createElement('button');
+                letterBtn.className = "min-w-[28px] sm:min-w-[32px] h-8 sm:h-9 px-1.5 rounded-lg bg-orange-100 hover:bg-orange-500 hover:text-white border border-orange-200 text-orange-700 font-bold text-sm sm:text-base shadow-sm transition-all transform hover:scale-110 active:scale-95 flex items-center justify-center select-none";
+                letterBtn.textContent = char;
+                letterBtn.title = `Click to hear "${char}"`;
+                letterBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    speakLetter(char);
+                };
+
+                container.appendChild(letterBtn);
+            });
+        }
+
+        function toggleCase() {
+            isCaseUpper = !isCaseUpper;
+            document.getElementById('caseState').textContent = isCaseUpper ? "UPPERCASE" : "lower";
+            updateDisplay();
+        }
+
+        function toggleSpellMode() {
+            isSpellMode = !isSpellMode;
+            const stateElem = document.getElementById('spellState');
+            stateElem.textContent = isSpellMode ? "On" : "Off";
+            stateElem.className = isSpellMode ? "text-amber-600 font-bold" : "text-stone-500 font-bold";
+            speakCurrentText();
+        }
+
+        function selectSampleWord(word) {
+            currentWord = word;
+            updateDisplay();
+            speakCurrentText();
+        }
+
+        function renderSampleWords() {
+            const container = document.getElementById('sampleWordsContainer');
+            container.innerHTML = '';
+            
+            const samples = langDefaults[currentLang] ? langDefaults[currentLang].samples : langDefaults["en-US"].samples;
+
+            samples.forEach(word => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white hover:bg-orange-500 hover:text-white text-stone-700 font-medium px-3.5 py-1.5 rounded-full text-xs sm:text-sm border border-stone-200 hover:border-orange-500 shadow-sm transition-all active:scale-95";
+                btn.textContent = word;
+                btn.onclick = () => selectSampleWord(word);
+                container.appendChild(btn);
+            });
+        }
+
+        function getLangName(langCode) {
+            const names = {
+                "en-US": "English",
+                "es-ES": "Spanish",
+                "fr-FR": "French",
+                "de-DE": "German",
+                "it-IT": "Italian",
+                "zh-CN": "Mandarin",
+                "zh-HK": "Cantonese",
+                "ja-JP": "Japanese",
+                "ko-KR": "Korean",
+                "pt-BR": "Portuguese",
+                "hi-IN": "Hindi"
+            };
+            return names[langCode] || langCode;
+        }
+
+        function updateStatus(msg) {
+            document.getElementById('statusText').textContent = msg;
+        }
+    </script>
+</body>
+</html>
