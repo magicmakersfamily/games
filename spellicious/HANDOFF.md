@@ -1,8 +1,11 @@
-# Speller — Handoff Note
+# Spellicious — Handoff Note
 
-## Update — Version 2.8
+## Update — Version 3.0
 
-- **Live:** Speller 2.8 is the current game at /speller/.
+- **Live:** Spellicious 3.0 is the current game at /spellicious/.
+- **Brand:** Official name is Spellicious; the logo hints at the pun with “Spell” + “icious”.
+- **Title:** Spellicious: Say & Spell
+- **Subtitle:** Free voice spelling, no ads
 - **Design source:** This release replaces the previous Say It, Spell It! page with the reviewed Gemini design supplied by the user.
 - **Interaction:** The page shows a large spoken word, clickable letter tiles, capitalization control, spell mode, language selection, sample words, and speech playback.
 - **Display:** The main word is intentionally oversized for easy reading on phones and tablets.
@@ -13,15 +16,17 @@
 - **English start:** English is the default, the first word is “hello,” and the page attempts to
   speak it after loading.
 - **Dependencies:** The page uses Tailwind and Lucide from their CDN plus Google Fonts, as supplied by the design source.
-- **Historical releases:** Earlier Say It, Spell It! versions remain frozen under versions/word-deconstructor/.
+- **Historical releases:** Earlier versions remain frozen under versions/speller/ and versions/word-deconstructor/.
 - **Future work:** Add sentence mode, improve privacy copy around browser speech services, and consider bringing back a curated phonics bank if this design needs instructional breakdowns again.
 
 ## Release
 
-- Current page: speller/index.html
-- Current URL: https://magicmakersfamily.github.io/games/speller/
-- Current version: 2.8
+- Current page: spellicious/index.html
+- Current URL: https://magicmakersfamily.github.io/games/spellicious/
+- Compatibility redirect: speller/index.html → ../spellicious/
+- Current version: 3.0
 - Launch date: 2026-09-30
-- Release tag: speller-v2.8
+- Release tag: spellicious-v3.0
+- Frozen archive: versions/spellicious/3.0/
 
-Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render speller/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.
+Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.

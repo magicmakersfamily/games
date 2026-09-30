@@ -86,7 +86,7 @@ footer a { color: var(--ink-2); }
         <label><input type="radio" name="game" value="Mid-Autumn Mayhem"> Mid-Autumn Mayhem</label>
         <label><input type="radio" name="game" value="Blow Up"> Blow Up</label>
         <label><input type="radio" name="game" value="James’s Nature Aquarium"> James’s Nature Aquarium</label>
-        <label><input type="radio" name="game" value="Speller"> Speller</label>
+        <label><input type="radio" name="game" value="Spellicious"> Spellicious</label>
         <label><input type="radio" name="game" value="Something else"> Something else</label>
       </div>
     </fieldset>
@@ -151,7 +151,7 @@ footer a { color: var(--ink-2); }
 const WEB3FORMS_KEY = '2115927c-3f99-4c82-9462-546f1055e436';
 const $ = s => document.querySelector(s);
 const params = new URLSearchParams(location.search);
-const GAMES = { 'mid-autumn': 'Mid-Autumn Mayhem', aquarium: 'James’s Nature Aquarium', 'blow-up': 'Blow Up', speller: 'Speller' };
+const GAMES = { 'mid-autumn': 'Mid-Autumn Mayhem', aquarium: 'James’s Nature Aquarium', 'blow-up': 'Blow Up', spellicious: 'Spellicious', speller: 'Spellicious' };
 const from = GAMES[params.get('game')];
 if (from) { const r = document.querySelector(`input[name="game"][value="${from}"]`); if (r) r.checked = true; }
 const version = (params.get('v') || '').replace(/[^0-9.]/g, '').slice(0, 8);
