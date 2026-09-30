@@ -27,7 +27,7 @@ blow-up/            Blow Up (beta)
   sim.test.js       engine tests (node --test)
   PLAN.md           the 1.4 / 2.0 plan (with DECISIONS.md, KNOWN-BUGS.md, CLAUDE.md)
   cover.png         card image (render with index.html#cover)
-word-deconstructor/ Say It, Spell It!
+speller/ Speller
   index.html        page, mic input, syllable/sound breakdown and interface
   cover.png         1200×744 card image
 versions/           past releases, still playable (versions/<game>/<X.Y>/), see versions/index.html
@@ -42,7 +42,7 @@ tools/              freeze-version.sh: freeze a tagged release into versions/
 | James’s Nature Aquarium | `aquarium/` | 3.4 | 2026-09-24 |
 | Mid-Autumn Mayhem | `mid-autumn/` | 1.7 | 2026-09-25 |
 | Blow Up (beta) | `blow-up/` | 1.4 | 2026-09-27 |
-| Say It, Spell It! | `word-deconstructor/` | 2.4 | 2026-09-29 |
+| Speller | `speller/` | 2.5 | 2026-09-30 |
 
 Past versions stay playable at https://magicmakersfamily.github.io/games/versions/ (for
 grown-ups; each keeps its own saved games). Every release is also a git tag (`blow-up-v1.3`, …).
