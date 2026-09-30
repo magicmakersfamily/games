@@ -175,7 +175,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.1 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.1">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.2 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.2">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -596,10 +596,16 @@
                     wordDisplay.appendChild(document.createTextNode(part));
                     return;
                 }
+                const startIndex = wordDisplay.textContent.length;
                 const word = document.createElement('span');
-                word.dataset.wordIndex = String(part ? text.indexOf(part, wordDisplay.textContent.length) : wordIndex);
+                word.dataset.wordIndex = String(startIndex);
                 word.className = 'text-stone-800 transition-colors';
-                word.textContent = part;
+                [...part].forEach((char, offset) => {
+                    const letter = document.createElement('span');
+                    letter.dataset.displayIndex = String(startIndex + offset);
+                    letter.textContent = char;
+                    word.appendChild(letter);
+                });
                 wordDisplay.appendChild(word);
                 wordIndex += 1;
             });
@@ -637,11 +643,16 @@
             clearLetterHighlights();
             const letter = document.querySelector(`[data-letter-index="${index}"]`);
             if (letter) letter.classList.add('bg-orange-500', 'text-white', 'ring-2', 'ring-orange-300', 'scale-110');
+            const displayLetter = document.querySelector(`[data-display-index="${index}"]`);
+            if (displayLetter) displayLetter.classList.add('text-orange-600');
         }
 
         function clearLetterHighlights() {
             document.querySelectorAll('[data-letter-index]').forEach(letter => {
                 letter.classList.remove('bg-orange-500', 'text-white', 'ring-2', 'ring-orange-300', 'scale-110');
+            });
+            document.querySelectorAll('[data-display-index]').forEach(letter => {
+                letter.classList.remove('text-orange-600');
             });
         }
 
