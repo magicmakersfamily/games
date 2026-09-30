@@ -1,8 +1,9 @@
 # Spellicious — Handoff Note
 
-## Update — Version 3.3
+## Update — Version 3.4
 
-- **Live:** Spellicious 3.3 is the current game at /spellicious/.
+- **Live:** Spellicious 3.4 is the current game at /spellicious/.
+- **Mic hint:** A smaller light-grey “space bar also works” line appears beneath “Tap Mic to Speak”.
 - **Keyboard:** Pressing the space bar toggles the microphone when a form control is not focused.
 - **Screen:** The app-store subtitle text is kept in metadata but removed from the visible game screen.
 - **Wordmark:** “Spell” is bold in the standard orange; “icious” is thinner and lighter for a distinct visual pun.
@@ -27,9 +28,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 3.3
+- Current version: 3.4
 - Launch date: 2026-09-30
-- Release tag: spellicious-v3.3
-- Frozen archive: versions/spellicious/3.3/
+- Release tag: spellicious-v3.4
+- Frozen archive: versions/spellicious/3.4/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.

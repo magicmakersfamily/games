@@ -118,7 +118,10 @@
                             <span class="sound-wave-bar w-1.5 bg-white rounded-full" style="animation-delay: 0.4s"></span>
                         </div>
                     </button>
-                    <span id="micLabel" class="text-xs font-bold text-stone-500 uppercase tracking-wider text-center mt-2">Tap Mic to Speak</span>
+                    <div id="micLabel" class="text-center mt-2">
+                        <span id="micLabelText" class="block text-xs font-bold text-stone-500 uppercase tracking-wider">Tap Mic to Speak</span>
+                        <span class="block text-[10px] font-medium text-stone-400 lowercase tracking-normal">space bar also works</span>
+                    </div>
                 </div>
 
                 <!-- Right Side: Spoken Word Display & Interactive Letters -->
@@ -158,7 +161,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 3.3 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=3.3">Share your thoughts</a></p>
+        <p class="mt-2">Version 3.4 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=3.4">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -332,7 +335,7 @@
             const btn = document.getElementById('micBtn');
             const icon = document.getElementById('micIcon');
             const wave = document.getElementById('listeningWave');
-            const label = document.getElementById('micLabel');
+            const label = document.getElementById('micLabelText');
 
             if (isListening) {
                 btn.classList.add('mic-pulse', 'ring-4', 'ring-red-400');
@@ -350,7 +353,7 @@
             const btn = document.getElementById('micBtn');
             const icon = document.getElementById('micIcon');
             const wave = document.getElementById('listeningWave');
-            const label = document.getElementById('micLabel');
+            const label = document.getElementById('micLabelText');
 
             btn.classList.remove('mic-pulse', 'ring-4', 'ring-red-400');
             icon.classList.remove('hidden');
