@@ -158,7 +158,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 3.2 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=3.2">Share your thoughts</a></p>
+        <p class="mt-2">Version 3.3 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=3.3">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -191,10 +191,24 @@
             lucide.createIcons();
             initVoiceSynthesis();
             initSpeechRecognition();
+            initKeyboardControls();
             renderSampleWords();
             updateDisplay();
             setTimeout(() => speakCurrentText(), 300);
         });
+
+        function initKeyboardControls() {
+            document.addEventListener('keydown', (event) => {
+                if (event.code !== 'Space' || event.repeat) return;
+
+                const target = event.target;
+                const tagName = target && target.tagName ? target.tagName.toLowerCase() : '';
+                if (['button', 'input', 'select', 'textarea'].includes(tagName) || target?.isContentEditable) return;
+
+                event.preventDefault();
+                toggleListening();
+            });
+        }
 
         function initVoiceSynthesis() {
             if (!('speechSynthesis' in window)) {
