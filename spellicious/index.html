@@ -183,7 +183,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.10 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.10">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.11 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.11">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -201,11 +201,11 @@
         let speechRunId = 0;
 
         const voiceStyles = {
-            default: { rate: 0.88, pitch: 1.05, volume: 1.0 },
-            robot: { rate: 0.78, pitch: 0.45, volume: 1.0 },
-            chipmunk: { rate: 1.12, pitch: 1.65, volume: 1.0 },
-            storyteller: { rate: 0.78, pitch: 1.12, volume: 1.0 },
-            slow: { rate: 0.55, pitch: 0.9, volume: 1.0 }
+            default: { rate: 1.0, pitch: 1.05, volume: 1.0 },
+            robot: { rate: 0.9, pitch: 0.45, volume: 1.0 },
+            chipmunk: { rate: 1.2, pitch: 1.65, volume: 1.0 },
+            storyteller: { rate: 0.95, pitch: 1.12, volume: 1.0 },
+            slow: { rate: 0.7, pitch: 0.9, volume: 1.0 }
         };
 
         const digitNames = {
@@ -434,34 +434,29 @@
                 word: match[0],
                 index: match.index
             }));
-            let currentIndex = 0;
-
-            function speakNextWord() {
+            const utterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
+            utterance.lang = currentLang;
+            if (selectedVoice) utterance.voice = selectedVoice;
+            applyVoiceStyle(utterance);
+            utterance.onstart = () => {
                 if (runId !== speechRunId) return;
-                if (currentIndex >= words.length) {
-                    clearWordHighlights();
-                    updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
-                    return;
-                }
-
-                const { word, index } = words[currentIndex];
-                const utterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(word));
-                utterance.lang = currentLang;
-                if (selectedVoice) utterance.voice = selectedVoice;
-                applyVoiceStyle(utterance);
-                utterance.onstart = () => {
-                    setWordHighlight(true, index);
-                    updateStatus(`Speaking: "${word}"`);
-                };
-                utterance.onend = () => {
-                    if (runId !== speechRunId) return;
-                    currentIndex += 1;
-                    window.setTimeout(speakNextWord, getSpeechGapMs());
-                };
-                queueUtterance(utterance, runId);
-            }
-
-            speakNextWord();
+                setWordHighlight(true, words[0]?.index ?? null);
+                updateStatus(`Speaking: "${text}"`);
+            };
+            utterance.onboundary = (event) => {
+                if (runId !== speechRunId || typeof event.charIndex !== 'number') return;
+                const currentWord = words.find((word, index) => {
+                    const next = words[index + 1];
+                    return event.charIndex >= word.index && (!next || event.charIndex < next.index);
+                });
+                if (currentWord) setWordHighlight(true, currentWord.index);
+            };
+            utterance.onend = () => {
+                if (runId !== speechRunId) return;
+                clearWordHighlights();
+                updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
+            };
+            queueUtterance(utterance, runId);
         }
 
         function speakSpellingSequence(text, runId = speechRunId) {
