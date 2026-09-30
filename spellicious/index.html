@@ -115,10 +115,6 @@
                         <option value="1" selected>Speed: 1x</option>
                         <option value="1.5">Speed: 1.5x</option>
                         <option value="2">Speed: 2x</option>
-                        <option value="3">Speed: 3x</option>
-                        <option value="4">Speed: 4x</option>
-                        <option value="5">Speed: 5x</option>
-                        <option value="10">Speed: 10x</option>
                     </select>
                     <i data-lucide="gauge" class="w-3 h-3 text-amber-600"></i>
                 </div>
@@ -187,7 +183,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.8 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.8">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.9 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.9">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -601,7 +597,7 @@
         }
 
         function getSpeechGapMs() {
-            return Math.max(0, Math.round(90 / speechSpeed - 45));
+            return Math.max(20, Math.round(260 / speechSpeed - 100));
         }
 
         function setWordHighlight(active, index = null) {

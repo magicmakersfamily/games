@@ -1,8 +1,9 @@
 # Spellicious — Handoff Note
 
-## Update — Version 4.8
+## Update — Version 4.9
 
-- **Live:** Spellicious 4.8 is the current game at /spellicious/.
+- **Live:** Spellicious 4.9 is the current game at /spellicious/.
+- **Speed:** 2x is now the maximum; the inter-word/inter-letter gap scales visibly from 0.5x through 2x.
 - **Speech recovery:** All utterances go through a guarded queue that resumes the browser engine and reports playback failures.
 - **Controls:** Language is a small top-right text dropdown; Voice and Speed are grouped into a compact shared control.
 - **Speech stability:** Canceled runs cannot restart stale callbacks; speech resumes before playback; raw rates are kept in a reliable browser range while high-speed gaps still tighten.
@@ -39,9 +40,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 4.8
+- Current version: 4.9
 - Launch date: 2026-09-30
-- Release tag: spellicious-v4.8
-- Frozen archive: versions/spellicious/4.8/
+- Release tag: spellicious-v4.9
+- Frozen archive: versions/spellicious/4.9/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.
