@@ -187,7 +187,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-6xl lg:max-w-7xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.38 · Launched <time datetime="2026-09-30">September 30, 2026</time> · Made for James and friends · <a class="underline" href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.38">Share your thoughts</a> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.38&amp;kind=bug">Report a bug</a></p>
+        <p class="mt-2">Version 4.39 · Launched <time datetime="2026-09-30">September 30, 2026</time> · Made for James and friends · <a class="underline" href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.39">Share your thoughts</a> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.39&amp;kind=bug">Report a bug</a></p>
         <p class="mt-1">Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a class="underline" href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></p>
         <p class="mt-1">These games don’t collect any information. Saved progress stays in your own browser.</p>
     </footer>
@@ -543,8 +543,8 @@
                 if (runId !== speechRunId) return;
                 if (currentIndex >= letters.length) {
                     clearLetterHighlights();
-                    if (/^[A-Za-z]+$/.test(text)) {
-                        const wordUtterance = new SpeechSynthesisUtterance(text);
+                    if (text.trim()) {
+                        const wordUtterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
                         wordUtterance.lang = currentLang;
                         if (selectedVoice) wordUtterance.voice = selectedVoice;
                         applyVoiceStyle(wordUtterance);
@@ -556,9 +556,6 @@
                             }
                         };
                         queueUtterance(wordUtterance, runId);
-                    } else {
-                        if (highlightedWordIndex !== null) clearWordHighlights();
-                        updateStatus("Spelling complete. Microphone ready.");
                     }
                     return;
                 }
@@ -599,7 +596,9 @@
             clearLetterHighlightTimers();
             clearLetterHighlights();
             if (isSpellMode) {
-                speakSpellingSequence(word, runId, displayIndex, displayIndex);
+                speakSingleString(word, `Saying: "${word}"`, true, runId, displayIndex, () => {
+                    speakSpellingSequence(word, runId, displayIndex, displayIndex);
+                });
                 return;
             }
             speakSingleString(word, `Speaking: "${word}"`, true, runId, displayIndex);
@@ -616,7 +615,7 @@
             speakCurrentText(runId);
         }
 
-        function speakSingleString(text, statusMsg, highlightWord = false, runId = speechRunId, highlightIndex = null) {
+        function speakSingleString(text, statusMsg, highlightWord = false, runId = speechRunId, highlightIndex = null, onComplete = null) {
             const utterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
             utterance.lang = currentLang;
             
@@ -636,6 +635,7 @@
                 if (runId !== speechRunId) return;
                 if (highlightWord) setWordHighlight(false);
                 updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
+                if (typeof onComplete === 'function') onComplete();
             };
 
             queueUtterance(utterance, runId);
