@@ -183,7 +183,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.17 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.17">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.18 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.18">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -312,7 +312,6 @@
             selectBestVoiceForLang(currentLang);
 
             if (langDefaults[currentLang]) {
-                currentWord = langDefaults[currentLang].defaultWord;
                 renderSampleWords();
             }
 
@@ -498,25 +497,8 @@
             function speakNextLetter() {
                 if (runId !== speechRunId) return;
                 if (currentIndex >= letters.length) {
-                    if (/[0-9]/.test(text) || /\s/.test(text)) {
-                        clearLetterHighlights();
-                        updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
-                        return;
-                    }
-                    const wordUtterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
-                    wordUtterance.lang = currentLang;
-                    if (selectedVoice) wordUtterance.voice = selectedVoice;
-                    applyVoiceStyle(wordUtterance);
-                    wordUtterance.onstart = () => {
-                        clearLetterHighlights();
-                        updateStatus(`Spelling complete. Saying: "${text}"`);
-                    };
-                wordUtterance.onend = () => {
-                        if (runId !== speechRunId) return;
-                        clearLetterHighlights();
-                        updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
-                    };
-                    queueUtterance(wordUtterance, runId);
+                    clearLetterHighlights();
+                    updateStatus("Spelling complete. Microphone ready.");
                     return;
                 }
 

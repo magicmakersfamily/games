@@ -2,7 +2,9 @@
 
 ## Update — Version 4.16
 
-- **Live:** Spellicious 4.17 is the current game at /spellicious/.
+- **Live:** Spellicious 4.18 is the current game at /spellicious/.
+- **Mode switching:** Changing language or Spell mode preserves the current displayed word instead of replacing it with a language default.
+- **Spell mode:** Speaks each letter and stops when spelling is complete; it no longer repeats the whole word automatically.
 - **Responsive display:** Short words remain oversized; longer phrases automatically shrink to fit the available screen width and resize on orientation changes.
 - **Case control:** Cycles through lower, UPPER, and Random; Random independently mixes lowercase and uppercase letters in the displayed word.
 - **Number phrases:** Embedded 3+ digit strings are spoken digit-by-digit, so “check 123” becomes “check one two three.”
@@ -49,9 +51,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 4.17
+- Current version: 4.18
 - Launch date: 2026-09-30
-- Release tag: spellicious-v4.17
+- Release tag: spellicious-v4.18
 - Frozen archive: versions/spellicious/4.10/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.
