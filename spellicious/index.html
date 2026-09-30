@@ -183,7 +183,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.20 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.20">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.21 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.21">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -661,7 +661,7 @@
             if (caseMode === 'upper') return currentWord.toUpperCase();
             if (caseMode === 'random') {
                 if (randomCaseText.length !== currentWord.length) {
-                    randomCaseText = [...currentWord].map(char => Math.random() < 0.5 ? char.toLowerCase() : char.toUpperCase()).join('');
+                    randomCaseText = Math.random() < 0.5 ? currentWord.toLowerCase() : currentWord.toUpperCase();
                 }
                 return randomCaseText;
             }
