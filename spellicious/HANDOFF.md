@@ -1,8 +1,10 @@
 # Spellicious — Handoff Note
 
-## Update — Version 4.14
+## Update — Version 4.15
 
-- **Live:** Spellicious 4.14 is the current game at /spellicious/.
+- **Live:** Spellicious 4.15 is the current game at /spellicious/.
+- **Number phrases:** Embedded 3+ digit strings are spoken digit-by-digit, so “check 123” becomes “check one two three.”
+- **Speed curve:** 1x remains natural; 1.5x is moderated and 2x stays within a reliable native speech rate.
 - **Reliable word highlighting:** Adds a timing fallback for speech engines that fire only the first boundary event, so later words still turn orange in sequence.
 - **Word timing:** Regular phrases use a small double-space pause for clearer word separation while staying in one continuous utterance.
 - **Highlight mapping:** Orange word highlighting now follows the spoken-text character positions, including number-safe speech conversions.
@@ -45,9 +47,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 4.14
+- Current version: 4.15
 - Launch date: 2026-09-30
-- Release tag: spellicious-v4.14
+- Release tag: spellicious-v4.15
 - Frozen archive: versions/spellicious/4.10/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.

@@ -183,7 +183,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.14 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.14">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.15 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.15">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -455,7 +455,7 @@
                 let elapsed = 0;
                 speechWords.forEach((word, index) => {
                     if (index > 0 && displayWords[index]) {
-                        elapsed += Math.round((speechWords[index - 1].length * 62 + 115) / speechSpeed);
+                        elapsed += Math.round((speechWords[index - 1].length * 62 + 115) / getEffectiveSpeechMultiplier());
                         wordHighlightTimers.push(window.setTimeout(() => {
                             if (runId === speechRunId) setWordHighlight(true, displayWords[index].index);
                         }, elapsed));
@@ -585,7 +585,7 @@
             const style = voiceStyles[currentVoiceStyle] || voiceStyles.default;
             // Native speech engines often become silent above ~2x; use sequencing gaps
             // for higher multipliers while keeping the actual utterance in a safe range.
-            utterance.rate = Math.max(0.1, Math.min(2, style.rate * speechSpeed));
+            utterance.rate = Math.max(0.1, Math.min(1.5, style.rate * getEffectiveSpeechMultiplier()));
             utterance.pitch = style.pitch;
             utterance.volume = style.volume;
         }
@@ -610,11 +610,12 @@
         }
 
         function getNumberSafeSpeechText(text) {
-            const trimmed = text.trim();
-            if (/^\d{3,}$/.test(trimmed)) {
-                return [...trimmed].map(digit => digitNames[digit]).join(' ');
-            }
-            return text;
+            return text.replace(/\d{3,}/g, digits => [...digits].map(digit => digitNames[digit]).join(' '));
+        }
+
+        function getEffectiveSpeechMultiplier() {
+            // Keep 1x natural, make 1.5x moderately faster, and keep 2x reliable.
+            return 1 + ((speechSpeed - 1) * 0.45);
         }
 
         function onVoiceStyleChange() {
