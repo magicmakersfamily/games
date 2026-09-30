@@ -1,8 +1,9 @@
 # Spellicious — Handoff Note
 
-## Update — Version 4.6
+## Update — Version 4.7
 
-- **Live:** Spellicious 4.6 is the current game at /spellicious/.
+- **Live:** Spellicious 4.7 is the current game at /spellicious/.
+- **Controls:** Language is a small top-right text dropdown; Voice and Speed are grouped into a compact shared control.
 - **Speech stability:** Canceled runs cannot restart stale callbacks; speech resumes before playback; raw rates are kept in a reliable browser range while high-speed gaps still tighten.
 - **Speed:** A compact selector offers 0.5x, 0.75x, 1x, 1.5x, 2x, 3x, 4x, 5x, and 10x speech speed; 1x is the default.
 - **Spacebar:** Space overrides selector/button focus, cancels speech and highlights, and opens the microphone regardless of settings.
@@ -37,9 +38,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 4.6
+- Current version: 4.7
 - Launch date: 2026-09-30
-- Release tag: spellicious-v4.6
-- Frozen archive: versions/spellicious/4.6/
+- Release tag: spellicious-v4.7
+- Frozen archive: versions/spellicious/4.7/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.
