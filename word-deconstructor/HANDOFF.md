@@ -1,10 +1,10 @@
 # Handoff Note
 
-## Update — Version 2.3
+## Update — Version 2.4
 
 The original handoff below is preserved as project history, but its status section is superseded:
 
-- **Live:** Say It, Spell It! 2.3. The v2 two-screen redesign is published, and the live page uses
+- **Live:** Say It, Spell It! 2.4. The v2 two-screen redesign is published, and the live page uses
   the curated accuracy-first word bank. Unknown words keep their spelling but receive no guessed
   phonics breakdown.
 - **Voice reliability:** Speech is warmed up from a user tap, resumed before every utterance, and
@@ -17,7 +17,7 @@ The original handoff below is preserved as project history, but its status secti
 - **Homophones:** 30 reviewed groups (65 spellings) show a “Which spelling did you mean?” chooser
   with a picture and short meaning clue. For example, saying any of `two`, `to`, or `too` shows all
   three; the recognized spelling stays selected until the child chooses another.
-- **Preserved releases:** v1.0, v2.0, v2.1, v2.2, and v2.3 are tagged and playable under
+- **Preserved releases:** v1.0, v2.0, v2.1, v2.2, v2.3, and v2.4 are tagged and playable under
   `versions/word-deconstructor/`. Saved state is isolated per archived version.
 - **Tests:** `node --test word-deconstructor/draft-v2.test.js` validates the curated bank,
   homophone groups, metadata, privacy copy, and live/draft parity. `node
@@ -26,6 +26,21 @@ The original handoff below is preserved as project history, but its status secti
 - **Still future work:** grow the hand-checked bank toward 300–500 words, replace TTS phoneme
   approximations with recorded human phonemes, and replace emoji-only pictures with reviewed
   illustrations.
+
+## Development Roadmap
+
+### Implemented this round
+
+- **Persistent microphone:** the mic is anchored in the top-left corner while the active word or
+  phrase builds in giant letters from left to right.
+- **Capitalization control:** a toggle switches the displayed learning text between uppercase,
+  lowercase, and randomized capitalization.
+- **Spell mode:** a toggle lets the child spell the letters aloud and the system responds by
+  saying the completed word.
+
+### Later
+
+- **Sentence mode:** let the child speak a sentence and display the recognized sentence on screen.
 
 ## Project
 The Game Shelf — family site of learning games at https://magicmakersfamily.github.io/games/

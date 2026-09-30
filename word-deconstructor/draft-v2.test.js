@@ -69,10 +69,10 @@ test('homophone groups are complete, unique, and include two/to/too', () => {
   assert.deepEqual(twoGroup.map(choice => choice.word), ['two', 'to', 'too']);
 });
 
-test('live v2.3 matches the reviewed draft except for its draft label', () => {
-  assert.equal(html.replace('Version 2.3 draft', 'Version 2.3'), liveHtml);
-  assert.match(liveHtml, /Version 2\.3 · Launched/);
-  assert.doesNotMatch(liveHtml, /Version 2\.3 draft/);
+test('live v2.4 matches the reviewed draft except for its draft label', () => {
+  assert.equal(html.replace('Version 2.4 draft', 'Version 2.4'), liveHtml);
+  assert.match(liveHtml, /Version 2\.4 · Launched/);
+  assert.doesNotMatch(liveHtml, /Version 2\.4 draft/);
 });
 
 test('unknown endings are not taught using incomplete base-word sounds', () => {
