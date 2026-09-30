@@ -184,7 +184,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-6xl lg:max-w-7xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.31 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.31">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.32 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.32">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -499,6 +499,9 @@
                 utterance.lang = currentLang;
                 if (selectedVoice) utterance.voice = selectedVoice;
                 applyVoiceStyle(utterance);
+                // Separate utterances give exact word highlights, but browsers add
+                // startup overhead between them. Compensate only for this sequence.
+                utterance.rate = Math.min(2, utterance.rate * 1.5);
                 utterance.onstart = () => {
                     if (runId !== speechRunId) return;
                     setWordHighlight(true, displayWord.index);
@@ -507,7 +510,7 @@
                 utterance.onend = () => {
                     if (runId !== speechRunId) return;
                     currentIndex += 1;
-                    window.setTimeout(speakNextWord, getSpeechGapMs());
+                    window.setTimeout(speakNextWord, 0);
                 };
                 queueUtterance(utterance, runId);
             }
