@@ -187,7 +187,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-6xl lg:max-w-7xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.34 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.34">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.35 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.35">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -528,13 +528,14 @@
             letterHighlightTimers = [];
         }
 
-        function speakSpellingSequence(text, runId = speechRunId) {
+        function speakSpellingSequence(text, runId = speechRunId, highlightedWordIndex = null) {
             const letters = [...text]
                 .map((char, index) => ({ char, index }))
                 .filter(({ char }) => char.trim() !== '');
             let currentIndex = 0;
 
             clearLetterHighlights();
+            if (highlightedWordIndex !== null) setWordHighlight(true, highlightedWordIndex);
 
             function speakNextLetter() {
                 if (runId !== speechRunId) return;
@@ -547,10 +548,14 @@
                         applyVoiceStyle(wordUtterance);
                         wordUtterance.onstart = () => updateStatus(`Spelling complete. Saying: "${text}"`);
                         wordUtterance.onend = () => {
-                            if (runId === speechRunId) updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
+                            if (runId === speechRunId) {
+                                if (highlightedWordIndex !== null) clearWordHighlights();
+                                updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
+                            }
                         };
                         queueUtterance(wordUtterance, runId);
                     } else {
+                        if (highlightedWordIndex !== null) clearWordHighlights();
                         updateStatus("Spelling complete. Microphone ready.");
                     }
                     return;
@@ -584,7 +589,7 @@
             speakSingleString(char, `Letter: "${char}"`, false, runId);
         }
 
-        function speakClickedWord(word) {
+        function speakClickedWord(word, displayIndex = null) {
             if (!('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
             const runId = ++speechRunId;
@@ -592,7 +597,7 @@
             clearLetterHighlightTimers();
             clearLetterHighlights();
             if (isSpellMode) {
-                speakSpellingSequence(word, runId);
+                speakSpellingSequence(word, runId, displayIndex);
                 return;
             }
             speakSingleString(word, `Speaking: "${word}"`, true, runId);
@@ -745,12 +750,12 @@
                 word.setAttribute('aria-label', `Speak ${part}`);
                 word.addEventListener('click', event => {
                     event.stopPropagation();
-                    speakClickedWord(part);
+                    speakClickedWord(part, startIndex);
                 });
                 word.addEventListener('keydown', event => {
                     if (event.key === 'Enter' || event.key === ' ') {
                         event.preventDefault();
-                        speakClickedWord(part);
+                        speakClickedWord(part, startIndex);
                     }
                 });
                 [...part].forEach((char, offset) => {
