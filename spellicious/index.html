@@ -184,7 +184,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.22 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.22">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.23 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.23">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -346,7 +346,7 @@
                 if (transcript) {
                     const safetyResult = window.spelliciousContentSafety.check(transcript);
                     if (safetyResult.blocked) {
-                        updateStatus("Oops! Let’s try a different word.");
+                        updateStatus(formatCaseText("oops"));
                         return;
                     }
                     currentWord = normalizeSpelledTranscript(safetyResult.normalized);
@@ -355,7 +355,7 @@
                 }
             };
 
-            function normalizeSpelledTranscript(transcript) {
+        function normalizeSpelledTranscript(transcript) {
                 const parts = transcript.toLowerCase().split(/[^a-z]+/).filter(Boolean);
                 if (parts.length >= 2 && parts.every(part => part.length === 1)) {
                     return parts.join('');
@@ -372,6 +372,12 @@
             recognition.onend = () => {
                 stopListeningUI();
             };
+        }
+
+        function formatCaseText(text) {
+            if (caseMode === 'upper') return text.toUpperCase();
+            if (caseMode === 'random') return Math.random() < 0.5 ? text.toLowerCase() : text.toUpperCase();
+            return text.toLowerCase();
         }
 
         function toggleListening() {
