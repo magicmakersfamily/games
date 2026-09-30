@@ -183,7 +183,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.19 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.19">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.20 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.20">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -343,11 +343,19 @@
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript.trim();
                 if (transcript) {
-                    currentWord = transcript;
+                    currentWord = normalizeSpelledTranscript(transcript);
                     updateDisplay();
                     speakCurrentText();
                 }
             };
+
+            function normalizeSpelledTranscript(transcript) {
+                const parts = transcript.toLowerCase().split(/[^a-z]+/).filter(Boolean);
+                if (parts.length >= 2 && parts.every(part => part.length === 1)) {
+                    return parts.join('');
+                }
+                return transcript;
+            }
 
             recognition.onerror = (event) => {
                 console.error("Speech recognition error:", event.error);
