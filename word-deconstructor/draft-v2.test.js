@@ -69,10 +69,10 @@ test('homophone groups are complete, unique, and include two/to/too', () => {
   assert.deepEqual(twoGroup.map(choice => choice.word), ['two', 'to', 'too']);
 });
 
-test('live v2.2 matches the reviewed draft except for its draft label', () => {
-  assert.equal(html.replace('Version 2.2 draft', 'Version 2.2'), liveHtml);
-  assert.match(liveHtml, /Version 2\.2 · Launched/);
-  assert.doesNotMatch(liveHtml, /Version 2\.2 draft/);
+test('live v2.3 matches the reviewed draft except for its draft label', () => {
+  assert.equal(html.replace('Version 2.3 draft', 'Version 2.3'), liveHtml);
+  assert.match(liveHtml, /Version 2\.3 · Launched/);
+  assert.doesNotMatch(liveHtml, /Version 2\.3 draft/);
 });
 
 test('unknown endings are not taught using incomplete base-word sounds', () => {
@@ -88,8 +88,16 @@ test('recognition echoes only after the microphone ends, and tiles say their let
   assert.match(html, /if \(pendingEcho\)[\s\S]*?speak\(wordToRepeat, 0\.85\)/);
 });
 
+test('voice playback is unlocked from a tap and explains a failed start', () => {
+  assert.match(html, /function unlockSpeech\(\)/);
+  assert.match(html, /Some browsers need one utterance directly from a tap/);
+  assert.match(html, /window\.speechSynthesis\.resume\(\)/);
+  assert.match(html, /Voice did not start\. Tap Test voice/);
+  assert.match(html, /soundTest\.addEventListener\("click"/);
+});
+
 test('the child flow and privacy language match the handoff', () => {
-  for (const id of ['startScreen', 'resultScreen', 'micBig', 'micSmall', 'wordBtn', 'pictureBtn', 'syllables', 'sounds', 'playAll']) {
+  for (const id of ['startScreen', 'resultScreen', 'micBig', 'micSmall', 'soundTest', 'voiceStatus', 'wordBtn', 'pictureBtn', 'syllables', 'sounds', 'playAll']) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
   assert.match(html, /I didn't hear a word\. Let's try again\./);

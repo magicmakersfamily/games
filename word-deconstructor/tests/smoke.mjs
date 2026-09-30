@@ -142,6 +142,7 @@ async function main() {
   })`);
   assert(!start.startHidden && start.resultHidden, 'start and result screens are not mutually exclusive');
   assert(start.heading === 'Say It, Spell It!', 'wrong title');
+  await click('#soundTest');
   await screenshot('01-start');
 
   console.log('[smoke] curated word: boat');

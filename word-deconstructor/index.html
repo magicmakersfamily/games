@@ -61,6 +61,9 @@
   .fallback input{ flex:1; font-size:16px; padding:10px 14px; border-radius:12px; border:1px solid var(--line); background:var(--paper); color:var(--ink); font-family:inherit; }
   .fallback button{ border:none; border-radius:12px; background:var(--ink); color:var(--paper); padding:10px 16px; font-weight:700; cursor:pointer; }
   .type-instead{border:none;background:none;color:var(--ink-soft);font-family:inherit;font-size:13px;font-weight:700;text-decoration:underline;cursor:pointer;padding:4px 8px}
+  .sound-test{border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:800 13px/1 "Nunito",system-ui,sans-serif;padding:8px 13px;cursor:pointer}
+  .sound-test:hover{border-color:var(--coral)}
+  .voice-status{font-size:12px;color:var(--ink-soft);text-align:center;margin:-8px 0 0;max-width:34ch}
 
   /* ---------- result screen ---------- */
   #resultScreen{ display:flex; flex-direction:column; align-items:center; gap:16px; width:100%; }
@@ -159,6 +162,8 @@
       </svg>
     </button>
     <p class="big-hint" id="bigHint">Tap. Say a word.</p>
+    <button class="sound-test" id="soundTest" type="button">🔊 Test voice</button>
+    <p class="voice-status" id="voiceStatus" aria-live="polite" hidden></p>
     <button class="type-instead" id="typeInstead" type="button" aria-expanded="false" aria-controls="fallbackForm">Type a word instead</button>
     <form class="fallback" id="fallbackForm" hidden>
       <input id="fallbackInput" type="text" placeholder="Type one word" aria-label="Type one word" autocomplete="off" autocapitalize="none" spellcheck="false">
@@ -208,7 +213,7 @@
     <summary>For grown-ups</summary>
     <p class="about">Tap the microphone and say one word. It shows the word, its syllables and sounds when they are in our hand-checked word bank, a picture when available, and reads everything back — to help with sounding out words while learning to read.</p>
     <p class="about">Magic Makers doesn't store your audio or words. Speech recognition is handled by your browser and may use its own speech service to turn your voice into text.</p>
-    <p class="about">Version 2.2 · Launched <time datetime="2026-09-29">September 29, 2026</time> · <a href="../feedback/?game=word-deconstructor&amp;v=2.2">Share your thoughts</a> · <a href="../feedback/?game=word-deconstructor&amp;v=2.2&amp;kind=bug">Report a bug</a></p>
+    <p class="about">Version 2.3 · Launched <time datetime="2026-09-29">September 29, 2026</time> · <a href="../feedback/?game=word-deconstructor&amp;v=2.3">Share your thoughts</a> · <a href="../feedback/?game=word-deconstructor&amp;v=2.3&amp;kind=bug">Report a bug</a></p>
     <p class="about">Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a>.</p>
     <p class="about">Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/word-deconstructor/" data-text="A free speech-to-reading game for kids: Say It, Spell It!">Tell a friend</button></p>
   </details>
@@ -518,24 +523,81 @@
   }
 
   var speechToken = 0;
+  var speechUnlocked = false;
+  var voiceStatus = null;
+
+  function setVoiceStatus(message){
+    if (!voiceStatus) return;
+    voiceStatus.textContent = message || "";
+    voiceStatus.hidden = !message;
+  }
+
+  function unlockSpeech(){
+    if (speechUnlocked || !("speechSynthesis" in window)) return;
+    speechUnlocked = true;
+    try{
+      // Some browsers need one utterance directly from a tap before later speech is allowed.
+      var warmup = new SpeechSynthesisUtterance(" ");
+      warmup.volume = 0;
+      warmup.rate = 10;
+      window.speechSynthesis.resume();
+      window.speechSynthesis.speak(warmup);
+    }catch(e){}
+  }
+
   function speak(text, rate, cb, sequenceToken){
     var token = sequenceToken || ++speechToken;
     try{
-      if (!("speechSynthesis" in window)){ if (cb && token === speechToken) cb(); return; }
+      if (!("speechSynthesis" in window)){
+        setVoiceStatus("Voice playback is not available in this browser.");
+        if (cb && token === speechToken) cb();
+        return;
+      }
       var u = new SpeechSynthesisUtterance(text);
       u.rate = rate || 0.92;
       if (preferredVoice) u.voice = preferredVoice;
       var finished = false;
+      var started = false;
+      u.onstart = function(){ started = true; setVoiceStatus(""); };
       function finish(){
         if (finished) return;
         finished = true;
         if (cb && token === speechToken) cb();
       }
       u.onend = finish;
-      u.onerror = finish;
-      if (!sequenceToken) window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(u);
-    }catch(e){ if (cb && token === speechToken) cb(); }
+      u.onerror = function(){
+        if (token === speechToken) setVoiceStatus("Voice did not start. Tap Test voice, then check that your browser is not muted.");
+        finish();
+      };
+      function startUtterance(){
+        if (token !== speechToken) return;
+        try{
+          window.speechSynthesis.resume();
+          window.speechSynthesis.speak(u);
+          setTimeout(function(){
+            if (!started && token === speechToken){
+              try{ window.speechSynthesis.resume(); }catch(e){}
+            }
+          }, 120);
+          setTimeout(function(){
+            if (!started && !finished && token === speechToken){
+              setVoiceStatus("Voice did not start. Tap Test voice, then check that your browser is not muted.");
+              finish();
+            }
+          }, 1600);
+        }catch(e){
+          setVoiceStatus("Voice did not start. Tap Test voice, then check that your browser is not muted.");
+          finish();
+        }
+      }
+      if (!sequenceToken && (window.speechSynthesis.speaking || window.speechSynthesis.pending)){
+        window.speechSynthesis.cancel();
+        setTimeout(startUtterance, 60);
+      } else startUtterance();
+    }catch(e){
+      setVoiceStatus("Voice did not start. Tap Test voice, then check that your browser is not muted.");
+      if (cb && token === speechToken) cb();
+    }
   }
 
   // ---------- screens ----------
@@ -547,6 +609,8 @@
   var typeInstead = document.getElementById("typeInstead");
   var fallbackForm = document.getElementById("fallbackForm");
   var fallbackInput = document.getElementById("fallbackInput");
+  var soundTest = document.getElementById("soundTest");
+  voiceStatus = document.getElementById("voiceStatus");
 
   var wordBtn = document.getElementById("wordBtn");
   var pictureBtn = document.getElementById("pictureBtn");
@@ -689,6 +753,7 @@
   var pendingEcho = "";
 
   function startListening(){
+    unlockSpeech();
     if (recognizer){
       try{ recognizer.start(); return; }catch(e){
         bigHint.textContent = "The microphone is busy — try again, or type below.";
@@ -705,6 +770,16 @@
     typeInstead.setAttribute("aria-expanded", String(willShow));
     typeInstead.textContent = willShow ? "Hide typing" : "Type a word instead";
     if (willShow) fallbackInput.focus();
+  });
+
+  soundTest.addEventListener("click", function(){
+    // Keep this one inside the button tap so mobile browsers allow it immediately.
+    speechUnlocked = true;
+    try{
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.resume();
+    }catch(e){}
+    speak("Voice is on. Let's say cat.", 0.9);
   });
 
   if (SR){
