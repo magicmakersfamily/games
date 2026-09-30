@@ -184,7 +184,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.26 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.26">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.27 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.27">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -491,10 +491,8 @@
             utterance.onstart = () => {
                 if (runId !== speechRunId) return;
                 setWordHighlight(true, displayWords[0]?.index ?? null);
-                clearLetterHighlights();
                 updateStatus(`Speaking: "${text}"`);
                 clearWordHighlightTimers();
-                clearLetterHighlightTimers();
                 let elapsed = 0;
                 speechWords.forEach((word, index) => {
                     if (index > 0 && displayWords[index]) {
@@ -502,15 +500,7 @@
                             if (runId === speechRunId) setWordHighlight(true, displayWords[index].index);
                         }, elapsed));
                     }
-                    const displayWord = displayWords[index];
-                    if (!displayWord) return;
-                    const duration = Math.max(180, Math.round((displayWord.word.length * 75 + 90) / getEffectiveSpeechMultiplier()));
-                    [...displayWord.word].forEach((char, letterIndex) => {
-                        letterHighlightTimers.push(window.setTimeout(() => {
-                            if (runId === speechRunId) setLetterHighlight(displayWord.index + letterIndex);
-                        }, elapsed + Math.round(letterIndex * duration / displayWord.word.length)));
-                    });
-                    elapsed += duration + 55;
+                    elapsed += Math.round((word.length * 62 + 115) / getEffectiveSpeechMultiplier());
                 });
             };
             utterance.onboundary = (event) => {
@@ -521,22 +511,11 @@
                 });
                 if (speechWordIndex >= 0 && displayWords[speechWordIndex]) {
                     setWordHighlight(true, displayWords[speechWordIndex].index);
-                    clearLetterHighlightTimers();
-                    clearLetterHighlights();
-                    const displayWord = displayWords[speechWordIndex];
-                    const duration = Math.max(180, Math.round((displayWord.word.length * 75 + 90) / getEffectiveSpeechMultiplier()));
-                    [...displayWord.word].forEach((char, letterIndex) => {
-                        letterHighlightTimers.push(window.setTimeout(() => {
-                            if (runId === speechRunId) setLetterHighlight(displayWord.index + letterIndex);
-                        }, Math.round(letterIndex * duration / displayWord.word.length)));
-                    });
                 }
             };
             utterance.onend = () => {
                 if (runId !== speechRunId) return;
                 clearWordHighlightTimers();
-                clearLetterHighlightTimers();
-                clearLetterHighlights();
                 clearWordHighlights();
                 updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
             };
@@ -620,9 +599,7 @@
         }
 
         function speakSingleString(text, statusMsg, highlightWord = false, runId = speechRunId) {
-            const spokenText = getNumberSafeSpeechText(text);
-            const isSingleWord = highlightWord && /^\p{L}+$/u.test(text);
-            const utterance = new SpeechSynthesisUtterance(spokenText);
+            const utterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
             utterance.lang = currentLang;
             
             if (selectedVoice) {
@@ -633,35 +610,12 @@
 
             utterance.onstart = () => {
                 if (runId !== speechRunId) return;
-                if (isSingleWord) {
-                    clearLetterHighlightTimers();
-                    setLetterHighlight(0);
-                    let elapsed = 0;
-                    [...text].forEach((char, index) => {
-                        if (index === 0) return;
-                        elapsed += Math.round((char.length * 45 + 55) / getEffectiveSpeechMultiplier());
-                        letterHighlightTimers.push(window.setTimeout(() => {
-                            if (runId === speechRunId) setLetterHighlight(index);
-                        }, elapsed));
-                    });
-                } else if (highlightWord) {
-                    setWordHighlight(true);
-                }
+                if (highlightWord) setWordHighlight(true);
                 updateStatus(statusMsg);
-            };
-
-            utterance.onboundary = (event) => {
-                if (runId !== speechRunId || !isSingleWord || typeof event.charIndex !== 'number') return;
-                const index = Math.min(text.length - 1, Math.max(0, event.charIndex));
-                setLetterHighlight(index);
             };
 
             utterance.onend = () => {
                 if (runId !== speechRunId) return;
-                if (isSingleWord) {
-                    clearLetterHighlightTimers();
-                    clearLetterHighlights();
-                }
                 if (highlightWord) setWordHighlight(false);
                 updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
             };
