@@ -1,8 +1,9 @@
 # Spellicious — Handoff Note
 
-## Update — Version 4.4
+## Update — Version 4.5
 
-- **Live:** Spellicious 4.4 is the current game at /spellicious/.
+- **Live:** Spellicious 4.5 is the current game at /spellicious/.
+- **Speed sequencing:** Higher speed settings progressively shorten the gaps between letters and words, with no added gap at 3x and above.
 - **Speed:** A compact selector offers 0.5x, 0.75x, 1x, 1.5x, 2x, 3x, 4x, 5x, and 10x speech speed; 1x is the default.
 - **Spacebar:** Space overrides selector/button focus, cancels speech and highlights, and opens the microphone regardless of settings.
 - **Highlighting:** Spell mode highlights each letter/number in both the large display and lower tiles; regular multi-word phrases highlight one large word at a time.
@@ -36,9 +37,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 4.4
+- Current version: 4.5
 - Launch date: 2026-09-30
-- Release tag: spellicious-v4.4
-- Frozen archive: versions/spellicious/4.4/
+- Release tag: spellicious-v4.5
+- Frozen archive: versions/spellicious/4.5/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.

@@ -191,7 +191,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.4 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.4">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.5 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.5">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -459,7 +459,7 @@
                 };
                 utterance.onend = () => {
                     currentIndex += 1;
-                    speakNextWord();
+                    window.setTimeout(speakNextWord, getSpeechGapMs());
                 };
                 window.speechSynthesis.speak(utterance);
             }
@@ -509,7 +509,7 @@
                 };
                 letterUtterance.onend = () => {
                     currentIndex += 1;
-                    speakNextLetter();
+                    window.setTimeout(speakNextLetter, getSpeechGapMs());
                 };
                 window.speechSynthesis.speak(letterUtterance);
             }
@@ -549,7 +549,7 @@
 
         function applyVoiceStyle(utterance) {
             const style = voiceStyles[currentVoiceStyle] || voiceStyles.default;
-            utterance.rate = Math.min(10, style.rate * speechSpeed);
+            utterance.rate = Math.max(0.1, Math.min(10, style.rate * speechSpeed));
             utterance.pitch = style.pitch;
             utterance.volume = style.volume;
         }
@@ -570,6 +570,10 @@
         function onSpeedChange() {
             speechSpeed = Number(document.getElementById('speedSelect').value) || 1;
             speakCurrentText();
+        }
+
+        function getSpeechGapMs() {
+            return Math.max(0, Math.round(90 / speechSpeed - 45));
         }
 
         function setWordHighlight(active, index = null) {
