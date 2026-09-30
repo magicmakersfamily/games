@@ -183,7 +183,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.18 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.18">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.19 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.19">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -498,7 +498,19 @@
                 if (runId !== speechRunId) return;
                 if (currentIndex >= letters.length) {
                     clearLetterHighlights();
-                    updateStatus("Spelling complete. Microphone ready.");
+                    if (/^[A-Za-z]+$/.test(text)) {
+                        const wordUtterance = new SpeechSynthesisUtterance(text);
+                        wordUtterance.lang = currentLang;
+                        if (selectedVoice) wordUtterance.voice = selectedVoice;
+                        applyVoiceStyle(wordUtterance);
+                        wordUtterance.onstart = () => updateStatus(`Spelling complete. Saying: "${text}"`);
+                        wordUtterance.onend = () => {
+                            if (runId === speechRunId) updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
+                        };
+                        queueUtterance(wordUtterance, runId);
+                    } else {
+                        updateStatus("Spelling complete. Microphone ready.");
+                    }
                     return;
                 }
 
