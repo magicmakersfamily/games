@@ -93,6 +93,22 @@
                     <i data-lucide="audio-lines" class="w-3.5 h-3.5 text-amber-600 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                 </div>
 
+                <!-- Speech Speed Selector -->
+                <div class="relative inline-block">
+                    <select id="speedSelect" onchange="onSpeedChange()" class="appearance-none bg-white px-3.5 py-1 pr-7 rounded-full border border-stone-200 shadow-sm text-xs sm:text-sm font-semibold text-stone-700 hover:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer">
+                        <option value="0.5">Speed: 0.5x</option>
+                        <option value="0.75">Speed: 0.75x</option>
+                        <option value="1" selected>Speed: 1x</option>
+                        <option value="1.5">Speed: 1.5x</option>
+                        <option value="2">Speed: 2x</option>
+                        <option value="3">Speed: 3x</option>
+                        <option value="4">Speed: 4x</option>
+                        <option value="5">Speed: 5x</option>
+                        <option value="10">Speed: 10x</option>
+                    </select>
+                    <i data-lucide="gauge" class="w-3.5 h-3.5 text-amber-600 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                </div>
+
                 <!-- Language Selector Dropdown -->
                 <div class="relative inline-block">
                     <select id="langSelect" onchange="onLanguageChange()" class="appearance-none bg-white px-3.5 py-1 pr-7 rounded-full border border-stone-200 shadow-sm text-xs sm:text-sm font-semibold text-stone-700 hover:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer">
@@ -175,7 +191,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.3 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.3">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.4 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.4">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -183,6 +199,7 @@
         let currentWord = "hello";
         let currentLang = "en-US";
         let currentVoiceStyle = "default";
+        let speechSpeed = 1;
         let isCaseUpper = false;
         let isSpellMode = false;
         let isListening = false;
@@ -532,7 +549,7 @@
 
         function applyVoiceStyle(utterance) {
             const style = voiceStyles[currentVoiceStyle] || voiceStyles.default;
-            utterance.rate = style.rate;
+            utterance.rate = Math.min(10, style.rate * speechSpeed);
             utterance.pitch = style.pitch;
             utterance.volume = style.volume;
         }
@@ -547,6 +564,11 @@
 
         function onVoiceStyleChange() {
             currentVoiceStyle = document.getElementById('voiceStyleSelect').value;
+            speakCurrentText();
+        }
+
+        function onSpeedChange() {
+            speechSpeed = Number(document.getElementById('speedSelect').value) || 1;
             speakCurrentText();
         }
 
