@@ -1,8 +1,9 @@
 # Spellicious — Handoff Note
 
-## Update — Version 3.5
+## Update — Version 3.6
 
-- **Live:** Spellicious 3.5 is the current game at /spellicious/.
+- **Live:** Spellicious 3.6 is the current game at /spellicious/.
+- **Regular mode:** The large word turns orange while it is spoken and returns to its normal color afterward.
 - **Spell mode:** Letters are spoken one at a time and the active letter turns orange; the full word is then spoken and the highlights clear.
 - **Mic hint:** A smaller light-grey “space bar also works” line appears beneath “Tap Mic to Speak”.
 - **Keyboard:** Pressing the space bar toggles the microphone when a form control is not focused.
@@ -29,9 +30,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 3.5
+- Current version: 3.6
 - Launch date: 2026-09-30
-- Release tag: spellicious-v3.5
-- Frozen archive: versions/spellicious/3.5/
+- Release tag: spellicious-v3.6
+- Frozen archive: versions/spellicious/3.6/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.
