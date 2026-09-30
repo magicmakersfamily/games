@@ -184,7 +184,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-6xl lg:max-w-7xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.29 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.29">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.30 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.30">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -350,7 +350,7 @@
                         updateStatus(formatCaseText("oops"));
                         return;
                     }
-                    currentWord = normalizeSpelledTranscript(safetyResult.normalized);
+                    currentWord = normalizeSpelledTranscript(normalizeRecognizedTranscript(transcript));
                     updateDisplay();
                     speakCurrentText();
                 }
@@ -381,6 +381,14 @@
                     return parts.join('');
                 }
                 return transcript;
+            }
+
+            function normalizeRecognizedTranscript(transcript) {
+                return transcript
+                    .toLowerCase()
+                    .replace(/\bdon\s+tee\b/g, "don't")
+                    .replace(/\s+/g, ' ')
+                    .trim();
             }
 
             recognition.onerror = (event) => {
