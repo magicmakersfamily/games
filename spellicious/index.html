@@ -184,7 +184,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.24 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.24">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.25 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.25">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -618,7 +618,7 @@
                     let elapsed = 0;
                     [...text].forEach((char, index) => {
                         if (index === 0) return;
-                        elapsed += Math.round((char.length * 62 + 95) / getEffectiveSpeechMultiplier());
+                        elapsed += Math.round((char.length * 45 + 55) / getEffectiveSpeechMultiplier());
                         letterHighlightTimers.push(window.setTimeout(() => {
                             if (runId === speechRunId) setLetterHighlight(index);
                         }, elapsed));
