@@ -71,7 +71,7 @@
             <div class="flex flex-wrap items-center justify-center gap-2 mt-2">
                 <button id="caseToggleBtn" onclick="toggleCase()" class="inline-flex items-center gap-1.5 bg-white px-3.5 py-1 rounded-full border border-stone-200 shadow-sm hover:border-amber-400 text-xs sm:text-sm font-semibold text-stone-700 transition-all active:scale-95">
                     <i data-lucide="type" class="w-3.5 h-3.5 text-amber-600"></i>
-                    Case: <span id="caseState" class="text-amber-700 font-bold">Original</span>
+                    Case: <span id="caseState" class="text-amber-700 font-bold">lower</span>
                 </button>
 
                 <button id="spellToggleBtn" onclick="toggleSpellMode()" class="inline-flex items-center gap-1.5 bg-white px-3.5 py-1 rounded-full border border-stone-200 shadow-sm hover:border-amber-400 text-xs sm:text-sm font-semibold text-stone-700 transition-all active:scale-95">
@@ -88,6 +88,7 @@
                         <option value="de-DE">Language: German</option>
                         <option value="it-IT">Language: Italian</option>
                         <option value="zh-CN">Language: Mandarin</option>
+                        <option value="zh-HK">Language: Cantonese</option>
                         <option value="ja-JP">Language: Japanese</option>
                         <option value="ko-KR">Language: Korean</option>
                         <option value="pt-BR">Language: Portuguese</option>
@@ -157,7 +158,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 2.5 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=speller&amp;v=2.5">Share your thoughts</a></p>
+        <p class="mt-2">Version 2.6 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=speller&amp;v=2.6">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -179,6 +180,7 @@
             "de-DE": { defaultWord: "hallo", samples: ["hallo", "sonne", "zauber", "blume", "schmetterling", "glücklich", "drache", "welt"] },
             "it-IT": { defaultWord: "ciao", samples: ["ciao", "sole", "magia", "farfalla", "fiore", "drago", "felice", "mondo"] },
             "zh-CN": { defaultWord: "你好", samples: ["你好", "太阳", "彩虹", "魔法", "蝴蝶", "快乐", "恐龙", "朋友"] },
+            "zh-HK": { defaultWord: "你好", samples: ["你好", "多謝", "早晨", "朋友", "食飯", "月亮", "蝴蝶", "開心"] },
             "ja-JP": { defaultWord: "こんにちは", samples: ["こんにちは", "たいよう", "にじ", "まほう", "ちょうちょう", "たのしい", "きょうりゅう", "ともだち"] },
             "ko-KR": { defaultWord: "안녕하세요", samples: ["안녕하세요", "태양", "무지개", "마법", "나비", "행복", "공룡", "친구"] },
             "pt-BR": { defaultWord: "olá", samples: ["olá", "sol", "mágica", "borboleta", "flor", "dragão", "feliz", "amigo"] },
@@ -420,7 +422,7 @@
 
         function toggleCase() {
             isCaseUpper = !isCaseUpper;
-            document.getElementById('caseState').textContent = isCaseUpper ? "UPPERCASE" : "Original";
+            document.getElementById('caseState').textContent = isCaseUpper ? "UPPERCASE" : "lower";
             updateDisplay();
         }
 
@@ -461,6 +463,7 @@
                 "de-DE": "German",
                 "it-IT": "Italian",
                 "zh-CN": "Mandarin",
+                "zh-HK": "Cantonese",
                 "ja-JP": "Japanese",
                 "ko-KR": "Korean",
                 "pt-BR": "Portuguese",
