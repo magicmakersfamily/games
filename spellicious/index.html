@@ -144,6 +144,9 @@
                     <div id="micLabel" class="text-center mt-2">
                         <span id="micLabelText" class="block text-xs font-bold text-stone-500 uppercase tracking-wider">Tap Mic to Speak</span>
                         <span class="block text-[10px] font-medium text-stone-400 lowercase tracking-normal">space bar also works</span>
+                        <button onclick="repeatCurrentPhrase()" class="mt-1 inline-flex items-center justify-center p-1 rounded-full text-stone-400 hover:text-orange-600 hover:bg-orange-100 transition-colors" title="Repeat the whole phrase" aria-label="Repeat the whole phrase">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -184,7 +187,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-6xl lg:max-w-7xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.33 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.33">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.34 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.34">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -588,7 +591,22 @@
             clearWordHighlightTimers();
             clearLetterHighlightTimers();
             clearLetterHighlights();
+            if (isSpellMode) {
+                speakSpellingSequence(word, runId);
+                return;
+            }
             speakSingleString(word, `Speaking: "${word}"`, true, runId);
+        }
+
+        function repeatCurrentPhrase() {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const runId = ++speechRunId;
+            clearWordHighlightTimers();
+            clearLetterHighlightTimers();
+            clearWordHighlights();
+            clearLetterHighlights();
+            speakCurrentText(runId);
         }
 
         function speakSingleString(text, statusMsg, highlightWord = false, runId = speechRunId) {
@@ -725,7 +743,10 @@
                 word.setAttribute('role', 'button');
                 word.setAttribute('tabindex', '0');
                 word.setAttribute('aria-label', `Speak ${part}`);
-                word.addEventListener('click', () => speakClickedWord(part));
+                word.addEventListener('click', event => {
+                    event.stopPropagation();
+                    speakClickedWord(part);
+                });
                 word.addEventListener('keydown', event => {
                     if (event.key === 'Enter' || event.key === ' ') {
                         event.preventDefault();
