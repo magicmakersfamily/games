@@ -183,7 +183,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.12 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.12">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.13 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.13">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -430,26 +430,32 @@
         }
 
         function speakWordSequence(text, runId = speechRunId) {
-            const words = [...text.matchAll(/\S+/g)].map(match => ({
+            const displayWords = [...text.matchAll(/\S+/g)].map(match => ({
                 word: match[0],
                 index: match.index
             }));
-            const utterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
+            // A second space creates a small, human-like pause without splitting
+            // the phrase into separate utterances (which causes large engine gaps).
+            const speechText = getNumberSafeSpeechText(text).replace(/\s+/g, '  ');
+            const speechWords = [...speechText.matchAll(/\S+/g)].map(match => ({ index: match.index }));
+            const utterance = new SpeechSynthesisUtterance(speechText);
             utterance.lang = currentLang;
             if (selectedVoice) utterance.voice = selectedVoice;
             applyVoiceStyle(utterance);
             utterance.onstart = () => {
                 if (runId !== speechRunId) return;
-                setWordHighlight(true, words[0]?.index ?? null);
+                setWordHighlight(true, displayWords[0]?.index ?? null);
                 updateStatus(`Speaking: "${text}"`);
             };
             utterance.onboundary = (event) => {
                 if (runId !== speechRunId || typeof event.charIndex !== 'number') return;
-                const currentWord = words.find((word, index) => {
-                    const next = words[index + 1];
+                const speechWordIndex = speechWords.findIndex((word, index) => {
+                    const next = speechWords[index + 1];
                     return event.charIndex >= word.index && (!next || event.charIndex < next.index);
                 });
-                if (currentWord) setWordHighlight(true, currentWord.index);
+                if (speechWordIndex >= 0 && displayWords[speechWordIndex]) {
+                    setWordHighlight(true, displayWords[speechWordIndex].index);
+                }
             };
             utterance.onend = () => {
                 if (runId !== speechRunId) return;
