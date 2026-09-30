@@ -79,6 +79,18 @@
                     Spell mode: <span id="spellState" class="text-stone-500 font-bold">Off</span>
                 </button>
 
+                <!-- Voice Style Selector -->
+                <div class="relative inline-block">
+                    <select id="voiceStyleSelect" onchange="onVoiceStyleChange()" class="appearance-none bg-white px-3.5 py-1 pr-7 rounded-full border border-stone-200 shadow-sm text-xs sm:text-sm font-semibold text-stone-700 hover:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer">
+                        <option value="default">Voice: Default</option>
+                        <option value="robot">Voice: Robot</option>
+                        <option value="chipmunk">Voice: Chipmunk</option>
+                        <option value="storyteller">Voice: Storyteller</option>
+                        <option value="slow">Voice: Slow Motion</option>
+                    </select>
+                    <i data-lucide="audio-lines" class="w-3.5 h-3.5 text-amber-600 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                </div>
+
                 <!-- Language Selector Dropdown -->
                 <div class="relative inline-block">
                     <select id="langSelect" onchange="onLanguageChange()" class="appearance-none bg-white px-3.5 py-1 pr-7 rounded-full border border-stone-200 shadow-sm text-xs sm:text-sm font-semibold text-stone-700 hover:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer">
@@ -161,19 +173,28 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 3.7 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=3.7">Share your thoughts</a></p>
+        <p class="mt-2">Version 3.8 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=3.8">Share your thoughts</a></p>
     </footer>
 
     <script>
         /* State Variables */
         let currentWord = "hello";
         let currentLang = "en-US";
+        let currentVoiceStyle = "default";
         let isCaseUpper = false;
         let isSpellMode = false;
         let isListening = false;
         let selectedVoice = null;
         let availableVoices = [];
         let recognition = null;
+
+        const voiceStyles = {
+            default: { rate: 0.88, pitch: 1.05, volume: 1.0 },
+            robot: { rate: 0.78, pitch: 0.45, volume: 1.0 },
+            chipmunk: { rate: 1.12, pitch: 1.65, volume: 1.0 },
+            storyteller: { rate: 0.78, pitch: 1.12, volume: 1.0 },
+            slow: { rate: 0.55, pitch: 0.9, volume: 1.0 }
+        };
 
         /* Language-specific default words */
         const langDefaults = {
@@ -401,8 +422,7 @@
                     const wordUtterance = new SpeechSynthesisUtterance(text);
                     wordUtterance.lang = currentLang;
                     if (selectedVoice) wordUtterance.voice = selectedVoice;
-                    wordUtterance.rate = 0.88;
-                    wordUtterance.pitch = 1.05;
+                    applyVoiceStyle(wordUtterance);
                     wordUtterance.onstart = () => {
                         clearLetterHighlights();
                         updateStatus(`Spelling complete. Saying: "${text}"`);
@@ -419,8 +439,7 @@
                 const letterUtterance = new SpeechSynthesisUtterance(char);
                 letterUtterance.lang = currentLang;
                 if (selectedVoice) letterUtterance.voice = selectedVoice;
-                letterUtterance.rate = 0.88;
-                letterUtterance.pitch = 1.05;
+                applyVoiceStyle(letterUtterance);
                 letterUtterance.onstart = () => {
                     setLetterHighlight(index);
                     updateStatus(`Spelling: ${char}`);
@@ -450,9 +469,7 @@
                 utterance.voice = selectedVoice;
             }
 
-            utterance.rate = 0.88;
-            utterance.pitch = 1.05;
-            utterance.volume = 1.0;
+            applyVoiceStyle(utterance);
 
             utterance.onstart = () => {
                 if (highlightWord) setWordHighlight(true);
@@ -465,6 +482,18 @@
             };
 
             window.speechSynthesis.speak(utterance);
+        }
+
+        function applyVoiceStyle(utterance) {
+            const style = voiceStyles[currentVoiceStyle] || voiceStyles.default;
+            utterance.rate = style.rate;
+            utterance.pitch = style.pitch;
+            utterance.volume = style.volume;
+        }
+
+        function onVoiceStyleChange() {
+            currentVoiceStyle = document.getElementById('voiceStyleSelect').value;
+            speakCurrentText();
         }
 
         function setWordHighlight(active) {
