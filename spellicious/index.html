@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="content-safety.js"></script>
+    <script src="content-safety.js?v=4.24"></script>
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -184,7 +184,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.23 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.23">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.24 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.24">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -344,7 +344,7 @@
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript.trim();
                 if (transcript) {
-                    const safetyResult = window.spelliciousContentSafety.check(transcript);
+                    const safetyResult = checkTranscriptSafety(transcript);
                     if (safetyResult.blocked) {
                         updateStatus(formatCaseText("oops"));
                         return;
@@ -354,6 +354,25 @@
                     speakCurrentText();
                 }
             };
+
+            function checkTranscriptSafety(transcript) {
+                try {
+                    const safety = window.spelliciousContentSafety;
+                    if (!safety || typeof safety.check !== 'function') {
+                        throw new Error('Content safety module is unavailable');
+                    }
+                    const result = safety.check(transcript);
+                    if (!result || typeof result.normalized !== 'string' ||
+                        typeof result.blocked !== 'boolean') {
+                        throw new Error('Content safety module returned an invalid result');
+                    }
+                    return result;
+                } catch (error) {
+                    // Fail closed: never display or speak an unchecked transcript.
+                    console.error('Content safety check failed:', error);
+                    return { normalized: '', blocked: true };
+                }
+            }
 
         function normalizeSpelledTranscript(transcript) {
                 const parts = transcript.toLowerCase().split(/[^a-z]+/).filter(Boolean);

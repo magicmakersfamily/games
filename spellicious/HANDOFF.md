@@ -1,5 +1,17 @@
 # Spellicious — Handoff Note
 
+## Update — Version 4.24
+
+- **Child-safe speech:** Expands filtering across every language in the selector.
+- **Evasion resistance:** Handles common inflections, compounds, punctuation, spaced letters,
+  leetspeak, repeated letters, diacritics, full-width text, and Cyrillic/Greek lookalikes.
+- **Phrase matching:** Finds blocked and threatening phrases inside longer transcripts.
+- **Unicode:** Preserves combining marks in scripts such as Devanagari.
+- **Fail closed:** An unavailable or malformed safety module can no longer pass unchecked speech.
+- **Cache safety:** The filter script is versioned with the release URL.
+- **Regression tests:** Covers direct profanity, obfuscation, multilingual input, threats, and
+  innocent substring collisions.
+
 ## Update — Version 4.16
 
 - **Live:** Spellicious 4.18 is the current game at /spellicious/.
@@ -51,9 +63,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 4.18
+- Current version: 4.24
 - Launch date: 2026-09-30
-- Release tag: spellicious-v4.18
+- Release tag: spellicious-v4.24
 - Frozen archive: versions/spellicious/4.10/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.
