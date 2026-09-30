@@ -69,10 +69,10 @@ test('homophone groups are complete, unique, and include two/to/too', () => {
   assert.deepEqual(twoGroup.map(choice => choice.word), ['two', 'to', 'too']);
 });
 
-test('live v2.1 matches the reviewed draft except for its draft label', () => {
-  assert.equal(html.replace('Version 2.1 draft', 'Version 2.1'), liveHtml);
-  assert.match(liveHtml, /Version 2\.1 · Launched/);
-  assert.doesNotMatch(liveHtml, /Version 2\.1 draft/);
+test('live v2.2 matches the reviewed draft except for its draft label', () => {
+  assert.equal(html.replace('Version 2.2 draft', 'Version 2.2'), liveHtml);
+  assert.match(liveHtml, /Version 2\.2 · Launched/);
+  assert.doesNotMatch(liveHtml, /Version 2\.2 draft/);
 });
 
 test('unknown endings are not taught using incomplete base-word sounds', () => {
@@ -80,11 +80,20 @@ test('unknown endings are not taught using incomplete base-word sounds', () => {
   assert.match(html, /Correctness beats coverage/);
 });
 
+test('recognition echoes only after the microphone ends, and tiles say their letters and sounds', () => {
+  assert.match(html, /function speakLetterAndSound\(display, spoken\)/);
+  assert.match(html, /display\.toUpperCase\(\)\.split\(""\)\.join\(" "\)/);
+  assert.match(html, /speak\(letterNames \+ "\. " \+ spoken, 0\.75\)/);
+  assert.match(html, /showResult\(firstWord, \{ echo:false \}\)/);
+  assert.match(html, /if \(pendingEcho\)[\s\S]*?speak\(wordToRepeat, 0\.85\)/);
+});
+
 test('the child flow and privacy language match the handoff', () => {
   for (const id of ['startScreen', 'resultScreen', 'micBig', 'micSmall', 'wordBtn', 'pictureBtn', 'syllables', 'sounds', 'playAll']) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
   assert.match(html, /I didn't hear a word\. Let's try again\./);
+  assert.match(html, /Letters &amp; sounds — tap one/);
   assert.match(html, /may use its own speech service/);
   assert.doesNotMatch(html, /audio never leaves|never sent anywhere/i);
 });

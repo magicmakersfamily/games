@@ -165,6 +165,21 @@ async function main() {
   await click('#pictureBtn');
   await screenshot('02-boat');
 
+  console.log('[smoke] cat letters and sounds');
+  await navigate();
+  await typeWord('cat');
+  const cat = await evaluate(`({
+    word: document.getElementById('wordBtn').textContent,
+    sounds: [...document.querySelectorAll('.snd-btn')].map(x => x.textContent),
+    labels: [...document.querySelectorAll('.snd-btn')].map(x => x.getAttribute('aria-label'))
+  })`);
+  assert(cat.word === 'cat', 'wrong cat result word');
+  assert(JSON.stringify(cat.sounds) === '["c","a","t"]', 'cat letters are not individually shown');
+  assert(JSON.stringify(cat.labels) === '["Hear the letter C and its sound","Hear the letter A and its sound","Hear the letter T and its sound"]', 'cat letter tiles are not described as clickable letters and sounds');
+  await click('.snd-btn:nth-child(1)');
+  await click('.snd-btn:nth-child(2)');
+  await click('.snd-btn:nth-child(3)');
+
   console.log('[smoke] homophones: two, to, too');
   await navigate();
   await typeWord('two');
@@ -227,7 +242,7 @@ async function main() {
   await screenshot('06-mobile-two');
 
   assert(errors.length === 0, 'browser errors: ' + errors.join(' | '));
-  console.log('[smoke] PASS — start, curated, homophone, unknown, picture-only, and mobile flows');
+  console.log('[smoke] PASS — start, curated, cat letters, homophone, unknown, picture-only, and mobile flows');
 }
 
 function serveStatic(root, port) {

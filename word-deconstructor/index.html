@@ -168,7 +168,7 @@
 
   <div id="resultScreen" hidden>
     <button class="word-btn" id="wordBtn" type="button"></button>
-    <p class="tap-hint">Tap the word to hear it</p>
+    <p class="tap-hint">We say it back. Tap the word to hear it again.</p>
 
     <button class="picture-btn" id="pictureBtn" type="button">🔤</button>
 
@@ -183,11 +183,11 @@
         <div class="syllables" id="syllables"></div>
       </div>
       <div style="margin-top:14px">
-        <p class="section-label">Sounds — tap one</p>
+        <p class="section-label">Letters &amp; sounds — tap one</p>
         <div class="sounds" id="sounds"></div>
       </div>
       <div class="replay-row">
-        <button class="pill-btn" id="playAll" type="button">▶ Play all sounds, then the word</button>
+        <button class="pill-btn" id="playAll" type="button">▶ Play each sound, then the word</button>
       </div>
     </div>
 
@@ -208,7 +208,7 @@
     <summary>For grown-ups</summary>
     <p class="about">Tap the microphone and say one word. It shows the word, its syllables and sounds when they are in our hand-checked word bank, a picture when available, and reads everything back — to help with sounding out words while learning to read.</p>
     <p class="about">Magic Makers doesn't store your audio or words. Speech recognition is handled by your browser and may use its own speech service to turn your voice into text.</p>
-    <p class="about">Version 2.1 · Launched <time datetime="2026-09-29">September 29, 2026</time> · <a href="../feedback/?game=word-deconstructor&amp;v=2.1">Share your thoughts</a> · <a href="../feedback/?game=word-deconstructor&amp;v=2.1&amp;kind=bug">Report a bug</a></p>
+    <p class="about">Version 2.2 · Launched <time datetime="2026-09-29">September 29, 2026</time> · <a href="../feedback/?game=word-deconstructor&amp;v=2.2">Share your thoughts</a> · <a href="../feedback/?game=word-deconstructor&amp;v=2.2&amp;kind=bug">Report a bug</a></p>
     <p class="about">Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a>.</p>
     <p class="about">Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/word-deconstructor/" data-text="A free speech-to-reading game for kids: Say It, Spell It!">Tell a friend</button></p>
   </details>
@@ -222,6 +222,7 @@
   // Each entry is hand-checked: syl = syllable spellings, snd = [display, spokenApproximation] pairs.
   // "spokenApproximation" is a phonetic respelling so the browser's text-to-speech says the
   // isolated sound instead of a letter name (e.g. "buh" instead of "bee" for the letter B).
+  // A tapped tile says both its letter name(s) and its sound ("C. kuh").
   var W = {
     // --- short a ---
     cat:{syl:["cat"], snd:[["c","kuh"],["a","ah"],["t","tuh"]], pic:"🐱"},
@@ -564,6 +565,11 @@
   var VOWEL_COLOR = "#2FA79B";
   var CONSONANT_COLOR = "#FF6B4A";
 
+  function speakLetterAndSound(display, spoken){
+    var letterNames = display.toUpperCase().split("").join(" ");
+    speak(letterNames + ". " + spoken, 0.75);
+  }
+
   function showHomophones(word){
     var entry = HOMOPHONE_INDEX[word];
     homophoneChoices.innerHTML = "";
@@ -589,7 +595,7 @@
     });
   }
 
-  function showResult(rawWord){
+  function showResult(rawWord, options){
     var word = rawWord.trim().replace(/[^a-zA-Z']/g, "");
     if (!word) return;
 
@@ -632,9 +638,9 @@
         b.className = "snd-btn";
         b.type = "button";
         b.textContent = display;
-        b.setAttribute("aria-label", "Hear the sound spelled " + display);
+        b.setAttribute("aria-label", "Hear the letter" + (display.length > 1 ? "s " : " ") + display.toUpperCase() + " and its sound");
         b.style.background = isVowelDisplay(display) ? VOWEL_COLOR : CONSONANT_COLOR;
-        b.addEventListener("click", function(){ speak(spoken, 0.75); });
+        b.addEventListener("click", function(){ speakLetterAndSound(display, spoken); });
         soundsEl.appendChild(b);
       });
     } else {
@@ -648,7 +654,7 @@
       currentSounds = [];
     }
 
-    speak(displayWord, 0.85);
+    if (!options || options.echo !== false) speak(displayWord, 0.85);
   }
 
   wordBtn.addEventListener("click", function(){ speak(wordBtn.dataset.word || wordBtn.textContent, 0.85); });
@@ -680,6 +686,7 @@
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   var recognizing = false;
   var recognizer = null;
+  var pendingEcho = "";
 
   function startListening(){
     if (recognizer){
@@ -714,7 +721,11 @@
     recognizer.onresult = function(e){
       var transcript = e.results[0][0].transcript;
       var firstWord = transcript.trim().split(/\s+/)[0];
-      showResult(firstWord);
+      // Wait until recognition has fully released the microphone before speaking back.
+      // This keeps the device from trying to recognize its own echo.
+      pendingEcho = firstWord;
+      showResult(firstWord, { echo:false });
+      try{ recognizer.stop(); }catch(err){}
     };
     recognizer.onerror = function(e){
       if (e.error === "no-speech"){
@@ -730,6 +741,11 @@
       recognizing = false;
       micBig.classList.remove("listening");
       if (bigHint.textContent === "Say one word!") bigHint.textContent = "Tap. Say a word.";
+      if (pendingEcho){
+        var wordToRepeat = pendingEcho;
+        pendingEcho = "";
+        speak(wordToRepeat, 0.85);
+      }
     };
 
     micBig.addEventListener("click", function(){
