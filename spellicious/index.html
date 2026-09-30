@@ -187,7 +187,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-6xl lg:max-w-7xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 4.37 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.37">Share your thoughts</a></p>
+        <p class="mt-2">Version 4.38 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=4.38">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -668,7 +668,10 @@
         }
 
         function getNumberSafeSpeechText(text) {
-            return text.replace(/\d{3,}/g, digits => [...digits].map(digit => digitNames[digit]).join(' '));
+            const numberSafeText = text.replace(/\d{3,}/g, digits => [...digits].map(digit => digitNames[digit]).join(' '));
+            return /^en(?:-|$)/i.test(currentLang)
+                ? numberSafeText.replace(/\bor\b/gi, 'oar')
+                : numberSafeText;
         }
 
         function getEffectiveSpeechMultiplier() {
