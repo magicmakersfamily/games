@@ -173,7 +173,7 @@
     <!-- Footer Status -->
     <footer class="w-full max-w-4xl mx-auto mt-auto text-center text-xs text-stone-400 pt-4">
         <p id="statusText">Microphone ready. Powered by high-clarity voice synthesis.</p>
-        <p class="mt-2">Version 3.8 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=3.8">Share your thoughts</a></p>
+        <p class="mt-2">Version 3.9 · Launched <time datetime="2026-09-30">September 30, 2026</time> · <a class="underline" href="../feedback/?game=spellicious&amp;v=3.9">Share your thoughts</a></p>
     </footer>
 
     <script>
@@ -194,6 +194,11 @@
             chipmunk: { rate: 1.12, pitch: 1.65, volume: 1.0 },
             storyteller: { rate: 0.78, pitch: 1.12, volume: 1.0 },
             slow: { rate: 0.55, pitch: 0.9, volume: 1.0 }
+        };
+
+        const digitNames = {
+            "0": "zero", "1": "one", "2": "two", "3": "three", "4": "four",
+            "5": "five", "6": "six", "7": "seven", "8": "eight", "9": "nine"
         };
 
         /* Language-specific default words */
@@ -419,7 +424,7 @@
 
             function speakNextLetter() {
                 if (currentIndex >= letters.length) {
-                    const wordUtterance = new SpeechSynthesisUtterance(text);
+                    const wordUtterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
                     wordUtterance.lang = currentLang;
                     if (selectedVoice) wordUtterance.voice = selectedVoice;
                     applyVoiceStyle(wordUtterance);
@@ -436,7 +441,7 @@
                 }
 
                 const { char, index } = letters[currentIndex];
-                const letterUtterance = new SpeechSynthesisUtterance(char);
+                const letterUtterance = new SpeechSynthesisUtterance(digitNames[char] || char);
                 letterUtterance.lang = currentLang;
                 if (selectedVoice) letterUtterance.voice = selectedVoice;
                 applyVoiceStyle(letterUtterance);
@@ -462,7 +467,7 @@
         }
 
         function speakSingleString(text, statusMsg, highlightWord = false) {
-            const utterance = new SpeechSynthesisUtterance(text);
+            const utterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
             utterance.lang = currentLang;
             
             if (selectedVoice) {
@@ -489,6 +494,14 @@
             utterance.rate = style.rate;
             utterance.pitch = style.pitch;
             utterance.volume = style.volume;
+        }
+
+        function getNumberSafeSpeechText(text) {
+            const trimmed = text.trim();
+            if (/^\d+$/.test(trimmed)) {
+                return [...trimmed].map(digit => digitNames[digit]).join(' ');
+            }
+            return text;
         }
 
         function onVoiceStyleChange() {

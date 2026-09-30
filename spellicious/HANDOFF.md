@@ -1,8 +1,9 @@
 # Spellicious — Handoff Note
 
-## Update — Version 3.8
+## Update — Version 3.9
 
-- **Live:** Spellicious 3.8 is the current game at /spellicious/.
+- **Live:** Spellicious 3.9 is the current game at /spellicious/.
+- **Numbers:** Numeric strings are spoken digit-by-digit, so 111 becomes “one one one.”
 - **Voice styles:** The Voice dropdown offers Default, Robot, Chipmunk, Storyteller, and Slow Motion pitch/rate profiles.
 - **Spacebar behavior:** During speech, pressing space cancels playback and opens the microphone; otherwise it toggles the mic.
 - **Regular mode:** The large word turns orange while it is spoken and returns to its normal color afterward.
@@ -32,9 +33,9 @@
 - Current page: spellicious/index.html
 - Current URL: https://magicmakersfamily.github.io/games/spellicious/
 - Compatibility redirect: speller/index.html → ../spellicious/
-- Current version: 3.8
+- Current version: 3.9
 - Launch date: 2026-09-30
-- Release tag: spellicious-v3.8
-- Frozen archive: versions/spellicious/3.8/
+- Release tag: spellicious-v3.9
+- Frozen archive: versions/spellicious/3.9/
 
 Before future releases, update the shelf card, README table, feedback game map, versions/index.html, and the frozen release archive. Render spellicious/cover.png, run a browser smoke check, commit, tag, push, and verify the public URL.
