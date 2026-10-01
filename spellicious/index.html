@@ -132,8 +132,10 @@
                 
                 <!-- Left Side: Big Microphone Button -->
                 <div class="flex flex-col items-center shrink-0">
-                    <button id="micBtn" onclick="toggleListening()" class="relative group w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-tr from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white shadow-xl shadow-orange-500/30 flex items-center justify-center transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-orange-300">
+                    <button id="micBtn" onclick="handleMicButtonClick()" aria-label="Speak the word" class="relative group w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-tr from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white shadow-xl shadow-orange-500/30 flex items-center justify-center transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-orange-300">
+                        <span id="micSrText" class="sr-only">Speak the word</span>
                         <i data-lucide="mic" id="micIcon" class="w-12 h-12 sm:w-14 sm:h-14 text-white"></i>
+                        <i data-lucide="square" id="micStopIcon" class="hidden w-10 h-10 sm:w-12 sm:h-12 text-white"></i>
                         <div id="listeningWave" class="hidden absolute inset-0 flex items-center justify-center gap-1.5">
                             <span class="sound-wave-bar w-1.5 bg-white rounded-full" style="animation-delay: 0.1s"></span>
                             <span class="sound-wave-bar w-1.5 bg-white rounded-full" style="animation-delay: 0.3s"></span>
@@ -141,6 +143,7 @@
                             <span class="sound-wave-bar w-1.5 bg-white rounded-full" style="animation-delay: 0.4s"></span>
                         </div>
                     </button>
+                    <div id="micStatusAnnouncer" class="sr-only" aria-live="polite"></div>
                     <div id="micLabel" class="text-center mt-2">
                         <span id="micLabelText" class="block text-xs font-bold text-stone-500 uppercase tracking-wider">Tap Mic to Speak</span>
                         <span class="block text-[10px] font-medium text-stone-400 lowercase tracking-normal">space bar also works</span>
