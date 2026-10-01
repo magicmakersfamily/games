@@ -463,16 +463,139 @@
             return null;
         }
 
-        /* Phase 4 fills in the real translation layers (local dictionary, the
-           Chrome built-in Translator API, then a remote fallback). For now this
-           always resolves to null so the speech plumbing above fails the same
-           honest way the real thing will when a word truly can't be translated. */
+        /* Three progressive-enhancement layers, tried in order. Each is optional:
+           if one can't answer, the next gets a chance. If all three fail, the
+           caller (handleTranslateRecognition) shows a friendly message and the
+           game stays fully playable -- it just doesn't translate that turn. */
         async function translateText(text, config) {
-            return translateFromDictionary(text, config);
+            const dictionaryResult = translateFromDictionary(text, config);
+            if (dictionaryResult) return dictionaryResult;
+
+            try {
+                const apiResult = await translateWithChromeAPI(text, config);
+                if (apiResult) return apiResult;
+            } catch (error) {
+                console.error('Chrome Translator API failed:', error);
+            }
+
+            try {
+                const remoteResult = await translateRemote(text, config.sourceLangAttr, config.targetLangAttr);
+                if (remoteResult) return remoteResult;
+            } catch (error) {
+                console.error('Remote translation failed:', error);
+            }
+
+            return null;
         }
 
-        function translateFromDictionary(text, config) {
-            return null;
+        /* Layer 1: a small, hand-authored dictionary of common, kid-appropriate
+           words. This only covers these ~30 words -- Spellicious accepts free-form
+           speech, not a fixed vocabulary, so most real words a child says will
+           fall through to layers 2/3. See HANDOFF.md for entries flagged for
+           review. Keys are lowercase; the recognized transcript is already
+           lowercased/trimmed by normalizeRecognizedTranscript before it gets here. */
+        const translateWordPairs = [
+            ['hello', 'hola'],
+            ['goodbye', 'adiós'],
+            ['yes', 'sí'],
+            ['no', 'no'],
+            ['please', 'por favor'],
+            ['thank you', 'gracias'],
+            ['friend', 'amigo'],
+            ['mom', 'mamá'],
+            ['dad', 'papá'],
+            ['water', 'agua'],
+            ['milk', 'leche'],
+            ['food', 'comida'],
+            ['apple', 'manzana'],
+            ['banana', 'plátano'],
+            ['dog', 'perro'],
+            ['cat', 'gato'],
+            ['sun', 'sol'],
+            ['moon', 'luna'],
+            ['star', 'estrella'],
+            ['rainbow', 'arcoíris'],
+            ['happy', 'feliz'],
+            ['sad', 'triste'],
+            ['red', 'rojo'],
+            ['blue', 'azul'],
+            ['green', 'verde'],
+            ['yellow', 'amarillo'],
+            ['one', 'uno'],
+            ['two', 'dos'],
+            ['three', 'tres'],
+            ['butterfly', 'mariposa'],
+            ['dinosaur', 'dinosaurio'],
+            ['magic', 'magia']
+        ];
+
+        const translateDictionary = { 'en-es': {}, 'es-en': {} };
+        translateWordPairs.forEach(([en, es]) => {
+            translateDictionary['en-es'][en.toLowerCase()] = es;
+            translateDictionary['es-en'][es.toLowerCase()] = en;
+        });
+
+        function translateFromDictionary(text) {
+            const table = translateDictionary[translateDirection];
+            if (!table) return null;
+            return table[text.toLowerCase().trim()] || null;
+        }
+
+        /* Layer 2: Chrome's built-in on-device Translator API. Feature-detected,
+           so this is a silent no-op (returns null) anywhere it doesn't exist --
+           Safari and mobile Chrome fall straight through to layer 3. */
+        async function translateWithChromeAPI(text, config) {
+            if (!('Translator' in self)) return null;
+
+            const sourceLanguage = config.sourceLangAttr;
+            const targetLanguage = config.targetLangAttr;
+
+            try {
+                const availability = await Translator.availability({ sourceLanguage, targetLanguage });
+                if (availability === 'unavailable') return null;
+                if (availability === 'downloadable' || availability === 'downloading') {
+                    updateStatus('Downloading the translation model for the first time, this may take a moment...');
+                }
+
+                const translator = await Translator.create({
+                    sourceLanguage,
+                    targetLanguage,
+                    monitor(monitor) {
+                        monitor.addEventListener('downloadprogress', (event) => {
+                            const percent = Math.round((event.loaded || 0) * 100);
+                            updateStatus(`Downloading translation model... ${percent}%`);
+                        });
+                    }
+                });
+
+                const result = await translator.translate(text);
+                return (result && result.trim()) ? result.trim() : null;
+            } catch (error) {
+                console.error('Chrome Translator API failed:', error);
+                return null;
+            }
+        }
+
+        /*
+         * Layer 3: pluggable remote fallback. NOT CONFIGURED -- no API key or
+         * secret lives in this repo. Point this at a small proxy you control,
+         * then replace the `throw` below with the actual fetch call.
+         *
+         * Expected request (suggested shape; adjust to match your proxy):
+         *   POST <your-proxy-url>
+         *   Content-Type: application/json
+         *   { "text": "hello", "from": "en", "to": "es" }
+         *
+         * Expected response:
+         *   200 OK, Content-Type: application/json
+         *   { "translation": "hola" }
+         *
+         * Any non-2xx status, a missing/empty `translation` field, or a thrown
+         * error is treated as "this layer has nothing" and the caller moves on
+         * (or shows the friendly failure message if this was the last layer).
+         */
+        async function translateRemote(text, from, to) {
+            throw new Error('Remote translation is not configured.');
         }
 
         function initKeyboardControls() {
