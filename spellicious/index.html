@@ -268,8 +268,21 @@
            translation panel's text so screen readers pronounce each language correctly. */
         let translateDirection = 'off';
         const translateDirections = {
-            'en-es': { from: 'en-US', to: 'es-ES', fromLangAttr: 'en', toLangAttr: 'es', label: 'English to Spanish' },
-            'es-en': { from: 'es-ES', to: 'en-US', fromLangAttr: 'es', toLangAttr: 'en', label: 'Spanish to English' }
+            'en-es': {
+                label: 'English to Spanish',
+                sourceLang: 'en-US',
+                sourceLangAttr: 'en',
+                targetLangAttr: 'es',
+                // Preferred voice.lang for the readback, in order; a RegExp matches any es-*.
+                targetVoicePreferences: ['es-US', 'es-MX', /^es-/i]
+            },
+            'es-en': {
+                label: 'Spanish to English',
+                sourceLang: 'es-US',
+                sourceLangAttr: 'es',
+                targetLangAttr: 'en',
+                targetVoicePreferences: ['en-US', /^en-/i]
+            }
         };
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -313,6 +326,15 @@
             const result = document.getElementById('translationResult');
             const announcer = document.getElementById('translateStatusAnnouncer');
 
+            // Switching direction mid-flow should never leave recognition or
+            // speech running against the old direction's language.
+            if (isListening && recognition) {
+                try { recognition.stop(); } catch (error) { /* already stopped */ }
+            }
+            if (isSpeaking) {
+                stopSpeaking();
+            }
+
             if (translateDirection === 'off' || !translateDirections[translateDirection]) {
                 panel.classList.add('hidden');
                 panel.classList.remove('flex');
@@ -323,14 +345,134 @@
             }
 
             const config = translateDirections[translateDirection];
-            original.setAttribute('lang', config.fromLangAttr);
-            result.setAttribute('lang', config.toLangAttr);
+            original.setAttribute('lang', config.sourceLangAttr);
+            result.setAttribute('lang', config.targetLangAttr);
             // Phase 4 fills these in once a word has been recognized and translated.
             original.textContent = '';
             result.textContent = 'Say a word to see it translated.';
             panel.classList.remove('hidden');
             panel.classList.add('flex');
             if (announcer) announcer.textContent = `Translate mode: ${config.label}.`;
+        }
+
+        /* Translate mode speech pipeline: recognize in the source language, stop
+           recognition before speaking (so the app never hears its own readback),
+           translate, then speak the result in a voice that actually matches the
+           target language -- or show the text with a clear message if no such
+           voice is installed. The whole thing is cancellable at any point via
+           the shared speechRunId: stopSpeaking() (the mic button's Stop) bumps
+           speechRunId, and every checkpoint below bails out as soon as it sees
+           a stale runId. */
+        async function handleTranslateRecognition(sourceText, config) {
+            const runId = beginSpeechRun();
+
+            try { recognition.stop(); } catch (error) { /* already stopped */ }
+
+            renderTranslationOriginal(sourceText, config);
+            renderTranslationResult('Translating...', config);
+            updateStatus(`Translating "${sourceText}"...`);
+
+            let translated = null;
+            try {
+                translated = await translateText(sourceText, config);
+            } catch (error) {
+                console.error('Translation failed:', error);
+            }
+
+            if (runId !== speechRunId) return; // Stop was pressed meanwhile
+
+            if (!translated) {
+                showTranslationError("Sorry, I couldn't translate that. Try again!");
+                setSpeakingUI(false);
+                return;
+            }
+
+            renderTranslationResult(translated, config);
+            speakTranslation(translated, config, runId);
+        }
+
+        function renderTranslationOriginal(text, config) {
+            const original = document.getElementById('translationOriginal');
+            if (!original) return;
+            original.setAttribute('lang', config.sourceLangAttr);
+            original.textContent = text;
+        }
+
+        function renderTranslationResult(text, config) {
+            const result = document.getElementById('translationResult');
+            if (!result) return;
+            result.setAttribute('lang', config.targetLangAttr);
+            result.textContent = text;
+        }
+
+        function showTranslationError(message) {
+            updateStatus(message);
+            renderTranslationResult(message, translateDirections[translateDirection] || { targetLangAttr: 'en' });
+            const announcer = document.getElementById('translateStatusAnnouncer');
+            if (announcer) announcer.textContent = message;
+        }
+
+        /* Speak a translated phrase, but only in a voice that actually matches the
+           target language -- never silently read Spanish with an English voice
+           (or vice versa). If no matching voice is installed, the translation
+           stays visible as text and the status/live-region explain why nothing
+           was spoken. */
+        function speakTranslation(text, config, runId) {
+            if (runId !== speechRunId) return;
+
+            if (!('speechSynthesis' in window)) {
+                updateStatus("Speech isn't supported on this browser, but here's the translation.");
+                setSpeakingUI(false);
+                return;
+            }
+
+            const voice = selectVoiceForLangPreferences(config.targetVoicePreferences);
+            if (!voice) {
+                updateStatus("No matching voice is installed for that language, but here's the translation.");
+                const announcer = document.getElementById('translateStatusAnnouncer');
+                if (announcer) announcer.textContent = "No matching voice is installed for this language. Showing the translation as text.";
+                setSpeakingUI(false);
+                return;
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.voice = voice;
+            utterance.lang = voice.lang;
+            applyVoiceStyle(utterance);
+            utterance.onstart = () => {
+                if (runId !== speechRunId) return;
+                updateStatus(`Speaking: "${text}"`);
+            };
+            utterance.onend = () => {
+                if (runId !== speechRunId) return;
+                updateStatus("Microphone ready. Tap mic, letters, or word to hear again.");
+            };
+            queueUtterance(utterance, runId);
+        }
+
+        function selectVoiceForLangPreferences(preferences) {
+            if (!availableVoices || availableVoices.length === 0) return null;
+            for (const preference of preferences) {
+                const matches = typeof preference === 'string'
+                    ? availableVoices.filter(v => (v.lang || '').toLowerCase() === preference.toLowerCase())
+                    : availableVoices.filter(v => preference.test(v.lang || ''));
+                if (matches.length > 0) {
+                    return matches.find(v => /google|natural|premium|enhanced/i.test(v.name || '')) || matches[0];
+                }
+            }
+            return null;
+        }
+
+        /* Phase 4 fills in the real translation layers (local dictionary, the
+           Chrome built-in Translator API, then a remote fallback). For now this
+           always resolves to null so the speech plumbing above fails the same
+           honest way the real thing will when a word truly can't be translated. */
+        async function translateText(text, config) {
+            return translateFromDictionary(text, config);
+        }
+
+        function translateFromDictionary(text, config) {
+            return null;
         }
 
         function initKeyboardControls() {
@@ -365,6 +507,10 @@
             clearLetterHighlights();
             setSpeakingUI(false);
             updateStatus("Stopped. Microphone ready. Tap mic, letters, or word to hear again.");
+            const translateConfig = translateDirections[translateDirection];
+            if (translateConfig) {
+                renderTranslationResult('Stopped.', translateConfig);
+            }
         }
 
         function beginSpeechRun() {
@@ -542,7 +688,9 @@
             recognition.onstart = () => {
                 isListening = true;
                 updateMicUI();
-                updateStatus(`Listening in ${getLangName(currentLang)}... Speak now!`);
+                const translateConfig = translateDirections[translateDirection];
+                const listeningLangName = getLangName(translateConfig ? translateConfig.sourceLang : currentLang);
+                updateStatus(`Listening in ${listeningLangName}... Speak now!`);
             };
 
             recognition.onresult = (event) => {
@@ -553,7 +701,13 @@
                         updateStatus(formatCaseText("oops"));
                         return;
                     }
-                    currentWord = normalizeSpelledTranscript(normalizeRecognizedTranscript(transcript));
+                    const normalized = normalizeSpelledTranscript(normalizeRecognizedTranscript(transcript));
+                    const translateConfig = translateDirections[translateDirection];
+                    if (translateConfig) {
+                        handleTranslateRecognition(normalized, translateConfig);
+                        return;
+                    }
+                    currentWord = normalized;
                     updateDisplay();
                     speakCurrentText();
                 }
@@ -620,7 +774,8 @@
                 recognition.stop();
             } else {
                 try {
-                    recognition.lang = currentLang;
+                    const translateConfig = translateDirections[translateDirection];
+                    recognition.lang = translateConfig ? translateConfig.sourceLang : currentLang;
                     recognition.start();
                 } catch (e) {
                     console.error(e);
@@ -1063,7 +1218,9 @@
                 "ja-JP": "Japanese",
                 "ko-KR": "Korean",
                 "pt-BR": "Portuguese",
-                "hi-IN": "Hindi"
+                "hi-IN": "Hindi",
+                "es-US": "Spanish",
+                "es-MX": "Spanish"
             };
             return names[langCode] || langCode;
         }
