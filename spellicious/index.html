@@ -845,8 +845,8 @@
             }
         }
 
-        function selectBestVoiceForLang(langCode) {
-            if (!availableVoices || availableVoices.length === 0) return;
+        function findVoiceForLangCode(langCode) {
+            if (!availableVoices || availableVoices.length === 0 || !langCode) return null;
 
             const normalizedLang = langCode.toLowerCase();
             const matchedVoices = normalizedLang === 'zh-hk'
@@ -858,15 +858,30 @@
                 })
                 : availableVoices.filter(v => (v.lang || '').toLowerCase().replace('_', '-') === normalizedLang);
 
-            if (matchedVoices.length > 0) {
-                selectedVoice = matchedVoices.find(v =>
-                    /google|natural|premium|enhanced/i.test(v.name || '')
-                ) || matchedVoices[0];
-            } else {
-                // Never silently select a Mandarin or unrelated voice for Cantonese.
-                // Leaving voice unset lets the browser honor utterance.lang instead.
-                selectedVoice = null;
-            }
+            if (matchedVoices.length === 0) return null;
+            // Never silently select a Mandarin or unrelated voice for Cantonese --
+            // an empty result here means the caller should leave voice unset and
+            // let the browser honor utterance.lang instead.
+            return matchedVoices.find(v => /google|natural|premium|enhanced/i.test(v.name || '')) || matchedVoices[0];
+        }
+
+        function selectBestVoiceForLang(langCode) {
+            selectedVoice = findVoiceForLangCode(langCode);
+        }
+
+        /* While a Translate direction is active, the main word display shows text
+           in that direction's SOURCE language, not whatever the top-right language
+           selector says -- so clicking/tapping it (or the speaker icon) must speak
+           it with the source language's voice, never the unrelated currentLang one. */
+        function getActiveSpeechLang() {
+            const config = translateDirections[translateDirection];
+            return config ? config.sourceLang : currentLang;
+        }
+
+        function getActiveSpeechVoice() {
+            const config = translateDirections[translateDirection];
+            if (!config) return selectedVoice;
+            return findVoiceForLangCode(config.sourceLang);
         }
 
         function onLanguageChange() {
@@ -881,6 +896,12 @@
 
             if (langDefaults[currentLang]) {
                 renderSampleWords();
+                // Translate mode drives the main word from the chosen direction's
+                // source language instead -- only switch the displayed word here
+                // when Translate is Off, so this selector doesn't fight with it.
+                if (translateDirection === 'off') {
+                    currentWord = langDefaults[currentLang].defaultWord;
+                }
             }
 
             updateDisplay();
@@ -1060,8 +1081,9 @@
             const speechText = getNumberSafeSpeechText(text);
             const speechWords = [...speechText.matchAll(/\S+/g)].map(match => ({ index: match.index }));
             const utterance = new SpeechSynthesisUtterance(speechText);
-            utterance.lang = currentLang;
-            if (selectedVoice) utterance.voice = selectedVoice;
+            utterance.lang = getActiveSpeechLang();
+            const activeVoice = getActiveSpeechVoice();
+            if (activeVoice) utterance.voice = activeVoice;
             applyVoiceStyle(utterance);
             utterance.onstart = () => {
                 if (runId !== speechRunId) return;
@@ -1112,8 +1134,9 @@
                     clearLetterHighlights();
                     if (text.trim()) {
                         const wordUtterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
-                        wordUtterance.lang = currentLang;
-                        if (selectedVoice) wordUtterance.voice = selectedVoice;
+                        wordUtterance.lang = getActiveSpeechLang();
+                        const activeWordVoice = getActiveSpeechVoice();
+                        if (activeWordVoice) wordUtterance.voice = activeWordVoice;
                         applyVoiceStyle(wordUtterance);
                         wordUtterance.onstart = () => updateStatus(`Spelling complete. Saying: "${text}"`);
                         wordUtterance.onend = () => {
@@ -1129,8 +1152,9 @@
 
                 const { char, index } = letters[currentIndex];
                 const letterUtterance = new SpeechSynthesisUtterance(getSpokenCharName(char));
-                letterUtterance.lang = currentLang;
-                if (selectedVoice) letterUtterance.voice = selectedVoice;
+                letterUtterance.lang = getActiveSpeechLang();
+                const activeLetterVoice = getActiveSpeechVoice();
+                if (activeLetterVoice) letterUtterance.voice = activeLetterVoice;
                 applyVoiceStyle(letterUtterance);
                 letterUtterance.onstart = () => {
                     setLetterHighlight(index);
@@ -1184,10 +1208,11 @@
 
         function speakSingleString(text, statusMsg, highlightWord = false, runId = speechRunId, highlightIndex = null, onComplete = null) {
             const utterance = new SpeechSynthesisUtterance(getNumberSafeSpeechText(text));
-            utterance.lang = currentLang;
-            
-            if (selectedVoice) {
-                utterance.voice = selectedVoice;
+            utterance.lang = getActiveSpeechLang();
+
+            const activeVoice = getActiveSpeechVoice();
+            if (activeVoice) {
+                utterance.voice = activeVoice;
             }
 
             applyVoiceStyle(utterance);
@@ -1244,7 +1269,7 @@
 
         function getNumberSafeSpeechText(text) {
             const numberSafeText = text.replace(/\d{3,}/g, digits => [...digits].map(digit => digitNames[digit]).join(' '));
-            return /^en(?:-|$)/i.test(currentLang)
+            return /^en(?:-|$)/i.test(getActiveSpeechLang())
                 ? numberSafeText.replace(/\bor\b/gi, 'oar')
                 : numberSafeText;
         }
