@@ -205,12 +205,15 @@
         let randomCaseText = '';
         let isSpellMode = false;
         let isListening = false;
+        let isSpeaking = false;
         let selectedVoice = null;
         let availableVoices = [];
         let recognition = null;
         let speechRunId = 0;
         let wordHighlightTimers = [];
         let letterHighlightTimers = [];
+        let speakingWatchdogId = null;
+        let lastAnnouncedMicState = null;
 
         const voiceStyles = {
             default: { rate: 1.0, pitch: 1.05, volume: 1.0 },
@@ -258,16 +261,128 @@
 
                 event.preventDefault();
                 event.stopPropagation();
-                const speechIsActive = 'speechSynthesis' in window &&
-                    (window.speechSynthesis.speaking || window.speechSynthesis.pending);
-                if (speechIsActive) {
-                    window.speechSynthesis.cancel();
-                    speechRunId += 1;
-                    setWordHighlight(false);
-                    clearLetterHighlights();
-                }
-                if (!isListening) toggleListening();
+                handleMicButtonClick();
             });
+        }
+
+        /* Mic button: doubles as the Stop control while a readback is playing */
+        function handleMicButtonClick() {
+            if (isSpeaking) {
+                stopSpeaking();
+                return;
+            }
+            toggleListening();
+        }
+
+        function stopSpeaking() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            speechRunId += 1;
+            clearWordHighlightTimers();
+            clearLetterHighlightTimers();
+            setWordHighlight(false);
+            clearLetterHighlights();
+            setSpeakingUI(false);
+            updateStatus("Stopped. Microphone ready. Tap mic, letters, or word to hear again.");
+        }
+
+        function beginSpeechRun() {
+            const runId = ++speechRunId;
+            setSpeakingUI(true, runId);
+            return runId;
+        }
+
+        function setSpeakingUI(active, runId = speechRunId) {
+            if (active) {
+                isSpeaking = true;
+                startSpeakingWatchdog(runId);
+            } else {
+                isSpeaking = false;
+                stopSpeakingWatchdog();
+            }
+            renderMicButtonState();
+        }
+
+        function startSpeakingWatchdog(runId) {
+            stopSpeakingWatchdog();
+            speakingWatchdogId = window.setInterval(() => {
+                if (runId !== speechRunId) {
+                    stopSpeakingWatchdog();
+                    return;
+                }
+                const stillSpeaking = window.speechSynthesis &&
+                    (window.speechSynthesis.speaking || window.speechSynthesis.pending);
+                if (!stillSpeaking) {
+                    setSpeakingUI(false);
+                }
+            }, 400);
+        }
+
+        function stopSpeakingWatchdog() {
+            if (speakingWatchdogId) {
+                window.clearInterval(speakingWatchdogId);
+                speakingWatchdogId = null;
+            }
+        }
+
+        function scheduleSpeechSessionCheck(runId) {
+            window.setTimeout(() => {
+                if (runId !== speechRunId) return;
+                const stillSpeaking = window.speechSynthesis &&
+                    (window.speechSynthesis.speaking || window.speechSynthesis.pending);
+                if (!stillSpeaking) {
+                    setSpeakingUI(false);
+                }
+            }, 120);
+        }
+
+        function announceMicState() {
+            const state = isListening ? 'listening' : isSpeaking ? 'speaking' : 'idle';
+            if (state === lastAnnouncedMicState) return;
+            lastAnnouncedMicState = state;
+            const announcer = document.getElementById('micStatusAnnouncer');
+            if (!announcer) return;
+            if (state === 'listening') announcer.textContent = "Listening. Press the button to stop.";
+            else if (state === 'speaking') announcer.textContent = "Reading aloud. Press the button to stop.";
+            else announcer.textContent = "Microphone ready.";
+        }
+
+        function renderMicButtonState() {
+            const btn = document.getElementById('micBtn');
+            const icon = document.getElementById('micIcon');
+            const stopIcon = document.getElementById('micStopIcon');
+            const wave = document.getElementById('listeningWave');
+            const label = document.getElementById('micLabelText');
+            const srText = document.getElementById('micSrText');
+
+            btn.classList.remove('mic-pulse', 'ring-4', 'ring-red-400', 'ring-orange-400');
+            icon.classList.add('hidden');
+            stopIcon.classList.add('hidden');
+            wave.classList.add('hidden');
+            label.classList.remove('text-red-500', 'font-bold');
+
+            if (isListening) {
+                btn.classList.add('mic-pulse', 'ring-4', 'ring-red-400');
+                wave.classList.remove('hidden');
+                label.textContent = "Listening...";
+                label.classList.add('text-red-500', 'font-bold');
+                btn.setAttribute('aria-label', 'Listening. Tap to stop.');
+                srText.textContent = 'Listening. Tap to stop.';
+            } else if (isSpeaking) {
+                stopIcon.classList.remove('hidden');
+                btn.classList.add('ring-4', 'ring-orange-400');
+                label.textContent = "Stop";
+                btn.setAttribute('aria-label', 'Stop reading aloud');
+                srText.textContent = 'Stop reading aloud';
+            } else {
+                icon.classList.remove('hidden');
+                label.textContent = "Tap Mic to Speak";
+                btn.setAttribute('aria-label', 'Speak the word');
+                srText.textContent = 'Speak the word';
+            }
+
+            announceMicState();
         }
 
         function initVoiceSynthesis() {
@@ -434,41 +549,19 @@
         }
 
         function updateMicUI() {
-            const btn = document.getElementById('micBtn');
-            const icon = document.getElementById('micIcon');
-            const wave = document.getElementById('listeningWave');
-            const label = document.getElementById('micLabelText');
-
-            if (isListening) {
-                btn.classList.add('mic-pulse', 'ring-4', 'ring-red-400');
-                icon.classList.add('hidden');
-                wave.classList.remove('hidden');
-                label.textContent = "Listening...";
-                label.classList.add('text-red-500', 'font-bold');
-            } else {
-                stopListeningUI();
-            }
+            renderMicButtonState();
         }
 
         function stopListeningUI() {
             isListening = false;
-            const btn = document.getElementById('micBtn');
-            const icon = document.getElementById('micIcon');
-            const wave = document.getElementById('listeningWave');
-            const label = document.getElementById('micLabelText');
-
-            btn.classList.remove('mic-pulse', 'ring-4', 'ring-red-400');
-            icon.classList.remove('hidden');
-            wave.classList.add('hidden');
-            label.textContent = "Tap Mic to Speak";
-            label.classList.remove('text-red-500');
+            renderMicButtonState();
         }
 
         function speakCurrentText() {
             if (!('speechSynthesis' in window)) return;
 
             window.speechSynthesis.cancel();
-            const runId = ++speechRunId;
+            const runId = beginSpeechRun();
             clearWordHighlightTimers();
             clearLetterHighlightTimers();
             setWordHighlight(false);
@@ -586,7 +679,7 @@
         function speakLetter(char) {
             if (!('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
-            const runId = ++speechRunId;
+            const runId = beginSpeechRun();
             setWordHighlight(false);
             speakSingleString(char, `Letter: "${char}"`, false, runId);
         }
@@ -594,7 +687,7 @@
         function speakClickedWord(word, displayIndex = null) {
             if (!('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
-            const runId = ++speechRunId;
+            const runId = beginSpeechRun();
             clearWordHighlightTimers();
             clearLetterHighlightTimers();
             clearLetterHighlights();
@@ -610,7 +703,7 @@
         function repeatCurrentPhrase() {
             if (!('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
-            const runId = ++speechRunId;
+            const runId = beginSpeechRun();
             clearWordHighlightTimers();
             clearLetterHighlightTimers();
             clearWordHighlights();
@@ -655,10 +748,16 @@
 
         function queueUtterance(utterance, runId = speechRunId) {
             if (runId !== speechRunId) return;
+            const originalOnEnd = utterance.onend;
+            utterance.onend = (event) => {
+                if (typeof originalOnEnd === 'function') originalOnEnd(event);
+                scheduleSpeechSessionCheck(runId);
+            };
             utterance.onerror = (event) => {
                 if (event.error !== 'canceled' && runId === speechRunId) {
                     updateStatus("Voice playback could not start. Tap the word or mic and try again.");
                 }
+                scheduleSpeechSessionCheck(runId);
             };
             window.setTimeout(() => {
                 if (runId !== speechRunId) return;
