@@ -388,6 +388,8 @@
             }
 
             renderTranslationResult(translated, config);
+            const announcer = document.getElementById('translateStatusAnnouncer');
+            if (announcer) announcer.textContent = `${sourceText} translates to ${translated}.`;
             speakTranslation(translated, config, runId);
         }
 
@@ -873,13 +875,32 @@
 
             recognition.onerror = (event) => {
                 console.error("Speech recognition error:", event.error);
-                updateStatus("Could not hear clearly. Try again!");
+                const message = getRecognitionErrorMessage(event.error);
+                updateStatus(message);
+                const announcer = document.getElementById('micStatusAnnouncer');
+                if (announcer) announcer.textContent = message;
                 stopListeningUI();
             };
 
             recognition.onend = () => {
                 stopListeningUI();
             };
+        }
+
+        function getRecognitionErrorMessage(errorCode) {
+            switch (errorCode) {
+                case 'not-allowed':
+                case 'service-not-allowed':
+                    return "Microphone access is blocked. Please allow microphone permission in your browser settings and try again.";
+                case 'no-speech':
+                    return "I didn't hear anything. Tap the mic and try again!";
+                case 'audio-capture':
+                    return "No microphone was found. Please check your device and try again.";
+                case 'network':
+                    return "No network connection for speech recognition. Try again when you're back online.";
+                default:
+                    return "Could not hear clearly. Try again!";
+            }
         }
 
         function formatCaseText(text) {
