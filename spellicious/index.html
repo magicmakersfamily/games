@@ -191,7 +191,7 @@
                          panel only holds the translated result, sized to match. -->
                     <div id="translationPanel" class="hidden flex-col items-center md:items-start gap-1 pt-2 mt-1 border-t border-amber-100 w-full">
                         <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Translation</span>
-                        <div id="translationResult" class="title-font font-bold text-orange-600 min-w-0 max-w-full break-words" style="word-break: normal; overflow-wrap: break-word;"></div>
+                        <div id="translationResult" onclick="speakCurrentTranslation()" tabindex="0" role="button" aria-label="Hear the translation" title="Click to hear the translation" onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); speakCurrentTranslation(); }" class="title-font font-bold text-orange-600 min-w-0 max-w-full break-words cursor-pointer hover:text-orange-700 transition-colors focus:outline-none focus:ring-4 focus:ring-orange-300 rounded-lg" style="word-break: normal; overflow-wrap: break-word;"></div>
                     </div>
 
                 </div>
@@ -283,6 +283,8 @@
            selection; `.fromLangAttr`/`.toLangAttr` set the lang="" attribute on the
            translation panel's text so screen readers pronounce each language correctly. */
         let translateDirection = 'off';
+        let lastTranslation = null;
+        let lastTranslationConfig = null;
         const translateDirections = {
             'en-es': {
                 label: 'English to Spanish',
@@ -351,6 +353,9 @@
                 stopSpeaking();
             }
 
+            lastTranslation = null;
+            lastTranslationConfig = null;
+
             if (translateDirection === 'off' || !translateDirections[translateDirection]) {
                 panel.classList.add('hidden');
                 panel.classList.remove('flex');
@@ -404,15 +409,28 @@
             if (runId !== speechRunId) return; // Stop was pressed meanwhile
 
             if (!translated) {
+                lastTranslation = null;
+                lastTranslationConfig = null;
                 showTranslationError("Sorry, I couldn't translate that. Try again!");
                 setSpeakingUI(false);
                 return;
             }
 
+            lastTranslation = translated;
+            lastTranslationConfig = config;
             renderTranslationResult(translated, config);
             const announcer = document.getElementById('translateStatusAnnouncer');
             if (announcer) announcer.textContent = `${sourceText} translates to ${translated}.`;
             speakTranslation(translated, config, runId);
+        }
+
+        /* Lets the player click/tap the translated word to hear it again, in the
+           same target-language voice selection used the first time. */
+        function speakCurrentTranslation() {
+            if (!lastTranslation || !lastTranslationConfig) return;
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            const runId = beginSpeechRun();
+            speakTranslation(lastTranslation, lastTranslationConfig, runId);
         }
 
         function renderTranslationResult(text, config) {
