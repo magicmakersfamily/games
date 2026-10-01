@@ -186,11 +186,12 @@
                         </div>
                     </div>
 
-                    <!-- Translation panel: hidden while Translate is Off -->
-                    <div id="translationPanel" class="hidden flex-col items-center md:items-start gap-1 pt-2 mt-1 border-t border-amber-100">
+                    <!-- Translation panel: hidden while Translate is Off. The source
+                         phrase is shown up in #wordDisplay (same as Off mode); this
+                         panel only holds the translated result, sized to match. -->
+                    <div id="translationPanel" class="hidden flex-col items-center md:items-start gap-1 pt-2 mt-1 border-t border-amber-100 w-full">
                         <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Translation</span>
-                        <div id="translationOriginal" class="text-lg sm:text-xl font-semibold text-stone-500 break-words"></div>
-                        <div id="translationResult" class="title-font text-4xl sm:text-5xl font-bold text-orange-600 break-words"></div>
+                        <div id="translationResult" class="title-font font-bold text-orange-600 min-w-0 max-w-full break-words" style="word-break: normal; overflow-wrap: break-word;"></div>
                     </div>
 
                 </div>
@@ -322,7 +323,6 @@
 
         function applyTranslateDirection() {
             const panel = document.getElementById('translationPanel');
-            const original = document.getElementById('translationOriginal');
             const result = document.getElementById('translationResult');
             const announcer = document.getElementById('translateStatusAnnouncer');
 
@@ -338,18 +338,16 @@
             if (translateDirection === 'off' || !translateDirections[translateDirection]) {
                 panel.classList.add('hidden');
                 panel.classList.remove('flex');
-                original.textContent = '';
                 result.textContent = '';
                 if (announcer) announcer.textContent = 'Translate mode off.';
                 return;
             }
 
             const config = translateDirections[translateDirection];
-            original.setAttribute('lang', config.sourceLangAttr);
             result.setAttribute('lang', config.targetLangAttr);
-            // Phase 4 fills these in once a word has been recognized and translated.
-            original.textContent = '';
-            result.textContent = 'Say a word to see it translated.';
+            // Phase 4 fills this in once a word has been recognized and translated;
+            // the source phrase itself shows up in the main #wordDisplay, same as Off mode.
+            renderTranslationResult('Say a word to see it translated.', config);
             panel.classList.remove('hidden');
             panel.classList.add('flex');
             if (announcer) announcer.textContent = `Translate mode: ${config.label}.`;
@@ -368,7 +366,10 @@
 
             try { recognition.stop(); } catch (error) { /* already stopped */ }
 
-            renderTranslationOriginal(sourceText, config);
+            // Show what was actually heard in the main display, same as Off mode.
+            currentWord = sourceText;
+            updateDisplay();
+
             renderTranslationResult('Translating...', config);
             updateStatus(`Translating "${sourceText}"...`);
 
@@ -393,18 +394,12 @@
             speakTranslation(translated, config, runId);
         }
 
-        function renderTranslationOriginal(text, config) {
-            const original = document.getElementById('translationOriginal');
-            if (!original) return;
-            original.setAttribute('lang', config.sourceLangAttr);
-            original.textContent = text;
-        }
-
         function renderTranslationResult(text, config) {
             const result = document.getElementById('translationResult');
             if (!result) return;
             result.setAttribute('lang', config.targetLangAttr);
             result.textContent = text;
+            fitWordDisplay(text, 'translationResult');
         }
 
         function showTranslationError(message) {
@@ -1259,13 +1254,14 @@
             });
         }
 
-        function fitWordDisplay(text) {
-            const wordDisplay = document.getElementById('wordDisplay');
+        function fitWordDisplay(text, elementId = 'wordDisplay') {
+            const el = document.getElementById(elementId);
+            if (!el) return;
             const characterCount = Math.max(3, [...text].length);
-            const availableWidth = Math.max(280, wordDisplay.clientWidth || window.innerWidth - 32);
+            const availableWidth = Math.max(280, el.clientWidth || window.innerWidth - 32);
             const widthFitRem = availableWidth / (characterCount * 0.58 * 16);
             const lengthScaleRem = 9 - Math.max(0, characterCount - 3) * 0.17;
-            wordDisplay.style.fontSize = `${Math.max(2.25, Math.min(9, widthFitRem, lengthScaleRem))}rem`;
+            el.style.fontSize = `${Math.max(2.25, Math.min(9, widthFitRem, lengthScaleRem))}rem`;
         }
 
         function renderInteractiveLetters(text) {
