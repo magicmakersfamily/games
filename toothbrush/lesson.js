@@ -1,4 +1,4 @@
-/* Toothbrush Timer — the lesson model.
+/* Toothbrush Coach — the lesson model.
  *
  * One timeline drives everything you see and hear: which quadrant and surface is being coached,
  * where the brush is, and which sugar bugs are still there. Every visible state is a pure function
@@ -63,8 +63,9 @@
 
   function bugRemoveAt(bug, duration) { return (bug.seg + bug.removeFrac) * duration / N; }
 
-  /** A bug is fully there until shortly before its time, shrinks while the brush is on it, and is
-   *  gone from its removal time on. Bugs outside the current cue never change. */
+  /** A bug is fully there until shortly before its time, squeezes a little (never below 70 %, so it
+   *  stays easy to see) while the brush is on it, and is gone from its removal time on. Bugs outside
+   *  the current cue never change. */
   function bugState(bug, elapsed, duration) {
     const at = bugRemoveAt(bug, duration);
     if (elapsed >= at) return { alive: false, scale: 0, active: false, since: elapsed - at };
@@ -72,8 +73,26 @@
     const active = !loc.done && loc.index === bug.seg;
     const dwell = duration / N / PLAN[bug.surface].stops.length;
     const win = Math.min(0.6, dwell * 0.6) / bug.of;
-    const scale = active && elapsed > at - win ? Math.max(0.05, (at - elapsed) / win) : 1;
+    const scale = active && elapsed > at - win ? 0.7 + 0.3 * Math.max(0, (at - elapsed) / win) : 1;
     return { alive: true, scale, active, since: 0 };
+  }
+
+  function aliveCount(elapsed, duration) { return BUGS.filter(b => bugState(b, elapsed, duration).alive).length; }
+
+  /** Where the face looks: at the coached quadrant, turning to the next one a moment before the
+   *  brush gets there, with a blink and raised eyebrows as each new quadrant starts. */
+  function gaze(elapsed, duration) {
+    const qd = duration / 4, lead = Math.min(0.8, qd * 0.06);
+    const qi = Math.max(0, Math.min(3, Math.floor(elapsed / qd))), into = elapsed - qi * qd;
+    let to = qi, u = 1;
+    if (qi < 3 && into > qd - lead) { to = qi + 1; u = Math.min(1, (into - (qd - lead)) / (lead * 0.6)); }
+    let blink = 0, brow = 0;
+    for (const b of [qd, 2 * qd, 3 * qd]) {
+      const dt = elapsed - b;
+      blink = Math.max(blink, 1 - Math.abs(dt) / 0.12);
+      if (dt > -lead && dt < 0.6) brow = Math.max(brow, Math.min(1, (dt + lead) / 0.2, (0.6 - dt) / 0.3));
+    }
+    return { from: QUADS[qi].id, to: QUADS[to].id, u, blink: Math.max(0, blink), brow };
   }
 
   function ease(m) { return m < 0.5 ? 2 * m * m : 1 - Math.pow(-2 * m + 2, 2) / 2; }
@@ -140,7 +159,7 @@
 
   const api = {
     QUADS, SURFACES, SURFACE_LABEL, PLAN, SEGMENTS, BUGS, N, VERTICAL_TEETH,
-    locate, bugRemoveAt, bugState, brushPose, create, start, pause, reset, tick, setDuration,
+    locate, bugRemoveAt, bugState, aliveCount, gaze, brushPose, create, start, pause, reset, tick, setDuration,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Lesson = api;

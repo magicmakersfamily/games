@@ -123,3 +123,52 @@ test('changing the duration keeps the same cue, the same point, and the same bug
     assert.deepStrictEqual(L.BUGS.map(b => L.bugState(b, s.elapsed, s.duration).alive), alive);
   }
 });
+
+test('fixed checkpoints (2 minutes): bugs left at 120, 110, 100, 90, 60, 30, 20, 10, 3, 2, 1, 0 s remaining', () => {
+  const expected = { 120: 36, 110: 33, 100: 30, 90: 27, 60: 18, 30: 9, 20: 6, 10: 3, 3: 1, 2: 1, 1: 1, 0: 0 };
+  for (const [left, count] of Object.entries(expected)) {
+    const t = 120 - Number(left);
+    assert.strictEqual(L.aliveCount(t, 120), count, `${left} s left`);
+  }
+  // the very last bug stays, clearly visible, until the completion boundary
+  const last = L.BUGS[L.BUGS.length - 1];
+  assert.strictEqual(L.bugRemoveAt(last, 120), 120);
+  const st = L.bugState(last, 119.999, 120);
+  assert.ok(st.alive && st.scale >= 0.7);
+  assert.strictEqual(L.aliveCount(119.999, 120), 1);
+});
+
+test('a bug that is still there is never smaller than 70 %', () => {
+  for (const d of DURATIONS) for (let t = 0; t < d; t += 0.03) for (const b of L.BUGS) {
+    const st = L.bugState(b, t, d);
+    if (st.alive) assert.ok(st.scale >= 0.7 - 1e-9);
+  }
+});
+
+test('the eyes look where the brush is, and turn to the next quadrant a moment before it moves', () => {
+  for (const d of DURATIONS) {
+    for (let t = 0; t < d; t += 0.05) {
+      const g = L.gaze(t, d), pose = L.brushPose(t, d);
+      assert.strictEqual(g.from, pose.quad);
+      if (g.to !== g.from) {
+        const next = L.SEGMENTS[Math.min(L.N - 1, (Math.floor(t / (d / 4)) + 1) * 3)];
+        assert.strictEqual(g.to, next.quad);
+        assert.ok((Math.floor(t / (d / 4)) + 1) * d / 4 - t <= 0.8 + 1e-9, 'only just before the change');
+      }
+    }
+    for (const b of [1, 2, 3]) assert.ok(L.gaze(b * d / 4, d).blink > 0.99);
+    assert.strictEqual(L.gaze(d / 8, d).blink, 0);
+  }
+});
+
+test('spoken lines are plain words: no symbols, numbers or emoji, and every line is recorded', () => {
+  const fs = require('node:fs'), path = require('node:path');
+  const lines = JSON.parse(fs.readFileSync(path.join(__dirname, 'lines.json'), 'utf8'));
+  const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+  const used = JSON.parse(html.match(/const CLIP_KEYS = (\[[^\]]*\])/)[1].replace(/'/g, '"'));
+  for (const l of lines) {
+    assert.match(l.text, /^[A-Za-z ,.!?'’]+$/, l.key);
+    assert.ok(fs.existsSync(path.join(__dirname, 'voice', l.key + '.mp3')), 'recorded: ' + l.key);
+  }
+  for (const k of used) assert.ok(lines.some(l => l.key === k), 'line exists: ' + k);
+});

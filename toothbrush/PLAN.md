@@ -1,4 +1,7 @@
-# Toothbrush Timer — plan and handoff
+# Toothbrush Coach — plan and handoff
+
+Called Toothbrush Timer up to 2.0; the folder stays `toothbrush/` so links keep working. In beta
+(purple badge) while the family tests it with kids.
 
 Read this before working on the game. The product notes the family wrote after testing 1.0 with James
 are kept word for word under "Product notes" below; this top part says where development stands.
@@ -18,7 +21,23 @@ are kept word for word under "Product notes" below; this top part says where dev
   (needs ffmpeg and `brew install espeak-ng`). Each line must stay under about 4.5 s so it fits a
   5-second cue in 1-minute mode. Browser speech is only a backup and shows a "backup voice" tag.
 
-## Status (2.0, October 3, 2026)
+## Status (2.1 beta, October 3, 2026)
+
+Done in 2.1 (from the 2.0 retest at the end of the notes):
+- Renamed to Toothbrush Coach.
+- Sync: bugs are drawn on top of the brush and never squeeze below 70 %, so every bug the model
+  counts is visible; the screen-reader description updates whenever the count changes; the last
+  bug goes at the completion boundary. Checkpoint tests at 120…0 s remaining in `lesson.test.js`,
+  and a browser check compares the bugs actually painted (`__toothbrush.drawn`) with the model and
+  the description at the same checkpoints.
+- A face: two eyes above the mouth. Always a mirror view (stated once in Grown-ups). The eyes look at
+  the next quadrant 0.8 s before the brush moves (`Lesson.gaze`), blink and lift their eyebrows at
+  each quadrant change, look at Start on the ready screen, rest half-closed when paused, look at the
+  tongue at the end and come back happy with the smile. Calm mode: no idle blinking.
+- A soft glow on the quadrant being brushed; an arrow (↗ ↖ ↙ ↘) on the coaching line.
+- "Younger child, or a grown-up helps" (default) says "this side / the other side / the same side"
+  instead of left and right; "Big kid" keeps left and right. The old flipped helper view is gone.
+- Header: one Grown-ups button (sound and voice switches are in Grown-ups); fits at 320 px.
 
 Done in 2.0 — P0 and P1 from the notes:
 - One timeline drives timer, voice, brush, active target, progress, bug removal, pause, reset, completion.
@@ -46,7 +65,7 @@ Not done yet:
 - Pronunciation/timing QA for other languages (English only for now).
 - Child testing against the success measures at the end of the notes.
 
-## Product notes (from the family, October 3, 2026)
+## Product notes (from the family, October 3, 2026, updated after the 2.0 retest)
 
 ### Toothbrush Coach — Integrated Product Notes
 
@@ -159,9 +178,9 @@ During brushing, show only:
 
 Hide the footer, promotional copy, full step list, settings, and secondary links until the session is paused or complete. The entire active experience must fit within `100dvh` without scrolling.
 
-#### Previously confirmed live-test defects
+#### Version 1.0 live-test defects
 
-These remain part of the same priority backlog:
+These were confirmed in the original build. The version 2.0 retest below records the substantial fixes and remaining regressions; do not treat resolved v1 items as open work.
 
 - “Brush Again” resets the lesson but leaves the victory card visible and retains the old scroll position.
 - The central Play triangle lacks an accessible button role and name.
@@ -222,3 +241,59 @@ These remain part of the same priority backlog:
 - Can they explain what the sugar bugs mean and why each one disappeared?
 - Does the child recognize the final image as a clean, happy smile?
 - Does the parent report less conflict after one and four weeks?
+
+#### Version 2.0 beta retest — October 3, 2026
+
+##### Major improvements confirmed
+
+- The five-step text strip has been removed.
+- The live screen now uses one concise cue such as `Top right · Outside`.
+- Play, Pause, Keep going, and hold-to-reset have meaningful accessible names.
+- The brush remains within a specific quadrant and changes its path for outside, chewing, and inside surfaces.
+- Bug removal now follows the quadrant sequence much more closely.
+- At the start of the final quadrant, nine bugs remained; during chewing, six remained; during inside brushing, three remained.
+- Pause correctly froze the timer and the visible bug count.
+- The tongue/spit/smile prompt is separate from the two-minute tooth-brushing lesson.
+- The new settled smile is much cleaner and more believable than the original inflated ending.
+- The replay flow now returns to a clean ready screen.
+
+##### Remaining synchronization defect
+
+At approximately one to two seconds remaining, the accessibility description still reported three sugar bugs, but no bugs were visibly distinguishable. They were either removed too early or fully hidden beneath the brush.
+
+Acceptance criteria:
+
+- The last target's bugs remain visibly identifiable until their scheduled removal events.
+- Do not place all remaining bugs directly under an opaque brush head.
+- Remove the final bug at the completion boundary—not before it.
+- The visible bug count, accessible description, target progress, and timer must agree on every animation frame.
+- Add deterministic timeline tests at 120, 110, 100, 90, 60, 30, 20, 10, 3, 2, 1, and 0 seconds.
+
+##### Eyes and orientation concept
+
+Add two simple, expressive eyes above the mouth so the child reads the diagram as a face rather than a floating dental chart.
+
+Recommended behavior:
+
+- Treat the face as a **mirror view**: the child's right remains on the screen's right.
+- State this once in the grown-up setup and keep it consistent throughout the product.
+- Place the eyes close to the mouth so they do not consume a separate large block of vertical space.
+- Have the pupils look toward the active quadrant a moment before the toothbrush moves there.
+- Use a blink or eyebrow lift as the gentle transition cue between quadrants.
+- At the ready screen, have the eyes look toward the Start button.
+- During Pause, let the eyes relax rather than continuing to animate.
+- At completion, reunite the same eyes with the sparkly smile so the reward feels like one coherent happy face.
+- In low-stimulation mode, keep the eyes still except for quadrant changes.
+
+For younger children, do not rely on the spoken words `left` and `right`. Prefer language such as `Top teeth—this side` while the eyes, a soft highlight, and the brush all point to the same target. The visual face establishes orientation; the words reinforce it rather than requiring left/right mastery.
+
+##### Mobile findings
+
+- The active lesson fits well at 320 pixels wide, including the cue, mouth, countdown, Pause, and protected reset.
+- On the ready/header screen, the Grown-ups control is clipped at 390 pixels and disappears at 320 pixels.
+- The header should use a compact overflow/menu treatment or move grown-up controls below the child-facing primary action on narrow screens.
+- Adding eyes will require shrinking the mouth slightly on phones; preserve the currently successful one-screen active layout.
+
+##### Voice QA limitation
+
+The browser test confirmed the visible cue and accessible structure, but did not provide reliable audio playback for judging voice realism. Naturalness, symbol handling, pronunciation, pacing, and cue overlap still require an audible device test with children and adults.

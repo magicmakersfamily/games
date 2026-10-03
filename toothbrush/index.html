@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Toothbrush Timer — The Game Shelf</title>
+<title>Toothbrush Coach (beta) — The Game Shelf</title>
 <meta name="description" content="A two-minute brushing coach for kids: a calm voice says which teeth and which side to brush, and the sugar bugs leave only where you are brushing.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Toothbrush Timer">
+<meta property="og:title" content="Toothbrush Coach">
 <meta property="og:description" content="A two-minute brushing coach for kids: a calm voice says which teeth and which side to brush, and the sugar bugs leave only where you are brushing.">
 <meta property="og:image" content="https://magicmakersfamily.github.io/games/toothbrush/cover.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314b8a6'/%3E%3Crect x='10' y='36' width='40' height='8' rx='4' fill='%23fff'/%3E%3Crect x='34' y='20' width='18' height='16' rx='3' fill='%23a7f3d0'/%3E%3C/svg%3E">
@@ -52,22 +52,19 @@
     padding: max(8px, env(safe-area-inset-top)) 16px max(10px, env(safe-area-inset-bottom));
     display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: 6px;
   }
-  .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 52px; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 52px; min-width: 0; }
+  .app > * { min-width: 0; }
   .top-left { min-width: 0; }
   .back-link { color: var(--muted); text-decoration: none; font-size: 13px; white-space: nowrap; }
   .back-link:hover { color: var(--teal); }
-  h1 { margin: 2px 0 0; font-size: clamp(17px, 5.2vw, 24px); color: var(--teal); line-height: 1.05; }
-  .tools { display: flex; gap: 6px; flex: none; }
-  .tool {
-    width: 54px; height: 50px; border-radius: 14px; border: 2px solid var(--line); background: var(--card);
-    display: grid; place-items: center; align-content: center; gap: 1px; padding: 0; line-height: 1;
+  h1 { margin: 2px 0 0; font-size: clamp(16px, 5vw, 24px); color: var(--teal); line-height: 1.1; }
+  h1 .name { white-space: nowrap; }
+  .grownups {
+    flex: none; height: 44px; padding: 0 10px; border-radius: 14px; border: 2px solid var(--line); background: var(--card);
+    display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); white-space: nowrap;
   }
-  .tool .ico { font-size: 18px; }
-  .tool .lbl { font-size: 10px; color: var(--muted); }
-  .tool[aria-pressed="true"] { border-color: var(--teal-bright); background: color-mix(in srgb, var(--teal-bright) 14%, var(--card)); }
-  .tool[aria-pressed="true"] .lbl { color: var(--teal); }
-  .tool[aria-pressed="false"] .ico { filter: grayscale(1); opacity: .55; }
-  .tool[aria-pressed="false"] .lbl { text-decoration: line-through; }
+  .beta { display: inline-block; font-family: 'Quicksand', system-ui, sans-serif; font-size: 10px; font-weight: 800; letter-spacing: .06em;
+    text-transform: uppercase; color: #fff; background: #6C4B8C; border-radius: 999px; padding: 1px 7px; vertical-align: 3px; }
   body[data-state="running"] .top, body[data-state="finale"] .top { visibility: hidden; }
 
   .coach {
@@ -76,6 +73,7 @@
   }
   .coach .sep { color: var(--teal-bright); }
   .coach .sub { color: var(--teal); }
+  .coach .arrow { color: var(--teal-bright); font-family: system-ui, sans-serif; }
 
   .stage { position: relative; min-height: 0; display: grid; place-items: center; }
   #mouth { display: block; }
@@ -183,19 +181,15 @@
   <header class="top">
     <div class="top-left">
       <a class="back-link" href="https://magicmakersfamily.github.io/games/">← All games</a>
-      <h1 class="display">Toothbrush Timer</h1>
+      <h1 class="display"><span class="name">Toothbrush Coach</span> <span class="beta" title="Beta: still being tested with kids and improved">Beta</span></h1>
     </div>
-    <div class="tools">
-      <button class="tool" id="soundBtn" type="button" aria-pressed="true" aria-label="Sound effects"><span class="ico" aria-hidden="true">🔔</span><span class="lbl">Sounds</span></button>
-      <button class="tool" id="voiceBtn" type="button" aria-pressed="true" aria-label="Spoken coaching"><span class="ico" aria-hidden="true">🗣️</span><span class="lbl">Voice</span></button>
-      <button class="tool" id="settingsBtn" type="button" aria-haspopup="dialog"><span class="ico" aria-hidden="true">⚙️</span><span class="lbl">Grown-ups</span></button>
-    </div>
+    <button class="grownups" id="settingsBtn" type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙️</span> Grown-ups</button>
   </header>
 
   <p class="coach display" id="coach" aria-live="polite"></p>
 
   <div class="stage" id="stage">
-    <canvas id="mouth" role="img" aria-label="A wide-open mouth with sugar bugs on the teeth"></canvas>
+    <canvas id="mouth" role="img" aria-label="A face with a wide-open mouth and sugar bugs on the teeth"></canvas>
     <span class="voice-tag" id="voiceTag" hidden>backup voice</span>
   </div>
 
@@ -224,16 +218,16 @@
     <div class="done-card" data-show="smile">
       <p>Outsides, chewing tops and insides: every tooth got a turn. 🦷</p>
       <button class="big display" id="againBtn" type="button"><span aria-hidden="true">🪥</span> Brush again</button>
-      <p class="grown">Grown-ups: like this? <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Buy us a mooncake on Ko-fi</a> · <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/toothbrush/" data-text="A two-minute toothbrush coach for kids: Toothbrush Timer">Tell a friend</button> · <a href="https://magicmakersfamily.github.io/games/">More from the Game Shelf</a></p>
+      <p class="grown">Grown-ups: like this? <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Buy us a mooncake on Ko-fi</a> · <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/toothbrush/" data-text="A two-minute toothbrush coach for kids: Toothbrush Coach">Tell a friend</button> · <a href="https://magicmakersfamily.github.io/games/">More from the Game Shelf</a></p>
     </div>
   </div>
 </div>
 
 <footer class="shelf-foot">
-  <p><b>Version 2.0</b> · Launched <time datetime="2026-10-03">October 3, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=2.0">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=2.0&amp;kind=bug">Report a bug</a></p>
+  <p><b>Version 2.1 (beta)</b> · Launched <time datetime="2026-10-03">October 3, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=2.1">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=2.1&amp;kind=bug">Report a bug</a></p>
   <p>Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></p>
   <p>These games don’t collect any information. Saved progress stays in your own browser.</p>
-  <p>Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/toothbrush/" data-text="A two-minute toothbrush coach for kids: Toothbrush Timer">Tell a friend</button></p>
+  <p>Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/toothbrush/" data-text="A two-minute toothbrush coach for kids: Toothbrush Coach">Tell a friend</button></p>
   <p>The brushing steps follow the American Dental Association’s guide: outside, inside and chewing surfaces, with up-and-down strokes behind the front teeth (<a href="https://www.mouthhealthy.org/all-topics-a-z/brushing-your-teeth/" target="_blank" rel="noopener">MouthHealthy.org</a>). The app can’t see the real toothbrush: the picture shows where to brush next.</p>
 </footer>
 
@@ -253,9 +247,10 @@
     </fieldset>
     <fieldset>
       <legend>Who’s brushing?</legend>
+      <p class="note">The face on screen is a mirror: your child’s right is on the right of the screen, just like the bathroom mirror.</p>
       <div class="modes">
-        <label class="opt"><input type="radio" name="mode" value="me"><span>I brush by myself<small>The picture works like a mirror: your right is on the right.</small></span></label>
-        <label class="opt"><input type="radio" name="mode" value="help"><span>A grown-up helps<small>The picture shows the child’s mouth the way you see it, facing them.</small></span></label>
+        <label class="opt"><input type="radio" name="mode" value="help"><span>Younger child, or a grown-up helps<small>Says “this side” and “the other side”. The eyes, the glow and the brush all point to the same teeth.</small></span></label>
+        <label class="opt"><input type="radio" name="mode" value="me"><span>Big kid, brushing alone<small>Also says left and right.</small></span></label>
       </div>
     </fieldset>
     <fieldset>
@@ -281,7 +276,7 @@
 
   // ---------- Settings (saved in this browser only) ----------
   const KEY = 'toothbrush:settings';
-  const prefs = { duration: 120, mode: 'me', voice: true, sound: true, calm: false };
+  const prefs = { duration: 120, mode: 'help', voice: true, sound: true, calm: false };
   try {
     const s = JSON.parse(localStorage.getItem(KEY) || 'null');
     if (s) {
@@ -307,22 +302,26 @@
 
   function cue(index) {
     const seg = L.SEGMENTS[index], q = L.QUADS[seg.qi];
-    const where = prefs.mode === 'help' ? 'Their ' + q.label.toLowerCase() : q.label;
+    const where = prefs.mode === 'help' ? (q.jaw === 'upper' ? 'Top teeth' : 'Bottom teeth') : q.label;
+    const arrow = { UR: '↗', UL: '↖', LL: '↙', LR: '↘' }[seg.quad];     // mirror view: right is right
     const key = seg.surface === 'outer' ? `${prefs.mode}-${seg.quad}`
       : seg.surface === 'chewing' ? (seg.qi % 2 ? 'chew-b' : 'chew-a')
       : (seg.qi % 2 ? 'inner-b' : 'inner-a');
-    return { where, what: L.SURFACE_LABEL[seg.surface], key };
+    return { where, what: L.SURFACE_LABEL[seg.surface], key, arrow, side: q.side };
   }
 
-  function setCoach(where, what) {
+  function setCoach(where, what, c0) {
     const c = $('coach');
     c.textContent = '';
+    const arrow = () => { const x = document.createElement('span'); x.className = 'arrow'; x.textContent = c0.arrow; x.setAttribute('aria-hidden', 'true'); return x; };
+    if (c0 && c0.side === 'left') c.appendChild(arrow());
     const a = document.createElement('span'); a.textContent = where; c.appendChild(a);
     if (what) {
       const s = document.createElement('span'); s.className = 'sep'; s.textContent = '·'; s.setAttribute('aria-hidden', 'true');
       const b = document.createElement('span'); b.className = 'sub'; b.textContent = what;
       c.append(s, b);
     }
+    if (c0 && c0.side === 'right') c.appendChild(arrow());
   }
 
   // ---------- Audio: one queue, so chimes and voice never overlap ----------
@@ -440,7 +439,7 @@
     if (uiState === 'smile') return setCoach('Sparkly smile! ✨', '');
     const c = cue(Math.max(0, S.seg));
     if (uiState === 'paused') return setCoach('Paused', c.where + ' · ' + c.what);
-    setCoach(c.where, c.what);
+    setCoach(c.where, c.what, c);
   }
 
   function handle(ev) {
@@ -522,10 +521,6 @@
 
   // ---------- Header toggles and settings ----------
   function renderPrefs() {
-    $('soundBtn').setAttribute('aria-pressed', String(prefs.sound));
-    $('soundBtn').querySelector('.ico').textContent = prefs.sound ? '🔔' : '🔕';
-    $('voiceBtn').setAttribute('aria-pressed', String(prefs.voice));
-    $('voiceBtn').querySelector('.ico').textContent = prefs.voice ? '🗣️' : '🤐';
     $('optVoice').checked = prefs.voice; $('optSound').checked = prefs.sound; $('optCalm').checked = prefs.calm;
     document.querySelectorAll('input[name="duration"]').forEach(r => { r.checked = Number(r.value) === prefs.duration; });
     document.querySelectorAll('input[name="mode"]').forEach(r => { r.checked = r.value === prefs.mode; });
@@ -533,8 +528,6 @@
     document.body.classList.toggle('calm', prefs.calm);
     readTheme();
   }
-  $('soundBtn').addEventListener('click', () => { prefs.sound = !prefs.sound; savePrefs(); renderPrefs(); });
-  $('voiceBtn').addEventListener('click', () => { prefs.voice = !prefs.voice; savePrefs(); renderPrefs(); if (!prefs.voice) Audio.stopVoice(); });
 
   const dlg = $('settings');
   function openSettings() {
@@ -576,7 +569,8 @@
 
   // ---------- Drawing (the model is lesson.js; this only paints what it says) ----------
   const canvas = $('mouth'), ctx = canvas.getContext('2d');
-  let G = null;             // geometry for the current size and view
+  let G = null;             // geometry for the current size
+  let drawn = 0;            // sugar bugs painted in the last frame (checked against the model)
   let theme = {};
 
   function readTheme() {
@@ -585,16 +579,18 @@
   }
 
   // Baby-tooth sizes as a fraction of the canvas: [width along the arch, depth across it].
+  const FACE = 0.25;        // extra canvas height above the mouth for the eyes
   const TOOTH = [[0.058, 0.044], [0.05, 0.042], [0.052, 0.05], [0.07, 0.066], [0.074, 0.07]];
 
   function layout() {
     const box = $('stage').getBoundingClientRect();
-    const size = Math.max(120, Math.floor(Math.min(box.width, box.height)));
+    const size = Math.max(120, Math.floor(Math.min(box.width, box.height / (1 + FACE))));
+    const height = Math.round(size * (1 + FACE));
     const dpr = Math.min(3, window.devicePixelRatio || 1);
-    canvas.style.width = size + 'px'; canvas.style.height = size + 'px';
-    canvas.width = Math.round(size * dpr); canvas.height = Math.round(size * dpr);
+    canvas.style.width = size + 'px'; canvas.style.height = height + 'px';
+    canvas.width = Math.round(size * dpr); canvas.height = Math.round(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const s = size, cx = s / 2, cy = s / 2, ax = s * 0.25, ay = s * 0.27;
+    const s = size, cx = s / 2, cy = s * FACE + s / 2, ax = s * 0.25, ay = s * 0.27;
     // Arc length along a quarter of the arch, from the front middle to the back.
     const table = [];
     let acc = 0, px = 0, py = -ay;
@@ -604,10 +600,10 @@
     }
     const phiAt = d => { for (const [a, p] of table) if (a >= d) return p; return Math.PI / 2; };
     const gap = s * 0.007;
-    G = { s, cx, cy, teeth: {}, sideSign: {} };
+    G = { s, h: height, cx, cy, eyeY: s * 0.15, teeth: {}, sideSign: {}, quadCenter: {} };
     for (const q of L.QUADS) {
-      // Mirror view: the child's right is on the right of the screen. Helper view: facing the child.
-      const sign = (q.side === 'right' ? 1 : -1) * (prefs.mode === 'help' ? -1 : 1);
+      // Always a mirror view: the child's right is on the right of the screen.
+      const sign = q.side === 'right' ? 1 : -1;
       const ca = q.jaw === 'upper' ? cy + s * 0.015 : cy - s * 0.015;
       const list = [];
       let d = gap / 2;
@@ -620,6 +616,7 @@
         list.push({ x, y, w, h, nx, ny, tx: -ny, ty: nx, k });   // n points out toward the lips
       });
       G.teeth[q.id] = list; G.sideSign[q.id] = sign;
+      G.quadCenter[q.id] = { x: (list[1].x + list[2].x + list[3].x) / 3, y: (list[1].y + list[2].y + list[3].y) / 3 };
     }
   }
 
@@ -787,23 +784,31 @@
     ctx.beginPath(); ctx.ellipse(cx, cy + s * 0.13, s * 0.17, s * 0.11, 0, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = 'rgba(0,0,0,.12)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx, cy + s * 0.06); ctx.lineTo(cx, cy + s * 0.18); ctx.stroke();
     if (opts.tongue) { ctx.strokeStyle = theme.teal; ctx.lineWidth = s * 0.012; ctx.beginPath(); ctx.ellipse(cx, cy + s * 0.13, s * 0.18, s * 0.12, 0, 0, Math.PI * 2); ctx.stroke(); }
+    const pose = opts.pose, activeQuad = pose ? pose.quad : null;
+    if (pose) {                     // a soft glow on the part of the mouth being brushed
+      const c = G.quadCenter[pose.quad], r = s * 0.2;
+      const grad = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, r);
+      grad.addColorStop(0, calm ? 'rgba(180,230,220,.22)' : 'rgba(94,234,212,.38)'); grad.addColorStop(1, 'rgba(94,234,212,0)');
+      ctx.globalAlpha = pose.alpha; ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
+    }
     ctx.restore();
 
-    const pose = opts.pose, activeQuad = pose ? pose.quad : null;
     for (const q of L.QUADS) {
       const lit = !pose || q.id === activeQuad;
       G.teeth[q.id].forEach((t, k) => drawTooth(t, lit, k >= 3, pose && q.id === activeQuad && pose.surface === 'chewing' && k >= 3));
     }
     if (pose) surfaceBand(pose.quad, pose.surface);
     const placement = pose ? brushPlacement(pose) : null;
+    if (pose) drawBrush(pose, placement);
+    // Bugs go on top of the brush, so every bug that is still there can be seen and counted.
+    drawn = 0;
     if (!opts.allClean) {
       for (const b of L.BUGS) {
         const st = L.bugState(b, S.elapsed, S.duration);
-        if (st.alive) drawBug(b, st, placement);
+        if (st.alive) { drawBug(b, st, placement); drawn++; }
         else if (st.since < 0.6 && !calm) { const p = bugPos(b), k = 1 - st.since / 0.6; sparkle(p.x, p.y, s * 0.02 * k + 2, k); }
       }
     }
-    if (pose) drawBrush(pose, placement);
     if (opts.tongue) {              // untimed tongue brushing at the end
       const m = Math.sin(now / 1000 * Math.PI * 2 * (calm ? 0.8 : 1.4)) * s * 0.02;
       const x = cx, y = cy + s * 0.12 + m;
@@ -873,6 +878,55 @@
     ctx.restore();
   }
 
+  // Eyes above the mouth make it a face. They look where the brush is going (from lesson.js),
+  // blink and lift their eyebrows when a new part of the mouth starts, and rest when paused.
+  function lookAt(quad) { return { x: quad[1] === 'R' ? 0.85 : -0.85, y: quad[0] === 'U' ? 0.3 : 0.95 }; }
+
+  function drawEyes(look, lid, brow, happy) {
+    const s = G.s, rx = s * 0.068, ry = s * 0.078, calm = prefs.calm;
+    const lidColor = calm ? '#e2c4ca' : '#f6bfcb';
+    for (const side of [-1, 1]) {
+      const ex = G.cx + side * s * 0.16, ey = G.eyeY;
+      ctx.save();
+      ctx.lineCap = 'round';
+      const by = ey - ry - s * 0.022 - brow * s * 0.022;              // eyebrow
+      ctx.strokeStyle = '#4a3a33'; ctx.lineWidth = s * 0.014;
+      ctx.beginPath(); ctx.moveTo(ex - rx * 0.75, by + s * 0.008); ctx.quadraticCurveTo(ex, by - s * 0.016, ex + rx * 0.75, by + s * 0.008); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(ex, ey, rx, ry, 0, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff'; ctx.fill();
+      ctx.save(); ctx.clip();
+      const px = ex + look.x * rx * 0.42, py = ey + look.y * ry * 0.42;
+      ctx.fillStyle = calm ? '#6b5446' : '#5b3a29'; ctx.beginPath(); ctx.arc(px, py, s * 0.036, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#111827'; ctx.beginPath(); ctx.arc(px, py, s * 0.019, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(px - s * 0.011, py - s * 0.013, s * (happy ? 0.011 : 0.008), 0, Math.PI * 2); ctx.fill();
+      if (lid > 0.001) {
+        const y = ey - ry + 2 * ry * Math.min(1, lid);
+        ctx.fillStyle = lidColor; ctx.fillRect(ex - rx - 2, ey - ry - 2, 2 * rx + 4, y - (ey - ry) + 2);
+        ctx.strokeStyle = '#4a3a33'; ctx.lineWidth = s * 0.006; ctx.beginPath(); ctx.moveTo(ex - rx, y); ctx.lineTo(ex + rx, y); ctx.stroke();
+      }
+      if (happy > 0) {               // cheeks pushed up by the smile
+        ctx.fillStyle = lidColor; ctx.beginPath(); ctx.ellipse(ex, ey + ry * 1.25, rx * 1.4, ry * (0.45 + 0.25 * happy), 0, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.restore();
+      ctx.beginPath(); ctx.ellipse(ex, ey, rx, ry, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = '#334155'; ctx.lineWidth = s * 0.007; ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  function eyesFor(now) {
+    const calm = prefs.calm;
+    const idleBlink = calm ? 0 : Math.max(0, 1 - Math.abs((now % 4300) - 140) / 90);   // now and then, only when idle
+    if (uiState === 'idle') return { look: { x: 0, y: 1 }, lid: idleBlink, brow: 0, happy: 0 };   // looking at Start
+    if (uiState === 'finale') return { look: { x: 0, y: 1 }, lid: idleBlink * 0.9, brow: 0.3, happy: 0 };
+    if (uiState === 'smile') return { look: { x: 0, y: 0.15 }, lid: 0, brow: 0.5, happy: 1 };
+    const g = L.gaze(S.elapsed, S.duration), a = lookAt(g.from), b = lookAt(g.to);
+    const u = g.u < 0.5 ? 2 * g.u * g.u : 1 - Math.pow(-2 * g.u + 2, 2) / 2;
+    const look = { x: a.x + (b.x - a.x) * u, y: a.y + (b.y - a.y) * u };
+    if (uiState === 'paused') return { look: { x: look.x * 0.3, y: 0.4 }, lid: 0.42, brow: 0, happy: 0 };   // resting
+    return { look, lid: g.blink, brow: g.brow, happy: 0 };
+  }
+
   function drawRing(progress, done) {
     const s = G.s, cx = G.cx, cy = G.cy, R = s * 0.472, w = s * 0.022;
     ctx.save();
@@ -893,14 +947,18 @@
 
   function draw(now) {
     if (!G) return;
-    ctx.clearRect(0, 0, G.s, G.s);
+    ctx.clearRect(0, 0, G.s, G.h);
+    const e = eyesFor(now);
+    drawEyes(e.look, e.lid, e.brow, e.happy);
     if (uiState === 'smile') {
       const u = Math.min(1, (now - smileAt) / (prefs.calm ? 300 : 600));
       if (u < 1) { ctx.save(); ctx.globalAlpha = 1 - u; drawOpenMouth(now, { allClean: true }); ctx.restore(); }
+      drawn = 0;
       ctx.save(); ctx.globalAlpha = u; drawSmile(now); ctx.restore();
       drawRing(1, true);
     } else if (uiState === 'finale') {
       drawOpenMouth(now, { allClean: true, tongue: true });
+      drawn = 0;
       drawRing(1, true);
     } else {
       drawOpenMouth(now, { pose: uiState === 'idle' ? null : L.brushPose(S.elapsed, S.duration) });
@@ -910,7 +968,7 @@
 
   function describeCanvas() {
     let label;
-    if (uiState === 'smile') label = 'A clean, sparkly smile.';
+    if (uiState === 'smile') label = 'A happy face with a clean, sparkly smile.';
     else if (uiState === 'finale') label = 'All the teeth are clean. A toothbrush is on the tongue.';
     else if (uiState === 'idle') label = 'A wide-open mouth. Sugar bugs sit on the outsides, chewing tops and insides of the teeth.';
     else {
@@ -922,11 +980,15 @@
   }
 
   // ---------- Main loop: one clock for everything ----------
-  let last = performance.now();
+  let last = performance.now(), describedCount = -1;
   function frame(now) {
     const dt = Math.min(0.25, Math.max(0, (now - last) / 1000)); last = now;
     L.tick(S, dt).forEach(handle);
     if (uiState === 'running') renderClock();
+    if (uiState === 'running' || uiState === 'paused') {
+      const n = L.aliveCount(S.elapsed, S.duration);
+      if (n !== describedCount) { describedCount = n; describeCanvas(); }
+    }
     draw(now);
     requestAnimationFrame(frame);
   }
@@ -941,7 +1003,7 @@
   requestAnimationFrame(frame);
 
   // For automated checks only; no effect on play.
-  window.__toothbrush = { S, L, prefs, Audio, get state() { return uiState; } };
+  window.__toothbrush = { S, L, prefs, Audio, get state() { return uiState; }, get drawn() { return drawn; } };
 })();
 </script>
 </body>
