@@ -1,0 +1,19 @@
+[
+  {"key": "me-UR", "text": "Top teeth, on your right side. Brush the outsides, along the gums."},
+  {"key": "me-UL", "text": "Now the top teeth on your left side. Brush the outsides."},
+  {"key": "me-LL", "text": "Bottom teeth, on your left side. Brush the outsides."},
+  {"key": "me-LR", "text": "Last part! Bottom teeth, on your right side. Brush the outsides."},
+  {"key": "help-UR", "text": "Top teeth, on this side. Brush the outsides, along the gums."},
+  {"key": "help-UL", "text": "Now the top teeth on the other side. Brush the outsides."},
+  {"key": "help-LL", "text": "Now the bottom teeth, on the same side. Brush the outsides."},
+  {"key": "help-LR", "text": "Last part! Bottom teeth, on the other side. Brush the outsides."},
+  {"key": "chew-a", "text": "Now the chewing tops. Scrub back and forth."},
+  {"key": "chew-b", "text": "Chewing tops next. Little scrubs, back and forth."},
+  {"key": "inner-a", "text": "Now the insides. Hold the brush up and down behind the front teeth."},
+  {"key": "inner-b", "text": "Insides now. Up and down behind the front teeth."},
+  {"key": "finale-me", "text": "Great brushing! Now brush your tongue, spit, and show me your smile."},
+  {"key": "finale-help", "text": "Great brushing! Now a gentle tongue brush, a spit, and a big smile."},
+  {"key": "smile", "text": "What a sparkly smile! All clean."},
+  {"key": "paused", "text": "Paused. Tap the green button when you're ready."},
+  {"key": "test", "text": "Hi! I'll tell you where to brush."}
+]
