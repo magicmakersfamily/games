@@ -71,10 +71,10 @@
     margin: 0; text-align: center; font-size: clamp(20px, 6vw, 28px); line-height: 1.15; min-height: 1.2em;
     color: var(--ink); display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
   }
-  .coach .sep { color: var(--teal-bright); }
   .coach .sub { color: var(--teal); }
   .coach .arrow { color: var(--teal-bright); font-family: system-ui, sans-serif; }
-  .coach .vis { display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .coach .sub::before { content: '·'; content: '·' / ''; color: var(--teal-bright); margin-right: 8px; }
+  .coach .arrow::before { content: attr(data-arrow); content: attr(data-arrow) / ''; }
   .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   @media (max-width: 420px) { .coach { min-height: 2.3em; font-size: clamp(18px, 5.6vw, 24px); } }
 
@@ -137,13 +137,19 @@
   .dlg { padding: 0 18px; display: grid; gap: 14px; }
   .dlg-head { display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 2; background: var(--card); padding: 14px 0 8px; margin-bottom: -6px; }
   .dlg-foot { position: sticky; bottom: 0; z-index: 2; background: var(--card); padding: 10px 0 14px; box-shadow: 0 -14px 14px -4px var(--card); }
-  details.why { border: 2px solid var(--line); border-radius: 14px; padding: 10px 12px; }
-  details.why summary { cursor: pointer; font-size: 14px; }
-  details.why summary small { display: block; font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 2px; }
-  details.why ul { margin: 10px 0 8px; padding-left: 18px; font-size: 12.5px; line-height: 1.45; font-weight: 600; }
-  details.why li { margin-bottom: 4px; }
-  details.why p { margin: 6px 0 0; font-size: 11.5px; color: var(--muted); font-weight: 600; line-height: 1.45; }
-  details.why a { color: var(--teal); }
+  .why { border: 2px solid var(--line); border-radius: 14px; padding: 10px 12px; }
+  .why-btn { display: flex; gap: 8px; align-items: flex-start; width: 100%; text-align: left; border: 0; background: none; padding: 0; font-size: 14px; }
+  .why-btn small { display: block; font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+  .why-btn .chev { transition: transform .2s; color: var(--teal); }
+  .why-btn[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  .why ul { margin: 10px 0 8px; padding-left: 18px; font-size: 12.5px; line-height: 1.45; font-weight: 600; }
+  .why li { margin-bottom: 4px; }
+  .why p { margin: 6px 0 0; font-size: 11.5px; color: var(--muted); font-weight: 600; line-height: 1.45; }
+  .why a { color: var(--teal); }
+  .section-title { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: -8px; }
+  .eyes-pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; }
+  .opt.eye span { display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 8px; min-height: 42px; padding: 6px 10px; font-size: 12.5px; line-height: 1.15; }
+  .iris { flex: none; width: 20px; height: 20px; border-radius: 50%; background: radial-gradient(circle, #05070a 0 28%, var(--l) 30%, var(--c) 100%); border: 2px solid #fff; box-shadow: 0 0 0 1px rgb(15 23 42 / .5); }
   .dlg h2 { margin: 0; font-size: 20px; color: var(--teal); }
   .x { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--chip); font-size: 18px; }
   fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 6px; }
@@ -238,7 +244,7 @@
 </div>
 
 <footer class="shelf-foot">
-  <p><b>Version 2.2 (beta)</b> · Launched <time datetime="2026-10-03">October 3, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=2.2">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=2.2&amp;kind=bug">Report a bug</a></p>
+  <p><b>Version 2.3 (beta)</b> · Launched <time datetime="2026-10-03">October 3, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=2.3">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=2.3&amp;kind=bug">Report a bug</a></p>
   <p>Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></p>
   <p>These games don’t collect any information. Saved progress stays in your own browser.</p>
   <p>Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/toothbrush/" data-text="A two-minute toothbrush coach for kids: Toothbrush Coach">Tell a friend</button></p>
@@ -254,10 +260,11 @@
     <fieldset>
       <legend>Timer</legend>
       <div class="seg">
-        <label class="opt"><input type="radio" name="duration" value="60"><span>1 minute</span></label>
+        <label class="opt"><input type="radio" name="duration" value="60"><span>1 minute<small>quick practice</small></span></label>
         <label class="opt"><input type="radio" name="duration" value="120"><span>2 minutes<small>recommended</small></span></label>
-        <label class="opt"><input type="radio" name="duration" value="180"><span>3 minutes</span></label>
+        <label class="opt"><input type="radio" name="duration" value="180"><span>3 minutes<small>extra time</small></span></label>
       </div>
+      <p class="note">Two minutes is the recommended brushing time. Quick practice is for learning the steps; extra time is for kids who like to go slower.</p>
     </fieldset>
     <fieldset>
       <legend>Who’s brushing?</legend>
@@ -273,8 +280,9 @@
       <label class="switch"><span>Sound effects<small>Soft chimes when it’s time to move on.</small></span><input type="checkbox" id="optSound"></label>
       <label class="switch"><span>Calm mode<small>Stationary sugar bugs, muted colors, and quieter chimes.</small></span><input type="checkbox" id="optCalm"></label>
     </fieldset>
-    <details class="why">
-      <summary>Why these brushing steps?<small>Based on current guidance from the American Dental Association and the American Academy of Pediatric Dentistry.</small></summary>
+    <div class="why">
+      <button type="button" class="why-btn" id="whyBtn" aria-expanded="false" aria-controls="whyPanel"><span class="chev" aria-hidden="true">▸</span><span>Why these brushing steps?<small>Based on current guidance from the American Dental Association and the American Academy of Pediatric Dentistry.</small></span></button>
+      <div id="whyPanel" hidden>
       <ul>
         <li>Brush twice a day for two minutes with fluoride toothpaste.</li>
         <li>Clean the outside, inside and chewing surfaces of every tooth.</li>
@@ -285,7 +293,20 @@
       <p>Sources: ADA <a href="https://www.mouthhealthy.org/all-topics-a-z/brushing-your-teeth/" target="_blank" rel="noopener">brushing guide</a>, <a href="https://www.ada.org/resources/ada-library/oral-health-topics/home-care" target="_blank" rel="noopener">home oral care</a> and <a href="https://www.mouthhealthy.org/all-topics-a-z/fluoride/" target="_blank" rel="noopener">fluoride for children</a>; AAPD <a href="https://www.aapd.org/research/oral-health-policies--recommendations/fluoride-therapy/" target="_blank" rel="noopener">fluoride therapy</a>. Based on guidance published by the ADA and AAPD; neither organization has reviewed or endorsed this app. Brushing the tongue is our own extra step.</p>
       <p>Guidance reviewed October 2026.</p>
       <p>This app provides general education and does not replace advice from your child’s dentist.</p>
-    </details>
+      </div>
+    </div>
+    <div class="section-title">Character</div>
+    <fieldset>
+      <legend>Eye color</legend>
+      <div class="eyes-pick">
+        <label class="opt eye"><input type="radio" name="eye" value="brown"><span><i class="iris" style="--c:#6b4226;--l:#9a6a43"></i>Brown</span></label>
+        <label class="opt eye"><input type="radio" name="eye" value="darkbrown"><span><i class="iris" style="--c:#3f2617;--l:#7a5236"></i>Dark brown</span></label>
+        <label class="opt eye"><input type="radio" name="eye" value="hazel"><span><i class="iris" style="--c:#7a6a2e;--l:#a99a52"></i>Hazel</span></label>
+        <label class="opt eye"><input type="radio" name="eye" value="green"><span><i class="iris" style="--c:#2f7a4a;--l:#5fae7a"></i>Green</span></label>
+        <label class="opt eye"><input type="radio" name="eye" value="blue"><span><i class="iris" style="--c:#2f62a8;--l:#6a9ad6"></i>Blue</span></label>
+        <label class="opt eye"><input type="radio" name="eye" value="gray"><span><i class="iris" style="--c:#5f6b78;--l:#97a3af"></i>Gray</span></label>
+      </div>
+    </fieldset>
     <p class="note">The timer pauses while this is open. Settings are saved on this device only.</p>
     <div class="dlg-foot">
       <button class="small-btn" type="button" id="testVoiceBtn">🔊 Test the voice</button>
@@ -303,7 +324,7 @@
 
   // ---------- Settings (saved in this browser only) ----------
   const KEY = 'toothbrush:settings';
-  const prefs = { duration: 120, mode: 'help', voice: true, sound: true, calm: false };
+  const prefs = { duration: 120, mode: 'help', voice: true, sound: true, calm: false, eye: 'brown' };
   try {
     const s = JSON.parse(localStorage.getItem(KEY) || 'null');
     if (s) {
@@ -311,6 +332,7 @@
       if (s.mode === 'me' || s.mode === 'help') prefs.mode = s.mode;
       if (typeof s.voice === 'boolean') prefs.voice = s.voice;
       if (typeof s.sound === 'boolean') prefs.sound = s.sound;
+      if (['brown', 'darkbrown', 'hazel', 'green', 'blue', 'gray'].includes(s.eye)) prefs.eye = s.eye;
       if (typeof s.calm === 'boolean') prefs.calm = s.calm;
       else if (typeof s.lowStim === 'boolean') prefs.calm = s.lowStim;      // saved by version 1
     }
@@ -331,34 +353,32 @@
     const seg = L.SEGMENTS[index], q = L.QUADS[seg.qi];
     const where = prefs.mode === 'help' ? (q.jaw === 'upper' ? 'Top teeth' : 'Bottom teeth') : q.label;
     const arrow = { UR: '↗', UL: '↖', LL: '↙', LR: '↘' }[seg.quad];     // mirror view: right is right
-    const key = seg.surface === 'outer' ? `${prefs.mode}-${seg.quad}`
-      : seg.surface === 'chewing' ? (seg.qi % 2 ? 'chew-b' : 'chew-a')
-      : (seg.qi % 2 ? 'inner-b' : 'inner-a');
+    const quick = prefs.duration === 60;      // 5-second cues: fewer words
+    const key = seg.surface === 'outer' ? `${quick ? 'q-' : ''}${prefs.mode}-${seg.quad}`
+      : seg.surface === 'chewing' ? (quick ? 'q-chew' : seg.qi % 2 ? 'chew-b' : 'chew-a')
+      : (quick ? 'q-inner' : seg.qi % 2 ? 'inner-b' : 'inner-a');
     return { where, what: L.SURFACE_LABEL[seg.surface], key, arrow, side: q.side };
   }
 
+  // The coaching line has one set of words, so screen readers hear it once. The dot and the arrow
+  // come from CSS with empty alternative text; the real side is added as hidden text.
   function setCoach(where, what, c0) {
     const box = $('coach');
     box.textContent = '';
-    // What a screen reader hears: one plain sentence, with the real side even in younger-child mode.
-    const said = document.createElement('span'); said.className = 'sr';
-    said.textContent = (c0 && prefs.mode === 'help' ? `${where}, ${c0.side} side` : where) + (what ? (c0 ? ': ' : '. ') + what : '');
-    const c = document.createElement('span'); c.className = 'vis'; c.setAttribute('aria-hidden', 'true');
-    box.append(said, c);
-    const arrow = () => { const x = document.createElement('span'); x.className = 'arrow'; x.textContent = c0.arrow; x.setAttribute('aria-hidden', 'true'); return x; };
-    if (c0 && c0.side === 'left') c.appendChild(arrow());
-    const a = document.createElement('span'); a.textContent = where; c.appendChild(a);
-    if (what) {
-      const s = document.createElement('span'); s.className = 'sep'; s.textContent = '·'; s.setAttribute('aria-hidden', 'true');
-      const b = document.createElement('span'); b.className = 'sub'; b.textContent = what;
-      c.append(s, b);
-    }
-    if (c0 && c0.side === 'right') c.appendChild(arrow());
+    const add = (cls, text) => { const e = document.createElement('span'); if (cls) e.className = cls; e.textContent = text; box.appendChild(e); return e; };
+    const arrow = () => { const a = add('arrow', ''); a.dataset.arrow = c0.arrow; a.setAttribute('aria-hidden', 'true'); };
+    if (c0 && c0.side === 'left') arrow();
+    add('', where);
+    if (what) add('sr', c0 && prefs.mode === 'help' ? `, ${c0.side} side:` : c0 ? ':' : '.');
+    if (what) add('sub', what);
+    if (c0 && c0.side === 'right') arrow();
   }
+
 
   // ---------- Audio: one queue, so chimes and voice never overlap ----------
   const CLIP_KEYS = ['me-UR', 'me-UL', 'me-LL', 'me-LR', 'help-UR', 'help-UL', 'help-LL', 'help-LR', 'chew-a', 'chew-b',
-    'inner-a', 'inner-b', 'finale-me', 'finale-help', 'smile', 'paused', 'test'];
+    'inner-a', 'inner-b', 'finale-me', 'finale-help', 'smile', 'paused', 'test',
+    'q-me-UR', 'q-me-UL', 'q-me-LL', 'q-me-LR', 'q-help-UR', 'q-help-UL', 'q-help-LL', 'q-help-LR', 'q-chew', 'q-inner'];
   const Audio = {
     ctx: null, clips: {}, loading: null, sources: [], speakTimer: 0,
     ensure() {
@@ -405,8 +425,9 @@
     },
     chime(kind, t) {
       const g = prefs.calm ? 0.05 : 0.09;
-      if (kind === 'quad') { this.tone(t, 659.25, 0.32, g); return this.tone(t + 0.16, 987.77, 0.42, g); }
-      if (kind === 'surface') return this.tone(t, 880, 0.22, g * 0.6);
+      const quick = prefs.duration === 60;
+      if (kind === 'quad') { if (quick) return this.tone(t, 783.99, 0.2, g); this.tone(t, 659.25, 0.32, g); return this.tone(t + 0.16, 987.77, 0.42, g); }
+      if (kind === 'surface') return this.tone(t, 880, quick ? 0.1 : 0.22, g * 0.6);
       if (kind === 'done') { this.tone(t, 523.25, 0.4, g); this.tone(t + 0.15, 659.25, 0.4, g); return this.tone(t + 0.3, 783.99, 0.6, g); }
       return t;
     },
@@ -415,7 +436,7 @@
       this.ensure();
       if (!this.ctx) return this.fallback(key, 0, force);
       let t = this.trim();
-      if (chime && prefs.sound) t = this.chime(chime, t) + 0.08;
+      if (chime && prefs.sound) t = this.chime(chime, t) + (prefs.duration === 60 ? 0.04 : 0.08);
       if (!(prefs.voice || force) || !key) return;
       if (!this.clips[key] && this.loading) {
         await Promise.race([this.loading, new Promise(r => setTimeout(r, 2500))]);
@@ -470,7 +491,7 @@
     if (uiState === 'finale') return setCoach('Brush your tongue', 'Spit, don’t rinse');
     if (uiState === 'smile') return setCoach('Sparkly smile! ✨', '');
     const c = cue(Math.max(0, S.seg));
-    if (uiState === 'paused') return setCoach('Paused', c.where + ' · ' + c.what);
+    if (uiState === 'paused') return setCoach('Paused', c.where + ', ' + c.what.toLowerCase());
     setCoach(c.where, c.what, c);
   }
 
@@ -556,7 +577,8 @@
     $('optVoice').checked = prefs.voice; $('optSound').checked = prefs.sound; $('optCalm').checked = prefs.calm;
     document.querySelectorAll('input[name="duration"]').forEach(r => { r.checked = Number(r.value) === prefs.duration; });
     document.querySelectorAll('input[name="mode"]').forEach(r => { r.checked = r.value === prefs.mode; });
-    $('durationLabel').textContent = prefs.duration / 60 + (prefs.duration === 60 ? ' minute' : ' minutes');
+    document.querySelectorAll('input[name="eye"]').forEach(r => { r.checked = r.value === prefs.eye; });
+    $('durationLabel').textContent = { 60: '1-minute quick practice', 120: '2 minutes', 180: '3 minutes, extra time' }[prefs.duration];
     document.body.classList.toggle('calm', prefs.calm);
     readTheme();
   }
@@ -580,6 +602,11 @@
   document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener('change', () => {
     prefs.mode = r.value; savePrefs(); renderPrefs(); layout(); renderCoach();
   }));
+  document.querySelectorAll('input[name="eye"]').forEach(r => r.addEventListener('change', () => { prefs.eye = r.value; savePrefs(); }));
+  $('whyBtn').addEventListener('click', () => {
+    const open = $('whyBtn').getAttribute('aria-expanded') !== 'true';
+    $('whyBtn').setAttribute('aria-expanded', String(open)); $('whyPanel').hidden = !open;
+  });
   $('optVoice').addEventListener('change', e => { prefs.voice = e.target.checked; savePrefs(); renderPrefs(); if (!prefs.voice) Audio.stopVoice(); });
   $('optSound').addEventListener('change', e => { prefs.sound = e.target.checked; savePrefs(); renderPrefs(); });
   $('optCalm').addEventListener('change', e => { prefs.calm = e.target.checked; savePrefs(); renderPrefs(); });
@@ -741,64 +768,81 @@
     ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
   }
 
-  function brushPlacement(pose) {
-    const s = G.s, t = toothAt(pose.quad, pose.tooth);
-    const BL = s * 0.085, T = s * 0.032;
-    const off = sf => sf === 'outer' ? (t.h / 2 + T / 2 + s * 0.006) : sf === 'chewing' ? 0
-      : -(t.h / 2 + (T / 2) * (1 - pose.tilt) + (BL * 0.42) * pose.tilt + s * 0.006);
-    const o = off(pose.fromSurface) + (off(pose.surface) - off(pose.fromSurface)) * pose.blend;
-    let x = t.x + t.nx * o, y = t.y + t.ny * o;
-    // Strokes run on the lesson clock, so they freeze when paused.
-    const e = S.elapsed, calm = prefs.calm, amp = (pose.settled ? 1 : 0.3) * (calm ? 0.5 : 1), f = calm ? 0.6 : 1;
-    if (pose.stroke === 'circles') { const a = e * Math.PI * 3 * f, r = s * 0.007 * amp; x += (t.tx * Math.cos(a) + t.nx * Math.sin(a)) * r; y += (t.ty * Math.cos(a) + t.ny * Math.sin(a)) * r; }
-    else if (pose.stroke === 'scrub') { const m = Math.sin(e * Math.PI * 4 * f) * s * (pose.surface === 'chewing' ? 0.014 : 0.009) * amp; x += t.tx * m; y += t.ty * m; }
-    else if (pose.stroke === 'vertical') { const m = Math.sin(e * Math.PI * 4 * f) * s * 0.01 * amp; x += t.nx * m; y += t.ny * m; }
-    return { x, y, ang: Math.atan2(t.ty, t.tx) + pose.tilt * Math.PI / 2, t, L: BL, T };
+  // ---- The toothbrush: one rigid object ----
+  // Handle, neck, head and bristles are drawn in one local frame (x runs from the head toward the
+  // handle, bristles on +y) and placed with a single translate + rotate. Each pose is solved from
+  // where the bristles touch the tooth. Sizes never change.
+  const RIG = { head: 0.085, headW: 0.03, bristle: 0.012, neck: 0.05, neckW: 0.014, handle: 0.5, handleW: 0.032 };
+  const BASS = 35 * Math.PI / 180;          // outside surfaces: brush angled out toward the gumline
+
+  function kindOf(surface, tooth) { return surface === 'inner' ? (tooth <= L.VERTICAL_TEETH + 1e-6 ? 'front' : 'inner') : surface; }
+
+  /** Where the rigid brush sits for one tooth position and surface. */
+  function rigPose(quad, f, kind) {
+    const s = G.s, t = toothAt(quad, f), sign = G.sideSign[quad], upper = quad[0] === 'U';
+    const T = RIG.headW * s, B = RIG.bristle * s, H = RIG.head * s;
+    const nOut = { x: t.nx, y: t.ny };
+    const p1 = toothAt(quad, Math.min(4, f + 0.02)), p0 = toothAt(quad, Math.max(0, f - 0.02));
+    let back = { x: p1.x - p0.x, y: p1.y - p0.y }; const bl = Math.hypot(back.x, back.y) || 1; back = { x: back.x / bl, y: back.y / bl };
+    const corner = { x: G.cx + sign * s * 0.5, y: G.cy + (upper ? -0.015 : 0.015) * s };   // between the lips, this side
+    const unit = v => { const l = Math.hypot(v.x, v.y) || 1; return { x: v.x / l, y: v.y / l }; };
+    let a, c, toward;               // a: head → handle; c: head centre; toward: from brush to tooth
+    if (kind === 'outer') {
+      a = unit({ x: back.x * Math.cos(BASS) + nOut.x * Math.sin(BASS), y: back.y * Math.cos(BASS) + nOut.y * Math.sin(BASS) });
+      if (upper && a.y < -0.45) a = unit({ x: a.x, y: -0.45 * Math.hypot(a.x, 1) / Math.sqrt(1 - 0.45 * 0.45) * 0.9 });   // keep the handle below the eyes
+      const contact = { x: t.x + nOut.x * t.h / 2, y: t.y + nOut.y * t.h / 2 };
+      c = { x: contact.x + nOut.x * (T / 2 + B) + a.x * H * 0.32, y: contact.y + nOut.y * (T / 2 + B) + a.y * H * 0.32 };
+      toward = { x: -nOut.x, y: -nOut.y };
+    } else if (kind === 'chewing') {
+      c = { x: t.x, y: t.y };
+      a = unit({ x: corner.x - c.x, y: corner.y - c.y });
+      toward = { x: -nOut.x, y: -nOut.y };
+    } else if (kind === 'inner') {
+      const contact = { x: t.x - nOut.x * t.h / 2, y: t.y - nOut.y * t.h / 2 };
+      c = { x: contact.x - nOut.x * (T / 2 + B), y: contact.y - nOut.y * (T / 2 + B) };
+      a = unit({ x: corner.x - c.x, y: corner.y - c.y });
+      toward = nOut;
+    } else {                        // front: upright behind the front teeth, handle straight out of the mouth
+      const contact = { x: t.x - nOut.x * t.h / 2, y: t.y - nOut.y * t.h / 2 };
+      a = { x: 0, y: upper ? 1 : -1 };
+      c = { x: contact.x - nOut.x * (T / 2 + B) + a.x * H * 0.4, y: contact.y - nOut.y * (T / 2 + B) + a.y * H * 0.4 };
+      toward = { x: -sign, y: 0 };
+    }
+    const flip = (-a.y * toward.x + a.x * toward.y) >= 0 ? 1 : -1;   // put the bristles toward the tooth
+    return { x: c.x, y: c.y, ang: Math.atan2(a.y, a.x), ax: a.x, ay: a.y, flip, t, kind };
   }
 
-  function drawBrush(pose, b) {
-    const s = G.s, sign = G.sideSign[pose.quad], upper = pose.quad[0] === 'U';
-    const ux = Math.cos(b.ang), uy = Math.sin(b.ang);
-    const handle = prefs.calm ? '#7fb5ad' : '#14b8a6', handleDark = prefs.calm ? '#5f948c' : '#0f8f83';
-    const alpha = pose.alpha;
+  /** The pose for this moment, including small strokes (on the lesson clock, so they freeze when paused). */
+  function brushPlacement(pose) {
+    const fromKind = kindOf(pose.fromSurface, pose.fromTooth), toKind = kindOf(pose.surface, pose.stop);
+    let rig, alpha = pose.alpha;
+    if (fromKind === toKind) rig = rigPose(pose.quad, pose.tooth, toKind);
+    else if (pose.blend < 0.5) { rig = rigPose(pose.quad, pose.fromTooth, fromKind); alpha *= 1 - 2 * pose.blend; }   // lift…
+    else { rig = rigPose(pose.quad, pose.stop, toKind); alpha *= 2 * pose.blend - 1; }                               // …and place
+    const s = G.s, e = S.elapsed, calm = prefs.calm, amp = (pose.settled ? 1 : 0.3) * (calm ? 0.5 : 1), f = calm ? 0.6 : 1, t = rig.t;
+    let dx = 0, dy = 0;
+    if (rig.kind === 'outer') { const w = e * Math.PI * 3 * f, r = s * 0.006 * amp; dx = (t.tx * Math.cos(w) + t.nx * Math.sin(w)) * r; dy = (t.ty * Math.cos(w) + t.ny * Math.sin(w)) * r; }
+    else if (rig.kind === 'chewing') { const m = Math.sin(e * Math.PI * 4 * f) * s * 0.012 * amp; dx = rig.ax * m; dy = rig.ay * m; }
+    else if (rig.kind === 'inner') { const m = Math.sin(e * Math.PI * 4 * f) * s * 0.008 * amp; dx = t.tx * m; dy = t.ty * m; }
+    else { const m = Math.sin(e * Math.PI * 4 * f) * s * 0.01 * amp; dx = rig.ax * m; dy = rig.ay * m; }
+    return Object.assign({}, rig, { x: rig.x + dx, y: rig.y + dy, alpha });
+  }
+
+  function drawRigidBrush(b, alpha) {
+    if (alpha <= 0.001) return;
+    const s = G.s, calm = prefs.calm;
+    const H = RIG.head * s, T = RIG.headW * s, B = RIG.bristle * s, N = RIG.neck * s, NW = RIG.neckW * s, HL = RIG.handle * s, HW = RIG.handleW * s;
+    const handle = calm ? '#7fb5ad' : '#14b8a6', dark = calm ? '#5f948c' : '#0f8f83';
     ctx.save();
-    ctx.lineCap = 'round';
-    // Lying along the teeth: the handle leaves through the corner of the mouth on this side.
-    const flat = 1 - pose.tilt;
-    if (flat > 0.02) {
-      const end = ux * sign >= 0 ? 1 : -1;
-      const ax_ = b.x + ux * end * b.L / 2, ay_ = b.y + uy * end * b.L / 2;
-      const nx_ = ax_ + ux * end * s * 0.035, ny_ = ay_ + uy * end * s * 0.035;
-      const ex = G.cx + sign * s * 0.56, ey = ny_ + (upper ? -1 : 1) * s * 0.01;
-      ctx.globalAlpha = alpha * flat;
-      ctx.strokeStyle = handleDark; ctx.lineWidth = s * 0.016;
-      ctx.beginPath(); ctx.moveTo(ax_, ay_); ctx.lineTo(nx_, ny_); ctx.stroke();
-      ctx.strokeStyle = handle; ctx.lineWidth = s * 0.032;
-      ctx.beginPath(); ctx.moveTo(nx_, ny_); ctx.lineTo(ex, ey); ctx.stroke();
-    }
-    // Held upright behind the front teeth: the handle points straight out toward you.
-    if (pose.tilt > 0.02) {
-      const t = b.t, back = { x: b.x - t.nx * b.L / 2, y: b.y - t.ny * b.L / 2 };
-      const tip = { x: back.x - t.nx * s * 0.045, y: back.y - t.ny * s * 0.045 };
-      ctx.globalAlpha = alpha * pose.tilt;
-      ctx.strokeStyle = handle; ctx.lineWidth = s * 0.03;
-      ctx.beginPath(); ctx.moveTo(back.x, back.y); ctx.lineTo(tip.x, tip.y); ctx.stroke();
-      ctx.fillStyle = handleDark; ctx.beginPath(); ctx.ellipse(tip.x, tip.y, s * 0.026, s * 0.02, 0, 0, Math.PI * 2); ctx.fill();
-    }
-    // The head, bristles toward the teeth.
-    ctx.globalAlpha = alpha;
-    ctx.translate(b.x, b.y); ctx.rotate(b.ang);
-    roundRect(-b.L / 2, -b.T / 2, b.L, b.T, b.T * 0.45);
-    ctx.fillStyle = prefs.calm ? '#e8efee' : '#ffffff'; ctx.fill();
-    ctx.strokeStyle = handleDark; ctx.lineWidth = 1.5; ctx.stroke();
-    ctx.fillStyle = prefs.calm ? '#a9c9d6' : '#7dd3fc';
-    // In the head's frame, -y points along the outward normal (toward the lips).
-    if (pose.tilt < 0.5 && pose.surface !== 'chewing') {
-      const towardTooth = pose.surface === 'outer' ? 1 : -1;     // +1: bristles on the inner (+y) side
-      roundRect(-b.L * 0.42, towardTooth > 0 ? b.T * 0.06 : -b.T * 0.46, b.L * 0.84, b.T * 0.4, 2); ctx.fill();
-    } else {
-      for (let i = -3; i <= 3; i++) for (const j of [-1, 1]) { ctx.beginPath(); ctx.arc(i * b.L * 0.12, j * b.T * 0.2, b.T * 0.11, 0, Math.PI * 2); ctx.fill(); }
-    }
+    ctx.globalAlpha *= alpha;
+    ctx.translate(b.x, b.y); ctx.rotate(b.ang); ctx.scale(1, b.flip);
+    roundRect(H / 2 + N - 2, -HW / 2, HL, HW, HW / 2); ctx.fillStyle = handle; ctx.fill();          // handle
+    ctx.strokeStyle = dark; ctx.lineWidth = 1.2; ctx.stroke();
+    roundRect(H / 2 - 3, -NW / 2, N + 6, NW, NW / 2); ctx.fillStyle = dark; ctx.fill();             // neck
+    ctx.fillStyle = calm ? '#a9c9d6' : '#7dd3fc';                                                    // bristles
+    for (let i = 0; i < 6; i++) { const x = -H / 2 + H * (0.08 + i * 0.155); roundRect(x, T / 2 - 1, H * 0.11, B + 1, 1.5); ctx.fill(); }
+    roundRect(-H / 2, -T / 2, H, T, T * 0.45); ctx.fillStyle = calm ? '#e8efee' : '#ffffff'; ctx.fill(); // head
+    ctx.strokeStyle = dark; ctx.lineWidth = 1.5; ctx.stroke();
     ctx.restore();
   }
 
@@ -831,7 +875,7 @@
     }
     if (pose) surfaceBand(pose.quad, pose.surface);
     const placement = pose ? brushPlacement(pose) : null;
-    if (pose) drawBrush(pose, placement);
+    if (pose) drawRigidBrush(placement, placement.alpha);
     // Bugs go on top of the brush, so every bug that is still there can be seen and counted.
     drawn = 0;
     if (!opts.allClean) {
@@ -841,44 +885,25 @@
         else if (st.since < 0.6 && !calm) { const p = bugPos(b), k = 1 - st.since / 0.6; sparkle(p.x, p.y, s * 0.02 * k + 2, k); }
       }
     }
-    if (opts.tongue) {              // untimed tongue brushing at the end
-      const m = Math.sin(now / 1000 * Math.PI * 2 * (calm ? 0.8 : 1.4)) * s * 0.02;
-      const x = cx, y = cy + s * 0.12 + m;
-      ctx.save(); ctx.lineCap = 'round';
-      ctx.strokeStyle = calm ? '#7fb5ad' : '#14b8a6'; ctx.lineWidth = s * 0.03;
-      ctx.beginPath(); ctx.moveTo(x, y + s * 0.042); ctx.lineTo(x, y + s * 0.09); ctx.stroke();
-      ctx.fillStyle = '#0f8f83'; ctx.beginPath(); ctx.ellipse(x, y + s * 0.09, s * 0.026, s * 0.02, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.translate(x, y); ctx.rotate(Math.PI / 2);
-      roundRect(-s * 0.0425, -s * 0.016, s * 0.085, s * 0.032, s * 0.014);
-      ctx.fillStyle = '#fff'; ctx.fill(); ctx.strokeStyle = '#0f8f83'; ctx.lineWidth = 1.5; ctx.stroke();
-      ctx.restore();
+    if (opts.tongue) {              // untimed tongue brushing at the end: the same brush, handle out over the lip
+      const m = Math.sin(now / 1000 * Math.PI * 2 * (calm ? 0.8 : 1.4)) * s * 0.018;
+      drawRigidBrush({ x: cx, y: cy + s * 0.1 + m, ang: Math.PI / 2, flip: 1 }, 1);
     }
   }
 
-  // The finished smile: same size as the mouth, teeth lined up, a few calm sparkles.
-  // The finished face: the progress ring becomes the outline of a face, and the eyes come down
-  // to sit with the smile, a small nose and two cheeks.
-  const FACE_END = { y: 0.6, rx: 0.43, ry: 0.5, eyes: 0.43, mouth: 0.72 };
+  // The finished smile: the progress ring moves up to frame the eyes and the smile together, with a
+  // see-through glow behind them. No skin colour, nose or cheeks: the coach stays an abstract,
+  // friendly face that any child can see themselves in.
+  const FACE_END = { y: 0.62, r: 0.455, eyes: 0.43, mouth: 0.71 };
   function smileMorph(now) { const u = Math.min(1, (now - smileAt) / (prefs.calm ? 350 : 700)); return u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; }
-  function drawFace(u) {
-    const s = G.s, R = s * 0.472, calm = prefs.calm;
-    const y = G.cy + (s * FACE_END.y - G.cy) * u, rx = R + (s * FACE_END.rx - R) * u, ry = R + (s * FACE_END.ry - R) * u;
+  function drawFrame(u) {
+    const s = G.s, R0 = s * 0.472, y = G.cy + (s * FACE_END.y - G.cy) * u, r = R0 + (s * FACE_END.r - R0) * u;
     ctx.save();
-    ctx.globalAlpha = u;
-    ctx.fillStyle = calm ? '#f6efe9' : '#fff3e8';
-    ctx.beginPath(); ctx.ellipse(G.cx, y, rx, ry, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.strokeStyle = calm ? '#c8b3a8' : '#f1b79f'; ctx.lineWidth = s * 0.018;
-    ctx.beginPath(); ctx.ellipse(G.cx, y, rx, ry, 0, 0, Math.PI * 2); ctx.stroke();
-    if (u < 1) {                      // the green ring fading into the outline
-      ctx.globalAlpha = 1 - u; ctx.strokeStyle = calm ? '#9cc3a5' : '#22c55e'; ctx.lineWidth = s * 0.022;
-      ctx.beginPath(); ctx.ellipse(G.cx, y, rx, ry, 0, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = 1;
-    }
-    ctx.globalAlpha = u;              // nose and cheeks
-    ctx.strokeStyle = calm ? '#c8a99c' : '#e8a08a'; ctx.lineWidth = s * 0.012; ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.moveTo(G.cx - s * 0.018, s * 0.585); ctx.quadraticCurveTo(G.cx, s * 0.61, G.cx + s * 0.018, s * 0.585); ctx.stroke();
-    ctx.fillStyle = calm ? 'rgba(220,150,160,.22)' : 'rgba(244,114,142,.28)';
-    for (const side of [-1, 1]) { ctx.beginPath(); ctx.ellipse(G.cx + side * s * 0.27, s * 0.66, s * 0.055, s * 0.035, 0, 0, Math.PI * 2); ctx.fill(); }
+    const g = ctx.createRadialGradient(G.cx, y, 0, G.cx, y, r);
+    g.addColorStop(0, prefs.calm ? 'rgba(156,195,165,.16)' : 'rgba(94,234,212,.20)'); g.addColorStop(1, 'rgba(94,234,212,0)');
+    ctx.globalAlpha = u; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(G.cx, y, r, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1; ctx.strokeStyle = prefs.calm ? '#9cc3a5' : '#22c55e'; ctx.lineWidth = s * 0.022;
+    ctx.beginPath(); ctx.arc(G.cx, y, r, 0, Math.PI * 2); ctx.stroke();
     ctx.restore();
   }
 
@@ -938,11 +963,21 @@
 
   // Eyes above the mouth make it a face. They look where the brush is going (from lesson.js),
   // blink and lift their eyebrows when a new part of the mouth starts, and rest when paused.
+  // Iris colours: a lighter centre so the black pupil always stands out, even for dark brown.
+  const EYE_COLORS = {
+    brown:     { label: 'Brown',      base: '#6b4226', light: '#9a6a43', calm: '#6f5444', calmLight: '#94795f' },
+    darkbrown: { label: 'Dark brown', base: '#3f2617', light: '#7a5236', calm: '#4a3529', calmLight: '#7b6150' },
+    hazel:     { label: 'Hazel',      base: '#7a6a2e', light: '#a99a52', calm: '#7a7050', calmLight: '#a39a78' },
+    green:     { label: 'Green',      base: '#2f7a4a', light: '#5fae7a', calm: '#4f7a60', calmLight: '#7fa58d' },
+    blue:      { label: 'Blue',       base: '#2f62a8', light: '#6a9ad6', calm: '#4f6b8f', calmLight: '#7f97b5' },
+    gray:      { label: 'Gray',       base: '#5f6b78', light: '#97a3af', calm: '#68717a', calmLight: '#99a1a8' },
+  };
   function lookAt(quad) { return { x: quad[1] === 'R' ? 0.85 : -0.85, y: quad[0] === 'U' ? 0.3 : 0.95 }; }
 
   function drawEyes(look, lid, brow, happy, eyeY) {
     const s = G.s, rx = s * 0.068, ry = s * 0.078, calm = prefs.calm;
-    const lidColor = calm ? '#e2c4ca' : '#f6bfcb';
+    const lidColor = calm ? '#d7dbe4' : '#d4dcf0';     // a soft neutral lid, not a skin tone
+    const iris = EYE_COLORS[prefs.eye] || EYE_COLORS.brown;
     for (const side of [-1, 1]) {
       const ex = G.cx + side * s * 0.16, ey = eyeY == null ? G.eyeY : eyeY;
       ctx.save();
@@ -954,8 +989,11 @@
       ctx.fillStyle = '#ffffff'; ctx.fill();
       ctx.save(); ctx.clip();
       const px = ex + look.x * rx * 0.42, py = ey + look.y * ry * 0.42;
-      ctx.fillStyle = calm ? '#6b5446' : '#5b3a29'; ctx.beginPath(); ctx.arc(px, py, s * 0.036, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = '#111827'; ctx.beginPath(); ctx.arc(px, py, s * 0.019, 0, Math.PI * 2); ctx.fill();
+      const ig = ctx.createRadialGradient(px, py, s * 0.012, px, py, s * 0.036);
+      ig.addColorStop(0, calm ? iris.calmLight : iris.light); ig.addColorStop(1, calm ? iris.calm : iris.base);
+      ctx.fillStyle = ig; ctx.beginPath(); ctx.arc(px, py, s * 0.036, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(15,23,42,.55)'; ctx.lineWidth = s * 0.004; ctx.stroke();               // dark rim keeps the iris clear on white
+      ctx.fillStyle = '#05070a'; ctx.beginPath(); ctx.arc(px, py, s * 0.017, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(px - s * 0.011, py - s * 0.013, s * (happy ? 0.011 : 0.008), 0, Math.PI * 2); ctx.fill();
       if (lid > 0.001) {
         const y = ey - ry + 2 * ry * Math.min(1, lid);
@@ -1012,7 +1050,7 @@
     const e = eyesFor(now);
     if (uiState === 'smile') {
       const u = smileMorph(now), s = G.s;
-      drawFace(u);
+      drawFrame(u);
       if (u < 1) { ctx.save(); ctx.globalAlpha = 1 - u; drawOpenMouth(now, { allClean: true }); ctx.restore(); }
       drawn = 0;
       ctx.save(); ctx.globalAlpha = u; drawSmile(now, s * FACE_END.mouth); ctx.restore();
@@ -1032,7 +1070,7 @@
 
   function describeCanvas() {
     let label;
-    if (uiState === 'smile') label = 'A happy face with a clean, sparkly smile.';
+    if (uiState === 'smile') label = 'A happy face smiling with clean teeth.';
     else if (uiState === 'finale') label = 'All the teeth are clean. A toothbrush is on the tongue.';
     else if (uiState === 'idle') label = 'A wide-open mouth. Sugar bugs sit on the outsides, chewing tops and insides of the teeth.';
     else {
@@ -1067,7 +1105,9 @@
   requestAnimationFrame(frame);
 
   // For automated checks only; no effect on play.
-  window.__toothbrush = { S, L, prefs, Audio, get state() { return uiState; }, get drawn() { return drawn; } };
+  window.__toothbrush = { S, L, prefs, Audio, get state() { return uiState; }, get drawn() { return drawn; },
+    brushAt: t => { const b = brushPlacement(L.brushPose(t, S.duration)), s = G.s, len = (RIG.head / 2 + RIG.neck + RIG.handle) * s;
+      return { x: b.x, y: b.y, ang: b.ang, kind: b.kind, alpha: b.alpha, endX: b.x + b.ax * len, endY: b.y + b.ay * len, cx: G.cx, cy: G.cy, s }; } };
 })();
 </script>
 </body>

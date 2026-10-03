@@ -120,7 +120,7 @@
     const tilt = upright(fromSurface, fromTooth) + (upright(seg.surface, stop) - upright(fromSurface, fromTooth)) * e;
     const stroke = seg.surface === 'outer' ? 'circles' : seg.surface === 'chewing' ? 'scrub' : (upright(seg.surface, stop) ? 'vertical' : 'scrub');
     return {
-      seg: seg.index, quad: seg.quad, surface: seg.surface, fromSurface, blend: e,
+      seg: seg.index, quad: seg.quad, surface: seg.surface, fromSurface, fromTooth, blend: e,
       tooth: fromTooth + (stop - fromTooth) * e, stop, tilt, stroke, alpha, settled: m >= 1,
     };
   }

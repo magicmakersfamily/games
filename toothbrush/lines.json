@@ -15,5 +15,15 @@
   {"key": "finale-help", "text": "Great brushing! Brush your tongue. Spit, don't rinse. Now show your smile!"},
   {"key": "smile", "text": "What a sparkly smile! All clean."},
   {"key": "paused", "text": "Paused. Tap the green button when you're ready."},
-  {"key": "test", "text": "Hi! I'll tell you where to brush."}
+  {"key": "test", "text": "Hi! I'll tell you where to brush."},
+  {"key": "q-me-UR", "text": "Top right. Outsides."},
+  {"key": "q-me-UL", "text": "Top left. Outsides."},
+  {"key": "q-me-LL", "text": "Bottom left. Outsides."},
+  {"key": "q-me-LR", "text": "Bottom right. Outsides."},
+  {"key": "q-help-UR", "text": "Top teeth, this side. Outsides."},
+  {"key": "q-help-UL", "text": "Top teeth, other side. Outsides."},
+  {"key": "q-help-LL", "text": "Bottom teeth, same side. Outsides."},
+  {"key": "q-help-LR", "text": "Bottom teeth, other side. Outsides."},
+  {"key": "q-chew", "text": "Chewing surfaces."},
+  {"key": "q-inner", "text": "Now the insides."}
 ]

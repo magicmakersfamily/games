@@ -21,7 +21,32 @@ are kept word for word under "Product notes" below; this top part says where dev
   (needs ffmpeg and `brew install espeak-ng`). Each line must stay under about 4.5 s so it fits a
   5-second cue in 1-minute mode. Browser speech is only a backup and shows a "backup voice" tag.
 
-## Status (2.2 beta, October 3, 2026)
+## Status (2.3 beta, October 3, 2026)
+
+Done in 2.3 (from the 2.2 retest at the end of the notes):
+- Rigid toothbrush: handle, neck, head and bristles are drawn in one local frame with one
+  translate + rotate (`rigPose`, `drawRigidBrush` in index.html; sizes in `RIG`, never change).
+  Poses are solved from the bristle contact: outside = angled 35° out toward the gumline (handle kept
+  below the eyes on the top teeth); chewing = head on the molar, handle out the corner of the mouth;
+  inside = bristles on the inner surface, handle out the corner; front = upright behind the front
+  teeth with the handle straight out of the mouth. Same pose type: the brush slides; different pose
+  type: lift and place (fade out, fade in), never a bend. A browser check runs every 50 ms of the
+  lesson and confirms the handle end is outside the lips whenever the brush is visible.
+- Identity-neutral ending: no skin-coloured oval, blush or nose. The progress ring moves up to frame
+  the eyes and smile with a see-through glow; eyelids are a soft neutral colour, not a skin tone.
+  The coach has no name, gender or pronouns.
+- Grown-ups → Character → Eye color (radio group): Brown (default), Dark brown, Hazel, Green, Blue,
+  Gray, each with an iris preview and a label; irises have a lighter centre and a dark rim so the
+  pupil stands out in normal and calm mode; saved with the other settings; cosmetic only.
+- Screen readers: the coaching line is one set of words (dot and arrow drawn by CSS with empty alt
+  text, the real side as hidden text), so running, paused and smile states are announced once.
+  "Why these brushing steps?" is a real button with aria-expanded/aria-controls.
+- Timer: "1 minute — quick practice", "2 minutes — recommended", "3 minutes — extra time", with a
+  note that two minutes is the recommended time. Quick practice uses short lines (q-* in
+  lines.json, 1.2–2.6 s instead of 3.3–4.1 s) and a single short chime.
+
+Still open: name and personality for the coach (no gender), one tiny local-only reward per finished
+session, a forgiving morning/evening calendar; family testing of the character across backgrounds.
 
 Done in 2.2 (from the 2.1 retest at the end of the notes):
 - "1 sugar bug left" (singular). The coaching line is one screen-reader sentence (hidden `.sr` span
@@ -90,9 +115,9 @@ Not done yet:
 - Pronunciation/timing QA for other languages (English only for now).
 - Child testing against the success measures at the end of the notes.
 
-## Product notes (from the family, October 3, 2026, updated after the 2.0 and 2.1 retests)
+## Product notes (from the family, October 3, 2026, updated after the 2.0, 2.1 and 2.2 retests)
 
-Latest tested version: 2.1 (beta), October 3, 2026.
+Latest tested version: 2.2 (beta), October 3, 2026.
 
 ### Toothbrush Coach — Integrated Product Notes
 
@@ -411,3 +436,84 @@ Recommended final spoken instruction:
 > Brush your tongue. Spit—don't rinse. Now show your smile!
 
 For children who cannot reliably spit, the parent guidance should emphasize the correct small amount of toothpaste and supervision rather than instructing the child to rinse.
+
+### Version 2.2 beta retest — October 3, 2026
+
+**Tested version: 2.2 (beta)**  
+**Test date: October 3, 2026**
+
+#### Improvements confirmed
+
+- Child-facing completion copy now says `You brushed every tooth!`
+- `Chewing surfaces` replaces the less natural `Chewing tops` language.
+- The Calm mode description now clearly says `Stationary sugar bugs, muted colors, and quieter chimes.`
+- A detailed ADA/AAPD guidance disclosure has been added under Grown-ups with sources, review date, non-endorsement language, and an educational disclaimer.
+- The final bug remains visible through the final seconds and still clears at the correct completion boundary.
+- The completion screen now brings the features into one face, but child testing identified an important inclusivity regression described below.
+
+#### High priority: rebuild the toothbrush as one rigid object
+
+The brush currently bends unnaturally. During outside and chewing targets, the long handle remains almost horizontal while the head rotates sharply. During inside targets, the head becomes vertical while the handle collapses, disappears, or forms an implausible near-90-degree bend.
+
+Required implementation:
+
+- Treat the handle, neck, head, and bristles as one rigid brush rig.
+- Keep all parts in fixed local positions; never rotate or translate the head independently from the handle.
+- Move the entire brush with one transform: translation plus rotation around a chosen pivot.
+- Anchor each pose using the bristle-contact point, then solve the full-brush position from that contact.
+- Create explicit canonical poses for upper/lower outside, chewing, inside, and vertical front-tooth strokes.
+- Animate small tooth-width strokes within each pose rather than swinging the brush through a large arc.
+- For outer surfaces, angle the complete brush naturally toward the gumline.
+- For chewing surfaces, place the bristles on the biting surface and let the full handle enter from the corner of the mouth.
+- For inner front teeth, rotate the entire brush vertically and keep the handle visibly extending out of the mouth.
+- Use a mouth/lip clipping mask for the entry point instead of shortening or hiding the handle.
+- Lift, move, and place the rigid brush during target transitions; a clean reposition is better than a physically impossible morph.
+- Keep brush-head dimensions constant throughout the lesson.
+
+Canvas acceptance test: freeze any animation frame and draw a straight centerline from the handle through the neck into the head. The brush should look manufacturable and physically holdable, with no rubber-hose bend.
+
+#### High priority: restore an identity-neutral character
+
+The new completion face uses a peach skin-colored oval, blush, and a small nose. In family testing it read as a Caucasian person and the oval shape read as an egg. This reduces the earlier character's useful gender and ethnicity ambiguity.
+
+Recommended direction:
+
+- Return to disconnected expressive eyes and a smiling mouth on the neutral background.
+- Remove the skin-colored filled oval, blush, and human-coded nose.
+- Preserve the eyes because they provide orientation and emotional feedback.
+- Preserve the improved smile, but let it float as a friendly abstract brushing coach rather than a specific human face.
+- If a framing shape is needed, use the existing progress ring, a transparent glow, or a non-skin-coded abstract shape.
+- Do not assign the coach a gender in copy, voice, name, or pronouns.
+- Test the character with families across multiple ethnic and cultural backgrounds before adding human skin, hair, or facial features.
+
+#### Character personalization: eye color
+
+Add an **Eye color** setting under a compact `Character` section in Grown-ups.
+
+Recommended options:
+
+- Brown — default
+- Dark brown
+- Hazel
+- Green
+- Blue
+- Gray
+
+Requirements:
+
+- Implement as an accessible radio group named `Eye color`.
+- Show a small iris preview plus a written color label; do not rely on color alone.
+- Maintain sufficient pupil/iris/sclera contrast in normal and Calm modes.
+- Apply the chosen color consistently on Ready, active, Paused, tongue, and completion screens.
+- Save the choice locally on the device with the other settings.
+- Keep eye color cosmetic only; it must not change rewards, coaching, or difficulty.
+- On narrow screens, allow swatches to wrap into two rows without widening the modal.
+- Consider a later `Surprise me` option, but keep Brown as the stable default.
+
+#### Additional Version 2.2 findings
+
+- The completion accessibility tree contains `Sparkly smile!` twice, which may produce a duplicate screen-reader announcement. Keep only one accessible instance and hide the decorative duplicate.
+- The paused state similarly exposes both a combined paused-status string and its individual visible parts. Ensure the live region announces the state once.
+- The `Why these brushing steps?` disclosure appears as a generic element rather than an explicit button/disclosure control in the accessibility tree. Expose an accessible name, expanded/collapsed state, and keyboard activation.
+- The one-minute option is useful for practice or accommodation, but it should not appear medically equivalent to the recommended routine. Label it `1-minute quick practice`; retain `2 minutes — recommended`; label three minutes `Extra time`.
+- The one-minute lesson changes targets every five seconds and feels considerably more hurried. Use fewer spoken words and shorter transition sounds in quick-practice mode.
