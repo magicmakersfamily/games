@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Toothbrush Timer — The Game Shelf</title>
+    <meta name="description" content="A playful 2-minute toothbrush timer for kids: five brushing steps, spoken coaching, and sugar bugs that flee as you brush.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Toothbrush Timer">
+    <meta property="og:description" content="A playful 2-minute toothbrush timer for kids: five brushing steps, spoken coaching, and sugar bugs that flee as you brush.">
+    <meta property="og:image" content="https://magicmakersfamily.github.io/games/toothbrush/cover.png">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314b8a6'/%3E%3Crect x='10' y='36' width='40' height='8' rx='4' fill='%23fff'/%3E%3Crect x='34' y='20' width='18' height='16' rx='3' fill='%23a7f3d0'/%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&amp;family=Quicksand:wght@600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="tailwind.css">
+    <script src="confetti.js"></script>
+    <style>
+        body { margin: 0; background-attachment: fixed !important; }
+        [hidden] { display: none !important; }
+        img { max-width: 100%; }
+        .back-link { color: #64748b; text-decoration: none; white-space: nowrap; }
+        .back-link:hover { color: #0d9488; }
+        .linkish { border: 0; background: none; padding: 0; font: inherit; color: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+        .shelf-foot { width: 100%; max-width: 42rem; margin: 0 auto; padding: 12px 16px 20px; box-sizing: border-box; text-align: center; font-size: 12px; line-height: 1.6; color: #64748b; font-weight: 600; display: grid; gap: 2px; }
+        .shelf-foot p { margin: 0; }
+        .shelf-foot b { color: #475569; }
+        .shelf-foot a, .shelf-foot .linkish { color: #64748b; text-decoration: underline; text-underline-offset: 2px; }
+        .shelf-foot a:hover, .shelf-foot .linkish:hover { color: #0d9488; }
+        .end-extras { font-size: 11px; color: #64748b; font-weight: 600; display: grid; gap: 6px; margin-top: 4px; }
+        .end-extras p { margin: 0; }
+        .end-extras a { color: #0f766e; }
+        .more-games { display: block; padding: 8px 12px; border-radius: 12px; border: 2px solid #99f6e4; background: #f0fdfa; color: #0f766e !important; text-decoration: none; font-size: 12px; font-weight: 800; }
+        .more-games:hover { background: #ccfbf1; }
+    
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #f3e8ff 100%);
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .font-playful {
+            font-family: 'Fredoka One', cursive;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+        }
+        @keyframes gentle-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-float {
+            animation: gentle-float 3s ease-in-out infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.98); opacity: 0.8; }
+            50% { transform: scale(1.03); opacity: 1; }
+            100% { transform: scale(0.98); opacity: 0.8; }
+        }
+        .animate-pulse-ring {
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+    <header class="w-full max-w-2xl mx-auto px-4 pt-3 flex items-center justify-between z-20">
+        <div class="flex items-center gap-2.5">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-400 to-emerald-400 text-white flex items-center justify-center text-2xl shadow-md font-playful animate-float">
+                🪥
+            </div>
+            <div>
+                <h1 class="text-xl sm:text-2xl font-playful text-teal-600 tracking-wide leading-none">Toothbrush Timer</h1>
+                <span class="text-xs text-slate-500 font-bold"><a class="back-link" href="https://magicmakersfamily.github.io/games/">← All games</a></span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <!-- Sound Effects Toggle -->
+            <button id="soundToggleBtn" onclick="toggleAudio()" class="w-11 h-11 rounded-2xl glass-card flex items-center justify-center text-xl text-slate-600 shadow-sm hover:scale-105 active:scale-95 transition-all" aria-label="Toggle Sound Effects" title="Sound Effects">
+                🔊
+            </button>
+            <!-- Voice Prompts Toggle -->
+            <button id="voiceToggleBtn" onclick="toggleVoice()" class="w-11 h-11 rounded-2xl glass-card flex items-center justify-center text-xl text-slate-600 shadow-sm hover:scale-105 active:scale-95 transition-all" aria-label="Toggle Voice Guidance" title="Voice Coaching">
+                🗣️
+            </button>
+            <!-- Parent Settings Button -->
+            <button id="settingsBtn" onclick="toggleSettingsModal(true)" class="w-11 h-11 rounded-2xl glass-card flex items-center justify-center text-xl text-slate-600 shadow-sm hover:scale-105 active:scale-95 transition-all" aria-label="Open Parent Settings" title="Parent Settings">
+                ⚙️
+            </button>
+        </div>
+    </header>
+
+    <main class="w-full max-w-lg mx-auto px-4 my-auto flex flex-col items-center justify-center gap-3 relative z-10 py-2">
+
+        <!-- Active Step Badge -->
+        <div id="stepBadge" class="px-6 py-2 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-playful text-sm sm:text-base tracking-wider uppercase shadow-md transition-all duration-300">
+            Step 1: Top Fronts ✨
+        </div>
+
+        <!-- Mouth & Central Timer Graphic Container -->
+        <div class="w-full glass-card rounded-3xl p-3 sm:p-5 shadow-2xl flex flex-col items-center relative overflow-hidden">
+
+            <!-- 5-Step Visual Key Tabs -->
+            <div class="grid grid-cols-5 gap-1 w-full max-w-[380px] mb-2 text-[10px] sm:text-[11px] font-extrabold text-center">
+                <div id="stepTab0" class="py-1.5 px-1 rounded-xl border border-purple-200 bg-purple-50 text-purple-700 transition-all shadow-sm">1. Top Fronts</div>
+                <div id="stepTab1" class="py-1.5 px-1 rounded-xl border border-sky-200 bg-sky-50 text-sky-700 transition-all shadow-sm">2. Top Backs</div>
+                <div id="stepTab2" class="py-1.5 px-1 rounded-xl border border-amber-200 bg-amber-50 text-amber-800 transition-all shadow-sm">3. Bottom Backs</div>
+                <div id="stepTab3" class="py-1.5 px-1 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700 transition-all shadow-sm">4. Bottom Fronts</div>
+                <div id="stepTab4" class="py-1.5 px-1 rounded-xl border border-rose-200 bg-rose-50 text-rose-700 transition-all shadow-sm">5. Tongue</div>
+            </div>
+
+            <!-- Single Canvas Element (Mouth, Teeth Tilt/Zoom, Bugs, Central Play Button) -->
+            <div class="relative w-full aspect-square max-w-[310px] sm:max-w-[350px] flex items-center justify-center my-1">
+                <canvas id="mouthCanvas" class="w-full h-full cursor-pointer drop-shadow-xl" onclick="handleCanvasClick(event)" width="350" height="350"></canvas>
+            </div>
+
+            <!-- Speech Guidance Text Box -->
+            <div id="speechBubble" class="mt-2 w-full bg-amber-50/95 border-2 border-amber-200 rounded-2xl p-3 text-center text-amber-950 text-xs sm:text-sm font-bold shadow-sm min-h-[52px] flex items-center justify-center transition-all duration-300">
+                <span id="speechText">Tap the <span class="text-teal-600 font-extrabold">PLAY TRIANGLE ▶</span> inside the mouth to start! 🪥✨</span>
+            </div>
+        </div>
+
+        <!-- Timer Secondary Controls (Reset & Quick Duration) -->
+        <div class="flex items-center justify-between gap-3 w-full max-w-sm px-1">
+            <button id="resetBtn" onclick="resetTimer()" class="px-4 h-12 rounded-2xl bg-white/95 text-slate-600 font-bold text-sm flex items-center justify-center shadow-md hover:bg-slate-100 active:scale-95 transition-all border border-slate-200 gap-1.5">
+                <span>↺</span> Reset
+            </button>
+
+            <!-- Digital Timer Countdown Display -->
+            <div id="digitalTimer" class="px-5 h-12 rounded-2xl bg-slate-800 text-teal-300 font-playful text-xl flex items-center justify-center shadow-md tracking-wider border border-slate-700">02:00</div>
+
+            <button onclick="toggleSettingsModal(true)" class="px-4 h-12 rounded-2xl bg-white/95 text-slate-600 font-bold text-sm flex items-center justify-center shadow-md hover:bg-slate-100 active:scale-95 transition-all border border-slate-200 gap-1.5">
+                <span>⏱️</span> Time
+            </button>
+        </div>
+
+        <!-- Celebration Banner (Positioned Below Mouth so Smile is 100% Unobstructed) -->
+        <div id="celebrationBanner" class="w-full max-w-sm glass-card rounded-2xl p-4 text-center shadow-xl bg-white/95 border-2 border-amber-300 flex flex-col items-center gap-2 hidden transition-all duration-500 transform scale-95 opacity-0">
+            <div class="text-2xl font-playful text-teal-600 flex items-center gap-2">
+                🏆 Super Sparkly Smile! ✨
+            </div>
+            <p class="text-xs font-bold text-slate-600">
+                All sugar bugs fled! Your teeth are super bright and clean!
+            </p>
+            <button onclick="resetTimer(); hideCelebrationBanner();" class="mt-1 px-6 py-2.5 rounded-xl bg-gradient-to-r from-teal-400 to-emerald-400 text-white font-playful text-sm shadow-md hover:opacity-95 active:scale-95 transition-all">
+                Brush Again 🪥
+            </button>
+            <div class="end-extras">
+                <p>Grown-ups: like this? <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Buy us a mooncake on Ko-fi</a> · <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/toothbrush/" data-text="A playful 2-minute toothbrush timer for kids: Toothbrush Timer">Tell a friend</button></p>
+                <a class="more-games" href="https://magicmakersfamily.github.io/games/">More from the Game Shelf →</a>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="shelf-foot">
+        <p><b>Version 1.0</b> · Launched <time datetime="2026-10-03">October 3, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=1.0">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=1.0&amp;kind=bug">Report a bug</a></p>
+        <p>Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></p>
+        <p>These games don’t collect any information. Saved progress stays in your own browser.</p>
+        <p>Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/toothbrush/" data-text="A playful 2-minute toothbrush timer for kids: Toothbrush Timer">Tell a friend</button></p>
+    </footer>
+
+    <div id="settingsModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border-2 border-slate-200 max-h-[90vh] overflow-y-auto text-slate-800">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h2 class="text-xl font-playful text-teal-600 flex items-center gap-2">
+                    ⚙️ Parent Settings
+                </h2>
+                <button onclick="toggleSettingsModal(false)" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center font-bold">✕</button>
+            </div>
+
+            <div class="space-y-4 pt-4">
+                <!-- Preset Duration Selector -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Timer Duration</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="setPresetDuration(60)" class="preset-btn py-2.5 px-3 rounded-2xl border-2 border-slate-200 font-bold hover:border-teal-400 transition-all text-xs" data-seconds="60">1 Min</button>
+                        <button type="button" onclick="setPresetDuration(120)" class="preset-btn py-2.5 px-3 rounded-2xl border-2 border-teal-500 bg-teal-50 text-teal-700 font-bold hover:border-teal-400 transition-all text-xs" data-seconds="120">2 Min (Recommended)</button>
+                        <button type="button" onclick="setPresetDuration(180)" class="preset-btn py-2.5 px-3 rounded-2xl border-2 border-slate-200 font-bold hover:border-teal-400 transition-all text-xs" data-seconds="180">3 Min</button>
+                    </div>
+                </div>
+
+                <!-- Spoken Coaching Toggle -->
+                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div>
+                        <div class="font-bold text-slate-800 text-xs">Spoken Coaching (Voice Prompts)</div>
+                        <div class="text-[11px] text-slate-500">Reads step instructions out loud.</div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="spokenStepsToggle" onchange="toggleSpokenStepsSetting(this.checked)" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500"></div>
+                    </label>
+                </div>
+
+                <!-- Test Voice Button -->
+                <div class="flex justify-between items-center px-1">
+                    <span class="text-xs font-bold text-slate-500">Voice Synthesis Test:</span>
+                    <button type="button" onclick="testVoicePlayback()" class="px-3 py-1.5 rounded-xl bg-teal-50 text-teal-700 border border-teal-200 text-xs font-bold hover:bg-teal-100 flex items-center gap-1">
+                        🔊 Test Voice Now
+                    </button>
+                </div>
+
+                <!-- Sound Effects Toggle -->
+                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div>
+                        <div class="font-bold text-slate-800 text-xs">Sound Effects &amp; Chimes</div>
+                        <div class="text-[11px] text-slate-500">Plays pop sounds and victory fanfare.</div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="soundFxToggle" onchange="toggleSoundFxSetting(this.checked)" checked="" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500"></div>
+                    </label>
+                </div>
+
+                <!-- Low Stimulation / Reduced Motion Toggle -->
+                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div>
+                        <div class="font-bold text-slate-800 text-xs">Low-Stimulation Mode</div>
+                        <div class="text-[11px] text-slate-500">Calmer colors and reduced movement.</div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="lowStimToggle" onchange="toggleLowStimulation(this.checked)" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500"></div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="mt-5 pt-3 border-t border-slate-100 flex justify-end">
+                <button onclick="toggleSettingsModal(false)" class="w-full py-2.5 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-bold text-xs shadow-md transition-all">
+                    Done &amp; Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Core Timer & State
+        let timerDuration = 120; // 2 Minutes
+        let timeRemaining = 120;
+        let isRunning = false;
+        let isCompleted = false;
+        let timerInterval = null;
+        let audioEnabled = true;
+        let spokenStepsEnabled = true;
+        let lowStimulationMode = false;
+
+        // 5 Step Milestones
+        const stepMessages = [
+            "Brush the fronts of your top teeth! ✨",
+            "Now brush behind your top teeth & bumpy tops! 🦷",
+            "Brush behind your bottom teeth & bumpy tops near your tongue! 👅",
+            "Now brush the fronts of your bottom teeth! ⭐",
+            "Gently scrub your tongue & do a final sweep! 🧹"
+        ];
+
+        let spokenMilestones = [false, false, false, false, false, false];
+
+        // Entities: 28 Sugar Bugs & Fleeing Animators
+        let sugarBugs = [];
+        let fleeingBugs = [];
+        let sparkleParticles = [];
+        let lastFleeTime = 0;
+
+        // Web Audio Context
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playChime(freq = 523.25, type = 'sine', duration = 0.2) {
+            if (!audioEnabled) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function playPopSound() {
+            if (!audioEnabled) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(750, audioCtx.currentTime + 0.08);
+
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch(e) {}
+        }
+
+        function playVictoryFanfare() {
+            if (!audioEnabled) return;
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((note, index) => {
+                setTimeout(() => playChime(note, 'triangle', 0.4), index * 140);
+            });
+        }
+
+        // Speech Synthesis API
+        function speakPrompt(text) {
+            if (!spokenStepsEnabled || !('speechSynthesis' in window)) return;
+            try {
+                window.speechSynthesis.cancel();
+                const cleanText = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.rate = 0.95;
+                utterance.pitch = 1.1;
+
+                const voices = window.speechSynthesis.getVoices();
+                const preferredVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Female') || v.name.includes('Google')));
+                if (preferredVoice) utterance.voice = preferredVoice;
+
+                setTimeout(() => window.speechSynthesis.speak(utterance), 180);
+            } catch(e) {}
+        }
+
+        function testVoicePlayback() {
+            initAudio();
+            spokenStepsEnabled = true;
+            document.getElementById('spokenStepsToggle').checked = true;
+            speakPrompt("Brush the fronts of your top teeth! Gentle little circles!");
+        }
+
+        const canvas = document.getElementById('mouthCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function setupCanvasSize() {
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+        }
+
+        // Initialize 28 Sugar Bugs across the 5 Step Zones
+        function initSugarBugs() {
+            sugarBugs = [];
+            fleeingBugs = [];
+            const colors = ['#f43f5e', '#a855f7', '#06b6d4', '#f59e0b', '#10b981', '#ec4899'];
+
+            // 5 Zones mapping angles and radii
+            const zoneConfigs = [
+                // Zone 0: Top Fronts
+                { step: 0, count: 6, startA: -Math.PI * 0.85, endA: -Math.PI * 0.15, rMin: 0.38, rMax: 0.42 },
+                // Zone 1: Top Backs & Chewing Tops
+                { step: 1, count: 6, startA: -Math.PI * 0.80, endA: -Math.PI * 0.20, rMin: 0.30, rMax: 0.35 },
+                // Zone 2: Bottom Backs & Chewing Tops
+                { step: 2, count: 6, startA: Math.PI * 0.20, endA: Math.PI * 0.80, rMin: 0.30, rMax: 0.35 },
+                // Zone 3: Bottom Fronts
+                { step: 3, count: 6, startA: Math.PI * 0.15, endA: Math.PI * 0.85, rMin: 0.38, rMax: 0.42 },
+                // Zone 4: Tongue
+                { step: 4, count: 4, startA: -Math.PI * 0.2, endA: Math.PI * 0.2, rMin: 0.05, rMax: 0.15 }
+            ];
+
+            let id = 0;
+            zoneConfigs.forEach(z => {
+                for (let i = 0; i < z.count; i++) {
+                    const angle = z.startA + (i / (z.count - 1 || 1)) * (z.endA - z.startA);
+                    const radius = z.rMin + Math.random() * (z.max - z.rMin || 0.03);
+                    sugarBugs.push({
+                        id: id++,
+                        stepZone: z.step,
+                        radiusRatio: radius,
+                        angle: angle,
+                        size: 8 + Math.random() * 4,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        alive: true,
+                        wiggleOffset: Math.random() * Math.PI * 2
+                    });
+                }
+            });
+        }
+
+        function renderMouthCanvas() {
+            const width = canvas.getBoundingClientRect().width;
+            const height = canvas.getBoundingClientRect().height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+
+            ctx.clearRect(0, 0, width, height);
+            ctx.save();
+            ctx.translate(centerX, centerY);
+
+            const elapsedRatio = (timerDuration - timeRemaining) / timerDuration;
+            const currentStep = isRunning ? Math.min(4, Math.floor(elapsedRatio * 5)) : 0;
+            const now = Date.now() * 0.004;
+
+            // Trigger Bug Fleeing Every 2.5 seconds when running
+            if (isRunning && Date.now() - lastFleeTime > 2400) {
+                fleeNextBug(currentStep, width);
+                lastFleeTime = Date.now();
+            }
+
+            // 3D Tilt & Zoom Transforms according to step
+            let scaleX = 1.0, scaleY = 1.0, offsetY = 0;
+            if (isRunning) {
+                if (currentStep === 0) { scaleX = 1.08; scaleY = 1.05; offsetY = 10; } // Top Fronts
+                else if (currentStep === 1) { scaleX = 1.05; scaleY = 0.95; offsetY = 15; } // Top Backs
+                else if (currentStep === 2) { scaleX = 1.05; scaleY = 0.95; offsetY = -15; } // Bottom Backs
+                else if (currentStep === 3) { scaleX = 1.08; scaleY = 1.05; offsetY = -10; } // Bottom Fronts
+                else if (currentStep === 4) { scaleX = 1.12; scaleY = 1.12; offsetY = 0; } // Tongue
+            }
+
+            ctx.scale(scaleX, scaleY);
+            ctx.translate(0, offsetY);
+
+            const outerLipR = width * 0.44;
+            const mouthCavityR = width * 0.36;
+            const toothArchR = width * 0.35;
+
+            // 1. Mouth Lips Outer Ring
+            ctx.beginPath();
+            if (isCompleted) {
+                // VICTORY SMILE GRAPHIC
+                ctx.arc(0, -width * 0.05, outerLipR, 0.1 * Math.PI, 0.9 * Math.PI, false);
+                ctx.lineWidth = 22;
+                ctx.strokeStyle = '#f43f5e';
+                ctx.stroke();
+            } else {
+                ctx.arc(0, 0, outerLipR, 0, Math.PI * 2);
+                ctx.fillStyle = '#fb7185';
+                ctx.fill();
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = '#f43f5e';
+                ctx.stroke();
+            }
+
+            // 2. Open Mouth Dark Cavity
+            ctx.beginPath();
+            ctx.arc(0, 0, mouthCavityR, 0, Math.PI * 2);
+            ctx.fillStyle = isCompleted ? '#9f1239' : '#881337';
+            ctx.fill();
+
+            // Tongue
+            ctx.beginPath();
+            ctx.ellipse(0, mouthCavityR * 0.45, mouthCavityR * 0.52, mouthCavityR * (currentStep === 4 ? 0.38 : 0.28), 0, 0, Math.PI);
+            ctx.fillStyle = currentStep === 4 ? '#fda4af' : '#f43f5e';
+            ctx.fill();
+            if (currentStep === 4) {
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#fb7185';
+                ctx.stroke();
+            }
+
+            // 3. Central Progress Ring
+            if (elapsedRatio > 0 && !isCompleted) {
+                const startAngle = -Math.PI / 2;
+                const endAngle = startAngle + (elapsedRatio * Math.PI * 2);
+                ctx.beginPath();
+                ctx.arc(0, 0, outerLipR + 3, startAngle, endAngle);
+                ctx.lineWidth = 8;
+                ctx.strokeStyle = '#0d9488';
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+
+            // 4. DRAW SINGLE TEETH ARCH
+            drawTeethArch(toothArchR, currentStep, width);
+
+            // 5. Render Sugar Bugs attached to teeth
+            sugarBugs.forEach(bug => {
+                if (!bug.alive) return;
+                const r = bug.radiusRatio * width;
+                const bx = Math.cos(bug.angle) * r;
+                const by = Math.sin(bug.angle) * r;
+                const wiggle = lowStimulationMode ? 0 : Math.sin(now * 2.5 + bug.wiggleOffset) * 2.5;
+
+                ctx.save();
+                ctx.translate(bx, by + wiggle);
+
+                // Body
+                ctx.beginPath();
+                ctx.arc(0, 0, bug.size, 0, Math.PI * 2);
+                ctx.fillStyle = bug.color;
+                ctx.fill();
+
+                // Eyes
+                ctx.beginPath();
+                ctx.arc(-bug.size * 0.35, -bug.size * 0.2, bug.size * 0.3, 0, Math.PI * 2);
+                ctx.arc(bug.size * 0.35, -bug.size * 0.2, bug.size * 0.3, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(-bug.size * 0.35, -bug.size * 0.2, bug.size * 0.15, 0, Math.PI * 2);
+                ctx.arc(bug.size * 0.35, -bug.size * 0.2, bug.size * 0.15, 0, Math.PI * 2);
+                ctx.fillStyle = '#000000';
+                ctx.fill();
+
+                ctx.restore();
+            });
+
+            // 6. Render Fleeing Bugs Animation
+            fleeingBugs.forEach((fb, idx) => {
+                fb.progress += 0.025;
+                if (fb.progress >= 1.0) {
+                    fleeingBugs.splice(idx, 1);
+                    return;
+                }
+                const curX = fb.startX + (fb.targetX - fb.startX) * fb.progress;
+                const curY = fb.startY + (fb.targetY - fb.startY) * fb.progress - Math.sin(fb.progress * Math.PI) * 35;
+
+                ctx.save();
+                ctx.translate(curX, curY);
+
+                // Foam trail
+                ctx.beginPath();
+                ctx.arc(-10 * fb.dir, 0, 6, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.fill();
+
+                // Fleeing Bug
+                ctx.beginPath();
+                ctx.arc(0, 0, fb.size, 0, Math.PI * 2);
+                ctx.fillStyle = fb.color;
+                ctx.fill();
+
+                ctx.restore();
+            });
+
+            // 7. Animated Toothbrush Scrubbing Path
+            if (isRunning && !isCompleted) {
+                const brushAngle = -Math.PI * 0.75 + (Math.sin(now * 2) * 0.5 + 0.5) * Math.PI * 1.5;
+                const brushR = currentStep === 4 ? width * 0.10 : toothArchR;
+                const bx = Math.cos(brushAngle) * brushR;
+                const by = Math.sin(brushAngle) * brushR;
+
+                ctx.save();
+                ctx.translate(bx, by);
+                ctx.rotate(brushAngle + Math.PI / 2);
+
+                // Brush Handle
+                ctx.beginPath();
+                ctx.roundRect(-4, 0, 8, 28, 4);
+                ctx.fillStyle = '#38bdf8';
+                ctx.fill();
+
+                // Head
+                ctx.beginPath();
+                ctx.roundRect(-7, -14, 14, 14, 3);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+
+                // Foaming Bubbles
+                ctx.beginPath();
+                ctx.arc(-8, -12 + Math.sin(now * 3) * 3, 4, 0, Math.PI * 2);
+                ctx.arc(8, -8 + Math.cos(now * 3) * 3, 5, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            // 8. CENTER PLAY TRIANGLE BUTTON (Inside Mouth Cavity)
+            if (!isRunning && !isCompleted) {
+                ctx.save();
+                // Play Button Outer Circle
+                ctx.beginPath();
+                ctx.arc(0, 0, width * 0.15, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(13, 148, 136, 0.92)';
+                ctx.fill();
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = '#ffffff';
+                ctx.stroke();
+
+                // Play Triangle Icon
+                ctx.beginPath();
+                const triSize = width * 0.07;
+                ctx.moveTo(-triSize * 0.5 + 3, -triSize);
+                ctx.lineTo(triSize + 3, 0);
+                ctx.lineTo(-triSize * 0.5 + 3, triSize);
+                ctx.closePath();
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            ctx.restore();
+
+            requestAnimationFrame(renderMouthCanvas);
+        }
+
+        function drawTeethArch(radius, activeStep, width) {
+            const numTeeth = 10;
+            const toothW = width * 0.044;
+            const toothH = width * 0.048;
+
+            // Upper Arch
+            for (let i = 0; i < numTeeth; i++) {
+                const angle = -Math.PI * 0.85 + (i / (numTeeth - 1)) * (Math.PI * 0.70);
+                const tx = Math.cos(angle) * radius;
+                const ty = Math.sin(angle) * radius;
+
+                ctx.save();
+                ctx.translate(tx, ty);
+                ctx.rotate(angle + Math.PI / 2);
+
+                ctx.beginPath();
+                ctx.roundRect(-toothW / 2, -toothH / 2, toothW, toothH, 4);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = '#cbd5e1';
+                ctx.stroke();
+
+                // Highlight active step
+                if (activeStep === 0) { // Top Fronts
+                    ctx.fillStyle = '#a855f7';
+                    ctx.fillRect(-toothW / 2 + 1, -toothH / 2 + 1, toothW - 2, toothH * 0.45);
+                } else if (activeStep === 1) { // Top Backs
+                    ctx.fillStyle = '#0284c7';
+                    ctx.fillRect(-toothW / 2 + 1, 0, toothW - 2, toothH * 0.45);
+                }
+
+                ctx.restore();
+            }
+
+            // Lower Arch
+            for (let i = 0; i < numTeeth; i++) {
+                const angle = Math.PI * 0.15 + (i / (numTeeth - 1)) * (Math.PI * 0.70);
+                const tx = Math.cos(angle) * radius;
+                const ty = Math.sin(angle) * radius;
+
+                ctx.save();
+                ctx.translate(tx, ty);
+                ctx.rotate(angle + Math.PI / 2);
+
+                ctx.beginPath();
+                ctx.roundRect(-toothW / 2, -toothH / 2, toothW, toothH, 4);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = '#cbd5e1';
+                ctx.stroke();
+
+                // Highlight active step
+                if (activeStep === 2) { // Bottom Backs
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.fillRect(-toothW / 2 + 1, -toothH / 2 + 1, toothW - 2, toothH * 0.45);
+                } else if (activeStep === 3) { // Bottom Fronts
+                    ctx.fillStyle = '#10b981';
+                    ctx.fillRect(-toothW / 2 + 1, 0, toothW - 2, toothH * 0.45);
+                }
+
+                ctx.restore();
+            }
+        }
+
+        function fleeNextBug(stepZone, canvasWidth) {
+            const targetBug = sugarBugs.find(b => b.alive && b.stepZone === stepZone) || sugarBugs.find(b => b.alive);
+            if (targetBug) {
+                targetBug.alive = false;
+                const startX = Math.cos(targetBug.angle) * targetBug.radiusRatio * canvasWidth;
+                const startY = Math.sin(targetBug.angle) * targetBug.radiusRatio * canvasWidth;
+                const escapeAngle = targetBug.angle + (Math.random() - 0.5);
+
+                fleeingBugs.push({
+                    startX: startX,
+                    startY: startY,
+                    targetX: Math.cos(escapeAngle) * canvasWidth * 0.7,
+                    targetY: Math.sin(escapeAngle) * canvasWidth * 0.7,
+                    size: targetBug.size,
+                    color: targetBug.color,
+                    progress: 0,
+                    dir: Math.cos(escapeAngle) > 0 ? 1 : -1
+                });
+
+                playPopSound();
+            }
+        }
+
+        function handleCanvasClick(e) {
+            initAudio();
+            if (!isRunning) {
+                startTimer();
+            } else {
+                pauseTimer();
+            }
+        }
+
+        function startTimer() {
+            if (timeRemaining <= 0) resetTimer();
+
+            isRunning = true;
+            isCompleted = false;
+            hideCelebrationBanner();
+
+            if (!spokenMilestones[0]) {
+                spokenMilestones[0] = true;
+                updateSpeechText(stepMessages[0]);
+                speakPrompt(stepMessages[0]);
+            }
+
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateDigitalTimerDisplay();
+                updateStepProgress();
+
+                if (timeRemaining <= 0) {
+                    completeTimer();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timeRemaining = timerDuration;
+            isCompleted = false;
+            spokenMilestones = [false, false, false, false, false, false];
+            initSugarBugs();
+            updateDigitalTimerDisplay();
+            updateStepProgress();
+            document.getElementById('stepBadge').innerText = "Step 1: Top Fronts ✨";
+            updateSpeechText('Tap the <span class="text-teal-600 font-extrabold">PLAY TRIANGLE ▶</span> inside the mouth to start! 🪥✨');
+            highlightStepTab(0);
+            hideCelebrationBanner();
+        }
+
+        function updateStepProgress() {
+            const elapsed = timerDuration - timeRemaining;
+            const ratio = elapsed / timerDuration;
+            const stepIndex = Math.min(4, Math.floor(ratio * 5));
+
+            highlightStepTab(stepIndex);
+
+            if (!spokenMilestones[stepIndex + 1] && ratio >= (stepIndex * 0.20)) {
+                spokenMilestones[stepIndex + 1] = true;
+                const msg = stepMessages[stepIndex];
+                document.getElementById('stepBadge').innerText = `Step ${stepIndex + 1}: ${getStepTitle(stepIndex)}`;
+                updateSpeechText(msg);
+                speakPrompt(msg);
+                playChime(523 + stepIndex * 80);
+            }
+        }
+
+        function getStepTitle(idx) {
+            return ["Top Fronts", "Top Backs", "Bottom Backs", "Bottom Fronts", "Tongue Sweep"][idx];
+        }
+
+        function highlightStepTab(activeIdx) {
+            for (let i = 0; i < 5; i++) {
+                const tab = document.getElementById(`stepTab${i}`);
+                if (i === activeIdx) {
+                    tab.className = "py-1.5 px-1 rounded-xl border-2 border-teal-500 bg-teal-100 text-teal-800 font-black scale-105 shadow-sm transition-all";
+                } else {
+                    tab.className = "py-1.5 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 font-semibold transition-all";
+                }
+            }
+        }
+
+        function completeTimer() {
+            pauseTimer();
+            isCompleted = true;
+            sugarBugs.forEach(b => b.alive = false);
+
+            document.getElementById('stepBadge').innerText = "All Clean! ✨";
+            updateSpeechText("Hooray! All clean! Your smile is super bright and sparkling!");
+            speakPrompt("Hooray! All clean! Your smile is super bright and sparkling!");
+
+            playVictoryFanfare();
+            triggerConfetti();
+            showCelebrationBanner();
+        }
+
+        function updateDigitalTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('digitalTimer').innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function updateSpeechText(text) {
+            document.getElementById('speechText').innerHTML = text;
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 100, spread: 80, origin: { y: 0.7 } });
+            }
+        }
+
+        function showCelebrationBanner() {
+            const banner = document.getElementById('celebrationBanner');
+            banner.classList.remove('hidden');
+            setTimeout(() => {
+                banner.classList.remove('scale-95', 'opacity-0');
+                banner.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function hideCelebrationBanner() {
+            const banner = document.getElementById('celebrationBanner');
+            banner.classList.remove('scale-100', 'opacity-100');
+            banner.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => banner.classList.add('hidden'), 300);
+        }
+
+        function toggleSettingsModal(show) {
+            const modal = document.getElementById('settingsModal');
+            if (show) {
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            } else {
+                modal.classList.add('opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        function setPresetDuration(seconds) {
+            timerDuration = seconds;
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                if (parseInt(btn.dataset.seconds) === seconds) {
+                    btn.className = "preset-btn py-2.5 px-3 rounded-2xl border-2 border-teal-500 bg-teal-50 text-teal-700 font-bold transition-all text-xs";
+                } else {
+                    btn.className = "preset-btn py-2.5 px-3 rounded-2xl border-2 border-slate-200 font-bold transition-all text-xs";
+                }
+            });
+            resetTimer();
+            saveSettings();
+        }
+
+        function toggleSpokenStepsSetting(enabled) {
+            spokenStepsEnabled = enabled;
+            document.getElementById('voiceToggleBtn').innerText = enabled ? '🗣️' : '🔇';
+            saveSettings();
+        }
+
+        function toggleSoundFxSetting(enabled) {
+            audioEnabled = enabled;
+            document.getElementById('soundToggleBtn').innerText = enabled ? '🔊' : '🔇';
+            saveSettings();
+        }
+
+        function toggleVoice() {
+            spokenStepsEnabled = !spokenStepsEnabled;
+            document.getElementById('spokenStepsToggle').checked = spokenStepsEnabled;
+            document.getElementById('voiceToggleBtn').innerText = spokenStepsEnabled ? '🗣️' : '🔇';
+            if (!spokenStepsEnabled && 'speechSynthesis' in window) speechSynthesis.cancel();
+            saveSettings();
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            document.getElementById('soundFxToggle').checked = audioEnabled;
+            document.getElementById('soundToggleBtn').innerText = audioEnabled ? '🔊' : '🔇';
+            saveSettings();
+        }
+
+        function toggleLowStimulation(enabled) {
+            lowStimulationMode = enabled;
+            saveSettings();
+        }
+
+        // Parent settings are saved in this browser only
+        const SETTINGS_KEY = 'toothbrush:settings';
+        function saveSettings() {
+            try {
+                localStorage.setItem(SETTINGS_KEY, JSON.stringify({
+                    duration: timerDuration, voice: spokenStepsEnabled, sound: audioEnabled, lowStim: lowStimulationMode
+                }));
+            } catch (e) {}
+        }
+        function loadSettings() {
+            let s = null;
+            try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY)); } catch (e) {}
+            if (!s) return;
+            if ([60, 120, 180].includes(s.duration)) setPresetDuration(s.duration);
+            if (typeof s.voice === 'boolean') toggleSpokenStepsSetting(s.voice);
+            if (typeof s.sound === 'boolean') toggleSoundFxSetting(s.sound);
+            if (typeof s.lowStim === 'boolean') toggleLowStimulation(s.lowStim);
+            document.getElementById('spokenStepsToggle').checked = spokenStepsEnabled;
+            document.getElementById('soundFxToggle').checked = audioEnabled;
+            document.getElementById('lowStimToggle').checked = lowStimulationMode;
+        }
+
+        // Tell a friend: open the share sheet, or copy the link where sharing is not available.
+        document.querySelectorAll('[data-tell]').forEach(b => b.addEventListener('click', async () => {
+            const url = b.dataset.tell, text = b.dataset.text;
+            try { if (navigator.share) { await navigator.share({ title: document.title, text, url }); return; } await navigator.clipboard.writeText(text + ' ' + url); b.textContent = 'Link copied! Paste it in a message.'; }
+            catch (e) { if (!(e && e.name === 'AbortError')) b.textContent = url; }
+        }));
+
+        // Initialize on Load
+        window.addEventListener('load', () => {
+            setupCanvasSize();
+            initSugarBugs();
+            loadSettings();
+            updateDigitalTimerDisplay();
+            if ('speechSynthesis' in window) speechSynthesis.getVoices();
+            requestAnimationFrame(renderMouthCanvas);
+        });
+
+        window.addEventListener('resize', () => {
+            setupCanvasSize();
+        });
+    </script>
+</body>
+</html>

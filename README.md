@@ -34,6 +34,11 @@ get-ready/          Ready To Go! (departure countdown with spoken steps)
   PLAN.md           handoff: where development stands and what is next (Apple Maps)
   index.html        page, timer, steps, destination ETA
   cover.png         1200×744 card image
+toothbrush/         Toothbrush Timer (2-minute brushing guide, made in Gemini Canvas)
+  index.html        page, mouth canvas, sugar bugs, spoken steps
+  tailwind.css      Tailwind classes compiled once (no CDN at runtime)
+  confetti.js       canvas-confetti 1.6.0 (ISC), vendored
+  cover.png         1200×744 card image
 versions/           past releases, still playable (versions/<game>/<X.Y>/), see versions/index.html
 tools/              freeze-version.sh: freeze a tagged release into versions/
 .nojekyll           serve files as-is
@@ -48,6 +53,7 @@ tools/              freeze-version.sh: freeze a tagged release into versions/
 | Blow Up (beta) | `blow-up/` | 1.4 | 2026-09-27 |
 | Spellicious | `spellicious/` | 4.40 | 2026-09-30 |
 | Ready To Go! | `get-ready/` | 1.4 | 2026-10-02 |
+| Toothbrush Timer | `toothbrush/` | 1.0 | 2026-10-03 |
 
 Past versions stay playable at https://magicmakersfamily.github.io/games/versions/ (for
 grown-ups; each keeps its own saved games). Every release is also a git tag (`blow-up-v1.3`, …).
