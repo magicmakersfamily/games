@@ -28,7 +28,9 @@ README.md           human overview + games table (version, launch date)
 
 Games are static: HTML, CSS and JavaScript only. No build step, no server, no tracking, no
 analytics. Progress goes in `localStorage` (wrap every access in try/catch). External requests
-only to Google Fonts. Graphics are drawn in code (canvas/SVG) and sound is generated with the Web
+only to Google Fonts. Exception, at the family's request: `get-ready/` looks up local weather by
+ZIP code from Open-Meteo (free, no key; geocoding with a zippopotam.us fallback), only after the
+user types a ZIP, and says so next to the ZIP box. Graphics are drawn in code (canvas/SVG) and sound is generated with the Web
 Audio API, started only from a button press.
 
 ## Adding or updating a game

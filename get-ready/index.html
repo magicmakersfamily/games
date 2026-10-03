@@ -79,7 +79,24 @@
     display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 12px;
     border-radius: 16px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
   }
+  .weather { position: relative; }
   .weather .w-icon { font-size: 22px; }
+  .w-main { border: 0; background: transparent; padding: 2px 4px; border-radius: 10px; text-align: left; display: flex; flex-direction: column; }
+  .w-main:hover { background: rgba(255,255,255,.06); }
+  .w-line { display: flex; align-items: center; }
+  .weather .w-advice { display: block; }
+  .icon-btn.spin svg { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .zip-pop {
+    position: absolute; right: 0; top: calc(100% + 8px); z-index: 40; width: 280px; max-width: calc(100vw - 32px);
+    background: var(--bg-deep); border: 2px solid var(--amber); border-radius: 16px; padding: 12px; box-shadow: 0 16px 40px rgba(0,0,0,.45);
+  }
+  .zip-pop label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+  .zip-row { display: flex; gap: 6px; }
+  .zip-row input { flex: 1; min-width: 0; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); padding: 0 10px; font-family: var(--mono); font-weight: 700; font-size: 16px; outline: none; }
+  .zip-row input:focus { border-color: var(--amber); }
+  .zip-err { margin: 8px 0 0; font-size: 12px; color: #fb7185; font-weight: 600; }
+  .zip-note { margin: 8px 0 0; font-size: 11px; color: var(--faint); line-height: 1.4; }
   .weather .w-temp { font-weight: 700; font-size: 15px; }
   .weather .w-cond { font-size: 10px; font-weight: 700; background: var(--amber); color: var(--amber-ink); padding: 2px 6px; border-radius: 6px; margin-left: 6px; text-transform: uppercase; letter-spacing: .04em; }
   .weather .w-advice { font-size: 11px; color: #fde68a; margin-top: 1px; }
@@ -391,15 +408,24 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
         <span>Destination</span>
       </button>
-      <div class="weather">
-        <span class="w-icon" id="weatherIcon">☀️</span>
-        <div>
-          <div><span class="w-temp" id="tempDisplay">72°F</span><span class="w-cond" id="weatherCond">Sunny</span></div>
-          <div class="w-advice" id="apparelAdvice">Sunscreen &amp; hats needed!</div>
-        </div>
-        <button class="icon-btn" title="Change weather" onclick="cycleWeather()">
+      <div class="weather" id="weather">
+        <span class="w-icon" id="weatherIcon">🌤️</span>
+        <button class="w-main" id="weatherMain" type="button" onclick="toggleZip()" title="Set your ZIP code">
+          <span class="w-line"><span class="w-temp" id="tempDisplay">Weather</span><span class="w-cond" id="weatherCond" hidden></span></span>
+          <span class="w-advice" id="apparelAdvice">Add your ZIP code</span>
+        </button>
+        <button class="icon-btn" id="weatherRefresh" type="button" title="Refresh weather" onclick="refreshWeather(true)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
         </button>
+        <form class="zip-pop" id="zipPop" hidden>
+          <label for="zipInput">ZIP code for local weather</label>
+          <div class="zip-row">
+            <input id="zipInput" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" placeholder="94110">
+            <button type="submit" class="btn-solid">Set</button>
+          </div>
+          <p class="zip-err" id="zipErr" hidden></p>
+          <p class="zip-note">The ZIP code is sent to Open-Meteo, a free weather service, to look up the forecast. Nothing else leaves this page.</p>
+        </form>
       </div>
     </div>
   </header>
@@ -559,7 +585,7 @@
 </div>
 
 <footer class="shelf-foot">
-  <p><b>Version 1.0</b> · Launched <time datetime="2026-10-02">October 2, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.0">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.0&amp;kind=bug">Report a bug</a></p>
+  <p><b>Version 1.1</b> · Launched <time datetime="2026-10-02">October 2, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.1">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.1&amp;kind=bug">Report a bug</a></p>
   <p>Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></p>
   <p>These games don’t collect any information. Saved progress stays in your own browser.</p>
   <p>Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/get-ready/" data-text="A calm countdown that tells the kids what to do next: Get Ready To Go!">Tell a friend</button></p>
@@ -575,6 +601,7 @@
     steps: [], stepsOpen: false,
     dest: { on: false, name: '', drive: 20, arriveBy: '' },
     muted: false, voice: 'calm', chime: true,
+    endAt: 0, zip: '', loc: null, wx: null,
   };
 
   function load() {
@@ -584,7 +611,7 @@
       if (Array.isArray(d.steps)) S.steps = d.steps.map(s => ({ ...s, done: false }));
       if (d.dest) S.dest = { ...S.dest, ...d.dest, on: false };
       if (typeof d.total === 'number' && d.total > 0) { S.total = d.total; S.remaining = d.total; }
-      ['muted', 'voice', 'chime'].forEach(k => { if (k in d) S[k] = d[k]; });
+      ['muted', 'voice', 'chime', 'zip', 'loc'].forEach(k => { if (k in d) S[k] = d[k]; });
     } catch (e) {}
   }
   function save() {
@@ -592,7 +619,7 @@
       localStorage.setItem('grtg', JSON.stringify({
         steps: S.steps.map(({ id, text, minute }) => ({ id, text, minute })),
         dest: { name: S.dest.name, drive: S.dest.drive, arriveBy: S.dest.arriveBy },
-        total: S.total, muted: S.muted, voice: S.voice, chime: S.chime,
+        total: S.total, muted: S.muted, voice: S.voice, chime: S.chime, zip: S.zip, loc: S.loc,
       }));
     } catch (e) {}
   }
@@ -626,28 +653,71 @@
       });
     } catch (e) {}
   }
-  function speak(text, withChime = true) {
-    showSubtitle(text);
-    if (S.muted) return;
-    const useChime = withChime && S.chime;
-    if (useChime) chime();
-    if (!('speechSynthesis' in window)) return;
+  // Speech queue. Announcements play one after another and never cut each other off.
+  // Chrome silently drops speak() when it comes straight after cancel(), so there is
+  // always a short gap between items, and a watchdog moves on if a voice never reports back.
+  // kind 'reminder': steps and countdown calls, always heard in order.
+  // kind 'info': button feedback; a newer info message replaces an older one.
+  const Q = [];
+  let current = null, watchdog = null;
+  function speak(text, withChime = false, kind = 'info') {
+    if (kind === 'info') {
+      for (let i = Q.length - 1; i >= 0; i--) if (Q[i].kind === 'info') Q.splice(i, 1);
+      if (current && current.kind === 'info') stopCurrent();
+    }
+    Q.push({ text, withChime, kind });
+    pump();
+  }
+  function pickVoice() {
+    const en = speechSynthesis.getVoices().filter(v => /^en(-|_|$)/i.test(v.lang));
+    return en.find(v => v.localService && /Samantha|Natural/.test(v.name))
+      || en.find(v => v.localService && /en[-_]US/i.test(v.lang))
+      || en.find(v => v.localService) || en[0] || null;
+  }
+  function pump() {
+    if (current || !Q.length) return;
+    const item = current = Q.shift();
+    showSubtitle(item.text, Q.filter(q => q.kind === 'reminder').length);
+    if (S.muted || !('speechSynthesis' in window)) {
+      watchdog = setTimeout(() => finish(item), 1800 + item.text.length * 45);
+      return;
+    }
+    const lead = item.withChime && S.chime ? (chime(), 650) : 0;
     setTimeout(() => {
-      speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
+      if (current !== item) return;
+      const u = new SpeechSynthesisUtterance(item.text);
       const p = { calm: [0.95, 1], coach: [1.1, 1.2], space: [0.9, 0.8], train: [1.05, 1.1] }[S.voice] || [1, 1];
-      u.rate = p[0]; u.pitch = p[1];
-      const v = speechSynthesis.getVoices().find(v => v.lang.startsWith('en') && /Natural|Google|Samantha/.test(v.name));
-      if (v) u.voice = v;
-      speechSynthesis.speak(u);
-    }, useChime ? 450 : 0);
+      u.rate = p[0]; u.pitch = p[1]; u.lang = 'en-US';
+      const v = pickVoice(); if (v) u.voice = v;
+      u.onend = u.onerror = () => finish(item);
+      item.u = u; // keep a reference: Chrome can lose onend for utterances that get garbage-collected
+      try { speechSynthesis.resume(); speechSynthesis.speak(u); } catch (e) { finish(item); return; }
+      watchdog = setTimeout(() => { try { speechSynthesis.cancel(); } catch (e) {} finish(item); }, 5000 + item.text.length * 120);
+    }, lead);
+  }
+  function finish(item) {
+    if (current !== item) return;
+    clearTimeout(watchdog); current = null;
+    if (!Q.length) hideSubtitleSoon();
+    setTimeout(pump, 350);
+  }
+  function stopCurrent() {
+    const item = current; if (!item) return;
+    try { speechSynthesis.cancel(); } catch (e) {}
+    finish(item);
+  }
+  function clearSpeech() {
+    Q.length = 0; stopCurrent();
   }
   let subTimer;
-  function showSubtitle(text) {
-    $('subtitleText').textContent = `“${text}”`;
+  function showSubtitle(text, more) {
+    $('subtitleText').textContent = `“${text}”` + (more ? `  (+${more} more)` : '');
     $('subtitle').classList.add('show');
     clearTimeout(subTimer);
-    subTimer = setTimeout(() => $('subtitle').classList.remove('show'), 5000);
+  }
+  function hideSubtitleSoon() {
+    clearTimeout(subTimer);
+    subTimer = setTimeout(() => $('subtitle').classList.remove('show'), 4000);
   }
 
   // Small built-in confetti burst (no outside scripts).
@@ -676,39 +746,63 @@
   }
 
   // ---------- Timer ----------
+  // The countdown follows the wall clock (endAt), so a slow or throttled tick never skips a step:
+  // every step whose time has been reached is queued, in order, even if several share a minute.
+  let wakeLock = null;
   function toggleTimer() { initAudio(); S.running ? pause() : start(); }
   function start() {
     if (S.remaining <= 0 || S.running) return;
     S.running = true;
-    if (S.remaining === S.total) speak(`Countdown started. ${Math.round(S.total / 60)} minutes until we go.`, false);
-    S.interval = setInterval(tick, 1000);
+    S.endAt = Date.now() + S.remaining * 1000;
+    S.steps.forEach(s => { if (s.minute * 60 > S.remaining) s.done = true; });
+    if (S.remaining === S.total) {
+      let line = `Countdown started. ${Math.round(S.total / 60)} minutes until we go.`;
+      if (S.wx) line += ' ' + weatherLine();
+      speak(line, false, 'reminder');
+    }
+    S.interval = setInterval(tick, 250);
+    try { navigator.wakeLock && navigator.wakeLock.request('screen').then(l => { wakeLock = l; }).catch(() => {}); } catch (e) {}
     renderGo();
   }
   function pause() {
-    S.running = false; clearInterval(S.interval); renderGo();
+    S.running = false; clearInterval(S.interval);
+    try { wakeLock && wakeLock.release(); } catch (e) {}
+    wakeLock = null;
+    renderGo();
   }
+  function stepOrder(a, b) { return b.minute - a.minute || a.id - b.id; }
   function tick() {
-    S.remaining = Math.max(0, S.remaining - 1);
-    S.steps.forEach(s => {
-      if (!s.done && s.minute * 60 === S.remaining) { s.done = true; speak(s.text); }
-    });
-    if (S.remaining === 60 && !S.steps.some(s => s.minute === 1)) speak('One minute left. Head for the door!');
-    if (S.remaining === 0) {
+    const now = Math.max(0, Math.ceil((S.endAt - Date.now()) / 1000));
+    if (now === S.remaining) return;
+    const prev = S.remaining;
+    S.remaining = now;
+    const due = S.steps.filter(s => !s.done && s.minute * 60 >= now && s.minute * 60 <= S.total).sort(stepOrder);
+    due.forEach(s => { s.done = true; speak(s.text, true, 'reminder'); });
+    if (prev > 60 && now <= 60 && now > 0 && !S.steps.some(s => s.minute === 1)) speak('One minute left. Head for the door!', true, 'reminder');
+    if (now === 0) {
       pause();
       confetti();
-      speak(S.dest.on && S.dest.name ? `Time to go to ${S.dest.name}!` : 'Time to go!');
+      speak(S.dest.on && S.dest.name ? `Time to go to ${S.dest.name}!` : 'Time to go!', true, 'reminder');
     }
     renderAll();
   }
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && S.running) {
+      tick();
+      try { navigator.wakeLock && navigator.wakeLock.request('screen').then(l => { wakeLock = l; }).catch(() => {}); } catch (e) {}
+    }
+  });
   function rearm() { S.steps.forEach(s => { s.done = s.minute * 60 > S.remaining; }); }
-  function resetTimer() { pause(); S.remaining = S.total; S.steps.forEach(s => s.done = false); renderAll(); }
+  function resetTimer() { pause(); clearSpeech(); S.remaining = S.total; S.steps.forEach(s => s.done = false); renderAll(); }
   function adjustTime(d) {
     S.remaining = Math.max(0, S.remaining + d);
     if (S.remaining > S.total) S.total = S.remaining;
-    rearm(); save(); renderAll();
+    if (S.running) S.endAt = Date.now() + S.remaining * 1000;
+    S.steps.forEach(s => { if (s.minute * 60 > S.remaining) s.done = true; else if (d > 0 && s.minute * 60 < S.remaining) s.done = false; });
+    save(); renderAll();
   }
   function setPreset(m) {
-    pause(); S.total = m * 60; S.remaining = S.total; S.steps.forEach(s => s.done = false);
+    pause(); clearSpeech(); S.total = m * 60; S.remaining = S.total; S.steps.forEach(s => s.done = false);
     save(); renderAll(); speak(`Timer set to ${m} minutes.`, false);
   }
 
@@ -795,7 +889,7 @@
     renderAll(); flash(id);
   }
   function deleteStep(id) { S.steps = S.steps.filter(s => s.id !== id); save(); renderAll(); }
-  function previewStep(id) { initAudio(); const s = S.steps.find(s => s.id === id); if (s) speak(s.text); }
+  function previewStep(id) { initAudio(); const s = S.steps.find(s => s.id === id); if (s) speak(s.text, true); }
   function flash(id) {
     const el = document.querySelector(`.step[data-id="${id}"]`);
     if (!el) return;
@@ -803,7 +897,7 @@
     setTimeout(() => el.classList.remove('flash'), 700);
   }
   function nextStep() {
-    return S.steps.filter(s => !s.done && s.minute * 60 <= S.remaining).sort((a, b) => b.minute - a.minute)[0];
+    return S.steps.filter(s => !s.done && s.minute * 60 <= S.remaining).sort(stepOrder)[0];
   }
   function autosize(t) { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; }
 
@@ -815,7 +909,7 @@
     const ae = document.activeElement;
     if (ae && list.contains(ae) && (ae.tagName === 'TEXTAREA' || ae.tagName === 'INPUT')) { renderStepStates(); return; } // don't rebuild while typing
     const nx = nextStep();
-    const sorted = [...S.steps].sort((a, b) => b.minute - a.minute);
+    const sorted = [...S.steps].sort(stepOrder);
     list.innerHTML = sorted.map(s => {
       const beyond = s.minute * 60 > S.total;
       const cls = ['step', s.done ? 'done' : '', nx && nx.id === s.id ? 'next' : '', beyond ? 'out' : ''].join(' ');
@@ -828,7 +922,7 @@
         </div>
         <div class="step-main">
           <textarea class="step-text" rows="1" data-text="${s.id}" aria-label="Words to announce">${esc(s.text)}</textarea>
-          <div class="step-meta">${beyond ? '<span class="warn">Starts before the timer does. Lower it or add time.</span>' : (s.done ? 'Announced' : `Says this at ${fmt(s.minute * 60)} left`)}</div>
+          <div class="step-meta">${beyond ? '<span class="warn">Starts before the timer does. Lower it or add time.</span>' : (s.done ? 'Announced' : `Says this at ${fmt(s.minute * 60)} left`) + lineNote(s)}</div>
         </div>
         <div class="step-tools">
           <button class="icon-btn" title="Hear it" onclick="previewStep(${s.id})"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
@@ -853,6 +947,12 @@
       inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.dispatchEvent(new Event('change')); });
     });
     $('emptyHint').hidden = S.steps.length > 0 || !$('composer').hidden;
+  }
+  function lineNote(s) {
+    const same = S.steps.filter(o => o.minute === s.minute).sort(stepOrder);
+    if (same.length < 2) return '';
+    const n = same.indexOf(s) + 1;
+    return ` · ${n}${['th','st','nd','rd'][n % 10 > 3 || Math.floor(n / 10) === 1 ? 0 : n % 10]} of ${same.length}`;
   }
   function renderStepStates() {
     const nx = nextStep();
@@ -962,21 +1062,114 @@
     speak(`Timer set. Leave in ${Math.round(secs / 60)} minutes to arrive by ${clock(target)}.`, false);
   }
 
-  // ---------- Weather (sample presets) ----------
-  const weather = [
-    { cond: 'Sunny', temp: '72°F', icon: '☀️', apparel: 'Sunscreen & hats needed!' },
-    { cond: 'Rainy', temp: '58°F', icon: '🌧️', apparel: 'Rain jackets & umbrellas!' },
-    { cond: 'Chilly', temp: '42°F', icon: '🧥', apparel: 'Warm coats & gloves on!' },
-    { cond: 'Snowy', temp: '28°F', icon: '❄️', apparel: 'Boots, mittens & scarves!' },
+  // ---------- Weather (Open-Meteo, by ZIP code) ----------
+  const WX = [
+    [[0], 'Clear', '☀️', '🌙'], [[1, 2], 'Partly cloudy', '⛅', '☁️'], [[3], 'Cloudy', '☁️', '☁️'],
+    [[45, 48], 'Foggy', '🌫️', '🌫️'], [[51, 53, 55, 56, 57], 'Drizzle', '🌦️', '🌧️'],
+    [[61, 63, 65, 66, 67, 80, 81, 82], 'Rainy', '🌧️', '🌧️'], [[71, 73, 75, 77, 85, 86], 'Snowy', '🌨️', '🌨️'],
+    [[95, 96, 99], 'Stormy', '⛈️', '⛈️'],
   ];
-  let wi = 0;
-  function cycleWeather() {
-    wi = (wi + 1) % weather.length;
-    const w = weather[wi];
-    $('weatherIcon').textContent = w.icon; $('tempDisplay').textContent = w.temp;
-    $('weatherCond').textContent = w.cond; $('apparelAdvice').textContent = w.apparel;
-    speak(`Weather: ${w.cond}, ${w.temp}. ${w.apparel}`, false);
+  function describe(w) {
+    const row = WX.find(r => r[0].includes(w.code)) || [[], 'Weather', '🌤️', '🌤️'];
+    const cond = row[1], icon = w.isDay ? row[2] : row[3];
+    let advice;
+    if (cond === 'Snowy') advice = 'Boots, mittens & scarves!';
+    else if (cond === 'Stormy') advice = 'Rain gear on. Stormy out there!';
+    else if (cond === 'Rainy' || cond === 'Drizzle' || w.rain >= 50) advice = 'Rain jackets & umbrellas!';
+    else if (w.feels < 35) advice = 'Warm coats, hats & gloves!';
+    else if (w.feels < 55) advice = 'Bring a jacket!';
+    else if (w.feels < 65) advice = 'A sweater or light layer.';
+    else if (w.high >= 78 && w.isDay) advice = 'Sunscreen, hats & water!';
+    else advice = 'Nice out. No jacket needed!';
+    return { cond, icon, advice };
   }
+  function weatherLine() {
+    const w = S.wx; if (!w) return '';
+    const d = describe(w);
+    return `It's ${Math.round(w.temp)} degrees and ${d.cond.toLowerCase()}. ${d.advice.replace(/&/g, 'and')}`;
+  }
+  function renderWeather(state) {
+    const w = S.wx;
+    $('weatherRefresh').classList.toggle('spin', state === 'loading');
+    if (state === 'error') {
+      $('weatherIcon').textContent = '⚠️'; $('tempDisplay').textContent = 'Weather';
+      $('weatherCond').hidden = true; $('apparelAdvice').textContent = 'Couldn’t load it. Tap ↻ to try again.';
+      return;
+    }
+    if (!S.zip || !w) {
+      if (state === 'loading') { $('apparelAdvice').textContent = 'Loading weather…'; return; }
+      $('weatherIcon').textContent = '🌤️'; $('tempDisplay').textContent = 'Weather';
+      $('weatherCond').hidden = true; $('apparelAdvice').textContent = 'Add your ZIP code';
+      $('weatherMain').title = 'Set your ZIP code';
+      return;
+    }
+    const d = describe(w);
+    $('weatherIcon').textContent = d.icon;
+    $('tempDisplay').textContent = `${Math.round(w.temp)}°F`;
+    $('weatherCond').hidden = false; $('weatherCond').textContent = d.cond;
+    $('apparelAdvice').textContent = d.advice;
+    $('weatherMain').title = `${S.loc ? S.loc.name + ' · ' : ''}Feels like ${Math.round(w.feels)}° · High ${Math.round(w.high)}° / Low ${Math.round(w.low)}° · ${w.rain}% chance of rain · ZIP ${S.zip} (tap to change)`;
+  }
+  async function lookupZip(zip) {
+    try {
+      const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${zip}&count=5&countryCode=US&language=en&format=json`);
+      const j = await r.json();
+      const hit = (j.results || []).find(x => (x.postcodes || []).includes(zip)) || (j.results || [])[0];
+      if (hit) return { lat: hit.latitude, lon: hit.longitude, name: `${hit.name}${hit.admin1 ? ', ' + hit.admin1 : ''}` };
+    } catch (e) {}
+    const r = await fetch(`https://api.zippopotam.us/us/${zip}`);
+    if (!r.ok) return null;
+    const j = await r.json(); const pl = j.places && j.places[0];
+    return pl ? { lat: +pl.latitude, lon: +pl.longitude, name: `${pl['place name']}, ${pl['state abbreviation']}` } : null;
+  }
+  let wxBusy = false;
+  async function refreshWeather(announce) {
+    initAudio();
+    if (!S.zip) { toggleZip(true); return; }
+    if (wxBusy) return;
+    wxBusy = true; renderWeather('loading');
+    try {
+      if (!S.loc) { S.loc = await lookupZip(S.zip); if (!S.loc) throw new Error('zip'); save(); }
+      const u = `https://api.open-meteo.com/v1/forecast?latitude=${S.loc.lat}&longitude=${S.loc.lon}` +
+        '&current=temperature_2m,apparent_temperature,weather_code,is_day' +
+        '&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+        '&temperature_unit=fahrenheit&timezone=auto&forecast_days=1';
+      const j = await (await fetch(u)).json();
+      S.wx = {
+        temp: j.current.temperature_2m, feels: j.current.apparent_temperature, code: j.current.weather_code,
+        isDay: !!j.current.is_day, high: j.daily.temperature_2m_max[0], low: j.daily.temperature_2m_min[0],
+        rain: j.daily.precipitation_probability_max[0] ?? 0, at: Date.now(),
+      };
+      renderWeather();
+      if (announce) speak(weatherLine(), false);
+    } catch (e) {
+      renderWeather('error');
+    } finally { wxBusy = false; }
+  }
+  function toggleZip(force) {
+    const pop = $('zipPop');
+    const open = typeof force === 'boolean' ? force : pop.hidden;
+    pop.hidden = !open;
+    if (open) { $('zipInput').value = S.zip; $('zipErr').hidden = true; setTimeout(() => $('zipInput').focus(), 0); }
+  }
+  $('zipPop').addEventListener('submit', async e => {
+    e.preventDefault();
+    const zip = $('zipInput').value.trim();
+    if (!/^\d{5}$/.test(zip)) { $('zipErr').textContent = 'Enter a 5-digit US ZIP code.'; $('zipErr').hidden = false; return; }
+    $('zipErr').hidden = true;
+    const prev = { zip: S.zip, loc: S.loc };
+    S.zip = zip; S.loc = null; S.wx = null;
+    renderWeather('loading');
+    try { S.loc = await lookupZip(zip); } catch (err) { S.loc = null; }
+    if (!S.loc) {
+      Object.assign(S, prev);
+      $('zipErr').textContent = 'Couldn’t find that ZIP code, or the weather service is unreachable. Check it and try again.';
+      $('zipErr').hidden = false; renderWeather(); refreshWeather(false); return;
+    }
+    save(); toggleZip(false); refreshWeather(true);
+  });
+  $('zipInput').addEventListener('keydown', e => { if (e.key === 'Escape') toggleZip(false); });
+  document.addEventListener('click', e => { if (!$('zipPop').hidden && !$('weather').contains(e.target)) toggleZip(false); });
 
   // ---------- Sound settings ----------
   function renderSound() {
@@ -991,7 +1184,7 @@
   }
   function toggleMute() {
     initAudio(); S.muted = !S.muted;
-    if (S.muted && 'speechSynthesis' in window) speechSynthesis.cancel();
+    if (S.muted) { try { speechSynthesis.cancel(); } catch (e) {} }
     save(); renderSound(); if (!S.muted) speak('Sound on.', false);
   }
   function toggleChime() { S.chime = !S.chime; save(); renderSound(); if (S.chime) chime(); }
@@ -1009,7 +1202,9 @@
   $('destName').value = S.dest.name;
   $('driveMins').value = S.dest.drive;
   $('arriveBy').value = S.dest.arriveBy;
-  renderSound(); renderAll();
+  renderSound(); renderAll(); renderWeather();
+  if (S.zip) refreshWeather(false);
+  setInterval(() => { if (S.zip && !wxBusy) refreshWeather(false); }, 20 * 60 * 1000);
   setInterval(() => { if (S.dest.on && !S.running) renderDest(); }, 15000);
   document.addEventListener('click', initAudio, { once: true });
   if ('speechSynthesis' in window) speechSynthesis.getVoices();
