@@ -1,936 +1,948 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Toothbrush Timer — The Game Shelf</title>
-    <meta name="description" content="A playful 2-minute toothbrush timer for kids: five brushing steps, spoken coaching, and sugar bugs that flee as you brush.">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Toothbrush Timer">
-    <meta property="og:description" content="A playful 2-minute toothbrush timer for kids: five brushing steps, spoken coaching, and sugar bugs that flee as you brush.">
-    <meta property="og:image" content="https://magicmakersfamily.github.io/games/toothbrush/cover.png">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314b8a6'/%3E%3Crect x='10' y='36' width='40' height='8' rx='4' fill='%23fff'/%3E%3Crect x='34' y='20' width='18' height='16' rx='3' fill='%23a7f3d0'/%3E%3C/svg%3E">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&amp;family=Quicksand:wght@600;700;800&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="tailwind.css">
-    <script src="confetti.js"></script>
-    <style>
-        body { margin: 0; background-attachment: fixed !important; }
-        [hidden] { display: none !important; }
-        img { max-width: 100%; }
-        .back-link { color: #64748b; text-decoration: none; white-space: nowrap; }
-        .back-link:hover { color: #0d9488; }
-        .linkish { border: 0; background: none; padding: 0; font: inherit; color: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
-        .shelf-foot { width: 100%; max-width: 42rem; margin: 0 auto; padding: 12px 16px 20px; box-sizing: border-box; text-align: center; font-size: 12px; line-height: 1.6; color: #64748b; font-weight: 600; display: grid; gap: 2px; }
-        .shelf-foot p { margin: 0; }
-        .shelf-foot b { color: #475569; }
-        .shelf-foot a, .shelf-foot .linkish { color: #64748b; text-decoration: underline; text-underline-offset: 2px; }
-        .shelf-foot a:hover, .shelf-foot .linkish:hover { color: #0d9488; }
-        .end-extras { font-size: 11px; color: #64748b; font-weight: 600; display: grid; gap: 6px; margin-top: 4px; }
-        .end-extras p { margin: 0; }
-        .end-extras a { color: #0f766e; }
-        .more-games { display: block; padding: 8px 12px; border-radius: 12px; border: 2px solid #99f6e4; background: #f0fdfa; color: #0f766e !important; text-decoration: none; font-size: 12px; font-weight: 800; }
-        .more-games:hover { background: #ccfbf1; }
-    
-        body {
-            font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #f3e8ff 100%);
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        .font-playful {
-            font-family: 'Fredoka One', cursive;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 2px solid rgba(255, 255, 255, 0.9);
-        }
-        @keyframes gentle-float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-        }
-        .animate-float {
-            animation: gentle-float 3s ease-in-out infinite;
-        }
-        @keyframes pulse-ring {
-            0% { transform: scale(0.98); opacity: 0.8; }
-            50% { transform: scale(1.03); opacity: 1; }
-            100% { transform: scale(0.98); opacity: 0.8; }
-        }
-        .animate-pulse-ring {
-            animation: pulse-ring 2s ease-in-out infinite;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Toothbrush Timer — The Game Shelf</title>
+<meta name="description" content="A two-minute brushing coach for kids: a calm voice says which teeth and which side to brush, and the sugar bugs leave only where you are brushing.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Toothbrush Timer">
+<meta property="og:description" content="A two-minute brushing coach for kids: a calm voice says which teeth and which side to brush, and the sugar bugs leave only where you are brushing.">
+<meta property="og:image" content="https://magicmakersfamily.github.io/games/toothbrush/cover.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314b8a6'/%3E%3Crect x='10' y='36' width='40' height='8' rx='4' fill='%23fff'/%3E%3Crect x='34' y='20' width='18' height='16' rx='3' fill='%23a7f3d0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #f3e8ff 100%);
+    --ink: #1e293b; --muted: #64748b; --card: #ffffff; --line: #e2e8f0; --chip: #f1f5f9;
+    --teal: #0d9488; --teal-bright: #14b8a6; --go: #10b981; --go-ink: #ffffff; --warn: #f59e0b;
+    --ring-track: #dbe4ee;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: linear-gradient(135deg, #0b1324 0%, #0d1b22 50%, #17122a 100%);
+      --ink: #e2e8f0; --muted: #94a3b8; --card: #111a2b; --line: #273449; --chip: #1b2638;
+      --teal: #2dd4bf; --teal-bright: #2dd4bf; --go: #10b981; --ring-track: #273449;
+      color-scheme: dark;
+    }
+  }
+  body.calm { --bg: #eef3f2; --teal-bright: #6aa9a0; --go: #5f9f8f; }
+  @media (prefers-color-scheme: dark) { body.calm { --bg: #111827; --teal-bright: #5b8f88; --go: #4f8577; } }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  [hidden] { display: none !important; }
+  img { max-width: 100%; }
+  body {
+    font-family: 'Quicksand', system-ui, sans-serif; font-weight: 700; color: var(--ink);
+    background: var(--bg); background-attachment: fixed; min-height: 100dvh;
+    -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  }
+  body.in-session { overflow: hidden; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--teal-bright); outline-offset: 2px; }
+  .display { font-family: 'Fredoka One', 'Quicksand', system-ui, sans-serif; font-weight: 400; }
+
+  /* The whole session lives in one screen: no scrolling while brushing. */
+  .app {
+    height: 100dvh; max-width: 560px; margin: 0 auto;
+    padding: max(8px, env(safe-area-inset-top)) 16px max(10px, env(safe-area-inset-bottom));
+    display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: 6px;
+  }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 52px; }
+  .top-left { min-width: 0; }
+  .back-link { color: var(--muted); text-decoration: none; font-size: 13px; white-space: nowrap; }
+  .back-link:hover { color: var(--teal); }
+  h1 { margin: 2px 0 0; font-size: clamp(17px, 5.2vw, 24px); color: var(--teal); line-height: 1.05; }
+  .tools { display: flex; gap: 6px; flex: none; }
+  .tool {
+    width: 54px; height: 50px; border-radius: 14px; border: 2px solid var(--line); background: var(--card);
+    display: grid; place-items: center; align-content: center; gap: 1px; padding: 0; line-height: 1;
+  }
+  .tool .ico { font-size: 18px; }
+  .tool .lbl { font-size: 10px; color: var(--muted); }
+  .tool[aria-pressed="true"] { border-color: var(--teal-bright); background: color-mix(in srgb, var(--teal-bright) 14%, var(--card)); }
+  .tool[aria-pressed="true"] .lbl { color: var(--teal); }
+  .tool[aria-pressed="false"] .ico { filter: grayscale(1); opacity: .55; }
+  .tool[aria-pressed="false"] .lbl { text-decoration: line-through; }
+  body[data-state="running"] .top, body[data-state="finale"] .top { visibility: hidden; }
+
+  .coach {
+    margin: 0; text-align: center; font-size: clamp(20px, 6vw, 28px); line-height: 1.15; min-height: 1.2em;
+    color: var(--ink); display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
+  }
+  .coach .sep { color: var(--teal-bright); }
+  .coach .sub { color: var(--teal); }
+
+  .stage { position: relative; min-height: 0; display: grid; place-items: center; }
+  #mouth { display: block; }
+  .voice-tag {
+    position: absolute; right: 0; bottom: 0; font-size: 11px; color: var(--muted); background: var(--card);
+    border: 1px solid var(--line); border-radius: 999px; padding: 3px 8px;
+  }
+
+  .controls { display: grid; gap: 8px; justify-items: center; padding-bottom: 2px; }
+  .row { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
+  .big {
+    min-height: 60px; padding: 0 26px; border: 0; border-radius: 20px; background: var(--go); color: var(--go-ink);
+    font-size: 20px; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 6px 16px rgb(16 185 129 / .28); min-width: 170px;
+  }
+  .big:active { transform: scale(.97); }
+  .big.pause { background: var(--card); color: var(--ink); border: 2px solid var(--line); box-shadow: none; min-width: 130px; }
+  .clock { font-size: clamp(34px, 11vw, 46px); color: var(--ink); letter-spacing: 1px; min-width: 3.4ch; text-align: center; font-variant-numeric: tabular-nums; }
+  .chip {
+    min-height: 44px; padding: 0 14px; border-radius: 14px; border: 2px solid var(--line); background: var(--card);
+    font-size: 14px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px;
+  }
+  .hold {
+    position: relative; overflow: hidden; min-height: 44px; padding: 0 14px; border-radius: 14px;
+    border: 2px dashed var(--line); background: var(--card); color: var(--muted); font-size: 13px;
+    user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+  }
+  .hold::before {
+    content: ''; position: absolute; inset: 0; width: 0; background: color-mix(in srgb, var(--warn) 30%, transparent);
+  }
+  .hold.holding::before { width: 100%; transition: width .9s linear; }
+  .hold span { position: relative; }
+
+  .done-card {
+    width: 100%; max-width: 380px; background: var(--card); border: 2px solid color-mix(in srgb, var(--warn) 50%, var(--line));
+    border-radius: 20px; padding: 12px 14px; text-align: center; display: grid; gap: 8px; justify-items: center;
+  }
+  .done-card p { margin: 0; font-size: 13px; color: var(--muted); }
+  .done-card .grown { font-size: 12px; font-weight: 600; }
+  .done-card a, .linkish { color: var(--teal); }
+  .linkish { border: 0; background: none; padding: 0; font: inherit; text-decoration: underline; text-underline-offset: 2px; }
+
+  .shelf-foot { max-width: 42rem; margin: 0 auto; padding: 18px 16px 28px; text-align: center; font-size: 12px; line-height: 1.6; color: var(--muted); font-weight: 600; display: grid; gap: 2px; }
+  .shelf-foot p { margin: 0; }
+  .shelf-foot b { color: var(--ink); font-weight: 700; }
+  .shelf-foot a, .shelf-foot .linkish { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+  .shelf-foot a:hover, .shelf-foot .linkish:hover { color: var(--teal); }
+  body.in-session .shelf-foot { display: none; }
+
+  /* Grown-ups settings */
+  dialog {
+    width: min(440px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); border: 0; border-radius: 22px; padding: 0;
+    background: var(--card); color: var(--ink); box-shadow: 0 20px 60px rgb(0 0 0 / .35);
+  }
+  dialog::backdrop { background: rgb(15 23 42 / .6); }
+  .dlg { padding: 16px 18px 18px; display: grid; gap: 14px; }
+  .dlg-head { display: flex; align-items: center; justify-content: space-between; }
+  .dlg h2 { margin: 0; font-size: 20px; color: var(--teal); }
+  .x { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--chip); font-size: 18px; }
+  fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 6px; }
+  legend { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 6px; padding: 0; }
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .opt { position: relative; display: block; }
+  .opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; width: 100%; height: 100%; }
+  .opt span {
+    display: grid; place-items: center; text-align: center; min-height: 46px; padding: 6px 8px; border-radius: 14px;
+    border: 2px solid var(--line); font-size: 13px; line-height: 1.2;
+  }
+  .opt span small { display: block; font-size: 11px; color: var(--muted); font-weight: 600; }
+  .opt input:checked + span { border-color: var(--teal-bright); background: color-mix(in srgb, var(--teal-bright) 14%, var(--card)); color: var(--teal); }
+  .opt input:focus-visible + span { outline: 3px solid var(--teal-bright); outline-offset: 2px; }
+  .modes { display: grid; gap: 6px; }
+  .modes .opt span { place-items: initial; justify-items: start; text-align: left; padding: 8px 12px; }
+  .switch {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px;
+    border: 2px solid var(--line); border-radius: 14px; cursor: pointer;
+  }
+  .switch small { display: block; font-size: 11px; color: var(--muted); font-weight: 600; }
+  .switch input {
+    appearance: none; -webkit-appearance: none; flex: none; width: 48px; height: 28px; border-radius: 999px; margin: 0;
+    background: var(--line); position: relative; cursor: pointer; transition: background .2s;
+  }
+  .switch input::after {
+    content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff;
+    box-shadow: 0 1px 3px rgb(0 0 0 / .3); transition: transform .2s;
+  }
+  .switch input:checked { background: var(--teal-bright); }
+  .switch input:checked::after { transform: translateX(20px); }
+  .dlg-foot { display: flex; gap: 8px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+  .small-btn { min-height: 42px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--line); background: var(--chip); font-size: 13px; }
+  .primary { min-height: 46px; padding: 0 22px; border-radius: 14px; border: 0; background: var(--teal-bright); color: #fff; font-size: 15px; }
+  .note { font-size: 11px; color: var(--muted); margin: 0; font-weight: 600; line-height: 1.45; }
+
+  @media (max-height: 600px) {
+    .big { min-height: 52px; font-size: 18px; }
+    .coach { font-size: 19px; }
+    .top { min-height: 46px; }
+    .tool { height: 44px; }
+  }
+</style>
 </head>
+<body data-state="idle">
 
-    <header class="w-full max-w-2xl mx-auto px-4 pt-3 flex items-center justify-between z-20">
-        <div class="flex items-center gap-2.5">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-400 to-emerald-400 text-white flex items-center justify-center text-2xl shadow-md font-playful animate-float">
-                🪥
-            </div>
-            <div>
-                <h1 class="text-xl sm:text-2xl font-playful text-teal-600 tracking-wide leading-none">Toothbrush Timer</h1>
-                <span class="text-xs text-slate-500 font-bold"><a class="back-link" href="https://magicmakersfamily.github.io/games/">← All games</a></span>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-2">
-            <!-- Sound Effects Toggle -->
-            <button id="soundToggleBtn" onclick="toggleAudio()" class="w-11 h-11 rounded-2xl glass-card flex items-center justify-center text-xl text-slate-600 shadow-sm hover:scale-105 active:scale-95 transition-all" aria-label="Toggle Sound Effects" title="Sound Effects">
-                🔊
-            </button>
-            <!-- Voice Prompts Toggle -->
-            <button id="voiceToggleBtn" onclick="toggleVoice()" class="w-11 h-11 rounded-2xl glass-card flex items-center justify-center text-xl text-slate-600 shadow-sm hover:scale-105 active:scale-95 transition-all" aria-label="Toggle Voice Guidance" title="Voice Coaching">
-                🗣️
-            </button>
-            <!-- Parent Settings Button -->
-            <button id="settingsBtn" onclick="toggleSettingsModal(true)" class="w-11 h-11 rounded-2xl glass-card flex items-center justify-center text-xl text-slate-600 shadow-sm hover:scale-105 active:scale-95 transition-all" aria-label="Open Parent Settings" title="Parent Settings">
-                ⚙️
-            </button>
-        </div>
-    </header>
-
-    <main class="w-full max-w-lg mx-auto px-4 my-auto flex flex-col items-center justify-center gap-3 relative z-10 py-2">
-
-        <!-- Active Step Badge -->
-        <div id="stepBadge" class="px-6 py-2 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-playful text-sm sm:text-base tracking-wider uppercase shadow-md transition-all duration-300">
-            Step 1: Top Fronts ✨
-        </div>
-
-        <!-- Mouth & Central Timer Graphic Container -->
-        <div class="w-full glass-card rounded-3xl p-3 sm:p-5 shadow-2xl flex flex-col items-center relative overflow-hidden">
-
-            <!-- 5-Step Visual Key Tabs -->
-            <div class="grid grid-cols-5 gap-1 w-full max-w-[380px] mb-2 text-[10px] sm:text-[11px] font-extrabold text-center">
-                <div id="stepTab0" class="py-1.5 px-1 rounded-xl border border-purple-200 bg-purple-50 text-purple-700 transition-all shadow-sm">1. Top Fronts</div>
-                <div id="stepTab1" class="py-1.5 px-1 rounded-xl border border-sky-200 bg-sky-50 text-sky-700 transition-all shadow-sm">2. Top Backs</div>
-                <div id="stepTab2" class="py-1.5 px-1 rounded-xl border border-amber-200 bg-amber-50 text-amber-800 transition-all shadow-sm">3. Bottom Backs</div>
-                <div id="stepTab3" class="py-1.5 px-1 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700 transition-all shadow-sm">4. Bottom Fronts</div>
-                <div id="stepTab4" class="py-1.5 px-1 rounded-xl border border-rose-200 bg-rose-50 text-rose-700 transition-all shadow-sm">5. Tongue</div>
-            </div>
-
-            <!-- Single Canvas Element (Mouth, Teeth Tilt/Zoom, Bugs, Central Play Button) -->
-            <div class="relative w-full aspect-square max-w-[310px] sm:max-w-[350px] flex items-center justify-center my-1">
-                <canvas id="mouthCanvas" class="w-full h-full cursor-pointer drop-shadow-xl" onclick="handleCanvasClick(event)" width="350" height="350"></canvas>
-            </div>
-
-            <!-- Speech Guidance Text Box -->
-            <div id="speechBubble" class="mt-2 w-full bg-amber-50/95 border-2 border-amber-200 rounded-2xl p-3 text-center text-amber-950 text-xs sm:text-sm font-bold shadow-sm min-h-[52px] flex items-center justify-center transition-all duration-300">
-                <span id="speechText">Tap the <span class="text-teal-600 font-extrabold">PLAY TRIANGLE ▶</span> inside the mouth to start! 🪥✨</span>
-            </div>
-        </div>
-
-        <!-- Timer Secondary Controls (Reset & Quick Duration) -->
-        <div class="flex items-center justify-between gap-3 w-full max-w-sm px-1">
-            <button id="resetBtn" onclick="resetTimer()" class="px-4 h-12 rounded-2xl bg-white/95 text-slate-600 font-bold text-sm flex items-center justify-center shadow-md hover:bg-slate-100 active:scale-95 transition-all border border-slate-200 gap-1.5">
-                <span>↺</span> Reset
-            </button>
-
-            <!-- Digital Timer Countdown Display -->
-            <div id="digitalTimer" class="px-5 h-12 rounded-2xl bg-slate-800 text-teal-300 font-playful text-xl flex items-center justify-center shadow-md tracking-wider border border-slate-700">02:00</div>
-
-            <button onclick="toggleSettingsModal(true)" class="px-4 h-12 rounded-2xl bg-white/95 text-slate-600 font-bold text-sm flex items-center justify-center shadow-md hover:bg-slate-100 active:scale-95 transition-all border border-slate-200 gap-1.5">
-                <span>⏱️</span> Time
-            </button>
-        </div>
-
-        <!-- Celebration Banner (Positioned Below Mouth so Smile is 100% Unobstructed) -->
-        <div id="celebrationBanner" class="w-full max-w-sm glass-card rounded-2xl p-4 text-center shadow-xl bg-white/95 border-2 border-amber-300 flex flex-col items-center gap-2 hidden transition-all duration-500 transform scale-95 opacity-0">
-            <div class="text-2xl font-playful text-teal-600 flex items-center gap-2">
-                🏆 Super Sparkly Smile! ✨
-            </div>
-            <p class="text-xs font-bold text-slate-600">
-                All sugar bugs fled! Your teeth are super bright and clean!
-            </p>
-            <button onclick="resetTimer(); hideCelebrationBanner();" class="mt-1 px-6 py-2.5 rounded-xl bg-gradient-to-r from-teal-400 to-emerald-400 text-white font-playful text-sm shadow-md hover:opacity-95 active:scale-95 transition-all">
-                Brush Again 🪥
-            </button>
-            <div class="end-extras">
-                <p>Grown-ups: like this? <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Buy us a mooncake on Ko-fi</a> · <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/toothbrush/" data-text="A playful 2-minute toothbrush timer for kids: Toothbrush Timer">Tell a friend</button></p>
-                <a class="more-games" href="https://magicmakersfamily.github.io/games/">More from the Game Shelf →</a>
-            </div>
-        </div>
-
-    </main>
-
-    <footer class="shelf-foot">
-        <p><b>Version 1.0</b> · Launched <time datetime="2026-10-03">October 3, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=1.0">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=1.0&amp;kind=bug">Report a bug</a></p>
-        <p>Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></p>
-        <p>These games don’t collect any information. Saved progress stays in your own browser.</p>
-        <p>Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/toothbrush/" data-text="A playful 2-minute toothbrush timer for kids: Toothbrush Timer">Tell a friend</button></p>
-    </footer>
-
-    <div id="settingsModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
-        <div class="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border-2 border-slate-200 max-h-[90vh] overflow-y-auto text-slate-800">
-            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-                <h2 class="text-xl font-playful text-teal-600 flex items-center gap-2">
-                    ⚙️ Parent Settings
-                </h2>
-                <button onclick="toggleSettingsModal(false)" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center font-bold">✕</button>
-            </div>
-
-            <div class="space-y-4 pt-4">
-                <!-- Preset Duration Selector -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Timer Duration</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button type="button" onclick="setPresetDuration(60)" class="preset-btn py-2.5 px-3 rounded-2xl border-2 border-slate-200 font-bold hover:border-teal-400 transition-all text-xs" data-seconds="60">1 Min</button>
-                        <button type="button" onclick="setPresetDuration(120)" class="preset-btn py-2.5 px-3 rounded-2xl border-2 border-teal-500 bg-teal-50 text-teal-700 font-bold hover:border-teal-400 transition-all text-xs" data-seconds="120">2 Min (Recommended)</button>
-                        <button type="button" onclick="setPresetDuration(180)" class="preset-btn py-2.5 px-3 rounded-2xl border-2 border-slate-200 font-bold hover:border-teal-400 transition-all text-xs" data-seconds="180">3 Min</button>
-                    </div>
-                </div>
-
-                <!-- Spoken Coaching Toggle -->
-                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-200">
-                    <div>
-                        <div class="font-bold text-slate-800 text-xs">Spoken Coaching (Voice Prompts)</div>
-                        <div class="text-[11px] text-slate-500">Reads step instructions out loud.</div>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="spokenStepsToggle" onchange="toggleSpokenStepsSetting(this.checked)" checked class="sr-only peer">
-                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500"></div>
-                    </label>
-                </div>
-
-                <!-- Test Voice Button -->
-                <div class="flex justify-between items-center px-1">
-                    <span class="text-xs font-bold text-slate-500">Voice Synthesis Test:</span>
-                    <button type="button" onclick="testVoicePlayback()" class="px-3 py-1.5 rounded-xl bg-teal-50 text-teal-700 border border-teal-200 text-xs font-bold hover:bg-teal-100 flex items-center gap-1">
-                        🔊 Test Voice Now
-                    </button>
-                </div>
-
-                <!-- Sound Effects Toggle -->
-                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-200">
-                    <div>
-                        <div class="font-bold text-slate-800 text-xs">Sound Effects &amp; Chimes</div>
-                        <div class="text-[11px] text-slate-500">Plays pop sounds and victory fanfare.</div>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="soundFxToggle" onchange="toggleSoundFxSetting(this.checked)" checked="" class="sr-only peer">
-                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500"></div>
-                    </label>
-                </div>
-
-                <!-- Low Stimulation / Reduced Motion Toggle -->
-                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-200">
-                    <div>
-                        <div class="font-bold text-slate-800 text-xs">Low-Stimulation Mode</div>
-                        <div class="text-[11px] text-slate-500">Calmer colors and reduced movement.</div>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="lowStimToggle" onchange="toggleLowStimulation(this.checked)" class="sr-only peer">
-                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500"></div>
-                    </label>
-                </div>
-            </div>
-
-            <div class="mt-5 pt-3 border-t border-slate-100 flex justify-end">
-                <button onclick="toggleSettingsModal(false)" class="w-full py-2.5 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white font-bold text-xs shadow-md transition-all">
-                    Done &amp; Close
-                </button>
-            </div>
-        </div>
+<div class="app" id="app">
+  <header class="top">
+    <div class="top-left">
+      <a class="back-link" href="https://magicmakersfamily.github.io/games/">← All games</a>
+      <h1 class="display">Toothbrush Timer</h1>
     </div>
-
-    <script>
-        // Core Timer & State
-        let timerDuration = 120; // 2 Minutes
-        let timeRemaining = 120;
-        let isRunning = false;
-        let isCompleted = false;
-        let timerInterval = null;
-        let audioEnabled = true;
-        let spokenStepsEnabled = true;
-        let lowStimulationMode = false;
-
-        // 5 Step Milestones
-        const stepMessages = [
-            "Brush the fronts of your top teeth! ✨",
-            "Now brush behind your top teeth & bumpy tops! 🦷",
-            "Brush behind your bottom teeth & bumpy tops near your tongue! 👅",
-            "Now brush the fronts of your bottom teeth! ⭐",
-            "Gently scrub your tongue & do a final sweep! 🧹"
-        ];
-
-        let spokenMilestones = [false, false, false, false, false, false];
-
-        // Entities: 28 Sugar Bugs & Fleeing Animators
-        let sugarBugs = [];
-        let fleeingBugs = [];
-        let sparkleParticles = [];
-        let lastFleeTime = 0;
-
-        // Web Audio Context
-        let audioCtx = null;
-
-        function initAudio() {
-            if (!audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (AudioContext) audioCtx = new AudioContext();
-            }
-            if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
-
-        function playChime(freq = 523.25, type = 'sine', duration = 0.2) {
-            if (!audioEnabled) return;
-            try {
-                initAudio();
-                if (!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-
-                osc.type = type;
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch(e) {}
-        }
-
-        function playPopSound() {
-            if (!audioEnabled) return;
-            try {
-                initAudio();
-                if (!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(350, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(750, audioCtx.currentTime + 0.08);
-
-                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.08);
-            } catch(e) {}
-        }
-
-        function playVictoryFanfare() {
-            if (!audioEnabled) return;
-            const notes = [523.25, 659.25, 783.99, 1046.50];
-            notes.forEach((note, index) => {
-                setTimeout(() => playChime(note, 'triangle', 0.4), index * 140);
-            });
-        }
-
-        // Speech Synthesis API
-        function speakPrompt(text) {
-            if (!spokenStepsEnabled || !('speechSynthesis' in window)) return;
-            try {
-                window.speechSynthesis.cancel();
-                const cleanText = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
-                const utterance = new SpeechSynthesisUtterance(cleanText);
-                utterance.rate = 0.95;
-                utterance.pitch = 1.1;
-
-                const voices = window.speechSynthesis.getVoices();
-                const preferredVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Female') || v.name.includes('Google')));
-                if (preferredVoice) utterance.voice = preferredVoice;
-
-                setTimeout(() => window.speechSynthesis.speak(utterance), 180);
-            } catch(e) {}
-        }
-
-        function testVoicePlayback() {
-            initAudio();
-            spokenStepsEnabled = true;
-            document.getElementById('spokenStepsToggle').checked = true;
-            speakPrompt("Brush the fronts of your top teeth! Gentle little circles!");
-        }
-
-        const canvas = document.getElementById('mouthCanvas');
-        const ctx = canvas.getContext('2d');
-
-        function setupCanvasSize() {
-            const rect = canvas.getBoundingClientRect();
-            const dpr = window.devicePixelRatio || 1;
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
-            ctx.scale(dpr, dpr);
-        }
-
-        // Initialize 28 Sugar Bugs across the 5 Step Zones
-        function initSugarBugs() {
-            sugarBugs = [];
-            fleeingBugs = [];
-            const colors = ['#f43f5e', '#a855f7', '#06b6d4', '#f59e0b', '#10b981', '#ec4899'];
-
-            // 5 Zones mapping angles and radii
-            const zoneConfigs = [
-                // Zone 0: Top Fronts
-                { step: 0, count: 6, startA: -Math.PI * 0.85, endA: -Math.PI * 0.15, rMin: 0.38, rMax: 0.42 },
-                // Zone 1: Top Backs & Chewing Tops
-                { step: 1, count: 6, startA: -Math.PI * 0.80, endA: -Math.PI * 0.20, rMin: 0.30, rMax: 0.35 },
-                // Zone 2: Bottom Backs & Chewing Tops
-                { step: 2, count: 6, startA: Math.PI * 0.20, endA: Math.PI * 0.80, rMin: 0.30, rMax: 0.35 },
-                // Zone 3: Bottom Fronts
-                { step: 3, count: 6, startA: Math.PI * 0.15, endA: Math.PI * 0.85, rMin: 0.38, rMax: 0.42 },
-                // Zone 4: Tongue
-                { step: 4, count: 4, startA: -Math.PI * 0.2, endA: Math.PI * 0.2, rMin: 0.05, rMax: 0.15 }
-            ];
-
-            let id = 0;
-            zoneConfigs.forEach(z => {
-                for (let i = 0; i < z.count; i++) {
-                    const angle = z.startA + (i / (z.count - 1 || 1)) * (z.endA - z.startA);
-                    const radius = z.rMin + Math.random() * (z.max - z.rMin || 0.03);
-                    sugarBugs.push({
-                        id: id++,
-                        stepZone: z.step,
-                        radiusRatio: radius,
-                        angle: angle,
-                        size: 8 + Math.random() * 4,
-                        color: colors[Math.floor(Math.random() * colors.length)],
-                        alive: true,
-                        wiggleOffset: Math.random() * Math.PI * 2
-                    });
-                }
-            });
-        }
-
-        function renderMouthCanvas() {
-            const width = canvas.getBoundingClientRect().width;
-            const height = canvas.getBoundingClientRect().height;
-            const centerX = width / 2;
-            const centerY = height / 2;
-
-            ctx.clearRect(0, 0, width, height);
-            ctx.save();
-            ctx.translate(centerX, centerY);
-
-            const elapsedRatio = (timerDuration - timeRemaining) / timerDuration;
-            const currentStep = isRunning ? Math.min(4, Math.floor(elapsedRatio * 5)) : 0;
-            const now = Date.now() * 0.004;
-
-            // Trigger Bug Fleeing Every 2.5 seconds when running
-            if (isRunning && Date.now() - lastFleeTime > 2400) {
-                fleeNextBug(currentStep, width);
-                lastFleeTime = Date.now();
-            }
-
-            // 3D Tilt & Zoom Transforms according to step
-            let scaleX = 1.0, scaleY = 1.0, offsetY = 0;
-            if (isRunning) {
-                if (currentStep === 0) { scaleX = 1.08; scaleY = 1.05; offsetY = 10; } // Top Fronts
-                else if (currentStep === 1) { scaleX = 1.05; scaleY = 0.95; offsetY = 15; } // Top Backs
-                else if (currentStep === 2) { scaleX = 1.05; scaleY = 0.95; offsetY = -15; } // Bottom Backs
-                else if (currentStep === 3) { scaleX = 1.08; scaleY = 1.05; offsetY = -10; } // Bottom Fronts
-                else if (currentStep === 4) { scaleX = 1.12; scaleY = 1.12; offsetY = 0; } // Tongue
-            }
-
-            ctx.scale(scaleX, scaleY);
-            ctx.translate(0, offsetY);
-
-            const outerLipR = width * 0.44;
-            const mouthCavityR = width * 0.36;
-            const toothArchR = width * 0.35;
-
-            // 1. Mouth Lips Outer Ring
-            ctx.beginPath();
-            if (isCompleted) {
-                // VICTORY SMILE GRAPHIC
-                ctx.arc(0, -width * 0.05, outerLipR, 0.1 * Math.PI, 0.9 * Math.PI, false);
-                ctx.lineWidth = 22;
-                ctx.strokeStyle = '#f43f5e';
-                ctx.stroke();
-            } else {
-                ctx.arc(0, 0, outerLipR, 0, Math.PI * 2);
-                ctx.fillStyle = '#fb7185';
-                ctx.fill();
-                ctx.lineWidth = 4;
-                ctx.strokeStyle = '#f43f5e';
-                ctx.stroke();
-            }
-
-            // 2. Open Mouth Dark Cavity
-            ctx.beginPath();
-            ctx.arc(0, 0, mouthCavityR, 0, Math.PI * 2);
-            ctx.fillStyle = isCompleted ? '#9f1239' : '#881337';
-            ctx.fill();
-
-            // Tongue
-            ctx.beginPath();
-            ctx.ellipse(0, mouthCavityR * 0.45, mouthCavityR * 0.52, mouthCavityR * (currentStep === 4 ? 0.38 : 0.28), 0, 0, Math.PI);
-            ctx.fillStyle = currentStep === 4 ? '#fda4af' : '#f43f5e';
-            ctx.fill();
-            if (currentStep === 4) {
-                ctx.lineWidth = 3;
-                ctx.strokeStyle = '#fb7185';
-                ctx.stroke();
-            }
-
-            // 3. Central Progress Ring
-            if (elapsedRatio > 0 && !isCompleted) {
-                const startAngle = -Math.PI / 2;
-                const endAngle = startAngle + (elapsedRatio * Math.PI * 2);
-                ctx.beginPath();
-                ctx.arc(0, 0, outerLipR + 3, startAngle, endAngle);
-                ctx.lineWidth = 8;
-                ctx.strokeStyle = '#0d9488';
-                ctx.lineCap = 'round';
-                ctx.stroke();
-            }
-
-            // 4. DRAW SINGLE TEETH ARCH
-            drawTeethArch(toothArchR, currentStep, width);
-
-            // 5. Render Sugar Bugs attached to teeth
-            sugarBugs.forEach(bug => {
-                if (!bug.alive) return;
-                const r = bug.radiusRatio * width;
-                const bx = Math.cos(bug.angle) * r;
-                const by = Math.sin(bug.angle) * r;
-                const wiggle = lowStimulationMode ? 0 : Math.sin(now * 2.5 + bug.wiggleOffset) * 2.5;
-
-                ctx.save();
-                ctx.translate(bx, by + wiggle);
-
-                // Body
-                ctx.beginPath();
-                ctx.arc(0, 0, bug.size, 0, Math.PI * 2);
-                ctx.fillStyle = bug.color;
-                ctx.fill();
-
-                // Eyes
-                ctx.beginPath();
-                ctx.arc(-bug.size * 0.35, -bug.size * 0.2, bug.size * 0.3, 0, Math.PI * 2);
-                ctx.arc(bug.size * 0.35, -bug.size * 0.2, bug.size * 0.3, 0, Math.PI * 2);
-                ctx.fillStyle = '#ffffff';
-                ctx.fill();
-
-                ctx.beginPath();
-                ctx.arc(-bug.size * 0.35, -bug.size * 0.2, bug.size * 0.15, 0, Math.PI * 2);
-                ctx.arc(bug.size * 0.35, -bug.size * 0.2, bug.size * 0.15, 0, Math.PI * 2);
-                ctx.fillStyle = '#000000';
-                ctx.fill();
-
-                ctx.restore();
-            });
-
-            // 6. Render Fleeing Bugs Animation
-            fleeingBugs.forEach((fb, idx) => {
-                fb.progress += 0.025;
-                if (fb.progress >= 1.0) {
-                    fleeingBugs.splice(idx, 1);
-                    return;
-                }
-                const curX = fb.startX + (fb.targetX - fb.startX) * fb.progress;
-                const curY = fb.startY + (fb.targetY - fb.startY) * fb.progress - Math.sin(fb.progress * Math.PI) * 35;
-
-                ctx.save();
-                ctx.translate(curX, curY);
-
-                // Foam trail
-                ctx.beginPath();
-                ctx.arc(-10 * fb.dir, 0, 6, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-                ctx.fill();
-
-                // Fleeing Bug
-                ctx.beginPath();
-                ctx.arc(0, 0, fb.size, 0, Math.PI * 2);
-                ctx.fillStyle = fb.color;
-                ctx.fill();
-
-                ctx.restore();
-            });
-
-            // 7. Animated Toothbrush Scrubbing Path
-            if (isRunning && !isCompleted) {
-                const brushAngle = -Math.PI * 0.75 + (Math.sin(now * 2) * 0.5 + 0.5) * Math.PI * 1.5;
-                const brushR = currentStep === 4 ? width * 0.10 : toothArchR;
-                const bx = Math.cos(brushAngle) * brushR;
-                const by = Math.sin(brushAngle) * brushR;
-
-                ctx.save();
-                ctx.translate(bx, by);
-                ctx.rotate(brushAngle + Math.PI / 2);
-
-                // Brush Handle
-                ctx.beginPath();
-                ctx.roundRect(-4, 0, 8, 28, 4);
-                ctx.fillStyle = '#38bdf8';
-                ctx.fill();
-
-                // Head
-                ctx.beginPath();
-                ctx.roundRect(-7, -14, 14, 14, 3);
-                ctx.fillStyle = '#ffffff';
-                ctx.fill();
-
-                // Foaming Bubbles
-                ctx.beginPath();
-                ctx.arc(-8, -12 + Math.sin(now * 3) * 3, 4, 0, Math.PI * 2);
-                ctx.arc(8, -8 + Math.cos(now * 3) * 3, 5, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-                ctx.fill();
-
-                ctx.restore();
-            }
-
-            // 8. CENTER PLAY TRIANGLE BUTTON (Inside Mouth Cavity)
-            if (!isRunning && !isCompleted) {
-                ctx.save();
-                // Play Button Outer Circle
-                ctx.beginPath();
-                ctx.arc(0, 0, width * 0.15, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(13, 148, 136, 0.92)';
-                ctx.fill();
-                ctx.lineWidth = 4;
-                ctx.strokeStyle = '#ffffff';
-                ctx.stroke();
-
-                // Play Triangle Icon
-                ctx.beginPath();
-                const triSize = width * 0.07;
-                ctx.moveTo(-triSize * 0.5 + 3, -triSize);
-                ctx.lineTo(triSize + 3, 0);
-                ctx.lineTo(-triSize * 0.5 + 3, triSize);
-                ctx.closePath();
-                ctx.fillStyle = '#ffffff';
-                ctx.fill();
-
-                ctx.restore();
-            }
-
-            ctx.restore();
-
-            requestAnimationFrame(renderMouthCanvas);
-        }
-
-        function drawTeethArch(radius, activeStep, width) {
-            const numTeeth = 10;
-            const toothW = width * 0.044;
-            const toothH = width * 0.048;
-
-            // Upper Arch
-            for (let i = 0; i < numTeeth; i++) {
-                const angle = -Math.PI * 0.85 + (i / (numTeeth - 1)) * (Math.PI * 0.70);
-                const tx = Math.cos(angle) * radius;
-                const ty = Math.sin(angle) * radius;
-
-                ctx.save();
-                ctx.translate(tx, ty);
-                ctx.rotate(angle + Math.PI / 2);
-
-                ctx.beginPath();
-                ctx.roundRect(-toothW / 2, -toothH / 2, toothW, toothH, 4);
-                ctx.fillStyle = '#ffffff';
-                ctx.fill();
-                ctx.lineWidth = 1.5;
-                ctx.strokeStyle = '#cbd5e1';
-                ctx.stroke();
-
-                // Highlight active step
-                if (activeStep === 0) { // Top Fronts
-                    ctx.fillStyle = '#a855f7';
-                    ctx.fillRect(-toothW / 2 + 1, -toothH / 2 + 1, toothW - 2, toothH * 0.45);
-                } else if (activeStep === 1) { // Top Backs
-                    ctx.fillStyle = '#0284c7';
-                    ctx.fillRect(-toothW / 2 + 1, 0, toothW - 2, toothH * 0.45);
-                }
-
-                ctx.restore();
-            }
-
-            // Lower Arch
-            for (let i = 0; i < numTeeth; i++) {
-                const angle = Math.PI * 0.15 + (i / (numTeeth - 1)) * (Math.PI * 0.70);
-                const tx = Math.cos(angle) * radius;
-                const ty = Math.sin(angle) * radius;
-
-                ctx.save();
-                ctx.translate(tx, ty);
-                ctx.rotate(angle + Math.PI / 2);
-
-                ctx.beginPath();
-                ctx.roundRect(-toothW / 2, -toothH / 2, toothW, toothH, 4);
-                ctx.fillStyle = '#ffffff';
-                ctx.fill();
-                ctx.lineWidth = 1.5;
-                ctx.strokeStyle = '#cbd5e1';
-                ctx.stroke();
-
-                // Highlight active step
-                if (activeStep === 2) { // Bottom Backs
-                    ctx.fillStyle = '#f59e0b';
-                    ctx.fillRect(-toothW / 2 + 1, -toothH / 2 + 1, toothW - 2, toothH * 0.45);
-                } else if (activeStep === 3) { // Bottom Fronts
-                    ctx.fillStyle = '#10b981';
-                    ctx.fillRect(-toothW / 2 + 1, 0, toothW - 2, toothH * 0.45);
-                }
-
-                ctx.restore();
-            }
-        }
-
-        function fleeNextBug(stepZone, canvasWidth) {
-            const targetBug = sugarBugs.find(b => b.alive && b.stepZone === stepZone) || sugarBugs.find(b => b.alive);
-            if (targetBug) {
-                targetBug.alive = false;
-                const startX = Math.cos(targetBug.angle) * targetBug.radiusRatio * canvasWidth;
-                const startY = Math.sin(targetBug.angle) * targetBug.radiusRatio * canvasWidth;
-                const escapeAngle = targetBug.angle + (Math.random() - 0.5);
-
-                fleeingBugs.push({
-                    startX: startX,
-                    startY: startY,
-                    targetX: Math.cos(escapeAngle) * canvasWidth * 0.7,
-                    targetY: Math.sin(escapeAngle) * canvasWidth * 0.7,
-                    size: targetBug.size,
-                    color: targetBug.color,
-                    progress: 0,
-                    dir: Math.cos(escapeAngle) > 0 ? 1 : -1
-                });
-
-                playPopSound();
-            }
-        }
-
-        function handleCanvasClick(e) {
-            initAudio();
-            if (!isRunning) {
-                startTimer();
-            } else {
-                pauseTimer();
-            }
-        }
-
-        function startTimer() {
-            if (timeRemaining <= 0) resetTimer();
-
-            isRunning = true;
-            isCompleted = false;
-            hideCelebrationBanner();
-
-            if (!spokenMilestones[0]) {
-                spokenMilestones[0] = true;
-                updateSpeechText(stepMessages[0]);
-                speakPrompt(stepMessages[0]);
-            }
-
-            timerInterval = setInterval(() => {
-                timeRemaining--;
-                updateDigitalTimerDisplay();
-                updateStepProgress();
-
-                if (timeRemaining <= 0) {
-                    completeTimer();
-                }
-            }, 1000);
-        }
-
-        function pauseTimer() {
-            isRunning = false;
-            clearInterval(timerInterval);
-        }
-
-        function resetTimer() {
-            pauseTimer();
-            timeRemaining = timerDuration;
-            isCompleted = false;
-            spokenMilestones = [false, false, false, false, false, false];
-            initSugarBugs();
-            updateDigitalTimerDisplay();
-            updateStepProgress();
-            document.getElementById('stepBadge').innerText = "Step 1: Top Fronts ✨";
-            updateSpeechText('Tap the <span class="text-teal-600 font-extrabold">PLAY TRIANGLE ▶</span> inside the mouth to start! 🪥✨');
-            highlightStepTab(0);
-            hideCelebrationBanner();
-        }
-
-        function updateStepProgress() {
-            const elapsed = timerDuration - timeRemaining;
-            const ratio = elapsed / timerDuration;
-            const stepIndex = Math.min(4, Math.floor(ratio * 5));
-
-            highlightStepTab(stepIndex);
-
-            if (!spokenMilestones[stepIndex + 1] && ratio >= (stepIndex * 0.20)) {
-                spokenMilestones[stepIndex + 1] = true;
-                const msg = stepMessages[stepIndex];
-                document.getElementById('stepBadge').innerText = `Step ${stepIndex + 1}: ${getStepTitle(stepIndex)}`;
-                updateSpeechText(msg);
-                speakPrompt(msg);
-                playChime(523 + stepIndex * 80);
-            }
-        }
-
-        function getStepTitle(idx) {
-            return ["Top Fronts", "Top Backs", "Bottom Backs", "Bottom Fronts", "Tongue Sweep"][idx];
-        }
-
-        function highlightStepTab(activeIdx) {
-            for (let i = 0; i < 5; i++) {
-                const tab = document.getElementById(`stepTab${i}`);
-                if (i === activeIdx) {
-                    tab.className = "py-1.5 px-1 rounded-xl border-2 border-teal-500 bg-teal-100 text-teal-800 font-black scale-105 shadow-sm transition-all";
-                } else {
-                    tab.className = "py-1.5 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 font-semibold transition-all";
-                }
-            }
-        }
-
-        function completeTimer() {
-            pauseTimer();
-            isCompleted = true;
-            sugarBugs.forEach(b => b.alive = false);
-
-            document.getElementById('stepBadge').innerText = "All Clean! ✨";
-            updateSpeechText("Hooray! All clean! Your smile is super bright and sparkling!");
-            speakPrompt("Hooray! All clean! Your smile is super bright and sparkling!");
-
-            playVictoryFanfare();
-            triggerConfetti();
-            showCelebrationBanner();
-        }
-
-        function updateDigitalTimerDisplay() {
-            const minutes = Math.floor(timeRemaining / 60);
-            const seconds = timeRemaining % 60;
-            document.getElementById('digitalTimer').innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
-
-        function updateSpeechText(text) {
-            document.getElementById('speechText').innerHTML = text;
-        }
-
-        function triggerConfetti() {
-            if (typeof confetti === 'function') {
-                confetti({ particleCount: 100, spread: 80, origin: { y: 0.7 } });
-            }
-        }
-
-        function showCelebrationBanner() {
-            const banner = document.getElementById('celebrationBanner');
-            banner.classList.remove('hidden');
-            setTimeout(() => {
-                banner.classList.remove('scale-95', 'opacity-0');
-                banner.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-
-        function hideCelebrationBanner() {
-            const banner = document.getElementById('celebrationBanner');
-            banner.classList.remove('scale-100', 'opacity-100');
-            banner.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => banner.classList.add('hidden'), 300);
-        }
-
-        function toggleSettingsModal(show) {
-            const modal = document.getElementById('settingsModal');
-            if (show) {
-                modal.classList.remove('hidden');
-                setTimeout(() => modal.classList.remove('opacity-0'), 10);
-            } else {
-                modal.classList.add('opacity-0');
-                setTimeout(() => modal.classList.add('hidden'), 300);
-            }
-        }
-
-        function setPresetDuration(seconds) {
-            timerDuration = seconds;
-            document.querySelectorAll('.preset-btn').forEach(btn => {
-                if (parseInt(btn.dataset.seconds) === seconds) {
-                    btn.className = "preset-btn py-2.5 px-3 rounded-2xl border-2 border-teal-500 bg-teal-50 text-teal-700 font-bold transition-all text-xs";
-                } else {
-                    btn.className = "preset-btn py-2.5 px-3 rounded-2xl border-2 border-slate-200 font-bold transition-all text-xs";
-                }
-            });
-            resetTimer();
-            saveSettings();
-        }
-
-        function toggleSpokenStepsSetting(enabled) {
-            spokenStepsEnabled = enabled;
-            document.getElementById('voiceToggleBtn').innerText = enabled ? '🗣️' : '🔇';
-            saveSettings();
-        }
-
-        function toggleSoundFxSetting(enabled) {
-            audioEnabled = enabled;
-            document.getElementById('soundToggleBtn').innerText = enabled ? '🔊' : '🔇';
-            saveSettings();
-        }
-
-        function toggleVoice() {
-            spokenStepsEnabled = !spokenStepsEnabled;
-            document.getElementById('spokenStepsToggle').checked = spokenStepsEnabled;
-            document.getElementById('voiceToggleBtn').innerText = spokenStepsEnabled ? '🗣️' : '🔇';
-            if (!spokenStepsEnabled && 'speechSynthesis' in window) speechSynthesis.cancel();
-            saveSettings();
-        }
-
-        function toggleAudio() {
-            audioEnabled = !audioEnabled;
-            document.getElementById('soundFxToggle').checked = audioEnabled;
-            document.getElementById('soundToggleBtn').innerText = audioEnabled ? '🔊' : '🔇';
-            saveSettings();
-        }
-
-        function toggleLowStimulation(enabled) {
-            lowStimulationMode = enabled;
-            saveSettings();
-        }
-
-        // Parent settings are saved in this browser only
-        const SETTINGS_KEY = 'toothbrush:settings';
-        function saveSettings() {
-            try {
-                localStorage.setItem(SETTINGS_KEY, JSON.stringify({
-                    duration: timerDuration, voice: spokenStepsEnabled, sound: audioEnabled, lowStim: lowStimulationMode
-                }));
-            } catch (e) {}
-        }
-        function loadSettings() {
-            let s = null;
-            try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY)); } catch (e) {}
-            if (!s) return;
-            if ([60, 120, 180].includes(s.duration)) setPresetDuration(s.duration);
-            if (typeof s.voice === 'boolean') toggleSpokenStepsSetting(s.voice);
-            if (typeof s.sound === 'boolean') toggleSoundFxSetting(s.sound);
-            if (typeof s.lowStim === 'boolean') toggleLowStimulation(s.lowStim);
-            document.getElementById('spokenStepsToggle').checked = spokenStepsEnabled;
-            document.getElementById('soundFxToggle').checked = audioEnabled;
-            document.getElementById('lowStimToggle').checked = lowStimulationMode;
-        }
-
-        // Tell a friend: open the share sheet, or copy the link where sharing is not available.
-        document.querySelectorAll('[data-tell]').forEach(b => b.addEventListener('click', async () => {
-            const url = b.dataset.tell, text = b.dataset.text;
-            try { if (navigator.share) { await navigator.share({ title: document.title, text, url }); return; } await navigator.clipboard.writeText(text + ' ' + url); b.textContent = 'Link copied! Paste it in a message.'; }
-            catch (e) { if (!(e && e.name === 'AbortError')) b.textContent = url; }
-        }));
-
-        // Initialize on Load
-        window.addEventListener('load', () => {
-            setupCanvasSize();
-            initSugarBugs();
-            loadSettings();
-            updateDigitalTimerDisplay();
-            if ('speechSynthesis' in window) speechSynthesis.getVoices();
-            requestAnimationFrame(renderMouthCanvas);
-        });
-
-        window.addEventListener('resize', () => {
-            setupCanvasSize();
-        });
-    </script>
+    <div class="tools">
+      <button class="tool" id="soundBtn" type="button" aria-pressed="true" aria-label="Sound effects"><span class="ico" aria-hidden="true">🔔</span><span class="lbl">Sounds</span></button>
+      <button class="tool" id="voiceBtn" type="button" aria-pressed="true" aria-label="Spoken coaching"><span class="ico" aria-hidden="true">🗣️</span><span class="lbl">Voice</span></button>
+      <button class="tool" id="settingsBtn" type="button" aria-haspopup="dialog"><span class="ico" aria-hidden="true">⚙️</span><span class="lbl">Grown-ups</span></button>
+    </div>
+  </header>
+
+  <p class="coach display" id="coach" aria-live="polite"></p>
+
+  <div class="stage" id="stage">
+    <canvas id="mouth" role="img" aria-label="A wide-open mouth with sugar bugs on the teeth"></canvas>
+    <span class="voice-tag" id="voiceTag" hidden>backup voice</span>
+  </div>
+
+  <div class="controls">
+    <!-- idle -->
+    <div class="row" data-show="idle">
+      <button class="big display" id="startBtn" type="button"><span aria-hidden="true">▶</span> Start brushing</button>
+    </div>
+    <div class="row" data-show="idle">
+      <button class="chip" id="durationBtn" type="button" aria-haspopup="dialog"><span aria-hidden="true">⏱️</span> <span id="durationLabel">2 minutes</span> · Timer settings</button>
+    </div>
+    <!-- running / paused -->
+    <div class="row" data-show="running paused">
+      <span class="clock display" id="clock" role="timer" aria-label="Time left">2:00</span>
+      <button class="big pause display" id="pauseBtn" type="button" data-show="running"><span aria-hidden="true">❚❚</span> Pause</button>
+      <button class="big display" id="resumeBtn" type="button" data-show="paused"><span aria-hidden="true">▶</span> Keep going</button>
+    </div>
+    <div class="row" data-show="running paused">
+      <button class="hold" id="restartBtn" type="button" aria-label="Start over. Press and hold."><span>↺ Hold to start over</span></button>
+    </div>
+    <!-- finale -->
+    <div class="row" data-show="finale">
+      <button class="big display" id="smileBtn" type="button"><span aria-hidden="true">😁</span> Show my smile</button>
+    </div>
+    <!-- smile -->
+    <div class="done-card" data-show="smile">
+      <p>Outsides, chewing tops and insides: every tooth got a turn. 🦷</p>
+      <button class="big display" id="againBtn" type="button"><span aria-hidden="true">🪥</span> Brush again</button>
+      <p class="grown">Grown-ups: like this? <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Buy us a mooncake on Ko-fi</a> · <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/toothbrush/" data-text="A two-minute toothbrush coach for kids: Toothbrush Timer">Tell a friend</button> · <a href="https://magicmakersfamily.github.io/games/">More from the Game Shelf</a></p>
+    </div>
+  </div>
+</div>
+
+<footer class="shelf-foot">
+  <p><b>Version 2.0</b> · Launched <time datetime="2026-10-03">October 3, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=2.0">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=toothbrush&amp;v=2.0&amp;kind=bug">Report a bug</a></p>
+  <p>Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></p>
+  <p>These games don’t collect any information. Saved progress stays in your own browser.</p>
+  <p>Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/toothbrush/" data-text="A two-minute toothbrush coach for kids: Toothbrush Timer">Tell a friend</button></p>
+  <p>The brushing steps follow the American Dental Association’s guide: outside, inside and chewing surfaces, with up-and-down strokes behind the front teeth (<a href="https://www.mouthhealthy.org/all-topics-a-z/brushing-your-teeth/" target="_blank" rel="noopener">MouthHealthy.org</a>). The app can’t see the real toothbrush: the picture shows where to brush next.</p>
+</footer>
+
+<dialog id="settings" aria-labelledby="settingsTitle">
+  <form method="dialog" class="dlg">
+    <div class="dlg-head">
+      <h2 class="display" id="settingsTitle">⚙️ Grown-ups</h2>
+      <button class="x" value="close" aria-label="Close">✕</button>
+    </div>
+    <fieldset>
+      <legend>Timer</legend>
+      <div class="seg">
+        <label class="opt"><input type="radio" name="duration" value="60"><span>1 minute</span></label>
+        <label class="opt"><input type="radio" name="duration" value="120"><span>2 minutes<small>recommended</small></span></label>
+        <label class="opt"><input type="radio" name="duration" value="180"><span>3 minutes</span></label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Who’s brushing?</legend>
+      <div class="modes">
+        <label class="opt"><input type="radio" name="mode" value="me"><span>I brush by myself<small>The picture works like a mirror: your right is on the right.</small></span></label>
+        <label class="opt"><input type="radio" name="mode" value="help"><span>A grown-up helps<small>The picture shows the child’s mouth the way you see it, facing them.</small></span></label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Sound and screen</legend>
+      <label class="switch"><span>Spoken coaching<small>Says which teeth and which side to brush.</small></span><input type="checkbox" id="optVoice"></label>
+      <label class="switch"><span>Sound effects<small>Soft chimes when it’s time to move on.</small></span><input type="checkbox" id="optSound"></label>
+      <label class="switch"><span>Calm mode<small>Softer colors, still bugs, quieter chimes.</small></span><input type="checkbox" id="optCalm"></label>
+    </fieldset>
+    <p class="note">The timer pauses while this is open. Settings are saved on this device only.</p>
+    <div class="dlg-foot">
+      <button class="small-btn" type="button" id="testVoiceBtn">🔊 Test the voice</button>
+      <button class="primary" value="close">Done</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="lesson.js"></script>
+<script>
+(() => {
+  'use strict';
+  const L = window.Lesson;
+  const $ = id => document.getElementById(id);
+
+  // ---------- Settings (saved in this browser only) ----------
+  const KEY = 'toothbrush:settings';
+  const prefs = { duration: 120, mode: 'me', voice: true, sound: true, calm: false };
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (s) {
+      if ([60, 120, 180].includes(s.duration)) prefs.duration = s.duration;
+      if (s.mode === 'me' || s.mode === 'help') prefs.mode = s.mode;
+      if (typeof s.voice === 'boolean') prefs.voice = s.voice;
+      if (typeof s.sound === 'boolean') prefs.sound = s.sound;
+      if (typeof s.calm === 'boolean') prefs.calm = s.calm;
+      else if (typeof s.lowStim === 'boolean') prefs.calm = s.lowStim;      // saved by version 1
+    }
+  } catch (e) {}
+  function savePrefs() { try { localStorage.setItem(KEY, JSON.stringify(prefs)); } catch (e) {} }
+
+  const S = L.create(prefs.duration);   // the one timeline
+  let uiState = 'idle';                 // idle | running | paused | finale | smile
+  let smileAt = 0;
+
+  // ---------- Words on screen and words spoken are kept apart ----------
+  // On screen: short labels ("Top right · Outside"). Spoken: whole sentences from lines.json,
+  // recorded in voice/ — never the screen text, so no symbols or emoji are read out.
+  const LINES = {};
+  fetch('lines.json').then(r => r.json()).then(list => { list.forEach(l => { LINES[l.key] = l.text; }); }).catch(() => {});
+
+  function cue(index) {
+    const seg = L.SEGMENTS[index], q = L.QUADS[seg.qi];
+    const where = prefs.mode === 'help' ? 'Their ' + q.label.toLowerCase() : q.label;
+    const key = seg.surface === 'outer' ? `${prefs.mode}-${seg.quad}`
+      : seg.surface === 'chewing' ? (seg.qi % 2 ? 'chew-b' : 'chew-a')
+      : (seg.qi % 2 ? 'inner-b' : 'inner-a');
+    return { where, what: L.SURFACE_LABEL[seg.surface], key };
+  }
+
+  function setCoach(where, what) {
+    const c = $('coach');
+    c.textContent = '';
+    const a = document.createElement('span'); a.textContent = where; c.appendChild(a);
+    if (what) {
+      const s = document.createElement('span'); s.className = 'sep'; s.textContent = '·'; s.setAttribute('aria-hidden', 'true');
+      const b = document.createElement('span'); b.className = 'sub'; b.textContent = what;
+      c.append(s, b);
+    }
+  }
+
+  // ---------- Audio: one queue, so chimes and voice never overlap ----------
+  const CLIP_KEYS = ['me-UR', 'me-UL', 'me-LL', 'me-LR', 'help-UR', 'help-UL', 'help-LL', 'help-LR', 'chew-a', 'chew-b',
+    'inner-a', 'inner-b', 'finale-me', 'finale-help', 'smile', 'paused', 'test'];
+  const Audio = {
+    ctx: null, clips: {}, loading: null, sources: [], speakTimer: 0,
+    ensure() {
+      if (!this.ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) this.ctx = new AC();
+      }
+      if (this.ctx && this.ctx.state === 'suspended' && uiState !== 'paused') this.ctx.resume();
+      if (!this.loading && this.ctx) {
+        const get = (k, tries) => fetch(`voice/${k}.mp3`)
+          .then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+          .catch(e => { if (tries > 0) return new Promise(r => setTimeout(r, 600)).then(() => get(k, tries - 1)); throw e; });
+        this.loading = Promise.all(CLIP_KEYS.map(k => get(k, 1)
+          .then(b => new Promise((ok, no) => this.ctx.decodeAudioData(b, ok, no)))
+          .then(buf => { this.clips[k] = buf; })
+          .catch(() => {})));
+      }
+    },
+    // Drop anything queued that has not started yet; keep what is already playing.
+    // Returns the earliest time something new may start.
+    trim() {
+      const now = this.ctx.currentTime;
+      this.sources = this.sources.filter(s => {
+        if (s.start > now + 0.01) { try { s.node.stop(); } catch (e) {} return false; }
+        return s.end > now;
+      });
+      return Math.max(now + 0.03, ...this.sources.map(s => s.end + 0.15));
+    },
+    stopAll() {
+      this.sources.forEach(s => { try { s.node.stop(); } catch (e) {} });
+      this.sources = [];
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
+      clearTimeout(this.speakTimer);
+    },
+    tone(t, freq, dur, gain) {
+      const c = this.ctx, o = c.createOscillator(), g = c.createGain();
+      o.type = 'sine'; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(gain, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(c.destination); o.start(t); o.stop(t + dur + 0.02);
+      this.sources.push({ node: o, start: t, end: t + dur });
+      return t + dur;
+    },
+    chime(kind, t) {
+      const g = prefs.calm ? 0.05 : 0.09;
+      if (kind === 'quad') { this.tone(t, 659.25, 0.32, g); return this.tone(t + 0.16, 987.77, 0.42, g); }
+      if (kind === 'surface') return this.tone(t, 880, 0.22, g * 0.6);
+      if (kind === 'done') { this.tone(t, 523.25, 0.4, g); this.tone(t + 0.15, 659.25, 0.4, g); return this.tone(t + 0.3, 783.99, 0.6, g); }
+      return t;
+    },
+    /** Chime (optional), then say one line. A new line waits for the one already playing. */
+    async say(key, chime, force) {
+      this.ensure();
+      if (!this.ctx) return this.fallback(key, 0, force);
+      let t = this.trim();
+      if (chime && prefs.sound) t = this.chime(chime, t) + 0.08;
+      if (!(prefs.voice || force) || !key) return;
+      if (!this.clips[key] && this.loading) {
+        await Promise.race([this.loading, new Promise(r => setTimeout(r, 2500))]);
+        t = Math.max(t, this.ctx.currentTime + 0.03);
+      }
+      const buf = this.clips[key];
+      if (!buf) return this.fallback(key, Math.max(0, t - this.ctx.currentTime), force);
+      const src = this.ctx.createBufferSource();
+      src.buffer = buf; src.connect(this.ctx.destination);
+      src.start(t);
+      this.sources.push({ node: src, start: t, end: t + buf.duration, voice: true });
+    },
+    speaking() { return !!this.ctx && this.sources.some(s => s.voice && s.end > this.ctx.currentTime); },
+    stopVoice() {
+      this.sources.filter(s => s.voice).forEach(s => { try { s.node.stop(); } catch (e) {} });
+      this.sources = this.sources.filter(s => !s.voice);
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
+    },
+    // Backup: the browser's own voice, only if the recorded lines could not load.
+    fallback(key, delay, force) {
+      if (!(prefs.voice || force) || !('speechSynthesis' in window) || !LINES[key]) return;
+      $('voiceTag').hidden = false;
+      clearTimeout(this.speakTimer);
+      this.speakTimer = setTimeout(() => {
+        const u = new SpeechSynthesisUtterance(LINES[key]);
+        const voices = speechSynthesis.getVoices().filter(v => /^en([-_]|$)/i.test(v.lang));
+        const rank = v => (/premium|enhanced|natural|neural/i.test(v.name) ? 4 : 0) + (/samantha|ava|allison|aria|jenny|zoe|google us/i.test(v.name) ? 2 : 0) + (/en-US/i.test(v.lang) ? 1 : 0);
+        voices.sort((a, b) => rank(b) - rank(a));
+        if (voices[0]) u.voice = voices[0];
+        u.lang = 'en-US'; u.rate = 0.95;
+        speechSynthesis.speak(u);
+      }, delay * 1000 + 180);
+    },
+    pause() { if (this.ctx && this.ctx.state === 'running') this.ctx.suspend(); if ('speechSynthesis' in window) speechSynthesis.cancel(); },
+    resume() { if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume(); },
+  };
+
+  // ---------- Session flow ----------
+  function setState(next) {
+    uiState = next;
+    document.body.dataset.state = next;
+    document.body.classList.toggle('in-session', next === 'running' || next === 'finale');
+    document.querySelectorAll('[data-show]').forEach(el => { el.hidden = !el.dataset.show.split(' ').includes(next); });
+    if (next === 'running' || next === 'finale' || next === 'smile') window.scrollTo(0, 0);
+    renderCoach();
+    renderClock();
+    describeCanvas();
+  }
+
+  function renderCoach() {
+    if (uiState === 'idle') return setCoach('Ready to brush?', '');
+    if (uiState === 'finale') return setCoach('Brush your tongue, spit, and smile', '');
+    if (uiState === 'smile') return setCoach('Sparkly smile! ✨', '');
+    const c = cue(Math.max(0, S.seg));
+    if (uiState === 'paused') return setCoach('Paused', c.where + ' · ' + c.what);
+    setCoach(c.where, c.what);
+  }
+
+  function handle(ev) {
+    if (ev.type === 'segment') {
+      renderCoach();
+      describeCanvas();
+      Audio.say(cue(ev.index).key, ev.quadChange ? 'quad' : 'surface');
+    } else if (ev.type === 'complete') {
+      setState('finale');
+      Audio.say(prefs.mode === 'help' ? 'finale-help' : 'finale-me', 'done');
+    } else if (ev.type === 'resume') {
+      Audio.resume();
+      if (!Audio.speaking()) Audio.say(cue(ev.index).key, null);
+    }
+  }
+
+  function startOrResume() {
+    Audio.ensure();
+    const events = L.start(S);
+    setState('running');
+    events.forEach(handle);
+    $('pauseBtn').focus({ preventScroll: true });
+  }
+  function pauseSession() {
+    if (!L.pause(S)) return false;
+    Audio.pause();
+    setState('paused');
+    return true;
+  }
+  function restart() {
+    Audio.stopAll(); Audio.resume();
+    L.reset(S);
+    setState('idle');
+    window.scrollTo(0, 0);
+    $('startBtn').focus({ preventScroll: true });
+  }
+
+  $('startBtn').addEventListener('click', startOrResume);
+  $('resumeBtn').addEventListener('click', startOrResume);
+  $('pauseBtn').addEventListener('click', () => { if (pauseSession()) $('resumeBtn').focus({ preventScroll: true }); });
+  $('smileBtn').addEventListener('click', () => {
+    Audio.stopAll(); Audio.ensure();
+    smileAt = performance.now();
+    setState('smile');
+    Audio.say('smile', null);
+    $('againBtn').focus({ preventScroll: true });
+  });
+  $('againBtn').addEventListener('click', restart);
+
+  // Start over only after a deliberate press-and-hold.
+  (() => {
+    const b = $('restartBtn'); let timer = null;
+    const begin = e => {
+      if (timer) return;
+      if (e.type === 'keydown') { if (e.repeat || (e.key !== 'Enter' && e.key !== ' ')) return; e.preventDefault(); }
+      b.classList.add('holding');
+      timer = setTimeout(() => { timer = null; b.classList.remove('holding'); restart(); }, 900);
+    };
+    const cancel = () => { clearTimeout(timer); timer = null; b.classList.remove('holding'); };
+    b.addEventListener('pointerdown', begin);
+    ['pointerup', 'pointerleave', 'pointercancel', 'blur'].forEach(t => b.addEventListener(t, cancel));
+    b.addEventListener('keydown', begin);
+    b.addEventListener('keyup', cancel);
+    b.addEventListener('contextmenu', e => e.preventDefault());
+  })();
+
+  // Leaving the page (another app, a call, the screen locking) pauses the session.
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pauseSession(); });
+  window.addEventListener('pagehide', () => pauseSession());
+
+  // Space bar pauses and resumes when no button has focus.
+  document.addEventListener('keydown', e => {
+    if (e.key !== ' ' || $('settings').open) return;
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    if (tag === 'BUTTON' || tag === 'INPUT' || tag === 'A') return;
+    e.preventDefault();
+    if (uiState === 'running') pauseSession(); else if (uiState === 'idle' || uiState === 'paused') startOrResume();
+  });
+
+  // ---------- Header toggles and settings ----------
+  function renderPrefs() {
+    $('soundBtn').setAttribute('aria-pressed', String(prefs.sound));
+    $('soundBtn').querySelector('.ico').textContent = prefs.sound ? '🔔' : '🔕';
+    $('voiceBtn').setAttribute('aria-pressed', String(prefs.voice));
+    $('voiceBtn').querySelector('.ico').textContent = prefs.voice ? '🗣️' : '🤐';
+    $('optVoice').checked = prefs.voice; $('optSound').checked = prefs.sound; $('optCalm').checked = prefs.calm;
+    document.querySelectorAll('input[name="duration"]').forEach(r => { r.checked = Number(r.value) === prefs.duration; });
+    document.querySelectorAll('input[name="mode"]').forEach(r => { r.checked = r.value === prefs.mode; });
+    $('durationLabel').textContent = prefs.duration / 60 + (prefs.duration === 60 ? ' minute' : ' minutes');
+    document.body.classList.toggle('calm', prefs.calm);
+    readTheme();
+  }
+  $('soundBtn').addEventListener('click', () => { prefs.sound = !prefs.sound; savePrefs(); renderPrefs(); });
+  $('voiceBtn').addEventListener('click', () => { prefs.voice = !prefs.voice; savePrefs(); renderPrefs(); if (!prefs.voice) Audio.stopVoice(); });
+
+  const dlg = $('settings');
+  function openSettings() {
+    pauseSession();
+    renderPrefs();
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  }
+  $('settingsBtn').addEventListener('click', openSettings);
+  $('durationBtn').addEventListener('click', openSettings);
+  dlg.addEventListener('close', () => {
+    const to = uiState === 'paused' ? $('resumeBtn') : uiState === 'idle' ? $('startBtn') : $('settingsBtn');
+    to.focus({ preventScroll: true });
+  });
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  document.querySelectorAll('input[name="duration"]').forEach(r => r.addEventListener('change', () => {
+    prefs.duration = Number(r.value); L.setDuration(S, prefs.duration); savePrefs(); renderPrefs(); renderClock();
+  }));
+  document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener('change', () => {
+    prefs.mode = r.value; savePrefs(); renderPrefs(); layout(); renderCoach();
+  }));
+  $('optVoice').addEventListener('change', e => { prefs.voice = e.target.checked; savePrefs(); renderPrefs(); if (!prefs.voice) Audio.stopVoice(); });
+  $('optSound').addEventListener('change', e => { prefs.sound = e.target.checked; savePrefs(); renderPrefs(); });
+  $('optCalm').addEventListener('change', e => { prefs.calm = e.target.checked; savePrefs(); renderPrefs(); });
+  $('testVoiceBtn').addEventListener('click', () => { Audio.ensure(); Audio.resume(); Audio.stopAll(); Audio.say('test', null, true); });
+
+  // Tell a friend: open the share sheet, or copy the link where sharing is not available.
+  document.querySelectorAll('[data-tell]').forEach(b => b.addEventListener('click', async () => {
+    const url = b.dataset.tell, text = b.dataset.text;
+    try { if (navigator.share) { await navigator.share({ title: document.title, text, url }); return; } await navigator.clipboard.writeText(text + ' ' + url); b.textContent = 'Link copied! Paste it in a message.'; }
+    catch (e) { if (!(e && e.name === 'AbortError')) b.textContent = url; }
+  }));
+
+  // ---------- Clock ----------
+  function renderClock() {
+    const left = Math.max(0, Math.ceil(S.duration - S.elapsed - 1e-9));
+    const txt = Math.floor(left / 60) + ':' + String(left % 60).padStart(2, '0');
+    if ($('clock').textContent !== txt) $('clock').textContent = txt;
+  }
+
+  // ---------- Drawing (the model is lesson.js; this only paints what it says) ----------
+  const canvas = $('mouth'), ctx = canvas.getContext('2d');
+  let G = null;             // geometry for the current size and view
+  let theme = {};
+
+  function readTheme() {
+    const cs = getComputedStyle(document.body);
+    theme = { track: cs.getPropertyValue('--ring-track').trim() || '#dbe4ee', teal: cs.getPropertyValue('--teal-bright').trim() || '#14b8a6' };
+  }
+
+  // Baby-tooth sizes as a fraction of the canvas: [width along the arch, depth across it].
+  const TOOTH = [[0.058, 0.044], [0.05, 0.042], [0.052, 0.05], [0.07, 0.066], [0.074, 0.07]];
+
+  function layout() {
+    const box = $('stage').getBoundingClientRect();
+    const size = Math.max(120, Math.floor(Math.min(box.width, box.height)));
+    const dpr = Math.min(3, window.devicePixelRatio || 1);
+    canvas.style.width = size + 'px'; canvas.style.height = size + 'px';
+    canvas.width = Math.round(size * dpr); canvas.height = Math.round(size * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const s = size, cx = s / 2, cy = s / 2, ax = s * 0.25, ay = s * 0.27;
+    // Arc length along a quarter of the arch, from the front middle to the back.
+    const table = [];
+    let acc = 0, px = 0, py = -ay;
+    for (let i = 0; i <= 400; i++) {
+      const phi = (i / 400) * Math.PI / 2, x = ax * Math.sin(phi), y = -ay * Math.cos(phi);
+      acc += Math.hypot(x - px, y - py); px = x; py = y; table.push([acc, phi]);
+    }
+    const phiAt = d => { for (const [a, p] of table) if (a >= d) return p; return Math.PI / 2; };
+    const gap = s * 0.007;
+    G = { s, cx, cy, teeth: {}, sideSign: {} };
+    for (const q of L.QUADS) {
+      // Mirror view: the child's right is on the right of the screen. Helper view: facing the child.
+      const sign = (q.side === 'right' ? 1 : -1) * (prefs.mode === 'help' ? -1 : 1);
+      const ca = q.jaw === 'upper' ? cy + s * 0.015 : cy - s * 0.015;
+      const list = [];
+      let d = gap / 2;
+      TOOTH.forEach(([fw, fh], k) => {
+        const w = fw * s, h = fh * s;
+        d += w / 2; const phi = phiAt(d); d += w / 2 + gap;
+        const x = cx + sign * ax * Math.sin(phi);
+        const y = q.jaw === 'upper' ? ca - ay * Math.cos(phi) : ca + ay * Math.cos(phi);
+        let nx = (x - cx) / (ax * ax), ny = (y - ca) / (ay * ay); const nl = Math.hypot(nx, ny); nx /= nl; ny /= nl;
+        list.push({ x, y, w, h, nx, ny, tx: -ny, ty: nx, k });   // n points out toward the lips
+      });
+      G.teeth[q.id] = list; G.sideSign[q.id] = sign;
+    }
+  }
+
+  const BUG_COLORS = ['#22c55e', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#ef4444'];
+  const BUG_CALM = ['#9bb5a2', '#c9b48e', '#c4a3b3', '#ada6c6', '#97b9c0', '#c4a1a1'];
+
+  function toothAt(quad, f) {      // a point on the arch at a fractional tooth number
+    const list = G.teeth[quad], a = list[Math.floor(f)], b = list[Math.min(4, Math.ceil(f))], u = f - Math.floor(f);
+    const mix = (p, q) => p + (q - p) * u;
+    let nx = mix(a.nx, b.nx), ny = mix(a.ny, b.ny); const l = Math.hypot(nx, ny); nx /= l; ny /= l;
+    return { x: mix(a.x, b.x), y: mix(a.y, b.y), w: mix(a.w, b.w), h: mix(a.h, b.h), nx, ny, tx: -ny, ty: nx };
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(x, y, w, h, r);
+    else { ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+  }
+
+  function drawTooth(t, active, molar, chewGlow) {
+    ctx.save();
+    ctx.translate(t.x, t.y); ctx.rotate(Math.atan2(t.ty, t.tx));
+    roundRect(-t.w / 2, -t.h / 2, t.w, t.h, Math.min(t.w, t.h) * 0.38);
+    ctx.fillStyle = active ? '#fffdf6' : '#e9e5da';
+    ctx.fill();
+    ctx.lineWidth = 1.2; ctx.strokeStyle = active ? '#d6cfbd' : '#cbc5b6'; ctx.stroke();
+    if (molar) {                    // the bumpy chewing top
+      ctx.strokeStyle = 'rgba(160,150,125,.55)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(-t.w * 0.28, 0); ctx.lineTo(t.w * 0.28, 0); ctx.moveTo(0, -t.h * 0.25); ctx.lineTo(0, t.h * 0.25); ctx.stroke();
+    }
+    if (chewGlow) {
+      roundRect(-t.w / 2 - 3, -t.h / 2 - 3, t.w + 6, t.h + 6, Math.min(t.w, t.h) * 0.45);
+      ctx.strokeStyle = theme.teal; ctx.globalAlpha *= 0.85; ctx.lineWidth = 3; ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function surfaceBand(quad, surface) {   // a glowing line along the coached side of the teeth
+    if (surface === 'chewing') return;
+    const s = G.s, dir = surface === 'outer' ? 1 : -1;
+    ctx.save();
+    ctx.strokeStyle = theme.teal; ctx.globalAlpha *= 0.75; ctx.lineWidth = s * 0.016; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    G.teeth[quad].forEach((t, i) => {
+      const off = t.h / 2 + s * 0.012, x = t.x + dir * t.nx * off, y = t.y + dir * t.ny * off;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function bugPos(b) {
+    const t = G.teeth[b.quad][b.tooth], r = G.s * 0.021;
+    let off = 0;
+    if (b.surface === 'outer') off = t.h / 2 + r * 0.95;
+    if (b.surface === 'inner') off = -(t.h / 2 + r * 0.95);
+    const slide = b.of > 1 ? (b.slot - (b.of - 1) / 2) * t.w * 0.42 : 0;
+    return { x: t.x + t.nx * off + t.tx * slide, y: t.y + t.ny * off + t.ty * slide, r };
+  }
+
+  function drawBug(b, st, brush) {
+    const p = bugPos(b), calm = prefs.calm;
+    let { x, y } = p; const r = p.r * st.scale;
+    if (st.active && !calm) {       // only the bugs being brushed right now fidget
+      x += Math.sin(S.elapsed * 9 + b.id) * G.s * 0.0035;
+      y += Math.cos(S.elapsed * 7 + b.id * 2) * G.s * 0.0025;
+    }
+    ctx.save();
+    ctx.translate(x, y);
+    if (st.scale < 1) ctx.rotate((1 - st.scale) * 3);
+    ctx.fillStyle = (calm ? BUG_CALM : BUG_COLORS)[b.id % 6];
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+    let lx = 0, ly = 0;             // eyes watch the brush when it is near
+    if (st.active && brush) { const dx = brush.x - x, dy = brush.y - y, l = Math.hypot(dx, dy) || 1; lx = dx / l * r * 0.12; ly = dy / l * r * 0.12; }
+    for (const ex of [-0.36, 0.36]) {
+      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(ex * r, -0.15 * r, r * 0.3, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#111827'; ctx.beginPath(); ctx.arc(ex * r + lx, -0.15 * r + ly, r * 0.14, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.strokeStyle = 'rgba(17,24,39,.7)'; ctx.lineWidth = Math.max(1, r * 0.1); ctx.beginPath();
+    if (st.active) ctx.arc(0, r * 0.45, r * 0.18, 0, Math.PI * 2);           // "oh!" — the brush is here
+    else ctx.arc(0, r * 0.2, r * 0.3, 0.15 * Math.PI, 0.85 * Math.PI);     // a smug grin
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function sparkle(x, y, size, alpha) {
+    ctx.save(); ctx.globalAlpha *= alpha; ctx.fillStyle = '#ffffff'; ctx.strokeStyle = 'rgba(234,179,8,.9)'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 - Math.PI / 2, rr = i % 2 ? size * 0.28 : size; ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); }
+    ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+  }
+
+  function brushPlacement(pose) {
+    const s = G.s, t = toothAt(pose.quad, pose.tooth);
+    const BL = s * 0.085, T = s * 0.032;
+    const off = sf => sf === 'outer' ? (t.h / 2 + T / 2 + s * 0.006) : sf === 'chewing' ? 0
+      : -(t.h / 2 + (T / 2) * (1 - pose.tilt) + (BL * 0.42) * pose.tilt + s * 0.006);
+    const o = off(pose.fromSurface) + (off(pose.surface) - off(pose.fromSurface)) * pose.blend;
+    let x = t.x + t.nx * o, y = t.y + t.ny * o;
+    // Strokes run on the lesson clock, so they freeze when paused.
+    const e = S.elapsed, calm = prefs.calm, amp = (pose.settled ? 1 : 0.3) * (calm ? 0.5 : 1), f = calm ? 0.6 : 1;
+    if (pose.stroke === 'circles') { const a = e * Math.PI * 3 * f, r = s * 0.007 * amp; x += (t.tx * Math.cos(a) + t.nx * Math.sin(a)) * r; y += (t.ty * Math.cos(a) + t.ny * Math.sin(a)) * r; }
+    else if (pose.stroke === 'scrub') { const m = Math.sin(e * Math.PI * 4 * f) * s * (pose.surface === 'chewing' ? 0.014 : 0.009) * amp; x += t.tx * m; y += t.ty * m; }
+    else if (pose.stroke === 'vertical') { const m = Math.sin(e * Math.PI * 4 * f) * s * 0.01 * amp; x += t.nx * m; y += t.ny * m; }
+    return { x, y, ang: Math.atan2(t.ty, t.tx) + pose.tilt * Math.PI / 2, t, L: BL, T };
+  }
+
+  function drawBrush(pose, b) {
+    const s = G.s, sign = G.sideSign[pose.quad], upper = pose.quad[0] === 'U';
+    const ux = Math.cos(b.ang), uy = Math.sin(b.ang);
+    const handle = prefs.calm ? '#7fb5ad' : '#14b8a6', handleDark = prefs.calm ? '#5f948c' : '#0f8f83';
+    const alpha = pose.alpha;
+    ctx.save();
+    ctx.lineCap = 'round';
+    // Lying along the teeth: the handle leaves through the corner of the mouth on this side.
+    const flat = 1 - pose.tilt;
+    if (flat > 0.02) {
+      const end = ux * sign >= 0 ? 1 : -1;
+      const ax_ = b.x + ux * end * b.L / 2, ay_ = b.y + uy * end * b.L / 2;
+      const nx_ = ax_ + ux * end * s * 0.035, ny_ = ay_ + uy * end * s * 0.035;
+      const ex = G.cx + sign * s * 0.56, ey = ny_ + (upper ? -1 : 1) * s * 0.01;
+      ctx.globalAlpha = alpha * flat;
+      ctx.strokeStyle = handleDark; ctx.lineWidth = s * 0.016;
+      ctx.beginPath(); ctx.moveTo(ax_, ay_); ctx.lineTo(nx_, ny_); ctx.stroke();
+      ctx.strokeStyle = handle; ctx.lineWidth = s * 0.032;
+      ctx.beginPath(); ctx.moveTo(nx_, ny_); ctx.lineTo(ex, ey); ctx.stroke();
+    }
+    // Held upright behind the front teeth: the handle points straight out toward you.
+    if (pose.tilt > 0.02) {
+      const t = b.t, back = { x: b.x - t.nx * b.L / 2, y: b.y - t.ny * b.L / 2 };
+      const tip = { x: back.x - t.nx * s * 0.045, y: back.y - t.ny * s * 0.045 };
+      ctx.globalAlpha = alpha * pose.tilt;
+      ctx.strokeStyle = handle; ctx.lineWidth = s * 0.03;
+      ctx.beginPath(); ctx.moveTo(back.x, back.y); ctx.lineTo(tip.x, tip.y); ctx.stroke();
+      ctx.fillStyle = handleDark; ctx.beginPath(); ctx.ellipse(tip.x, tip.y, s * 0.026, s * 0.02, 0, 0, Math.PI * 2); ctx.fill();
+    }
+    // The head, bristles toward the teeth.
+    ctx.globalAlpha = alpha;
+    ctx.translate(b.x, b.y); ctx.rotate(b.ang);
+    roundRect(-b.L / 2, -b.T / 2, b.L, b.T, b.T * 0.45);
+    ctx.fillStyle = prefs.calm ? '#e8efee' : '#ffffff'; ctx.fill();
+    ctx.strokeStyle = handleDark; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.fillStyle = prefs.calm ? '#a9c9d6' : '#7dd3fc';
+    // In the head's frame, -y points along the outward normal (toward the lips).
+    if (pose.tilt < 0.5 && pose.surface !== 'chewing') {
+      const towardTooth = pose.surface === 'outer' ? 1 : -1;     // +1: bristles on the inner (+y) side
+      roundRect(-b.L * 0.42, towardTooth > 0 ? b.T * 0.06 : -b.T * 0.46, b.L * 0.84, b.T * 0.4, 2); ctx.fill();
+    } else {
+      for (let i = -3; i <= 3; i++) for (const j of [-1, 1]) { ctx.beginPath(); ctx.arc(i * b.L * 0.12, j * b.T * 0.2, b.T * 0.11, 0, Math.PI * 2); ctx.fill(); }
+    }
+    ctx.restore();
+  }
+
+  function drawOpenMouth(now, opts) {
+    const s = G.s, cx = G.cx, cy = G.cy, calm = prefs.calm;
+    ctx.save();
+    ctx.fillStyle = calm ? '#d9a3ab' : '#f06c84';                       // lips
+    ctx.beginPath(); ctx.ellipse(cx, cy, s * 0.425, s * 0.415, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = calm ? '#6e3c46' : '#6d1830';                       // inside
+    ctx.beginPath(); ctx.ellipse(cx, cy, s * 0.385, s * 0.375, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.clip();
+    ctx.fillStyle = calm ? '#80505a' : '#86243f';                       // roof of the mouth
+    ctx.beginPath(); ctx.ellipse(cx, cy - s * 0.1, s * 0.17, s * 0.11, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = calm ? '#c98d97' : '#f2647e';                       // tongue
+    ctx.beginPath(); ctx.ellipse(cx, cy + s * 0.13, s * 0.17, s * 0.11, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,.12)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx, cy + s * 0.06); ctx.lineTo(cx, cy + s * 0.18); ctx.stroke();
+    if (opts.tongue) { ctx.strokeStyle = theme.teal; ctx.lineWidth = s * 0.012; ctx.beginPath(); ctx.ellipse(cx, cy + s * 0.13, s * 0.18, s * 0.12, 0, 0, Math.PI * 2); ctx.stroke(); }
+    ctx.restore();
+
+    const pose = opts.pose, activeQuad = pose ? pose.quad : null;
+    for (const q of L.QUADS) {
+      const lit = !pose || q.id === activeQuad;
+      G.teeth[q.id].forEach((t, k) => drawTooth(t, lit, k >= 3, pose && q.id === activeQuad && pose.surface === 'chewing' && k >= 3));
+    }
+    if (pose) surfaceBand(pose.quad, pose.surface);
+    const placement = pose ? brushPlacement(pose) : null;
+    if (!opts.allClean) {
+      for (const b of L.BUGS) {
+        const st = L.bugState(b, S.elapsed, S.duration);
+        if (st.alive) drawBug(b, st, placement);
+        else if (st.since < 0.6 && !calm) { const p = bugPos(b), k = 1 - st.since / 0.6; sparkle(p.x, p.y, s * 0.02 * k + 2, k); }
+      }
+    }
+    if (pose) drawBrush(pose, placement);
+    if (opts.tongue) {              // untimed tongue brushing at the end
+      const m = Math.sin(now / 1000 * Math.PI * 2 * (calm ? 0.8 : 1.4)) * s * 0.02;
+      const x = cx, y = cy + s * 0.12 + m;
+      ctx.save(); ctx.lineCap = 'round';
+      ctx.strokeStyle = calm ? '#7fb5ad' : '#14b8a6'; ctx.lineWidth = s * 0.03;
+      ctx.beginPath(); ctx.moveTo(x, y + s * 0.042); ctx.lineTo(x, y + s * 0.09); ctx.stroke();
+      ctx.fillStyle = '#0f8f83'; ctx.beginPath(); ctx.ellipse(x, y + s * 0.09, s * 0.026, s * 0.02, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.translate(x, y); ctx.rotate(Math.PI / 2);
+      roundRect(-s * 0.0425, -s * 0.016, s * 0.085, s * 0.032, s * 0.014);
+      ctx.fillStyle = '#fff'; ctx.fill(); ctx.strokeStyle = '#0f8f83'; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  // The finished smile: same size as the mouth, teeth lined up, a few calm sparkles.
+  function drawSmile(now) {
+    const s = G.s, cx = G.cx, cy = G.cy, calm = prefs.calm;
+    const W = s * 0.72, y0 = cy - s * 0.06, Lx = cx - W / 2, Rx = cx + W / 2;
+    const topCtl = y0 + s * 0.035, botCtl = y0 + s * 0.34;
+    const curve = (x, ctl) => { const u = (x - Lx) / W; return (1 - u) * (1 - u) * y0 + 2 * u * (1 - u) * ctl + u * u * y0; };
+    ctx.save();
+    ctx.beginPath(); ctx.moveTo(Lx, y0); ctx.quadraticCurveTo(cx, topCtl, Rx, y0); ctx.quadraticCurveTo(cx, botCtl, Lx, y0); ctx.closePath();
+    ctx.fillStyle = calm ? '#6e3c46' : '#6d1830'; ctx.fill();
+    ctx.save(); ctx.clip();
+    ctx.fillStyle = calm ? '#d9a3ab' : '#f28ba0';                       // gums
+    ctx.beginPath(); ctx.moveTo(Lx, y0); ctx.quadraticCurveTo(cx, topCtl, Rx, y0); ctx.lineTo(Rx, y0 + s * 0.03); ctx.quadraticCurveTo(cx, topCtl + s * 0.032, Lx, y0 + s * 0.03); ctx.closePath(); ctx.fill();
+    [-2.5, -1.5, -0.5, 0.5, 1.5, 2.5].forEach(i => {                    // lower teeth, just peeking
+      const w = s * 0.05, x = cx + i * (w + s * 0.004), base = curve(x, botCtl);
+      roundRect(x - w / 2, base - s * 0.06, w, s * 0.08, s * 0.012); ctx.fillStyle = '#efece3'; ctx.fill();
+    });
+    const widths = [0.074, 0.062, 0.058, 0.056], heights = [0.11, 0.098, 0.094, 0.082];
+    const teeth = [];
+    for (const side of [-1, 1]) {
+      let x = cx;
+      widths.forEach((fw, k) => {
+        const w = s * fw, h = s * heights[k], mid = x + side * (w / 2 + s * 0.002);
+        x += side * (w + s * 0.004);
+        teeth.push({ x: mid, w, h, k, side });
+      });
+    }
+    teeth.forEach(t => {
+      t.top = curve(t.x, topCtl) + s * 0.022;
+      roundRect(t.x - t.w / 2, t.top - s * 0.02, t.w, t.h + s * 0.02, t.w * 0.3);
+      ctx.fillStyle = '#fffdf6'; ctx.fill(); ctx.strokeStyle = '#ddd6c4'; ctx.lineWidth = 1; ctx.stroke();
+    });
+    ctx.restore();
+    ctx.fillStyle = calm ? '#d9a3ab' : '#f06c84';                       // upper lip
+    ctx.beginPath(); ctx.moveTo(Lx - s * 0.012, y0 + s * 0.004);
+    ctx.bezierCurveTo(Lx + W * 0.2, y0 - s * 0.05, cx - s * 0.07, y0 - s * 0.075, cx, y0 - s * 0.045);
+    ctx.bezierCurveTo(cx + s * 0.07, y0 - s * 0.075, Rx - W * 0.2, y0 - s * 0.05, Rx + s * 0.012, y0 + s * 0.004);
+    ctx.quadraticCurveTo(cx, topCtl, Lx - s * 0.012, y0 + s * 0.004); ctx.fill();
+    ctx.fillStyle = calm ? '#cf96a0' : '#e85b78';                       // lower lip
+    ctx.beginPath(); ctx.moveTo(Lx - s * 0.012, y0 + s * 0.004); ctx.quadraticCurveTo(cx, botCtl, Rx + s * 0.012, y0 + s * 0.004);
+    ctx.quadraticCurveTo(cx, botCtl + s * 0.16, Lx - s * 0.012, y0 + s * 0.004); ctx.fill();
+    const lipY = curve(cx, botCtl);
+    ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = s * 0.01; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(cx - s * 0.08, lipY + s * 0.05); ctx.quadraticCurveTo(cx, lipY + s * 0.065, cx + s * 0.08, lipY + s * 0.05); ctx.stroke();
+    // Sparkles: one short twinkle each, then they settle and stay.
+    const u = (now - smileAt) / 1000;
+    [teeth.find(t => t.k === 0 && t.side < 0), teeth.find(t => t.k === 1 && t.side > 0), teeth.find(t => t.k === 2 && t.side < 0)].forEach((t, i) => {
+      const local = u - 0.5 - i * 0.25;
+      let size = 0.55;
+      if (!calm && local < 0) size = 0;
+      else if (!calm && local < 0.7) size = 0.55 + Math.sin(local / 0.7 * Math.PI) * 0.7;
+      if (size > 0) sparkle(t.x + t.w * 0.18, t.top + t.h * 0.3, s * 0.03 * size, 0.95);
+    });
+    ctx.restore();
+  }
+
+  function drawRing(progress, done) {
+    const s = G.s, cx = G.cx, cy = G.cy, R = s * 0.472, w = s * 0.022;
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = theme.track; ctx.lineWidth = w;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+    if (progress > 0) {
+      ctx.strokeStyle = done ? (prefs.calm ? '#9cc3a5' : '#22c55e') : theme.teal;
+      ctx.beginPath(); ctx.arc(cx, cy, R, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(1, progress)); ctx.stroke();
+    }
+    for (let i = 0; i < 4; i++) {   // a dot for each part of the mouth
+      const a = -Math.PI / 2 + i * Math.PI / 2;
+      ctx.beginPath(); ctx.arc(cx + Math.cos(a) * R, cy + Math.sin(a) * R, w * 0.32, 0, Math.PI * 2);
+      ctx.fillStyle = done || progress * 4 > i + 1e-9 ? '#ffffff' : 'rgba(100,116,139,.6)'; ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function draw(now) {
+    if (!G) return;
+    ctx.clearRect(0, 0, G.s, G.s);
+    if (uiState === 'smile') {
+      const u = Math.min(1, (now - smileAt) / (prefs.calm ? 300 : 600));
+      if (u < 1) { ctx.save(); ctx.globalAlpha = 1 - u; drawOpenMouth(now, { allClean: true }); ctx.restore(); }
+      ctx.save(); ctx.globalAlpha = u; drawSmile(now); ctx.restore();
+      drawRing(1, true);
+    } else if (uiState === 'finale') {
+      drawOpenMouth(now, { allClean: true, tongue: true });
+      drawRing(1, true);
+    } else {
+      drawOpenMouth(now, { pose: uiState === 'idle' ? null : L.brushPose(S.elapsed, S.duration) });
+      drawRing(S.elapsed / S.duration, false);
+    }
+  }
+
+  function describeCanvas() {
+    let label;
+    if (uiState === 'smile') label = 'A clean, sparkly smile.';
+    else if (uiState === 'finale') label = 'All the teeth are clean. A toothbrush is on the tongue.';
+    else if (uiState === 'idle') label = 'A wide-open mouth. Sugar bugs sit on the outsides, chewing tops and insides of the teeth.';
+    else {
+      const seg = L.SEGMENTS[Math.max(0, S.seg)], q = L.QUADS[seg.qi];
+      const left = L.BUGS.filter(b => L.bugState(b, S.elapsed, S.duration).alive).length;
+      label = `The toothbrush is on the ${q.label.toLowerCase()} teeth${prefs.mode === 'help' ? ' (the child’s ' + q.side + ')' : ''}: ${L.SURFACE_LABEL[seg.surface].toLowerCase()}. ${left} sugar bugs left.`;
+    }
+    canvas.setAttribute('aria-label', label);
+  }
+
+  // ---------- Main loop: one clock for everything ----------
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.25, Math.max(0, (now - last) / 1000)); last = now;
+    L.tick(S, dt).forEach(handle);
+    if (uiState === 'running') renderClock();
+    draw(now);
+    requestAnimationFrame(frame);
+  }
+
+  // ---------- Start up ----------
+  renderPrefs();
+  layout();
+  setState('idle');
+  new ResizeObserver(() => layout()).observe($('stage'));
+  const dark = matchMedia('(prefers-color-scheme: dark)');
+  if (dark.addEventListener) dark.addEventListener('change', readTheme);
+  requestAnimationFrame(frame);
+
+  // For automated checks only; no effect on play.
+  window.__toothbrush = { S, L, prefs, Audio, get state() { return uiState; } };
+})();
+</script>
 </body>
 </html>
