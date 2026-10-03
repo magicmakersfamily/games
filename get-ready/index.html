@@ -79,7 +79,9 @@
     display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 12px;
     border-radius: 16px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
   }
-  .weather { position: relative; }
+  .weather-slot { position: relative; }
+  .wx-source { margin: 0 0 10px; font-size: 13px; color: var(--text); line-height: 1.45; }
+  .wx-source small { display: block; color: var(--faint); font-size: 11px; }
   .weather .w-icon { font-size: 22px; }
   .w-main { border: 0; background: transparent; padding: 2px 4px; border-radius: 10px; text-align: left; display: flex; flex-direction: column; }
   .w-main:hover { background: rgba(255,255,255,.06); }
@@ -117,37 +119,54 @@
   .dest-card {
     margin-block: 4px 12px; padding: 14px 16px; border-radius: var(--radius);
     background: linear-gradient(135deg, rgba(79,70,229,.18), rgba(56,189,248,.08)); border: 1px solid rgba(129,140,248,.3);
-    display: grid; grid-template-columns: minmax(0, 1.4fr) auto auto minmax(0, 1.2fr) auto; gap: 14px; align-items: end;
+    display: flex; flex-direction: column; gap: 10px;
   }
-  .field label { display: block; font-size: 11px; font-weight: 600; color: #c7d2fe; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
-  .field input {
-    width: 100%; height: 40px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--line);
-    background: rgba(11,18,34,.7); font-weight: 600; outline: none;
-  }
-  .field input:focus { border-color: var(--amber); }
   .stepper { display: inline-flex; align-items: center; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: rgba(11,18,34,.7); overflow: hidden; }
   .stepper button { width: 32px; height: 100%; border: 0; background: transparent; color: var(--muted); font-size: 18px; font-weight: 600; }
   .stepper button:hover { color: var(--amber); background: rgba(255,255,255,.05); }
   .stepper input { width: 44px; height: 100%; border: 0; background: transparent; text-align: center; font-family: var(--mono); font-weight: 700; outline: none; -moz-appearance: textfield; }
   .stepper input::-webkit-inner-spin-button, .stepper input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   .stepper .unit { padding-right: 10px; color: var(--faint); font-size: 12px; }
-  .field input[type="time"] { width: 130px; font-family: var(--mono); }
-
-  .eta { display: flex; align-items: center; gap: 12px; min-width: 0; }
-  .eta-block { min-width: 0; }
-  .eta-label { font-size: 11px; font-weight: 600; color: #c7d2fe; text-transform: uppercase; letter-spacing: .08em; }
-  .eta-time { font-family: var(--mono); font-weight: 700; font-size: 22px; line-height: 1.2; }
-  .eta-arrow { color: var(--faint); font-size: 18px; padding-top: 14px; }
-  .eta-status { font-size: 12px; font-weight: 600; margin-top: 2px; }
+  .place-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .search { position: relative; flex: 1 1 320px; min-width: 0; }
+  .search input {
+    width: 100%; height: 46px; padding: 0 14px 0 42px; border-radius: 14px; border: 1px solid var(--line);
+    background: rgba(11,18,34,.85); font-weight: 600; font-size: 16px; outline: none;
+  }
+  .search input:focus { border-color: var(--amber); }
+  .search input::placeholder { color: var(--faint); }
+  .search .s-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); pointer-events: none; }
+  .suggest {
+    position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 45; list-style: none; margin: 0; padding: 4px;
+    background: var(--bg-deep); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.45);
+    max-height: 320px; overflow-y: auto;
+  }
+  .suggest li { display: flex; gap: 10px; align-items: flex-start; padding: 9px 10px; border-radius: 10px; cursor: pointer; }
+  .suggest li[aria-selected="true"], .suggest li:hover { background: var(--surface-2); }
+  .suggest .s-pin { color: #fb7185; padding-top: 1px; }
+  .suggest .s-name { font-weight: 600; }
+  .suggest .s-addr { font-size: 12px; color: var(--muted); }
+  .suggest li.s-empty { color: var(--faint); font-size: 13px; cursor: default; background: none; }
+  .from-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: #c7d2fe; }
+  .from-line .linkish { color: var(--amber); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+  .from-box { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .from-box .search input { height: 40px; font-size: 14px; }
+  .times { display: flex; align-items: flex-end; gap: 10px 12px; flex-wrap: wrap; }
+  .t-field label { display: block; font-size: 11px; font-weight: 600; color: #c7d2fe; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
+  .t-field input[type="time"] {
+    height: 44px; width: 150px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--line); background: rgba(11,18,34,.85);
+    font-family: var(--mono); font-weight: 700; font-size: 18px; outline: none;
+  }
+  .t-field input[type="time"]:focus { border-color: var(--amber); }
+  .t-field .stepper { height: 44px; }
+  .t-arrow { color: var(--faint); font-size: 18px; padding-bottom: 11px; }
+  .drive-note { font-size: 11px; color: var(--faint); margin-top: 4px; max-width: 220px; }
+  .eta-status { font-size: 13px; font-weight: 600; padding-bottom: 12px; }
   .eta-status.good { color: var(--green); }
   .eta-status.bad { color: #fb7185; }
-  .eta-status button {
-    margin-left: 6px; border: 0; background: var(--amber); color: var(--amber-ink); font-weight: 700; font-size: 11px;
-    border-radius: 8px; padding: 3px 8px;
-  }
   .dest-actions { display: flex; align-items: center; gap: 8px; }
   .maps-link {
-    display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 12px;
+    display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 14px; border-radius: 14px;
     background: var(--indigo); color: #fff; text-decoration: none; font-weight: 600; font-size: 14px; white-space: nowrap;
   }
   .maps-link:hover { background: #6366f1; }
@@ -211,6 +230,7 @@
     font-size: calc(var(--ring) * 0.2); margin-block: 10px 6px; cursor: pointer; font-variant-numeric: tabular-nums;
     border-radius: 14px; padding: 2px 8px; transition: color .2s, background .2s, font-size .45s cubic-bezier(.2,.8,.2,1);
   }
+  .time.long { font-size: calc(var(--ring) * 0.14); }
   .time:hover { color: var(--amber); background: rgba(255,255,255,.04); }
   .time-edit { display: none; align-items: center; gap: 6px; margin-block: 10px 6px; }
   .time-edit.show { display: flex; }
@@ -372,10 +392,7 @@
 
   /* ---------- Responsive ---------- */
   @media (max-width: 900px) {
-    .dest-card { grid-template-columns: 1fr 1fr; }
-    .dest-card .f-name { grid-column: 1 / -1; }
-    .eta { grid-column: 1 / -1; }
-    .dest-actions { grid-column: 1 / -1; }
+    .t-field input[type="time"] { width: 128px; font-size: 16px; }
     .layout, .layout.steps-open { grid-template-columns: minmax(0, 1fr); gap: 16px; }
     .panel-shell { display: none; }
     .layout.steps-open .panel-shell { display: block; }
@@ -408,23 +425,30 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
         <span>Destination</span>
       </button>
-      <div class="weather" id="weather">
-        <span class="w-icon" id="weatherIcon">🌤️</span>
-        <button class="w-main" id="weatherMain" type="button" onclick="toggleZip()" title="Set your ZIP code">
-          <span class="w-line"><span class="w-temp" id="tempDisplay">Weather</span><span class="w-cond" id="weatherCond" hidden></span></span>
-          <span class="w-advice" id="apparelAdvice">Add your ZIP code</span>
+      <div class="weather-slot" id="weather">
+        <button class="chip-btn" id="wxOff" type="button" onclick="toggleZip(true)">
+          <span aria-hidden="true">🌤️</span><span>See the Weather</span>
         </button>
-        <button class="icon-btn" id="weatherRefresh" type="button" title="Refresh weather" onclick="refreshWeather(true)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
-        </button>
+        <div class="weather" id="wxOn" hidden>
+          <span class="w-icon" id="weatherIcon">🌤️</span>
+          <button class="w-main" id="weatherMain" type="button" onclick="toggleZip()" title="Weather details">
+            <span class="w-line"><span class="w-temp" id="tempDisplay">--°F</span><span class="w-cond" id="weatherCond"></span></span>
+            <span class="w-advice" id="apparelAdvice">Loading weather…</span>
+          </button>
+          <button class="icon-btn" id="weatherRefresh" type="button" title="Refresh weather" onclick="refreshWeather(true)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+          </button>
+        </div>
         <form class="zip-pop" id="zipPop" hidden>
-          <label for="zipInput">ZIP code for local weather</label>
+          <p class="wx-source" id="wxSource" hidden></p>
+          <label for="zipInput">ZIP code for current weather</label>
           <div class="zip-row">
             <input id="zipInput" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" placeholder="94110">
-            <button type="submit" class="btn-solid">Set</button>
+            <button type="submit" class="btn-solid">Show</button>
           </div>
           <p class="zip-err" id="zipErr" hidden></p>
-          <p class="zip-note">The ZIP code is sent to Open-Meteo, a free weather service, to look up the forecast. Nothing else leaves this page.</p>
+          <p class="zip-note">Current conditions come from the nearest National Weather Service station; the day’s high, low and rain chance from Open-Meteo. Only the ZIP code’s location is sent to them.</p>
+          <button type="button" class="btn-ghost" id="wxTurnOff" onclick="turnOffWeather()" hidden>Turn off weather</button>
         </form>
       </div>
     </div>
@@ -433,50 +457,57 @@
   <div class="dest-wrap" id="destWrap" inert>
     <div class="dest-inner">
       <div class="dest-card">
-        <div class="field f-name">
-          <label for="destName">Where to?</label>
-          <input id="destName" type="text" list="destSuggestions" placeholder="Grandma's House" autocomplete="off">
-          <datalist id="destSuggestions">
-            <option value="Grandma's House"></option>
-            <option value="School"></option>
-            <option value="Soccer Practice"></option>
-            <option value="Airport"></option>
-          </datalist>
-        </div>
-        <div class="field">
-          <label for="driveMins">Drive time</label>
-          <div class="stepper">
-            <button onclick="nudgeDrive(-5)" aria-label="Less drive time">−</button>
-            <input id="driveMins" type="number" min="0" max="600" value="20">
-            <span class="unit">min</span>
-            <button onclick="nudgeDrive(5)" aria-label="More drive time">+</button>
+        <div class="place-row">
+          <div class="search">
+            <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+            <input id="destQuery" type="search" placeholder="Search for a place or address" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="destSuggest" aria-label="Where to?">
+            <ul class="suggest" id="destSuggest" role="listbox" hidden></ul>
+          </div>
+          <div class="dest-actions">
+            <a class="maps-link disabled" id="mapsLink" href="https://www.google.com/maps" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+              Open in Google Maps
+            </a>
+            <button class="icon-btn" type="button" title="Turn off destination" onclick="toggleDestination(false)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
           </div>
         </div>
-        <div class="field">
-          <label for="arriveBy">Arrive by</label>
-          <input id="arriveBy" type="time">
+        <div class="from-line">
+          <span id="fromLabel">Leaving from: not set</span>
+          <button class="linkish" type="button" id="fromToggle" onclick="toggleFrom()">Change</button>
         </div>
-        <div class="eta">
-          <div class="eta-block">
-            <div class="eta-label">Leave</div>
-            <div class="eta-time" id="leaveAt">--:--</div>
+        <div class="from-box" id="fromBox" hidden>
+          <div class="search">
+            <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+            <input id="fromQuery" type="search" placeholder="Where are you leaving from?" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="fromSuggest" aria-label="Leaving from">
+            <ul class="suggest" id="fromSuggest" role="listbox" hidden></ul>
           </div>
-          <div class="eta-arrow">→</div>
-          <div class="eta-block">
-            <div class="eta-label">Arrive</div>
-            <div class="eta-time" id="arriveAt">--:--</div>
-            <div class="eta-status" id="etaStatus"></div>
+          <button class="btn-ghost" type="button" onclick="useMyLocation()">Use my location</button>
+        </div>
+        <div class="times">
+          <div class="t-field">
+            <label for="leaveTime">Leave at</label>
+            <input id="leaveTime" type="time">
           </div>
+          <div class="t-arrow">→</div>
+          <div class="t-field">
+            <label for="driveMins">Drive</label>
+            <div class="stepper">
+              <button type="button" onclick="nudgeDrive(-1)" aria-label="Shorter drive">−</button>
+              <input id="driveMins" type="number" min="0" max="900" value="20">
+              <span class="unit">min</span>
+              <button type="button" onclick="nudgeDrive(1)" aria-label="Longer drive">+</button>
+            </div>
+          </div>
+          <div class="t-arrow">→</div>
+          <div class="t-field">
+            <label for="arriveTime">Arrive at</label>
+            <input id="arriveTime" type="time">
+          </div>
+          <div class="eta-status" id="etaStatus"></div>
         </div>
-        <div class="dest-actions">
-          <a class="maps-link disabled" id="mapsLink" href="https://www.google.com/maps" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-            Check route
-          </a>
-          <button class="icon-btn" title="Remove destination" onclick="toggleDestination(false)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-          </button>
-        </div>
+        <div class="drive-note" id="driveNote" style="max-width:none">Change Leave or Arrive and the timer follows.</div>
       </div>
     </div>
   </div>
@@ -585,7 +616,7 @@
 </div>
 
 <footer class="shelf-foot">
-  <p><b>Version 1.1</b> · Launched <time datetime="2026-10-02">October 2, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.1">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.1&amp;kind=bug">Report a bug</a></p>
+  <p><b>Version 1.2</b> · Launched <time datetime="2026-10-02">October 2, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.2">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.2&amp;kind=bug">Report a bug</a></p>
   <p>Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></p>
   <p>These games don’t collect any information. Saved progress stays in your own browser.</p>
   <p>Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/get-ready/" data-text="A calm countdown that tells the kids what to do next: Get Ready To Go!">Tell a friend</button></p>
@@ -599,7 +630,7 @@
   const S = {
     total: 1800, remaining: 1800, running: false, interval: null,
     steps: [], stepsOpen: false,
-    dest: { on: false, name: '', drive: 20, arriveBy: '' },
+    dest: { on: false, place: null, from: null, drive: 20, driveAuto: false, miles: 0, anchor: 'leave', arriveAt: 0 },
     muted: false, voice: 'calm', chime: true,
     endAt: 0, zip: '', loc: null, wx: null,
   };
@@ -609,7 +640,7 @@
       const d = JSON.parse(localStorage.getItem('grtg') || 'null');
       if (!d) return;
       if (Array.isArray(d.steps)) S.steps = d.steps.map(s => ({ ...s, done: false }));
-      if (d.dest) S.dest = { ...S.dest, ...d.dest, on: false };
+      if (d.dest) S.dest = { ...S.dest, place: d.dest.place || null, from: d.dest.from || null, drive: d.dest.drive ?? 20, driveAuto: !!d.dest.driveAuto, miles: d.dest.miles || 0, on: false };
       if (typeof d.total === 'number' && d.total > 0) { S.total = d.total; S.remaining = d.total; }
       ['muted', 'voice', 'chime', 'zip', 'loc'].forEach(k => { if (k in d) S[k] = d[k]; });
     } catch (e) {}
@@ -618,14 +649,16 @@
     try {
       localStorage.setItem('grtg', JSON.stringify({
         steps: S.steps.map(({ id, text, minute }) => ({ id, text, minute })),
-        dest: { name: S.dest.name, drive: S.dest.drive, arriveBy: S.dest.arriveBy },
+        dest: { place: S.dest.place, from: S.dest.from, drive: S.dest.drive, driveAuto: S.dest.driveAuto, miles: S.dest.miles },
         total: S.total, muted: S.muted, voice: S.voice, chime: S.chime, zip: S.zip, loc: S.loc,
       }));
     } catch (e) {}
   }
 
   const $ = id => document.getElementById(id);
-  const fmt = s => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+  const fmt = s => s >= 3600
+    ? `${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
+    : `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
   const clock = d => d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
   const esc = s => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -782,7 +815,7 @@
     if (now === 0) {
       pause();
       confetti();
-      speak(S.dest.on && S.dest.name ? `Time to go to ${S.dest.name}!` : 'Time to go!', true, 'reminder');
+      speak(destName() ? `Time to go to ${destName()}!` : 'Time to go!', true, 'reminder');
     }
     renderAll();
   }
@@ -798,11 +831,12 @@
     S.remaining = Math.max(0, S.remaining + d);
     if (S.remaining > S.total) S.total = S.remaining;
     if (S.running) S.endAt = Date.now() + S.remaining * 1000;
+    S.dest.anchor = 'leave';
     S.steps.forEach(s => { if (s.minute * 60 > S.remaining) s.done = true; else if (d > 0 && s.minute * 60 < S.remaining) s.done = false; });
     save(); renderAll();
   }
   function setPreset(m) {
-    pause(); clearSpeech(); S.total = m * 60; S.remaining = S.total; S.steps.forEach(s => s.done = false);
+    pause(); clearSpeech(); S.dest.anchor = 'leave'; S.total = m * 60; S.remaining = S.total; S.steps.forEach(s => s.done = false);
     save(); renderAll(); speak(`Timer set to ${m} minutes.`, false);
   }
 
@@ -821,7 +855,7 @@
     let m = parseInt($('editMins').value, 10), s = parseInt($('editSecs').value, 10);
     m = isNaN(m) || m < 0 ? 0 : Math.min(m, 600);
     s = isNaN(s) || s < 0 ? 0 : Math.min(s, 59);
-    S.remaining = m * 60 + s;
+    S.remaining = m * 60 + s; S.dest.anchor = 'leave';
     S.total = Math.max(S.remaining, 1);
     editing = false;
     $('timeDisplay').style.display = '';
@@ -1003,64 +1037,194 @@
   }
   function renderSub() {
     const el = $('subLine');
-    if (S.remaining === 0) el.innerHTML = S.dest.on && S.dest.name ? `Time to go to <b>${esc(S.dest.name)}</b>!` : 'Time to go!';
-    else if (S.dest.on && S.dest.name) el.innerHTML = `Heading to <b>${esc(S.dest.name)}</b>`;
+    if (S.remaining === 0) el.innerHTML = destName() ? `Time to go to <b>${esc(destName())}</b>!` : 'Time to go!';
+    else if (destName()) el.innerHTML = `Heading to <b>${esc(destName())}</b>`;
     else el.textContent = S.running ? `Leaving at ${clock(new Date(Date.now() + S.remaining * 1000))}` : 'Tap the time to change it';
   }
+  function destName() { return S.dest.on && S.dest.place ? S.dest.place.name : ''; }
+  const hhmm = d => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  const roundMin = ms => new Date(Math.round(ms / 60000) * 60000);
   function renderDest() {
     $('destToggle').classList.toggle('on', S.dest.on);
-    $('destToggle').querySelector('span').textContent = S.dest.on ? (S.dest.name || 'Destination') : 'Destination';
+    $('destToggle').querySelector('span').textContent = S.dest.on && S.dest.place ? S.dest.place.name : 'Destination';
     $('destWrap').classList.toggle('open', S.dest.on);
     $('destWrap').inert = !S.dest.on;
     if (!S.dest.on) return;
-    const leave = new Date(Date.now() + S.remaining * 1000);
-    const arrive = new Date(leave.getTime() + S.dest.drive * 60000);
-    $('leaveAt').textContent = clock(leave);
-    $('arriveAt').textContent = clock(arrive);
+    const leaveMs = Date.now() + S.remaining * 1000;
+    const arriveMs = leaveMs + S.dest.drive * 60000;
+    const ae = document.activeElement;
+    if (ae !== $('leaveTime')) $('leaveTime').value = hhmm(roundMin(leaveMs));
+    if (ae !== $('arriveTime')) $('arriveTime').value = hhmm(roundMin(arriveMs));
+    if (ae !== $('driveMins')) $('driveMins').value = S.dest.drive;
+    if (ae !== $('destQuery') && S.dest.place && !$('destQuery').value) $('destQuery').value = S.dest.place.name;
+
+    const f = S.dest.from;
+    $('fromLabel').textContent = f ? `Leaving from: ${f.name}` : 'Leaving from: not set';
+    $('fromToggle').textContent = f ? 'Change' : 'Set it';
+
     const st = $('etaStatus');
-    if (S.dest.arriveBy) {
-      const [h, m] = S.dest.arriveBy.split(':').map(Number);
-      const target = new Date(); target.setHours(h, m, 0, 0);
-      if (target.getTime() < Date.now() - 6 * 3600000) target.setDate(target.getDate() + 1);
-      const slack = Math.round((target - arrive) / 60000);
+    if (S.dest.anchor === 'arrive' && S.dest.arriveAt) {
+      const slack = Math.round((S.dest.arriveAt - arriveMs) / 60000);
       st.className = 'eta-status ' + (slack >= 0 ? 'good' : 'bad');
-      st.innerHTML = (slack >= 0 ? `${slack} min to spare` : `${-slack} min late`) +
-        `<button onclick="matchTimer()" title="Set the countdown so you leave exactly on time">Match timer</button>`;
-    } else {
-      st.className = 'eta-status'; st.textContent = '';
-    }
-    const has = !!S.dest.name.trim();
-    $('mapsLink').classList.toggle('disabled', !has);
-    $('mapsLink').href = has ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(S.dest.name)}&travelmode=driving` : 'https://www.google.com/maps';
+      st.textContent = slack === 0 ? 'Right on time' : slack > 0 ? `${slack} min to spare` : `${-slack} min late`;
+    } else { st.className = 'eta-status'; st.textContent = ''; }
+
+    const note = $('driveNote');
+    if (routing) note.textContent = 'Finding the drive time…';
+    else if (routeError) note.textContent = routeError;
+    else if (S.dest.place && S.dest.driveAuto) note.textContent = `${S.dest.miles} mi. Usual drive time without traffic; check Google Maps for traffic and adjust the minutes. Change Leave or Arrive and the timer follows.`;
+    else if (S.dest.place && !f) note.textContent = 'Set where you’re leaving from to get the drive time. Change Leave or Arrive and the timer follows.';
+    else note.textContent = 'Change Leave or Arrive and the timer follows.';
+
+    const p = S.dest.place;
+    $('mapsLink').classList.toggle('disabled', !p);
+    $('mapsLink').href = p
+      ? `https://www.google.com/maps/dir/?api=1${f ? `&origin=${f.lat},${f.lon}` : ''}&destination=${encodeURIComponent([p.name, p.addr].filter(Boolean).join(', '))}&travelmode=driving`
+      : 'https://www.google.com/maps';
   }
   function renderAll() {
-    if (!editing) $('timeDisplay').textContent = fmt(S.remaining);
+    if (!editing) { $('timeDisplay').textContent = fmt(S.remaining); $('timeDisplay').classList.toggle('long', S.remaining >= 3600); }
     renderGo(); renderRing(); renderNext(); renderSteps(); renderSub(); renderDest();
   }
 
   // ---------- Destination ----------
+  // Place search: OpenStreetMap's Photon geocoder (free, no key). Drive time: OSRM's public router.
+  let routing = false, routeError = '';
   function toggleDestination(force) {
     S.dest.on = typeof force === 'boolean' ? force : !S.dest.on;
+    if (S.dest.on) defaultFrom();
     renderAll();
-    if (S.dest.on) setTimeout(() => { if (!S.dest.name) $('destName').focus(); }, 300);
+    if (S.dest.on) setTimeout(() => { if (!S.dest.place) $('destQuery').focus(); }, 300);
   }
-  $('destName').addEventListener('input', e => { S.dest.name = e.target.value; save(); renderSub(); renderDest(); });
-  $('destName').addEventListener('change', e => { if (S.dest.name.trim()) speak(`Destination set to ${S.dest.name.trim()}.`, false); });
-  $('driveMins').addEventListener('input', e => { S.dest.drive = Math.max(0, parseInt(e.target.value, 10) || 0); save(); renderDest(); });
-  $('arriveBy').addEventListener('input', e => { S.dest.arriveBy = e.target.value; save(); renderDest(); });
-  function nudgeDrive(d) { S.dest.drive = Math.max(0, S.dest.drive + d); $('driveMins').value = S.dest.drive; save(); renderDest(); }
-  function matchTimer() {
-    if (!S.dest.arriveBy) return;
-    const [h, m] = S.dest.arriveBy.split(':').map(Number);
-    const target = new Date(); target.setHours(h, m, 0, 0);
-    if (target.getTime() < Date.now() - 6 * 3600000) target.setDate(target.getDate() + 1);
-    const secs = Math.max(0, Math.round((target - Date.now()) / 1000) - S.dest.drive * 60);
-    const wasRunning = S.running; pause();
-    S.remaining = secs; S.total = Math.max(secs, 1); rearm(); S.steps.forEach(s => s.done = s.minute * 60 > secs);
+  function defaultFrom() {
+    if (!S.dest.from && S.loc) S.dest.from = { name: `around ZIP ${S.zip}`, lat: S.loc.lat, lon: S.loc.lon, fromZip: true };
+  }
+  function toPlace(f) {
+    const p = f.properties, [lon, lat] = f.geometry.coordinates;
+    const street = [p.housenumber, p.street].filter(Boolean).join(' ');
+    const name = p.name || street || p.city || p.county || 'Unnamed place';
+    const addr = [p.name && street ? street : '', p.city || p.district || p.county, p.state, p.countrycode && p.countrycode !== 'US' ? p.country : '']
+      .filter(Boolean).filter((x, i, a) => a.indexOf(x) === i && x !== name).join(', ');
+    return { name, addr, lat, lon };
+  }
+  function makeSearch(inputId, listId, onPick, bias) {
+    const input = $(inputId), list = $(listId);
+    let items = [], sel = -1, timer = null, seq = 0;
+    const close = () => { list.hidden = true; input.setAttribute('aria-expanded', 'false'); };
+    const show = html => { list.innerHTML = html; list.hidden = false; input.setAttribute('aria-expanded', 'true'); };
+    const draw = () => show(items.length
+      ? items.map((it, i) => `<li role="option" data-i="${i}" aria-selected="${i === sel}"><span class="s-pin">●</span><span><div class="s-name">${esc(it.name)}</div><div class="s-addr">${esc(it.addr)}</div></span></li>`).join('')
+      : '<li class="s-empty">No matches. Try a street address, a business name or a town.</li>');
+    const pick = it => { close(); input.value = it.name; onPick(it); };
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      const q = input.value.trim();
+      if (q.length < 3) { close(); return; }
+      timer = setTimeout(async () => {
+        const my = ++seq;
+        try {
+          const b = bias();
+          const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=6&lang=en${b ? `&lat=${b.lat}&lon=${b.lon}` : ''}`;
+          const j = await (await fetch(url)).json();
+          if (my !== seq) return;
+          items = (j.features || []).map(toPlace); sel = items.length ? 0 : -1; draw();
+        } catch (e) {
+          if (my === seq) show('<li class="s-empty">Place search isn’t reachable right now. You can still type the drive time.</li>');
+        }
+      }, 300);
+    });
+    input.addEventListener('keydown', e => {
+      if (list.hidden || !items.length) return;
+      if (e.key === 'ArrowDown') { sel = Math.min(items.length - 1, sel + 1); draw(); e.preventDefault(); }
+      else if (e.key === 'ArrowUp') { sel = Math.max(0, sel - 1); draw(); e.preventDefault(); }
+      else if (e.key === 'Enter') { pick(items[Math.max(0, sel)]); e.preventDefault(); }
+      else if (e.key === 'Escape') close();
+    });
+    list.addEventListener('mousedown', e => {
+      const li = e.target.closest('li[data-i]'); if (!li) return;
+      e.preventDefault(); pick(items[+li.dataset.i]);
+    });
+    input.addEventListener('blur', () => setTimeout(close, 150));
+  }
+  makeSearch('destQuery', 'destSuggest', it => {
+    S.dest.place = it; defaultFrom(); save();
+    if (!S.dest.from) toggleFrom(true);
+    speak(`Destination set to ${it.name}.`, false);
+    routeDrive();
+  }, () => S.dest.from || S.loc);
+  makeSearch('fromQuery', 'fromSuggest', it => {
+    S.dest.from = { name: it.name, lat: it.lat, lon: it.lon }; save(); toggleFrom(false); routeDrive();
+  }, () => S.loc);
+  function toggleFrom(force) {
+    const box = $('fromBox');
+    box.hidden = typeof force === 'boolean' ? !force : !box.hidden;
+    if (!box.hidden) setTimeout(() => $('fromQuery').focus(), 0);
+  }
+  function useMyLocation() {
+    if (!navigator.geolocation) { routeError = 'This browser can’t share your location. Search for it instead.'; renderDest(); return; }
+    navigator.geolocation.getCurrentPosition(pos => {
+      S.dest.from = { name: 'your current location', lat: pos.coords.latitude, lon: pos.coords.longitude };
+      save(); toggleFrom(false); routeDrive();
+    }, () => { routeError = 'Location isn’t available here. Search for where you’re leaving from instead.'; renderDest(); }, { timeout: 10000 });
+  }
+  async function routeDrive() {
+    const a = S.dest.from, b = S.dest.place;
+    routeError = '';
+    if (!a || !b) { renderAll(); return; }
+    routing = true; renderDest();
+    try {
+      const j = await (await fetch(`https://router.project-osrm.org/route/v1/driving/${a.lon},${a.lat};${b.lon},${b.lat}?overview=false`)).json();
+      const r = j.routes && j.routes[0];
+      if (!r) throw new Error('no route');
+      S.dest.drive = Math.max(1, Math.round(r.duration / 60));
+      S.dest.miles = Math.round(r.distance / 160.934) / 10;
+      S.dest.driveAuto = true;
+    } catch (e) {
+      S.dest.driveAuto = false;
+      routeError = 'Couldn’t work out the drive. Type the minutes in.';
+    }
+    routing = false;
+    afterDriveChange();
+  }
+  // Leave/Arrive edits set the timer. If Arrive was the last thing set, the arrival time stays
+  // fixed and a new drive time moves the leave time (and the timer) instead.
+  function parseClock(v) {
+    const [h, m] = v.split(':').map(Number);
+    const d = new Date(); d.setHours(h, m, 0, 0);
+    if (d.getTime() < Date.now() - 60000) d.setDate(d.getDate() + 1);
+    return d;
+  }
+  function setTimerTo(sec) {
+    S.remaining = Math.max(0, Math.min(86400, Math.round(sec)));
+    S.total = Math.max(S.remaining, 1);
+    if (S.running) S.endAt = Date.now() + S.remaining * 1000;
+    S.steps.forEach(s => { s.done = s.minute * 60 > S.remaining; });
     save(); renderAll();
-    if (wasRunning) start();
-    speak(`Timer set. Leave in ${Math.round(secs / 60)} minutes to arrive by ${clock(target)}.`, false);
   }
+  function afterDriveChange() {
+    if (S.dest.anchor === 'arrive' && S.dest.arriveAt > Date.now()) setTimerTo((S.dest.arriveAt - Date.now()) / 1000 - S.dest.drive * 60);
+    else { save(); renderAll(); }
+  }
+  $('leaveTime').addEventListener('change', e => {
+    if (!e.target.value) return;
+    const d = parseClock(e.target.value);
+    S.dest.anchor = 'leave'; S.dest.arriveAt = 0;
+    setTimerTo((d - Date.now()) / 1000);
+    speak(`Timer set. Leave at ${clock(d)}.`, false);
+  });
+  $('arriveTime').addEventListener('change', e => {
+    if (!e.target.value) return;
+    const d = parseClock(e.target.value);
+    S.dest.anchor = 'arrive'; S.dest.arriveAt = d.getTime();
+    const sec = (d - Date.now()) / 1000 - S.dest.drive * 60;
+    setTimerTo(sec);
+    if (sec <= 0) speak(`Leave now to get as close to ${clock(d)} as you can!`, false);
+    else speak(`Timer set. Leave at ${clock(new Date(Date.now() + sec * 1000))} to arrive by ${clock(d)}.`, false);
+  });
+  $('driveMins').addEventListener('change', e => {
+    S.dest.drive = Math.max(0, Math.min(900, parseInt(e.target.value, 10) || 0)); S.dest.driveAuto = false; afterDriveChange();
+  });
+  function nudgeDrive(d) { S.dest.drive = Math.max(0, Math.min(900, S.dest.drive + d)); S.dest.driveAuto = false; afterDriveChange(); }
 
   // ---------- Weather (Open-Meteo, by ZIP code) ----------
   const WX = [
@@ -1069,58 +1233,105 @@
     [[61, 63, 65, 66, 67, 80, 81, 82], 'Rainy', '🌧️', '🌧️'], [[71, 73, 75, 77, 85, 86], 'Snowy', '🌨️', '🌨️'],
     [[95, 96, 99], 'Stormy', '⛈️', '⛈️'],
   ];
+  function category(text) {
+    const t = text.toLowerCase();
+    if (/thunder/.test(t)) return 'Stormy';
+    if (/snow|sleet|ice|freezing/.test(t)) return 'Snowy';
+    if (/drizzle/.test(t)) return 'Drizzle';
+    if (/rain|shower/.test(t)) return 'Rainy';
+    if (/fog|mist|haze|smoke|dust/.test(t)) return 'Foggy';
+    if (/overcast|mostly cloudy|^cloudy/.test(t)) return 'Cloudy';
+    if (/partly|few clouds|scattered|cloud/.test(t)) return 'Partly cloudy';
+    if (/clear|sunny|fair/.test(t)) return 'Clear';
+    return '';
+  }
   function describe(w) {
-    const row = WX.find(r => r[0].includes(w.code)) || [[], 'Weather', '🌤️', '🌤️'];
-    const cond = row[1], icon = w.isDay ? row[2] : row[3];
+    const cat = (w.text && category(w.text)) || (WX.find(r => r[0].includes(w.code)) || [[], 'Weather'])[1];
+    const row = WX.find(r => r[1] === cat) || [[], 'Weather', '🌤️', '🌤️'];
+    const cond = w.text && w.text.length <= 18 ? w.text : row[1];
+    const icon = /haze|smoke/i.test(w.text || '') ? '🌫️' : (w.isDay ? row[2] : row[3]);
     let advice;
-    if (cond === 'Snowy') advice = 'Boots, mittens & scarves!';
-    else if (cond === 'Stormy') advice = 'Rain gear on. Stormy out there!';
-    else if (cond === 'Rainy' || cond === 'Drizzle' || w.rain >= 50) advice = 'Rain jackets & umbrellas!';
+    if (row[1] === 'Snowy') advice = 'Boots, mittens & scarves!';
+    else if (row[1] === 'Stormy') advice = 'Rain gear on. Stormy out there!';
+    else if (row[1] === 'Rainy' || row[1] === 'Drizzle' || w.rain >= 50) advice = 'Rain jackets & umbrellas!';
     else if (w.feels < 35) advice = 'Warm coats, hats & gloves!';
     else if (w.feels < 55) advice = 'Bring a jacket!';
     else if (w.feels < 65) advice = 'A sweater or light layer.';
-    else if (w.high >= 78 && w.isDay) advice = 'Sunscreen, hats & water!';
+    else if (w.isDay && (w.temp >= 75 || ((w.high ?? 0) >= 80 && new Date().getHours() < 14)) && (row[1] === 'Clear' || row[1] === 'Partly cloudy')) advice = 'Sunscreen, hats & water!';
+    else if (w.temp >= 85) advice = 'Hot today. Bring water!';
     else advice = 'Nice out. No jacket needed!';
-    return { cond, icon, advice };
+    return { cond, icon, advice, cat: row[1] };
   }
   function weatherLine() {
     const w = S.wx; if (!w) return '';
     const d = describe(w);
-    return `It's ${Math.round(w.temp)} degrees and ${d.cond.toLowerCase()}. ${d.advice.replace(/&/g, 'and')}`;
+    const adj = /haze|smoke/i.test(w.text || '') ? 'hazy' : ({ Clear: 'clear', 'Partly cloudy': 'partly cloudy', Cloudy: 'cloudy', Foggy: 'foggy', Drizzle: 'drizzly', Rainy: 'rainy', Snowy: 'snowy', Stormy: 'stormy' }[d.cat] || 'like this');
+    return `It's ${Math.round(w.temp)} degrees and ${adj}. ${d.advice.replace(/&/g, 'and')}`;
+  }
+  function ago(ms) {
+    const m = Math.max(0, Math.round((Date.now() - ms) / 60000));
+    return m < 1 ? 'just now' : m < 60 ? `${m} min ago` : `${Math.round(m / 60)} hr ago`;
   }
   function renderWeather(state) {
-    const w = S.wx;
+    const on = !!S.zip;
+    $('wxOff').hidden = on; $('wxOn').hidden = !on;
+    $('wxTurnOff').hidden = !on;
     $('weatherRefresh').classList.toggle('spin', state === 'loading');
+    const src = $('wxSource');
+    if (!on) { src.hidden = true; return; }
+    const w = S.wx;
     if (state === 'error') {
-      $('weatherIcon').textContent = '⚠️'; $('tempDisplay').textContent = 'Weather';
-      $('weatherCond').hidden = true; $('apparelAdvice').textContent = 'Couldn’t load it. Tap ↻ to try again.';
-      return;
+      $('weatherIcon').textContent = '⚠️'; $('tempDisplay').textContent = '--°F'; $('weatherCond').hidden = true;
+      $('apparelAdvice').textContent = 'Couldn’t load it. Tap ↻ to try again.';
+      src.hidden = true; return;
     }
-    if (!S.zip || !w) {
-      if (state === 'loading') { $('apparelAdvice').textContent = 'Loading weather…'; return; }
-      $('weatherIcon').textContent = '🌤️'; $('tempDisplay').textContent = 'Weather';
-      $('weatherCond').hidden = true; $('apparelAdvice').textContent = 'Add your ZIP code';
-      $('weatherMain').title = 'Set your ZIP code';
-      return;
-    }
+    if (!w) { $('apparelAdvice').textContent = 'Loading weather…'; $('weatherCond').hidden = true; src.hidden = true; return; }
     const d = describe(w);
     $('weatherIcon').textContent = d.icon;
     $('tempDisplay').textContent = `${Math.round(w.temp)}°F`;
     $('weatherCond').hidden = false; $('weatherCond').textContent = d.cond;
     $('apparelAdvice').textContent = d.advice;
-    $('weatherMain').title = `${S.loc ? S.loc.name + ' · ' : ''}Feels like ${Math.round(w.feels)}° · High ${Math.round(w.high)}° / Low ${Math.round(w.low)}° · ${w.rain}% chance of rain · ZIP ${S.zip} (tap to change)`;
+    const where = S.loc ? S.loc.name : `ZIP ${S.zip}`;
+    const parts = [`Feels like ${Math.round(w.feels)}°`];
+    if (w.high != null) parts.push(`High ${Math.round(w.high)}° / Low ${Math.round(w.low)}°`, `${w.rain}% chance of rain`);
+    src.innerHTML = `<b>${esc(where)}</b> · ${Math.round(w.temp)}°F ${esc(d.cond)}<br>${parts.join(' · ')}` +
+      `<small>${w.source.kind === 'obs' ? `Measured ${ago(w.source.at)} at ${esc(w.source.station)}` : `Estimated for this area (no recent station report)`}</small>`;
+    src.hidden = false;
+    $('weatherMain').title = `${where}: ${parts.join(', ')}`;
   }
   async function lookupZip(zip) {
     try {
-      const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${zip}&count=5&countryCode=US&language=en&format=json`);
-      const j = await r.json();
-      const hit = (j.results || []).find(x => (x.postcodes || []).includes(zip)) || (j.results || [])[0];
-      if (hit) return { lat: hit.latitude, lon: hit.longitude, name: `${hit.name}${hit.admin1 ? ', ' + hit.admin1 : ''}` };
+      const r = await fetch(`https://api.zippopotam.us/us/${zip}`);
+      if (r.ok) {
+        const j = await r.json(); const pl = j.places && j.places[0];
+        if (pl) return { lat: +pl.latitude, lon: +pl.longitude, name: `${pl['place name']}, ${pl['state abbreviation']}` };
+      }
     } catch (e) {}
-    const r = await fetch(`https://api.zippopotam.us/us/${zip}`);
-    if (!r.ok) return null;
-    const j = await r.json(); const pl = j.places && j.places[0];
-    return pl ? { lat: +pl.latitude, lon: +pl.longitude, name: `${pl['place name']}, ${pl['state abbreviation']}` } : null;
+    const j = await (await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${zip}&count=10&countryCode=US&language=en&format=json`)).json();
+    const hit = (j.results || []).find(x => (x.postcodes || []).includes(zip));
+    return hit ? { lat: hit.latitude, lon: hit.longitude, name: `${hit.name}${hit.admin1 ? ', ' + hit.admin1 : ''}` } : null;
+  }
+  const c2f = c => c * 9 / 5 + 32;
+  async function latestObservation(loc) {
+    // Actual measured conditions from the closest National Weather Service station with a fresh report.
+    if (!loc.stations) {
+      const pt = await (await fetch(`https://api.weather.gov/points/${loc.lat.toFixed(4)},${loc.lon.toFixed(4)}`)).json();
+      const st = await (await fetch(pt.properties.observationStations)).json();
+      loc.stations = (st.features || []).slice(0, 4).map(f => ({ id: f.properties.stationIdentifier, name: f.properties.name }));
+      save();
+    }
+    for (const st of loc.stations) {
+      try {
+        const o = (await (await fetch(`https://api.weather.gov/stations/${st.id}/observations/latest`)).json()).properties;
+        const age = Date.now() - new Date(o.timestamp).getTime();
+        if (o && o.temperature && o.temperature.value != null && age < 2 * 3600e3) {
+          const t = c2f(o.temperature.value);
+          const feelsC = (o.heatIndex && o.heatIndex.value != null) ? o.heatIndex.value : (o.windChill && o.windChill.value != null) ? o.windChill.value : null;
+          return { temp: t, feels: feelsC == null ? t : c2f(feelsC), text: o.textDescription || '', station: st.name, at: new Date(o.timestamp).getTime() };
+        }
+      } catch (e) {}
+    }
+    return null;
   }
   let wxBusy = false;
   async function refreshWeather(announce) {
@@ -1130,21 +1341,33 @@
     wxBusy = true; renderWeather('loading');
     try {
       if (!S.loc) { S.loc = await lookupZip(S.zip); if (!S.loc) throw new Error('zip'); save(); }
-      const u = `https://api.open-meteo.com/v1/forecast?latitude=${S.loc.lat}&longitude=${S.loc.lon}` +
-        '&current=temperature_2m,apparent_temperature,weather_code,is_day' +
-        '&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
-        '&temperature_unit=fahrenheit&timezone=auto&forecast_days=1';
-      const j = await (await fetch(u)).json();
+      const [obs, fc] = await Promise.all([
+        latestObservation(S.loc).catch(() => null),
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${S.loc.lat}&longitude=${S.loc.lon}` +
+          '&current=temperature_2m,apparent_temperature,weather_code,is_day' +
+          '&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+          '&temperature_unit=fahrenheit&timezone=auto&forecast_days=1').then(r => r.json()).catch(() => null),
+      ]);
+      if (!obs && !fc) throw new Error('weather');
       S.wx = {
-        temp: j.current.temperature_2m, feels: j.current.apparent_temperature, code: j.current.weather_code,
-        isDay: !!j.current.is_day, high: j.daily.temperature_2m_max[0], low: j.daily.temperature_2m_min[0],
-        rain: j.daily.precipitation_probability_max[0] ?? 0, at: Date.now(),
+        temp: obs ? obs.temp : fc.current.temperature_2m,
+        feels: obs ? obs.feels : fc.current.apparent_temperature,
+        text: obs ? obs.text : '', code: fc ? fc.current.weather_code : null,
+        isDay: fc ? !!fc.current.is_day : (new Date().getHours() >= 7 && new Date().getHours() < 19),
+        high: fc ? fc.daily.temperature_2m_max[0] : null, low: fc ? fc.daily.temperature_2m_min[0] : null,
+        rain: fc ? (fc.daily.precipitation_probability_max[0] ?? 0) : 0,
+        source: obs ? { kind: 'obs', station: obs.station, at: obs.at } : { kind: 'model', at: Date.now() },
       };
       renderWeather();
       if (announce) speak(weatherLine(), false);
     } catch (e) {
       renderWeather('error');
     } finally { wxBusy = false; }
+  }
+  function turnOffWeather() {
+    S.zip = ''; S.loc = null; S.wx = null;
+    if (S.dest.from && S.dest.from.fromZip) S.dest.from = null;
+    save(); toggleZip(false); renderWeather(); renderDest();
   }
   function toggleZip(force) {
     const pop = $('zipPop');
@@ -1159,14 +1382,15 @@
     $('zipErr').hidden = true;
     const prev = { zip: S.zip, loc: S.loc };
     S.zip = zip; S.loc = null; S.wx = null;
+    if (S.dest.from && S.dest.from.fromZip) S.dest.from = null;
     renderWeather('loading');
     try { S.loc = await lookupZip(zip); } catch (err) { S.loc = null; }
     if (!S.loc) {
       Object.assign(S, prev);
       $('zipErr').textContent = 'Couldn’t find that ZIP code, or the weather service is unreachable. Check it and try again.';
-      $('zipErr').hidden = false; renderWeather(); refreshWeather(false); return;
+      $('zipErr').hidden = false; renderWeather(); if (S.zip) refreshWeather(false); return;
     }
-    save(); toggleZip(false); refreshWeather(true);
+    save(); toggleZip(false); defaultFrom(); refreshWeather(true);
   });
   $('zipInput').addEventListener('keydown', e => { if (e.key === 'Escape') toggleZip(false); });
   document.addEventListener('click', e => { if (!$('zipPop').hidden && !$('weather').contains(e.target)) toggleZip(false); });
@@ -1199,13 +1423,11 @@
 
   // ---------- Boot ----------
   load();
-  $('destName').value = S.dest.name;
   $('driveMins').value = S.dest.drive;
-  $('arriveBy').value = S.dest.arriveBy;
   renderSound(); renderAll(); renderWeather();
   if (S.zip) refreshWeather(false);
   setInterval(() => { if (S.zip && !wxBusy) refreshWeather(false); }, 20 * 60 * 1000);
-  setInterval(() => { if (S.dest.on && !S.running) renderDest(); }, 15000);
+  setInterval(() => { if (S.dest.on && !S.running) renderDest(); if (S.wx) renderWeather(); }, 15000);
   document.addEventListener('click', initAudio, { once: true });
   if ('speechSynthesis' in window) speechSynthesis.getVoices();
 </script>
