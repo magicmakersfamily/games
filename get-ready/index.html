@@ -109,29 +109,18 @@
   .icon-btn:hover { background: rgba(255,255,255,.16); }
   .icon-btn svg { width: 16px; height: 16px; }
 
-  /* ---------- Destination ---------- */
-  .dest-wrap {
-    max-width: 1280px; width: 100%; margin-inline: auto;
-    display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s ease, opacity .3s; opacity: 0;
-  }
-  .dest-wrap.open { grid-template-rows: 1fr; opacity: 1; }
-  .dest-inner { overflow: hidden; min-height: 0; }
-  .dest-card {
-    margin-block: 4px 12px; padding: 14px 16px; border-radius: var(--radius);
-    background: linear-gradient(135deg, rgba(79,70,229,.18), rgba(56,189,248,.08)); border: 1px solid rgba(129,140,248,.3);
-    display: flex; flex-direction: column; gap: 10px;
-  }
-  .stepper { display: inline-flex; align-items: center; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: rgba(11,18,34,.7); overflow: hidden; }
-  .stepper button { width: 32px; height: 100%; border: 0; background: transparent; color: var(--muted); font-size: 18px; font-weight: 600; }
+  /* ---------- Destination pane ---------- */
+  .stepper { display: inline-flex; align-items: center; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-deep); overflow: hidden; }
+  .stepper button { width: 34px; height: 100%; border: 0; background: transparent; color: var(--muted); font-size: 18px; font-weight: 600; }
   .stepper button:hover { color: var(--amber); background: rgba(255,255,255,.05); }
-  .stepper input { width: 44px; height: 100%; border: 0; background: transparent; text-align: center; font-family: var(--mono); font-weight: 700; outline: none; -moz-appearance: textfield; }
+  .stepper input { width: 46px; height: 100%; border: 0; background: transparent; text-align: center; font-family: var(--mono); font-weight: 700; font-size: 16px; outline: none; -moz-appearance: textfield; }
   .stepper input::-webkit-inner-spin-button, .stepper input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-  .stepper .unit { padding-right: 10px; color: var(--faint); font-size: 12px; }
-  .place-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .search { position: relative; flex: 1 1 320px; min-width: 0; }
+  .stepper .unit { padding-right: 8px; color: var(--faint); font-size: 12px; }
+  .lbl { display: block; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+  .search { position: relative; min-width: 0; }
   .search input {
     width: 100%; height: 46px; padding: 0 14px 0 42px; border-radius: 14px; border: 1px solid var(--line);
-    background: rgba(11,18,34,.85); font-weight: 600; font-size: 16px; outline: none;
+    background: var(--bg-deep); font-weight: 600; font-size: 16px; outline: none;
   }
   .search input:focus { border-color: var(--amber); }
   .search input::placeholder { color: var(--faint); }
@@ -139,7 +128,7 @@
   .suggest {
     position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 45; list-style: none; margin: 0; padding: 4px;
     background: var(--bg-deep); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.45);
-    max-height: 320px; overflow-y: auto;
+    max-height: 300px; overflow-y: auto;
   }
   .suggest li { display: flex; gap: 10px; align-items: flex-start; padding: 9px 10px; border-radius: 10px; cursor: pointer; }
   .suggest li[aria-selected="true"], .suggest li:hover { background: var(--surface-2); }
@@ -147,29 +136,39 @@
   .suggest .s-name { font-weight: 600; }
   .suggest .s-addr { font-size: 12px; color: var(--muted); }
   .suggest li.s-empty { color: var(--faint); font-size: 13px; cursor: default; background: none; }
-  .from-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: #c7d2fe; }
-  .from-line .linkish { color: var(--amber); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
-  .from-box { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .from-box .search input { height: 40px; font-size: 14px; }
-  .times { display: flex; align-items: flex-end; gap: 10px 12px; flex-wrap: wrap; }
-  .t-field label { display: block; font-size: 11px; font-weight: 600; color: #c7d2fe; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
-  .t-field input[type="time"] {
-    height: 44px; width: 150px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--line); background: rgba(11,18,34,.85);
+  .from-row {
+    display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 0 12px; border-radius: 12px;
+    border: 1px solid var(--line); background: transparent; text-align: left; font-size: 14px;
+  }
+  .from-row:hover { border-color: #475569; background: rgba(255,255,255,.03); }
+  .from-row .k { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+  .from-row .v { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+  .from-row .chev { color: var(--faint); font-size: 18px; transition: transform .2s; }
+  .from-row[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  .from-box { display: flex; flex-direction: column; gap: 6px; }
+  .from-box .search input { height: 42px; font-size: 15px; }
+  .from-box .btn-ghost { align-self: flex-start; }
+  .seg { display: inline-flex; padding: 3px; border-radius: 12px; background: var(--bg-deep); border: 1px solid var(--line); }
+  .seg button { border: 0; background: transparent; color: var(--muted); font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 9px; }
+  .seg button[aria-checked="true"] { background: var(--amber); color: var(--amber-ink); }
+  .plan-grid { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+  .plan-grid input[type="time"] {
+    height: 44px; width: 150px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-deep);
     font-family: var(--mono); font-weight: 700; font-size: 18px; outline: none;
   }
-  .t-field input[type="time"]:focus { border-color: var(--amber); }
-  .t-field .stepper { height: 44px; }
-  .t-arrow { color: var(--faint); font-size: 18px; padding-bottom: 11px; }
-  .drive-note { font-size: 11px; color: var(--faint); margin-top: 4px; max-width: 220px; }
-  .eta-status { font-size: 13px; font-weight: 600; padding-bottom: 12px; }
+  .plan-grid input[type="time"]:focus { border-color: var(--amber); }
+  .result { padding: 12px 14px; border-radius: 14px; background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.3); font-size: 16px; font-weight: 600; line-height: 1.35; }
+  .result b { font-family: var(--mono); color: var(--amber); }
+  .eta-status { font-size: 13px; font-weight: 600; margin-top: 4px; }
   .eta-status.good { color: var(--green); }
   .eta-status.bad { color: #fb7185; }
-  .dest-actions { display: flex; align-items: center; gap: 8px; }
+  .drive-note { font-size: 12px; color: var(--faint); margin: 0; line-height: 1.45; }
+  .dest-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .maps-link {
-    display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 14px; border-radius: 14px;
-    background: var(--indigo); color: #fff; text-decoration: none; font-weight: 600; font-size: 14px; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 12px;
+    border: 1px solid rgba(129,140,248,.45); color: #c7d2fe; text-decoration: none; font-weight: 600; font-size: 14px; white-space: nowrap;
   }
-  .maps-link:hover { background: #6366f1; }
+  .maps-link:hover { background: rgba(99,102,241,.15); color: #fff; }
   .maps-link svg { width: 16px; height: 16px; }
   .maps-link.disabled { opacity: .45; pointer-events: none; }
 
@@ -179,30 +178,34 @@
     display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0fr); gap: 0;
     transition: grid-template-columns .45s cubic-bezier(.2,.8,.2,1), gap .45s;
   }
-  .layout.steps-open { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; }
+  .layout.drawer-open { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; }
 
   /* ---------- Timer stage ---------- */
   .stage {
-    position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
-    padding-block: 12px 8px; min-height: 560px;
+    position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+    padding-block: 4px 8px;
   }
-  .steps-toggle {
-    position: absolute; top: 4px; right: 0; display: inline-flex; align-items: center; gap: 8px;
-    height: 44px; padding: 0 16px 0 12px; border-radius: 999px; border: 0;
-    background: var(--amber); color: var(--amber-ink); font-weight: 700; font-size: 15px;
-    box-shadow: 0 8px 24px rgba(251,191,36,.2); transition: transform .15s, background .2s, opacity .3s;
+  .pills { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; width: min(560px, 100%); }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px; height: 44px; max-width: 100%; padding: 0 16px; border-radius: 999px;
+    border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font-weight: 600; font-size: 15px;
+    transition: border-color .2s, background .2s, color .2s;
   }
-  .steps-toggle:hover { transform: translateY(-1px); background: #fcd34d; }
-  .steps-toggle svg { width: 18px; height: 18px; }
-  .steps-toggle .count { background: var(--amber-ink); color: var(--amber); border-radius: 999px; font-size: 12px; min-width: 22px; height: 22px; padding: 0 6px; display: grid; place-items: center; }
-  .layout.steps-open .steps-toggle { opacity: 0; pointer-events: none; }
+  .pill:hover { border-color: var(--amber); }
+  .pill svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--amber); }
+  .pill .txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .pill .count { background: rgba(251,191,36,.18); color: var(--amber); border-radius: 999px; font-size: 12px; font-weight: 700; min-width: 24px; height: 24px; padding: 0 7px; display: grid; place-items: center; }
+  .pill[aria-expanded="true"] { background: var(--amber); border-color: var(--amber); color: var(--amber-ink); }
+  .pill[aria-expanded="true"] svg { color: var(--amber-ink); }
+  .pill[aria-expanded="true"] .count { background: var(--amber-ink); color: var(--amber); }
+  .pill.set { border-color: rgba(251,191,36,.6); }
 
   .ring-wrap {
-    --ring: min(58vh, 84vw, 540px);
+    --ring: min(52vh, 84vw, 520px);
     position: relative; width: var(--ring); height: var(--ring); max-width: 100%;
     transition: width .45s cubic-bezier(.2,.8,.2,1), height .45s cubic-bezier(.2,.8,.2,1);
   }
-  .layout.steps-open .ring-wrap { --ring: min(50vh, 46vw, 440px); }
+  .layout.drawer-open .ring-wrap { --ring: min(48vh, 44vw, 440px); }
   .ring-glow { position: absolute; inset: 8%; border-radius: 50%; background: var(--ring-color); opacity: .12; filter: blur(60px); transition: background 1s; }
   .ring-wrap svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .ring-track { stroke: rgba(148,163,184,.14); fill: none; }
@@ -278,26 +281,39 @@
   }
   .preset:hover { color: var(--text); border-color: #64748b; }
   .divider { width: 1px; height: 22px; background: var(--line); margin-inline: 4px; }
-  .sound-group { display: inline-flex; align-items: center; gap: 6px; }
-  .sound-group select {
-    height: 34px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--muted);
-    font-weight: 600; font-size: 13px; padding: 0 10px; outline: none;
-  }
-  .icon-btn.muted { color: #fb7185; }
+  .sound-btn { display: inline-flex; align-items: center; gap: 6px; }
+  .sound-btn svg { width: 16px; height: 16px; }
+  .sound-btn.muted { color: #fb7185; border-color: rgba(244,63,94,.5); }
 
-  /* ---------- Steps panel ---------- */
-  .panel-shell { min-width: 0; overflow: hidden; }
-  .panel {
-    width: 100%; min-width: 300px; height: 100%; max-height: calc(100vh - 120px); position: sticky; top: 12px;
-    background: rgba(26,36,56,.85); border: 1px solid var(--line); border-radius: 22px;
+  /* ---------- Drawer (side panel on wide screens, bottom sheet on phones) ---------- */
+  .drawer-shell { min-width: 0; overflow: hidden; }
+  .drawer {
+    width: 100%; min-width: 320px; height: calc(100vh - 100px); max-height: 760px; position: sticky; top: 12px;
+    background: rgba(26,36,56,.92); border: 1px solid var(--line); border-radius: 22px;
     display: flex; flex-direction: column; overflow: hidden;
     opacity: 0; transform: translateX(24px); transition: opacity .35s .1s, transform .45s cubic-bezier(.2,.8,.2,1);
   }
-  .layout.steps-open .panel { opacity: 1; transform: none; }
-  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 16px 12px; border-bottom: 1px solid var(--line); }
-  .panel-head h2 { margin: 0; font-size: 18px; font-weight: 700; }
-  .panel-head p { margin: 2px 0 0; font-size: 12px; color: var(--muted); }
-  .panel-body { padding: 14px 16px 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .layout.drawer-open .drawer { opacity: 1; transform: none; }
+  .drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 16px 12px; border-bottom: 1px solid var(--line); }
+  .drawer-head h2 { margin: 0; font-size: 18px; font-weight: 700; }
+  .drawer-head p { margin: 2px 0 0; font-size: 12px; color: var(--muted); }
+  .grab { display: none; }
+  .drawer-body { padding: 14px 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--bg-deep); color: var(--text); font-size: 13px; font-weight: 600;
+  }
+  .chip:hover { border-color: var(--amber); color: var(--amber); }
+  .sound-box { margin-top: 6px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+  .sound-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .sound-row select {
+    height: 40px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-deep); color: var(--text);
+    font-weight: 600; font-size: 14px; padding: 0 10px; outline: none;
+  }
+  .switch { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: var(--text); cursor: pointer; }
+  .switch input { width: 18px; height: 18px; accent-color: var(--amber); }
 
   .add-btn {
     display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px;
@@ -392,19 +408,35 @@
 
   /* ---------- Responsive ---------- */
   @media (max-width: 900px) {
-    .t-field input[type="time"] { width: 128px; font-size: 16px; }
-    .layout, .layout.steps-open { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-    .panel-shell { display: none; }
-    .layout.steps-open .panel-shell { display: block; }
-    .panel { min-width: 0; max-height: none; position: static; transform: none; }
-    .layout.steps-open .ring-wrap { --ring: min(50vh, 84vw, 440px); }
-    .stage { min-height: 0; padding-top: 60px; }
+    .layout, .layout.drawer-open { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .layout.drawer-open .ring-wrap { --ring: min(25vh, 58vw, 260px); }
+    .layout.drawer-open .stage { gap: 10px; }
+    .stage { justify-content: flex-start; padding-top: 12px; }
+    .layout.drawer-open .next-up { display: none; }
+    .layout.drawer-open .sub { font-size: 12px; }
+    .layout.drawer-open .badge { font-size: 9px; padding: 3px 8px; }
+    .subtitle { font-size: 14px; padding: 8px 16px; }
+    .layout.drawer-open .secondary { display: none; }
+    .app.sheet-open { padding-bottom: 58vh; }
+    .drawer-shell { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; overflow: visible; pointer-events: none; }
+    .drawer {
+      min-width: 0; height: auto; max-height: 58vh; position: relative; top: auto; pointer-events: auto;
+      border-radius: 22px 22px 0 0; border-bottom: 0; box-shadow: 0 -16px 40px rgba(0,0,0,.5);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      opacity: 1; transform: translateY(105%); transition: transform .35s cubic-bezier(.2,.8,.2,1);
+    }
+    .layout.drawer-open .drawer { transform: none; }
+    .grab { display: block; width: 40px; height: 4px; border-radius: 2px; background: var(--line); margin: 8px auto 0; }
+    .drawer-head { padding-top: 8px; }
+    .app.sheet-open ~ .subtitle { bottom: auto; top: calc(10px + env(safe-area-inset-top, 0px)); transform: translate(-50%, -20px); }
+    .app.sheet-open ~ .subtitle.show { transform: translate(-50%, 0); }
   }
   @media (max-width: 520px) {
     .brand h1 { font-size: 17px; }
     .weather .w-advice { display: none; }
     .ctl { height: 50px; min-width: 46px; padding: 0 10px; font-size: 13px; }
     .go { height: 54px; font-size: 16px; }
+    .plan-grid input[type="time"] { width: 132px; font-size: 16px; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; animation: none !important; }
@@ -421,10 +453,6 @@
       <h1>Ready To Go!</h1>
     </div>
     <div class="top-right">
-      <button class="chip-btn" id="destToggle" onclick="toggleDestination()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-        <span>Destination</span>
-      </button>
       <div class="weather-slot" id="weather">
         <button class="chip-btn" id="wxOff" type="button" onclick="toggleZip(true)">
           <span aria-hidden="true">🌤️</span><span>See the Weather</span>
@@ -454,72 +482,8 @@
     </div>
   </header>
 
-  <div class="dest-wrap" id="destWrap" inert>
-    <div class="dest-inner">
-      <div class="dest-card">
-        <div class="place-row">
-          <div class="search">
-            <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-            <input id="destQuery" type="search" placeholder="Search for a place or address" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="destSuggest" aria-label="Where to?">
-            <ul class="suggest" id="destSuggest" role="listbox" hidden></ul>
-          </div>
-          <div class="dest-actions">
-            <a class="maps-link disabled" id="mapsLink" href="https://www.google.com/maps" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-              Open in Google Maps
-            </a>
-            <button class="icon-btn" type="button" title="Turn off destination" onclick="toggleDestination(false)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="from-line">
-          <span id="fromLabel">Leaving from: not set</span>
-          <button class="linkish" type="button" id="fromToggle" onclick="toggleFrom()">Change</button>
-        </div>
-        <div class="from-box" id="fromBox" hidden>
-          <div class="search">
-            <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-            <input id="fromQuery" type="search" placeholder="Where are you leaving from?" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="fromSuggest" aria-label="Leaving from">
-            <ul class="suggest" id="fromSuggest" role="listbox" hidden></ul>
-          </div>
-          <button class="btn-ghost" type="button" onclick="useMyLocation()">Use my location</button>
-        </div>
-        <div class="times">
-          <div class="t-field">
-            <label for="leaveTime">Leave at</label>
-            <input id="leaveTime" type="time">
-          </div>
-          <div class="t-arrow">→</div>
-          <div class="t-field">
-            <label for="driveMins">Drive</label>
-            <div class="stepper">
-              <button type="button" onclick="nudgeDrive(-1)" aria-label="Shorter drive">−</button>
-              <input id="driveMins" type="number" min="0" max="900" value="20">
-              <span class="unit">min</span>
-              <button type="button" onclick="nudgeDrive(1)" aria-label="Longer drive">+</button>
-            </div>
-          </div>
-          <div class="t-arrow">→</div>
-          <div class="t-field">
-            <label for="arriveTime">Arrive at</label>
-            <input id="arriveTime" type="time">
-          </div>
-          <div class="eta-status" id="etaStatus"></div>
-        </div>
-        <div class="drive-note" id="driveNote" style="max-width:none">Change Leave or Arrive and the timer follows.</div>
-      </div>
-    </div>
-  </div>
-
   <main class="layout" id="layout">
     <section class="stage">
-      <button class="steps-toggle" id="stepsToggle" onclick="setStepsOpen(true)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-        <span>Steps</span>
-        <span class="count" id="stepCount" hidden>0</span>
-      </button>
-
       <div class="ring-wrap" id="ringWrap">
         <div class="ring-glow"></div>
         <svg viewBox="0 0 320 320">
@@ -537,10 +501,19 @@
             <button onclick="saveInlineEdit()">Set</button>
           </div>
           <div class="sub" id="subLine">Tap the time to change it</div>
-          <div class="next-up" id="nextUp" hidden onclick="setStepsOpen(true)">
+          <div class="next-up" id="nextUp" hidden onclick="openDrawer('steps')">
             <span class="label">Next</span><span class="txt" id="nextText"></span><span class="in" id="nextIn"></span>
           </div>
         </div>
+      </div>
+
+      <div class="pills">
+        <button class="pill" id="destPill" type="button" aria-expanded="false" aria-controls="drawerShell" onclick="toggleDrawer('dest')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span class="txt" id="destPillText">Destination</span>
+        </button>
+        <button class="pill" id="stepsPill" type="button" aria-expanded="false" aria-controls="drawerShell" onclick="toggleDrawer('steps')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2" fill="currentColor"/><circle cx="4.5" cy="12" r="1.2" fill="currentColor"/><circle cx="4.5" cy="18" r="1.2" fill="currentColor"/></svg><span class="txt">Steps</span><span class="count" id="stepCount">0</span>
+        </button>
       </div>
 
       <div class="controls">
@@ -556,35 +529,27 @@
       </div>
 
       <div class="secondary">
-        <button class="preset" onclick="setPreset(15)">15 min</button>
-        <button class="preset" onclick="setPreset(30)">30 min</button>
-        <button class="preset" onclick="setPreset(60)">60 min</button>
+        <button class="preset" type="button" onclick="setPreset(15)">15 min</button>
+        <button class="preset" type="button" onclick="setPreset(30)">30 min</button>
+        <button class="preset" type="button" onclick="setPreset(60)">60 min</button>
         <span class="divider"></span>
-        <div class="sound-group">
-          <button class="icon-btn" id="muteBtn" title="Sound on" onclick="toggleMute()"></button>
-          <select id="voiceStyle" onchange="changeVoiceStyle()" aria-label="Voice style">
-            <option value="calm">🧘 Calm</option>
-            <option value="coach">📣 Coach</option>
-            <option value="space">🚀 Space</option>
-            <option value="train">🚂 Conductor</option>
-          </select>
-          <button class="icon-btn" id="chimeBtn" title="Chime before announcements" onclick="toggleChime()">🔔</button>
-        </div>
+        <button class="preset sound-btn" id="muteBtn" type="button" aria-pressed="false" onclick="toggleMute()"></button>
       </div>
     </section>
 
-    <aside class="panel-shell" id="panelShell" inert>
-      <div class="panel">
-        <div class="panel-head">
+    <aside class="drawer-shell" id="drawerShell" aria-labelledby="drawerTitle" inert>
+      <div class="drawer" id="drawer">
+        <div class="grab" aria-hidden="true"></div>
+        <div class="drawer-head">
           <div>
-            <h2>Steps</h2>
-            <p>Read aloud when the timer reaches each time.</p>
+            <h2 id="drawerTitle">Steps</h2>
+            <p id="drawerHint">Read aloud when the timer reaches each time.</p>
           </div>
-          <button class="icon-btn" title="Close steps" onclick="setStepsOpen(false)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-          </button>
+          <button class="icon-btn" type="button" title="Close" aria-label="Close" onclick="openDrawer(null)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
-        <div class="panel-body" id="panelBody">
+
+        <div class="drawer-body" id="stepsPane">
+          <div class="chips" id="chips" role="group" aria-label="Quick add a step"></div>
           <button class="add-btn" id="addBtn" onclick="openComposer()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
             Add Steps
@@ -609,6 +574,72 @@
           </div>
           <div id="stepList" style="display:flex;flex-direction:column;gap:10px"></div>
           <div class="empty-hint" id="emptyHint">Add things like “brush teeth” or “shoes on.” Each one shows up as a dot on the timer ring.</div>
+          <div class="sound-box">
+            <label class="lbl" for="voiceStyle">Voice for announcements</label>
+            <div class="sound-row">
+              <select id="voiceStyle" onchange="changeVoiceStyle()">
+                <option value="calm">🧘 Calm</option>
+                <option value="coach">📣 Coach</option>
+                <option value="space">🚀 Space commander</option>
+                <option value="train">🚂 Train conductor</option>
+              </select>
+              <button class="btn-ghost" type="button" onclick="hearSample()">▶ Hear a sample</button>
+            </div>
+            <label class="switch"><input type="checkbox" id="chimeToggle" onchange="toggleChime()"> Play a chime before each step</label>
+          </div>
+        </div>
+
+        <div class="drawer-body" id="destPane" hidden>
+          <div>
+            <label class="lbl" for="destQuery">Where are you going?</label>
+            <div class="search">
+              <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+              <input id="destQuery" type="search" placeholder="Search for a place or address" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="destSuggest">
+              <ul class="suggest" id="destSuggest" role="listbox" hidden></ul>
+            </div>
+          </div>
+          <button class="from-row" id="fromToggle" type="button" aria-expanded="false" aria-controls="fromBox" onclick="toggleFrom()">
+            <span class="k">From</span><span class="v" id="fromLabel">Not set</span><span class="chev" aria-hidden="true">›</span>
+          </button>
+          <div class="from-box" id="fromBox" hidden>
+            <div class="search">
+              <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+              <input id="fromQuery" type="search" placeholder="Where are you leaving from?" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="fromSuggest" aria-label="Leaving from">
+              <ul class="suggest" id="fromSuggest" role="listbox" hidden></ul>
+            </div>
+            <button class="btn-ghost" type="button" onclick="useMyLocation()">Use my location</button>
+          </div>
+          <div>
+            <span class="lbl" id="planByLabel">Plan by</span>
+            <div class="seg" role="radiogroup" aria-labelledby="planByLabel">
+              <button type="button" role="radio" id="modeArrive" aria-checked="true" onclick="setMode('arrive')">Arrive by</button>
+              <button type="button" role="radio" id="modeLeave" aria-checked="false" onclick="setMode('leave')">Leave at</button>
+            </div>
+          </div>
+          <div class="plan-grid">
+            <div>
+              <label class="lbl" for="planTime" id="planTimeLabel">Arrive by</label>
+              <input id="planTime" type="time">
+            </div>
+            <div>
+              <label class="lbl" for="driveMins">Drive</label>
+              <div class="stepper">
+                <button type="button" onclick="nudgeDrive(-1)" aria-label="Shorter drive">−</button>
+                <input id="driveMins" type="number" min="0" max="900" value="20">
+                <span class="unit">min</span>
+                <button type="button" onclick="nudgeDrive(1)" aria-label="Longer drive">+</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="result" id="planResult" aria-live="polite"></div>
+            <div class="eta-status" id="etaStatus"></div>
+          </div>
+          <p class="drive-note" id="driveNote"></p>
+          <div class="dest-actions">
+            <a class="maps-link disabled" id="mapsLink" href="https://www.google.com/maps" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg> Open in Google Maps</a>
+            <button class="btn-ghost" type="button" onclick="clearDestination()">Clear destination</button>
+          </div>
         </div>
       </div>
     </aside>
@@ -616,7 +647,7 @@
 </div>
 
 <footer class="shelf-foot">
-  <p><b>Version 1.3</b> · Launched <time datetime="2026-10-02">October 2, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.3">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.3&amp;kind=bug">Report a bug</a></p>
+  <p><b>Version 1.4</b> · Launched <time datetime="2026-10-02">October 2, 2026</time> · Made for James and friends · <a href="https://magicmakersfamily.github.io/games/">The Game Shelf</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.4">Share your thoughts</a> · <a href="https://magicmakersfamily.github.io/games/feedback/?game=get-ready&amp;v=1.4&amp;kind=bug">Report a bug</a></p>
   <p>Made by Magic Makers. More games are on the way. Like this? Buy us a mooncake: <a href="https://ko-fi.com/magicmakers" target="_blank" rel="noopener">Ko-fi</a></p>
   <p>These games don’t collect any information. Saved progress stays in your own browser.</p>
   <p>Know someone who might like this? <button class="linkish" type="button" data-tell="https://magicmakersfamily.github.io/games/get-ready/" data-text="A calm countdown that tells the kids what to do next: Ready To Go!">Tell a friend</button></p>
@@ -629,8 +660,8 @@
   const C = 2 * Math.PI * 140;
   const S = {
     total: 1800, remaining: 1800, running: false, interval: null,
-    steps: [], stepsOpen: false,
-    dest: { on: false, place: null, from: null, drive: 20, driveAuto: false, miles: 0, anchor: 'leave', arriveAt: 0 },
+    steps: [], drawer: null,
+    dest: { on: false, place: null, from: null, drive: 20, driveAuto: false, miles: 0, mode: 'arrive', target: 0 },
     muted: false, voice: 'calm', chime: true,
     endAt: 0, zip: '', loc: null, wx: null,
   };
@@ -640,7 +671,7 @@
       const d = JSON.parse(localStorage.getItem('grtg') || 'null');
       if (!d) return;
       if (Array.isArray(d.steps)) S.steps = d.steps.map(s => ({ ...s, done: false }));
-      if (d.dest) S.dest = { ...S.dest, place: d.dest.place || null, from: d.dest.from || null, drive: d.dest.drive ?? 20, driveAuto: !!d.dest.driveAuto, miles: d.dest.miles || 0, on: false };
+      if (d.dest) S.dest = { ...S.dest, place: d.dest.place || null, from: d.dest.from || null, drive: d.dest.drive ?? 20, driveAuto: !!d.dest.driveAuto, miles: d.dest.miles || 0, mode: d.dest.mode === 'leave' ? 'leave' : 'arrive', on: false };
       if (typeof d.total === 'number' && d.total > 0) { S.total = d.total; S.remaining = d.total; }
       ['muted', 'voice', 'chime', 'zip', 'loc'].forEach(k => { if (k in d) S[k] = d[k]; });
     } catch (e) {}
@@ -649,7 +680,7 @@
     try {
       localStorage.setItem('grtg', JSON.stringify({
         steps: S.steps.map(({ id, text, minute }) => ({ id, text, minute })),
-        dest: { place: S.dest.place, from: S.dest.from, drive: S.dest.drive, driveAuto: S.dest.driveAuto, miles: S.dest.miles },
+        dest: { place: S.dest.place, from: S.dest.from, drive: S.dest.drive, driveAuto: S.dest.driveAuto, miles: S.dest.miles, mode: S.dest.mode },
         total: S.total, muted: S.muted, voice: S.voice, chime: S.chime, zip: S.zip, loc: S.loc,
       }));
     } catch (e) {}
@@ -831,12 +862,11 @@
     S.remaining = Math.max(0, S.remaining + d);
     if (S.remaining > S.total) S.total = S.remaining;
     if (S.running) S.endAt = Date.now() + S.remaining * 1000;
-    S.dest.anchor = 'leave';
     S.steps.forEach(s => { if (s.minute * 60 > S.remaining) s.done = true; else if (d > 0 && s.minute * 60 < S.remaining) s.done = false; });
     save(); renderAll();
   }
   function setPreset(m) {
-    pause(); clearSpeech(); S.dest.anchor = 'leave'; S.total = m * 60; S.remaining = S.total; S.steps.forEach(s => s.done = false);
+    pause(); clearSpeech(); S.total = m * 60; S.remaining = S.total; S.steps.forEach(s => s.done = false);
     save(); renderAll(); speak(`Timer set to ${m} minutes.`, false);
   }
 
@@ -855,7 +885,7 @@
     let m = parseInt($('editMins').value, 10), s = parseInt($('editSecs').value, 10);
     m = isNaN(m) || m < 0 ? 0 : Math.min(m, 600);
     s = isNaN(s) || s < 0 ? 0 : Math.min(s, 59);
-    S.remaining = m * 60 + s; S.dest.anchor = 'leave';
+    S.remaining = m * 60 + s;
     S.total = Math.max(S.remaining, 1);
     editing = false;
     $('timeDisplay').style.display = '';
@@ -869,12 +899,53 @@
   }));
 
   // ---------- Steps ----------
-  function setStepsOpen(open) {
-    S.stepsOpen = open;
-    $('layout').classList.toggle('steps-open', open);
-    $('panelShell').inert = !open;
-    if (open && S.steps.length === 0) setTimeout(openComposer, 250);
-    if (!open) closeComposer();
+  // One drawer holds either Steps or Destination: a side panel on wide screens, a bottom sheet on phones.
+  const narrow = () => matchMedia('(max-width: 900px)').matches;
+  function openDrawer(which) {
+    S.drawer = which;
+    const open = !!which;
+    $('layout').classList.toggle('drawer-open', open);
+    document.querySelector('.app').classList.toggle('sheet-open', open && narrow());
+    $('drawerShell').inert = !open;
+    $('stepsPane').hidden = which !== 'steps';
+    $('destPane').hidden = which !== 'dest';
+    $('stepsPill').setAttribute('aria-expanded', String(which === 'steps'));
+    $('destPill').setAttribute('aria-expanded', String(which === 'dest'));
+    if (which === 'steps') {
+      $('drawerTitle').textContent = 'Steps';
+      $('drawerHint').textContent = 'Read aloud when the timer reaches each time.';
+      if (S.steps.length === 0) setTimeout(openComposer, 250);
+    } else closeComposer();
+    if (which === 'dest') {
+      $('drawerTitle').textContent = 'Destination';
+      $('drawerHint').textContent = 'Plan when to leave. The timer follows.';
+      S.dest.on = true; defaultFrom();
+      if (!S.dest.place) setTimeout(() => $('destQuery').focus(), 300);
+    }
+    renderAll();
+    if (open && narrow()) setTimeout(() => $('ringWrap').scrollIntoView({ block: 'start', behavior: 'smooth' }), 50);
+  }
+  function toggleDrawer(which) { openDrawer(S.drawer === which ? null : which); }
+  function setStepsOpen(open) { openDrawer(open ? 'steps' : null); }
+  document.addEventListener('keydown', e => {
+    const t = e.target && e.target.closest ? e.target : null;
+    if (e.key === 'Escape' && S.drawer && !(t && t.closest('.suggest, .composer, .search, #timeEdit'))) openDrawer(null);
+  });
+  matchMedia('(max-width: 900px)').addEventListener('change', () => document.querySelector('.app').classList.toggle('sheet-open', !!S.drawer && narrow()));
+
+  const QUICK = [
+    ['🪥', 'Brush teeth', 'Brush your teeth!'], ['🚽', 'Bathroom', 'Bathroom time before we go!'],
+    ['👕', 'Get dressed', 'Time to get dressed!'], ['👟', 'Shoes', 'Shoes on!'],
+    ['🧥', 'Coat', 'Coat on!'], ['🎒', 'Backpack', 'Grab your backpack!'],
+  ];
+  function renderChips() {
+    $('chips').innerHTML = QUICK.map((q, i) => `<button class="chip" type="button" onclick="quickAdd(${i})"><span aria-hidden="true">${q[0]}</span>+ ${q[1]}</button>`).join('');
+  }
+  function quickAdd(i) {
+    const minute = suggestMinute();
+    const step = { id: Date.now(), text: QUICK[i][2], minute, done: minute * 60 > S.remaining && S.remaining !== S.total };
+    S.steps.push(step);
+    save(); closeComposer(); renderAll(); flash(step.id);
   }
   function suggestMinute() {
     const cap = Math.max(1, Math.floor(S.total / 60) - 1);
@@ -1018,7 +1089,7 @@
       const a = (s.minute * 60 / S.total) * 2 * Math.PI;
       const x = 160 + 140 * Math.sin(a), y = 160 - 140 * Math.cos(a);
       const lx = 160 + 166 * Math.sin(a), ly = 160 - 166 * Math.cos(a) + 3.5;
-      return `<g class="marker ${s.done ? 'done' : ''}" onclick="setStepsOpen(true);setTimeout(()=>flash(${s.id}),300)">
+      return `<g class="marker ${s.done ? 'done' : ''}" onclick="openDrawer('steps');setTimeout(()=>flash(${s.id}),300)">
         <title>${esc(s.text)} (${s.minute} min left)</title>
         <circle class="dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7"/>
         <text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle">${s.minute}</text>
@@ -1032,51 +1103,53 @@
       $('nextText').textContent = nx.text;
       $('nextIn').textContent = `in ${fmt(S.remaining - nx.minute * 60)}`;
     }
-    const n = S.steps.length;
-    $('stepCount').hidden = n === 0; $('stepCount').textContent = n;
+    $('stepCount').textContent = S.steps.length;
+    $('stepsPill').classList.toggle('set', S.steps.length > 0);
   }
-  function renderSub() {
-    const el = $('subLine');
-    if (S.remaining === 0) el.innerHTML = destName() ? `Time to go to <b>${esc(destName())}</b>!` : 'Time to go!';
-    else if (destName()) el.innerHTML = `Heading to <b>${esc(destName())}</b>`;
-    else el.textContent = S.running ? `Leaving at ${clock(new Date(Date.now() + S.remaining * 1000))}` : 'Tap the time to change it';
-  }
+  function destActive() { return S.dest.on && (!!S.dest.place || !!S.dest.target); }
   function destName() { return S.dest.on && S.dest.place ? S.dest.place.name : ''; }
   const hhmm = d => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
   const roundMin = ms => new Date(Math.round(ms / 60000) * 60000);
+  const leaveMs = () => Date.now() + S.remaining * 1000;
+  function renderSub() {
+    const el = $('subLine');
+    if (S.remaining === 0) el.innerHTML = destName() ? `Time to go to <b>${esc(destName())}</b>!` : 'Time to go!';
+    else if (destActive()) el.innerHTML = `Leave <b>${clock(roundMin(leaveMs()))}</b>${destName() ? ` · ${esc(destName())}` : ''}`;
+    else el.textContent = S.running ? `Leaving at ${clock(roundMin(leaveMs()))}` : 'Tap the time to change it';
+  }
   function renderDest() {
-    $('destToggle').classList.toggle('on', S.dest.on);
-    $('destToggle').querySelector('span').textContent = S.dest.on && S.dest.place ? S.dest.place.name : 'Destination';
-    $('destWrap').classList.toggle('open', S.dest.on);
-    $('destWrap').inert = !S.dest.on;
-    if (!S.dest.on) return;
-    const leaveMs = Date.now() + S.remaining * 1000;
-    const arriveMs = leaveMs + S.dest.drive * 60000;
+    const d = S.dest;
+    $('destPillText').textContent = destName() || (destActive() ? `Leave ${clock(roundMin(leaveMs()))}` : 'Destination');
+    $('destPill').classList.toggle('set', destActive());
+    if (S.drawer !== 'dest') return;
+    const lv = leaveMs(), arr = lv + d.drive * 60000;
     const ae = document.activeElement;
-    if (ae !== $('leaveTime')) $('leaveTime').value = hhmm(roundMin(leaveMs));
-    if (ae !== $('arriveTime')) $('arriveTime').value = hhmm(roundMin(arriveMs));
-    if (ae !== $('driveMins')) $('driveMins').value = S.dest.drive;
-    if (ae !== $('destQuery') && S.dest.place && !$('destQuery').value) $('destQuery').value = S.dest.place.name;
+    $('modeArrive').setAttribute('aria-checked', String(d.mode === 'arrive'));
+    $('modeLeave').setAttribute('aria-checked', String(d.mode === 'leave'));
+    $('planTimeLabel').textContent = d.mode === 'arrive' ? 'Arrive by' : 'Leave at';
+    if (ae !== $('planTime')) $('planTime').value = hhmm(roundMin(d.mode === 'arrive' ? (d.target || arr) : lv));
+    if (ae !== $('driveMins')) $('driveMins').value = d.drive;
+    if (ae !== $('destQuery') && d.place && !$('destQuery').value) $('destQuery').value = d.place.name;
+    $('fromLabel').textContent = d.from ? d.from.name : 'Not set';
 
-    const f = S.dest.from;
-    $('fromLabel').textContent = f ? `Leaving from: ${f.name}` : 'Leaving from: not set';
-    $('fromToggle').textContent = f ? 'Change' : 'Set it';
-
+    $('planResult').innerHTML = d.mode === 'arrive'
+      ? (S.remaining === 0 ? 'Time to leave now!' : `You’ll need to leave at <b>${clock(roundMin(lv))}</b>`)
+      : `You’ll arrive about <b>${clock(roundMin(arr))}</b>`;
     const st = $('etaStatus');
-    if (S.dest.anchor === 'arrive' && S.dest.arriveAt) {
-      const slack = Math.round((S.dest.arriveAt - arriveMs) / 60000);
+    if (d.mode === 'arrive' && d.target) {
+      const slack = Math.round((d.target - arr) / 60000);
       st.className = 'eta-status ' + (slack >= 0 ? 'good' : 'bad');
-      st.textContent = slack === 0 ? 'Right on time' : slack > 0 ? `${slack} min to spare` : `${-slack} min late`;
+      st.textContent = slack === 0 ? `Right on time for ${clock(new Date(d.target))}` : slack > 0 ? `${slack} min to spare` : `${-slack} min late for ${clock(new Date(d.target))}`;
     } else { st.className = 'eta-status'; st.textContent = ''; }
 
     const note = $('driveNote');
     if (routing) note.textContent = 'Finding the drive time…';
     else if (routeError) note.textContent = routeError;
-    else if (S.dest.place && S.dest.driveAuto) note.textContent = `${S.dest.miles} mi. Usual drive time without traffic; check Google Maps for traffic and adjust the minutes. Change Leave or Arrive and the timer follows.`;
-    else if (S.dest.place && !f) note.textContent = 'Set where you’re leaving from to get the drive time. Change Leave or Arrive and the timer follows.';
-    else note.textContent = 'Change Leave or Arrive and the timer follows.';
+    else if (d.place && d.driveAuto) note.textContent = `${d.miles} mi. Usual drive time without traffic. Check Google Maps for traffic and adjust the minutes.`;
+    else if (d.place && !d.from) note.textContent = 'Set where you’re leaving from to fill in the drive time.';
+    else note.textContent = 'Type the drive time, or pick a place to fill it in.';
 
-    const p = S.dest.place;
+    const p = d.place, f = d.from;
     $('mapsLink').classList.toggle('disabled', !p);
     $('mapsLink').href = p
       ? `https://www.google.com/maps/dir/?api=1${f ? `&origin=${f.lat},${f.lon}` : ''}&destination=${encodeURIComponent([p.name, p.addr].filter(Boolean).join(', '))}&travelmode=driving`
@@ -1090,11 +1163,10 @@
   // ---------- Destination ----------
   // Place search: OpenStreetMap's Photon geocoder (free, no key). Drive time: OSRM's public router.
   let routing = false, routeError = '';
-  function toggleDestination(force) {
-    S.dest.on = typeof force === 'boolean' ? force : !S.dest.on;
-    if (S.dest.on) defaultFrom();
-    renderAll();
-    if (S.dest.on) setTimeout(() => { if (!S.dest.place) $('destQuery').focus(); }, 300);
+  function clearDestination() {
+    S.dest.on = false; S.dest.place = null; S.dest.target = 0; routeError = '';
+    $('destQuery').value = '';
+    save(); openDrawer(null);
   }
   function defaultFrom() {
     if (!S.dest.from && S.loc) S.dest.from = { name: `around ZIP ${S.zip}`, lat: S.loc.lat, lon: S.loc.lon, fromZip: true };
@@ -1147,7 +1219,7 @@
     input.addEventListener('blur', () => setTimeout(close, 150));
   }
   makeSearch('destQuery', 'destSuggest', it => {
-    S.dest.place = it; defaultFrom(); save();
+    S.dest.place = it; S.dest.on = true; defaultFrom(); save();
     if (!S.dest.from) toggleFrom(true);
     speak(`Destination set to ${it.name}.`, false);
     routeDrive();
@@ -1158,6 +1230,7 @@
   function toggleFrom(force) {
     const box = $('fromBox');
     box.hidden = typeof force === 'boolean' ? !force : !box.hidden;
+    $('fromToggle').setAttribute('aria-expanded', String(!box.hidden));
     if (!box.hidden) setTimeout(() => $('fromQuery').focus(), 0);
   }
   function useMyLocation() {
@@ -1201,25 +1274,33 @@
     S.steps.forEach(s => { s.done = s.minute * 60 > S.remaining; });
     save(); renderAll();
   }
+  // Arrive by (default): the arrival time stays fixed; drive time and the timer follow it.
+  // Leave at: the leave time is the end of the countdown; the arrival time is shown as a result.
   function afterDriveChange() {
-    if (S.dest.anchor === 'arrive' && S.dest.arriveAt > Date.now()) setTimerTo((S.dest.arriveAt - Date.now()) / 1000 - S.dest.drive * 60);
+    if (S.dest.mode === 'arrive' && S.dest.target > Date.now()) setTimerTo((S.dest.target - Date.now()) / 1000 - S.dest.drive * 60);
     else { save(); renderAll(); }
   }
-  $('leaveTime').addEventListener('change', e => {
+  function setMode(m) {
+    if (S.dest.mode === m) return;
+    S.dest.mode = m;
+    S.dest.target = m === 'arrive' ? leaveMs() + S.dest.drive * 60000 : 0;
+    save(); renderAll();
+  }
+  $('planTime').addEventListener('change', e => {
     if (!e.target.value) return;
     const d = parseClock(e.target.value);
-    S.dest.anchor = 'leave'; S.dest.arriveAt = 0;
-    setTimerTo((d - Date.now()) / 1000);
-    speak(`Timer set. Leave at ${clock(d)}.`, false);
-  });
-  $('arriveTime').addEventListener('change', e => {
-    if (!e.target.value) return;
-    const d = parseClock(e.target.value);
-    S.dest.anchor = 'arrive'; S.dest.arriveAt = d.getTime();
-    const sec = (d - Date.now()) / 1000 - S.dest.drive * 60;
-    setTimerTo(sec);
-    if (sec <= 0) speak(`Leave now to get as close to ${clock(d)} as you can!`, false);
-    else speak(`Timer set. Leave at ${clock(new Date(Date.now() + sec * 1000))} to arrive by ${clock(d)}.`, false);
+    S.dest.on = true;
+    if (S.dest.mode === 'arrive') {
+      S.dest.target = d.getTime();
+      const sec = (d - Date.now()) / 1000 - S.dest.drive * 60;
+      setTimerTo(sec);
+      if (sec <= 0) speak(`Leave now to get as close to ${clock(d)} as you can!`, false);
+      else speak(`Timer set. Leave at ${clock(roundMin(Date.now() + sec * 1000))} to arrive by ${clock(d)}.`, false);
+    } else {
+      S.dest.target = 0;
+      setTimerTo((d - Date.now()) / 1000);
+      speak(`Timer set. Leave at ${clock(d)}.`, false);
+    }
   });
   $('driveMins').addEventListener('change', e => {
     S.dest.drive = Math.max(0, Math.min(900, parseInt(e.target.value, 10) || 0)); S.dest.driveAuto = false; afterDriveChange();
@@ -1396,22 +1477,26 @@
   document.addEventListener('click', e => { if (!$('zipPop').hidden && !$('weather').contains(e.target)) toggleZip(false); });
 
   // ---------- Sound settings ----------
+  const SPK_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>';
+  const SPK_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';
   function renderSound() {
     $('muteBtn').classList.toggle('muted', S.muted);
-    $('muteBtn').title = S.muted ? 'Sound off' : 'Sound on';
-    $('muteBtn').innerHTML = S.muted
-      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>'
-      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>';
-    $('chimeBtn').style.opacity = S.chime ? 1 : .35;
-    $('chimeBtn').title = S.chime ? 'Chime on' : 'Chime off';
+    $('muteBtn').setAttribute('aria-pressed', String(S.muted));
+    $('muteBtn').innerHTML = S.muted ? `${SPK_OFF} Sound off` : `${SPK_ON} Sound on`;
+    $('chimeToggle').checked = S.chime;
     $('voiceStyle').value = S.voice;
+  }
+  function hearSample() {
+    initAudio();
+    const s = nextStep() || [...S.steps].sort(stepOrder)[0];
+    speak(s ? s.text : 'Shoes on! Five minutes until we go.', true);
   }
   function toggleMute() {
     initAudio(); S.muted = !S.muted;
     if (S.muted) { try { speechSynthesis.cancel(); } catch (e) {} }
     save(); renderSound(); if (!S.muted) speak('Sound on.', false);
   }
-  function toggleChime() { S.chime = !S.chime; save(); renderSound(); if (S.chime) chime(); }
+  function toggleChime() { initAudio(); S.chime = $('chimeToggle').checked; save(); renderSound(); if (S.chime) chime(); }
   function changeVoiceStyle() { initAudio(); S.voice = $('voiceStyle').value; save(); speak('Voice updated.', true); }
 
   // Tell a friend: open the share sheet, or copy the link where sharing is not available.
@@ -1424,10 +1509,10 @@
   // ---------- Boot ----------
   load();
   $('driveMins').value = S.dest.drive;
-  renderSound(); renderAll(); renderWeather();
+  renderChips(); renderSound(); renderAll(); renderWeather();
   if (S.zip) refreshWeather(false);
   setInterval(() => { if (S.zip && !wxBusy) refreshWeather(false); }, 20 * 60 * 1000);
-  setInterval(() => { if (S.dest.on && !S.running) renderDest(); if (S.wx) renderWeather(); }, 15000);
+  setInterval(() => { if (!S.running) { renderSub(); renderDest(); } if (S.wx) renderWeather(); }, 15000);
   document.addEventListener('click', initAudio, { once: true });
   if ('speechSynthesis' in window) speechSynthesis.getVoices();
 </script>

@@ -47,7 +47,7 @@ tools/              freeze-version.sh: freeze a tagged release into versions/
 | Mid-Autumn Mayhem | `mid-autumn/` | 1.7 | 2026-09-25 |
 | Blow Up (beta) | `blow-up/` | 1.4 | 2026-09-27 |
 | Spellicious | `spellicious/` | 4.40 | 2026-09-30 |
-| Ready To Go! | `get-ready/` | 1.3 | 2026-10-02 |
+| Ready To Go! | `get-ready/` | 1.4 | 2026-10-02 |
 
 Past versions stay playable at https://magicmakersfamily.github.io/games/versions/ (for
 grown-ups; each keeps its own saved games). Every release is also a git tag (`blow-up-v1.3`, …).

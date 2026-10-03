@@ -5,19 +5,25 @@ A departure countdown for families: a big timer that reads your own steps aloud
 Folder stays `get-ready/` so shared links keep working (the game was called "Get Ready To Go!"
 until 1.3).
 
-## Current release: 1.3 (2026-10-02)
+## Current release: 1.4 (2026-10-02)
 
-- Timer is large and centred. Steps panel is off by default; the "+ Steps" button opens it and
-  the timer shrinks to about 2/3 width.
-- Steps: type the words, pick "say it at N min left", then edit the text or re-time each block in
-  place. Each step is a dot on the ring. Steps that share a minute play one after another, in the
-  order they were added.
+- Timer is the hero. Under it, two buttons, "Destination" and "Steps · N", open one shared drawer:
+  a side panel on wide screens, a bottom sheet on phones (timer shrinks and stays above it). Only
+  one is open at a time; Escape or × closes it. Buttons carry aria-expanded/aria-controls and the
+  closed drawer is inert.
+- Steps: quick-add chips (Brush teeth, Bathroom, Get dressed, Shoes, Coat, Backpack), the add
+  form, editable step blocks with dots on the ring. Voice style, "Hear a sample" and the chime
+  switch live at the bottom of Steps; the Sound on/off button stays by the timer.
+- Destination: place search, a "From ›" row, "Plan by: Arrive by | Leave at" (Arrive by is the
+  default), one editable time, drive minutes, and the other time shown as the result ("You'll need
+  to leave at 10:14"). With Arrive by, a new drive time moves the timer; changing the timer by hand
+  shows minutes to spare or late. Under the time, the ring shows "Leave 10:14 · place".
 - Speech goes through a queue (never `cancel()` right before `speak()`; Chrome drops it), with a
   watchdog. The countdown follows the wall clock, so throttled ticks can't skip a step.
 - Weather is off until the user enters a ZIP ("See the Weather"). ZIP → zippopotam.us; current
   conditions from the nearest National Weather Service station; high/low/rain from Open-Meteo.
-- Destination: search box (Photon / OpenStreetMap), drive time from OSRM (no traffic), editable
-  Leave / Arrive times that set the timer, and an "Open in Google Maps" link.
+- Destination search is still Photon / OpenStreetMap with OSRM drive times (no traffic), plus an
+  "Open in Google Maps" link.
 
 ## Known problem
 
@@ -45,7 +51,7 @@ drive times ignore traffic. The family found this confusing. It is the next thin
    Key ID, `origin` = `https://magicmakersfamily.github.io`, about one year `exp`) and put only the
    signed token in the page. Apple's token docs page didn't load when checked; confirm the allowed
    expiry when signing, and shorten it if a one-year token is rejected.
-3. Replace Photon/OSRM with MapKit JS: address autocomplete for "Where to?" and "Leaving from"
+3. Replace Photon/OSRM with MapKit JS inside the Destination drawer: address autocomplete for "Where are you going?" and "From"
    (remember home on the device), drive time with traffic via Directions/ETA using the leave or
    arrive time. Keep "Open in Google Maps" and manual minutes as the fallback. Load MapKit only
    when Destination is opened; update the privacy line on the page and the CLAUDE.md exception.
