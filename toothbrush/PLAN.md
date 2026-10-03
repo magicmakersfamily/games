@@ -21,7 +21,32 @@ are kept word for word under "Product notes" below; this top part says where dev
   (needs ffmpeg and `brew install espeak-ng`). Each line must stay under about 4.5 s so it fits a
   5-second cue in 1-minute mode. Browser speech is only a backup and shows a "backup voice" tag.
 
-## Status (2.1 beta, October 3, 2026)
+## Status (2.2 beta, October 3, 2026)
+
+Done in 2.2 (from the 2.1 retest at the end of the notes):
+- "1 sugar bug left" (singular). The coaching line is one screen-reader sentence (hidden `.sr` span
+  with the real side, e.g. "Top teeth, right side: Outside"); the visible words and arrow are
+  `aria-hidden`.
+- "Chewing surfaces" on screen; spoken "Now brush the chewing surfaces…" (re-recorded chew-a/b).
+- Calm mode text: "Stationary sugar bugs, muted colors, and quieter chimes."
+- Grown-ups dialog scrolls inside itself with Close (sticky header) and Done (sticky footer, fade)
+  always visible at 320 px.
+- Ending is one face: the progress ring morphs into a face outline, the eyes move down to join a
+  small nose, cheeks and the smile, they blink once as the sparkles appear, then stay still. Card:
+  "You brushed every tooth!" with the surface summary as small grown-up text (hidden on short screens).
+- Final spoken line: "Great brushing! Brush your tongue. Spit, don't rinse. Now show your smile!"
+- Grown-ups → "Why these brushing steps?" panel (closed by default, only reachable when not brushing):
+  claims checked against the sources on October 3, 2026 — ADA brushing guide (surfaces, short
+  tooth-wide strokes, vertical behind front teeth), ADA Home Oral Care (twice a day, two minutes,
+  fluoride toothpaste), ADA fluoride page (rice-grain under 3, pea-sized 3–6, supervision), AAPD
+  Fluoride Therapy best practice (revised 2023; supervised twice-daily brushing, smear/pea amounts,
+  rinsing kept to a minimum or avoided, spit). Tongue brushing is not in these sources and the panel
+  says it is our own extra step. "Guidance reviewed October 2026" — update when rechecked.
+- The message-channel console error from the retest did not reproduce in clean Chrome profiles
+  (no console errors in any automated run), so it is most likely a browser extension.
+
+Not done yet (next product step from the 2.1 notes): a name and a bit of personality for the face,
+one tiny local-only reward per completed session, a forgiving morning/evening calendar.
 
 Done in 2.1 (from the 2.0 retest at the end of the notes):
 - Renamed to Toothbrush Coach.
@@ -65,7 +90,9 @@ Not done yet:
 - Pronunciation/timing QA for other languages (English only for now).
 - Child testing against the success measures at the end of the notes.
 
-## Product notes (from the family, October 3, 2026, updated after the 2.0 retest)
+## Product notes (from the family, October 3, 2026, updated after the 2.0 and 2.1 retests)
+
+Latest tested version: 2.1 (beta), October 3, 2026.
 
 ### Toothbrush Coach — Integrated Product Notes
 
@@ -297,3 +324,90 @@ For younger children, do not rely on the spoken words `left` and `right`. Prefer
 ##### Voice QA limitation
 
 The browser test confirmed the visible cue and accessible structure, but did not provide reliable audio playback for judging voice realism. Naturalness, symbol handling, pronunciation, pacing, and cue overlap still require an audible device test with children and adults.
+
+### Version 2.1 beta retest — October 3, 2026
+
+#### Major improvements confirmed
+
+- Eyes have been added and now form a useful orientation system.
+- Younger-child mode removes visible left/right language, uses a directional arrow, and preserves the exact anatomical side in the accessible image description.
+- The pupils look toward the active quadrant; the eyes visibly relax during Pause.
+- Parent settings clearly explain that the face is a mirror and offer younger-child and big-kid coaching modes.
+- Parent settings, Pause, protected reset, and the complete active lesson now fit at 320 pixels wide.
+- The previously clipped Grown-ups control is visible at 320 and 390 pixels.
+- Settings checkboxes and radio buttons now respond through their semantic controls.
+- Calm mode creates a genuinely quieter visual treatment with muted colors and stationary bugs.
+- Opening the parent panel from Pause keeps the lesson paused.
+- Bug timing is now correctly synchronized through the final second: nine bugs at 0:30, one visible bug at 0:01, then zero at the tongue transition.
+- The two-minute lesson, tongue prompt, Show my smile interaction, and replay flow all completed successfully.
+
+#### Small defects and copy fixes
+
+- The accessible description says `1 sugar bugs left`; singular should be `1 sugar bug left`.
+- The decorative direction arrow appears as a separate accessible generic element and may be announced by some screen readers. Mark it `aria-hidden="true"`; preserve the direction in the image alt text.
+- `Chewing tops` is understandable but unnatural and less consistent with dental guidance. Prefer `Chewing surfaces` visually and `Brush the chewing surfaces` in speech.
+- Calm mode's parent description, `still bugs`, can be misread as “bugs remain.” Prefer `Stationary sugar bugs, muted colors, and quieter chimes.`
+- At 320 pixels, the parent dialog requires scrolling and the Done button is initially below the viewport. Keep Close visible and consider a sticky Done footer or subtle bottom fade to signal additional content.
+- One browser message-channel console error appeared after completion, with no visible app failure. Reproduce in a clean browser profile before treating it as an application defect; it may originate from an extension.
+
+#### Next visual refinement: make the ending one face
+
+The eyes and smile are individually appealing, but the completion composition still feels slightly separated: the eyes sit outside the large green circle while the mouth sits low inside a mostly empty circle.
+
+Recommended completion treatment:
+
+- At `Show my smile`, morph the progress ring into a soft face or cheek outline.
+- Bring the eyes and mouth into one compact facial composition.
+- Move the smile upward slightly and reduce the empty vertical space.
+- Optionally add a tiny nose or two subtle cheek marks; avoid adding more text or decorative clutter.
+- Replace `Outsides, chewing tops and insides: every tooth got a turn` with the more child-centered `You brushed every tooth!` Put the detailed surface summary in smaller grown-up copy if it is still needed.
+- Let the eyes brighten or blink once as the sparkles appear, then settle into a still expression.
+
+#### Next product-level opportunity
+
+The core coaching loop is now strong enough that the next major gain will come from attachment and return motivation rather than more brushing-screen complexity.
+
+- Give the face a name and a small amount of personality.
+- Award one tiny local-only object or sticker after a fully completed session.
+- Show a forgiving morning/evening calendar for parents and children.
+- Keep rewards secondary to the clean two-minute coaching flow.
+- Measure whether children voluntarily ask to use the coach again, not merely whether they can finish one session.
+
+#### Parent trust: ADA and AAPD guidance panel
+
+Add a parent-initiated information panel inside **Grown-ups**. Do not display it automatically or interrupt an active brushing session.
+
+Suggested entry point:
+
+> **Why these brushing steps?**  
+> Based on current guidance from the American Dental Association and the American Academy of Pediatric Dentistry.
+
+Suggested short summary:
+
+- Brush twice daily for two minutes with fluoride toothpaste.
+- Clean the outside, inside, and chewing surfaces.
+- Use short, gentle strokes and vertical strokes behind the front teeth.
+- After brushing, spit out excess toothpaste and minimize or avoid rinsing so fluoride remains on the teeth.
+- Young children need an age-appropriate amount of toothpaste and adult help or supervision.
+
+Official links:
+
+- ADA brushing guide: https://www.mouthhealthy.org/all-topics-a-z/brushing-your-teeth/
+- ADA child fluoride guidance: https://www.mouthhealthy.org/all-topics-a-z/fluoride/
+- AAPD fluoride guidance: https://www.aapd.org/research/oral-health-policies--recommendations/fluoride-therapy/
+
+Required trust and claims language:
+
+- Say `Based on guidance published by the ADA and AAPD`.
+- Do not say `ADA approved`, `ADA certified`, or otherwise imply that either organization reviewed or endorsed the app.
+- Do not use an ADA or AAPD logo without permission.
+- Display `Guidance reviewed October 2026` and update this date whenever the cited guidance is rechecked.
+- Include: `This app provides general education and does not replace advice from your child’s dentist.`
+- Keep the existing footer source link, but make the Grown-ups panel the primary explanation for parents.
+- Open official external links only from the parent panel, outside an active session, so a child cannot accidentally leave the coach.
+
+Recommended final spoken instruction:
+
+> Brush your tongue. Spit—don't rinse. Now show your smile!
+
+For children who cannot reliably spit, the parent guidance should emphasize the correct small amount of toothpaste and supervision rather than instructing the child to rinse.

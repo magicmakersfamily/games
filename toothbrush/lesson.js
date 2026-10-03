@@ -19,7 +19,7 @@
     { id: 'LR', jaw: 'lower', side: 'right', label: 'Bottom right' },
   ];
   const SURFACES = ['outer', 'chewing', 'inner'];
-  const SURFACE_LABEL = { outer: 'Outside', chewing: 'Chewing tops', inner: 'Inside' };
+  const SURFACE_LABEL = { outer: 'Outside', chewing: 'Chewing surfaces', inner: 'Inside' };
 
   // Where the brush stops (in order) and which teeth carry a sugar bug, per surface. The brush
   // snakes through the quadrant: outside back-to-front, chewing tops front-to-back over the molars,
