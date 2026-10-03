@@ -30,6 +30,9 @@ blow-up/            Blow Up (beta)
 spellicious/ Spellicious
   index.html        page, mic input, syllable/sound breakdown and interface
   cover.png         1200×744 card image
+get-ready/          Get Ready To Go! (departure countdown with spoken steps)
+  index.html        page, timer, steps, destination ETA
+  cover.png         1200×744 card image
 versions/           past releases, still playable (versions/<game>/<X.Y>/), see versions/index.html
 tools/              freeze-version.sh: freeze a tagged release into versions/
 .nojekyll           serve files as-is
@@ -43,6 +46,7 @@ tools/              freeze-version.sh: freeze a tagged release into versions/
 | Mid-Autumn Mayhem | `mid-autumn/` | 1.7 | 2026-09-25 |
 | Blow Up (beta) | `blow-up/` | 1.4 | 2026-09-27 |
 | Spellicious | `spellicious/` | 4.40 | 2026-09-30 |
+| Get Ready To Go! | `get-ready/` | 1.0 | 2026-10-02 |
 
 Past versions stay playable at https://magicmakersfamily.github.io/games/versions/ (for
 grown-ups; each keeps its own saved games). Every release is also a git tag (`blow-up-v1.3`, …).
