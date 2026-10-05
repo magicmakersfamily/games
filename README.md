@@ -34,7 +34,7 @@ get-ready/          Ready To Go! (departure countdown with spoken steps)
   PLAN.md           handoff: where development stands and what is next (Apple Maps)
   index.html        page, timer, steps, destination ETA
   cover.png         1200×744 card image
-toothbrush/         Toothbrush Coach (beta; called Toothbrush Timer before 2.1)
+toothbrush/         Brush Buddy (beta; called Toothbrush Coach in 2.1–2.3, Toothbrush Timer before)
   PLAN.md           handoff: status, what is next, and the family's product notes
   lesson.js         the lesson model: cues, sugar bugs, brush pose, timeline
   lesson.test.js    model tests (node --test)
@@ -56,7 +56,7 @@ tools/              freeze-version.sh: freeze a tagged release into versions/
 | Blow Up (beta) | `blow-up/` | 1.4 | 2026-09-27 |
 | Spellicious | `spellicious/` | 4.40 | 2026-09-30 |
 | Ready To Go! | `get-ready/` | 1.4 | 2026-10-02 |
-| Toothbrush Coach (beta) | `toothbrush/` | 2.3 | 2026-10-03 |
+| Brush Buddy (beta) | `toothbrush/` | 2.4 | 2026-10-03 |
 
 Past versions stay playable at https://magicmakersfamily.github.io/games/versions/ (for
 grown-ups; each keeps its own saved games). Every release is also a git tag (`blow-up-v1.3`, …).

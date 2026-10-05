@@ -1,4 +1,4 @@
-/* Toothbrush Coach — the lesson model.
+/* Brush Buddy — the lesson model.
  *
  * One timeline drives everything you see and hear: which quadrant and surface is being coached,
  * where the brush is, and which sugar bugs are still there. Every visible state is a pure function

@@ -1,6 +1,6 @@
-# Toothbrush Coach — plan and handoff
+# Brush Buddy — plan and handoff
 
-Called Toothbrush Timer up to 2.0; the folder stays `toothbrush/` so links keep working. In beta
+Called Toothbrush Timer up to 2.0 and Toothbrush Coach in 2.1–2.3 (renamed Brush Buddy in 2.4); the folder stays `toothbrush/` so links keep working. In beta
 (purple badge) while the family tests it with kids.
 
 Read this before working on the game. The product notes the family wrote after testing 1.0 with James
@@ -74,7 +74,7 @@ Not done yet (next product step from the 2.1 notes): a name and a bit of persona
 one tiny local-only reward per completed session, a forgiving morning/evening calendar.
 
 Done in 2.1 (from the 2.0 retest at the end of the notes):
-- Renamed to Toothbrush Coach.
+- Renamed to Toothbrush Coach (2.1); renamed Brush Buddy in 2.4.
 - Sync: bugs are drawn on top of the brush and never squeeze below 70 %, so every bug the model
   counts is visible; the screen-reader description updates whenever the count changes; the last
   bug goes at the completion boundary. Checkpoint tests at 120…0 s remaining in `lesson.test.js`,
